@@ -1,0 +1,19 @@
+{
+  "expand": "مشاهده اطلاعات بیشتر",
+  "notDefine": "این فیلد ارائه نشده است.",
+  "currency": "ارز",
+  "currency_symbol": "نماد ارز",
+  "currency_name": "نام ارز",
+  "iso2": "آلفا-2",
+  "iso3": "آلفا-3",
+  "numeric_code": "کد عددی",
+  "emoji": "پرچم",
+  "submit": "ارسال",
+  "required": "این فیلد الزامی است.",
+  "Not Found": "نتیجه یافت نشد",
+  "country_name": "نام کشور",
+  "currencyInformation": "اطلاعات ارز",
+  "currencyId": "شناسه ارز",
+  "currencyEdited": "ارز با موفقیت به روز شد",
+  "totalAgents": "تعداد نمایندگان"
+}

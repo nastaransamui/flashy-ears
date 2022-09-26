@@ -1,0 +1,50 @@
+{
+  "title": "Dashboard",
+  "Profile": "Profile",
+  "Settings": "Settings",
+  "Log out": "Log out",
+  "notification": "Notifications",
+  "MyProfile": "My Profile",
+  "EditProfile": "Edit Profile",
+  "SettingsProfile": "Settings Profile",
+  "sidebar": {
+    "Home": "Home"
+  },
+  "header": {
+    "title": "This is Header Title",
+    "signOut": "Sign Out",
+    "language": "Language",
+    "header_login": "login",
+    "header_contact": "contact",
+    "header_register": "register",
+    "header_theme": "Color Combination",
+    "profile": "Profile",
+    "header_dark": "Dark",
+    "header_light": "Light",
+    "header_language": "Language",
+    "pageNav_top": "To Top",
+    "header_logout": "Logout"
+  },
+  "map": {
+    "title": "Global Sales by Top Locations"
+  },
+  "charts": {
+    "buttonHover1": "Refresh",
+    "buttonHover2": "Change Date",
+    "title_0": "Daily Sales",
+    "subtitle_0": "increase in today sales: ",
+    "footer_0": "updated 4 minutes ago",
+    "title_1": "Email Subscriptions",
+    "subtitle_1": "Last Campaign Performance",
+    "footer_1": "campaign sent 2 days ago",
+    "title_2": "Completed Tasks",
+    "subtitle_2": "Last Campaign Performance",
+    "footer_2": "campaign sent 3 days ago"
+  },
+  "3rdRow": {
+    "title": "Manage Listings",
+    "tooltip_0": "View",
+    "tooltip_1": "Edit",
+    "tooltip_2": "Remove"
+  }
+}

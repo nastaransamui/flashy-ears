@@ -1,0 +1,49 @@
+{
+  "title": "داشبورد",
+  "Profile": "مشخصات",
+  "Settings": "تنظیمات",
+  "Log out": "خروج",
+  "notification": "اطلاعیه ها",
+  "MyProfile": "پروفایل من",
+  "EditProfile": "ویرایش پروفایل",
+  "SettingsProfile": "تنظیمات پروفایل",
+  "sidebar": {
+    "Home": "خانه"
+  },
+  "header": {
+    "title": "این صفحه اصلی است",
+    "signOut": "خروج از سیستم",
+    "language": "زبان",
+    "header_login": "ورود",
+    "header_contact": "تماس",
+    "header_register": "ثبت نام",
+    "header_theme": "حالت تم",
+    "header_dark": "تیره",
+    "header_light": "روشن",
+    "header_language": "زبان",
+    "pageNav_top": "به بالا",
+    "header_logout": "خروج"
+  },
+  "map": {
+    "title": "فروش جهانی بر اساس مکان های برتر"
+  },
+  "charts": {
+    "buttonHover1": "به روز رسانی",
+    "buttonHover2": "تغییر تاریخ",
+    "title_0": "فروش روزانه",
+    "subtitle_0": "افزایش فروش امروز:",
+    "footer_0": "4 دقیقه پیش آپدیت شد",
+    "title_1": "اشتراک های ایمیل",
+    "subtitle_1": "آخرین عملکرد کمپین",
+    "footer_1": "کمپین ارسال شده 2 روز پیش",
+    "title_2": "وظایف تکمیل شده",
+    "subtitle_2": "آخرین عملکرد کمپین",
+    "footer_2": "کمپین ارسال شده 3 روز پیش"
+  },
+  "3rdRow": {
+    "title": "مدیریت لیست ها",
+    "tooltip_0": "چشم انداز",
+    "tooltip_1": "ویرایش کنید",
+    "tooltip_2": "برداشتن"
+  }
+}

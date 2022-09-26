@@ -1,0 +1,19 @@
+{
+  "expand": "See more information",
+  "notDefine": "This field not provided.",
+  "currency": "Currency",
+  "currency_symbol": "Currency symbol",
+  "currency_name": "Currency name",
+  "iso2": "Alpha-2",
+  "iso3": "Alpha-3",
+  "numeric_code": "Numeric Code",
+  "emoji": "Flag",
+  "submit": "Submit",
+  "required": "This field is required.",
+  "Not Found": "result not found",
+  "country_name": "Country name",
+  "currencyInformation": "Information of currency",
+  "currencyId": "Currency ID",
+  "currencyEdited": "Currency was successfully updated",
+  "totalAgents": "Number of agents"
+}
