@@ -2,7 +2,7 @@ import '@mui/material/styles';
 import { createTheme } from '@mui/material';
 import palette from './palette';
 import type {} from '@mui/x-data-grid/themeAugmentation';
-import { PaletteMode, } from '@mui/material';
+import { PaletteMode } from '@mui/material';
 
 declare module '@mui/material/styles' {
   interface TypeText {
@@ -128,6 +128,35 @@ const appTheme = (color: string, mode: PaletteMode, dir: string) => {
           ],
     //override
     components: {
+      MuiCssBaseline: {
+        styleOverrides: `
+        h3 {
+          color: red;
+        }
+        ::-webkit-scrollbar-track {
+          -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+          box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+          border-radius: 10px;
+          background-color: ${mode === 'dark' ? '#212121' : '#fff'};
+        }
+        
+        ::-webkit-scrollbar {
+          width: 8px;
+          background-color: #121212;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+          border-radius: 10px;
+          -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+          box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+          background-color: ${
+            mode === 'dark'
+              ? palette[color].palette.primary.light
+              : palette[color].palette.primary.dark
+          };
+        }
+      `,
+      },
       MuiInput: {
         styleOverrides: {
           root: {
@@ -139,6 +168,15 @@ const appTheme = (color: string, mode: PaletteMode, dir: string) => {
       },
       MuiOutlinedInput: {
         styleOverrides: {
+          //for auto complete browser select
+          input: {
+            '&:-webkit-autofill': {
+              WebkitBoxShadow: `0 0 0 100px ${
+                mode === 'dark' ? '#212121' : '#fff'
+              } inset`,
+              WebkitTextFillColor: mode === 'dark' ? '#fff' : '#000000',
+            },
+          },
           root: {
             '&:hover .MuiOutlinedInput-notchedOutline': {
               borderRadius: 10,
@@ -225,14 +263,14 @@ const appTheme = (color: string, mode: PaletteMode, dir: string) => {
           },
         },
       },
-      MuiIconButton:{
-        styleOverrides:{
-          root:{
-            '&:hover':{
-              backgroundColor: 'unset'
-            }
-          }
-        }
+      MuiIconButton: {
+        styleOverrides: {
+          root: {
+            '&:hover': {
+              backgroundColor: 'unset',
+            },
+          },
+        },
       },
       MuiTooltip: {
         styleOverrides: {
@@ -255,7 +293,6 @@ const appTheme = (color: string, mode: PaletteMode, dir: string) => {
       },
     },
   });
-
   return theme;
 };
 

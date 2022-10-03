@@ -3,13 +3,17 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography'
+import { useNavigate } from "react-router-dom";
 
 
-export default function Error(props:any ){
-  const {classes} = useStyles({});
+export default function Error(props: any) {
+  const { classes } = useStyles({});
   const { errorCode, text, router, t, type } = props;
-
-  return(
+  let navigate: Function;
+  if (type !== 'next') {
+    navigate = useNavigate();
+  }
+  return (
     <div className={classes.errorWrap}>
       <Container maxWidth='md'>
         <Grid container spacing={0}>
@@ -32,8 +36,7 @@ export default function Error(props:any ){
                   if (type == 'next') {
                     router.push('/');
                   } else {
-                    console.log("Error should update history.push")
-                    // history.push('/admin/dashboard');
+                    navigate('/');
                   }
                 }}
                 className={classes.button}>

@@ -1,8 +1,8 @@
 
-import { Fragment,  } from 'react'
+import { Fragment, } from 'react'
 //Theme
 import { ThemeProvider } from '@mui/material/styles';
-
+import CssBaseline from '@mui/material/CssBaseline';
 
 import { ChildrenProps } from '@/interfaces/react.interface'
 
@@ -21,19 +21,18 @@ const AppWrapper = ({ children }: ChildrenProps) => {
   const { adminTheme,
     jss,
     adminFormSubmit,
-    theme,
-    adminLoadingBar,} = useWrapper()
- 
+    adminLoadingBar, } = useWrapper()
   return (
     <Fragment >
       <ThemeProvider theme={adminTheme}>
+        <CssBaseline />
         <StylesProvider jss={jss}>
           <Backdrop
             sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
             open={adminFormSubmit}
-            onClick={() => { console.log('somehing') }}
+          // onClick={() => { console.log('somehing') }}
           >
-            <CircleToBlockLoading color={theme.palette.secondary.main} />
+            <CircleToBlockLoading color={adminTheme.palette.primary.main} />
           </Backdrop>
 
           <CustomToaster />

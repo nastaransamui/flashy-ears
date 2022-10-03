@@ -21,11 +21,14 @@
       "@/public/*": ["public/*"],
       "@/lib/*": ["lib/*"],
       "@/theme/*": ["theme/*"],
-      "@/interfaces/*": ["src/components/Shared/interfaces/*"]
+      "@/interfaces/*": ["src/components/Shared/interfaces/*"],
+      "@/helpers/*": ["helpers/*"],
+      "@/models/*": ["models/*"],
+      "@/root/*": ["/*"]
     },
     "jsxImportSource": "@emotion/react",
     "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "user.js"],
   "exclude": ["node_modules"]
 }

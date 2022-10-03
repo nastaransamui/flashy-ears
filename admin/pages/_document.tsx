@@ -1,20 +1,27 @@
 import * as React from 'react';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import createEmotionServer from '@emotion/server/create-instance';
-import appTheme from '@/theme/appTheme';
 import createEmotionCache from '@/src/createEmotionCache';
+import appTheme from '@/theme/appTheme';
+import { getCookies, hasCookie } from 'cookies-next';
+
+interface Props {
+  adminThemeName?: any;
+  adminThemeType?: any;
+  i18nextLng?: any;
+}
 
 
-class MyDocument extends Document {
+class MyDocument extends Document<Props> {
 
   render() {
     const theme = appTheme(
-      'cloud',
-      'dark',
-      'ltr'
+      this.props.adminThemeName,
+      this.props.adminThemeType,
+      this.props.i18nextLng == 'en' ? 'ltr': 'rtl'
     )
     return (
-      <Html lang="en">
+      <Html lang={this.props.i18nextLng}>
         <Head>
           {/* PWA primary color */}
           <meta name="theme-color" content={theme.palette.primary.main} />
@@ -79,7 +86,7 @@ class MyDocument extends Document {
           {(this.props as any).emotionStyleTags}
         </Head>
         <body>
-          {/* <div
+          <div
             id='preloader'
             style={{
               position: 'fixed',
@@ -105,7 +112,7 @@ class MyDocument extends Document {
               src='/admin/images/loading.gif'
               alt='loading'
             />
-          </div> */}
+          </div>
           <Main />
           <NextScript />
         </body>
@@ -170,6 +177,9 @@ MyDocument.getInitialProps = async (ctx) => {
   return {
     ...initialProps,
     emotionStyleTags,
+    adminThemeType: hasCookie('adminThemeType', ctx) ? getCookies(ctx).adminThemeType : 'dark',
+    adminThemeName: hasCookie('adminThemeName', ctx) ? getCookies(ctx).adminThemeName : 'cloud',
+    i18nextLng: hasCookie('i18nextLng', ctx) ? getCookies(ctx).i18nextLng : 'en',
   };
 };
 

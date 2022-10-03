@@ -87,7 +87,7 @@ export const CustomToaster = () => {
   return (
     <Fragment>
       <ToastContainer limit={1} position="bottom-left"
-        autoClose={140000}
+        autoClose={5000}
         transition={Zoom}
         closeOnClick={false}
         toastClassName={classes.toastBody}

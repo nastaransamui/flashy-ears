@@ -17,6 +17,8 @@ const customJestConfig = {
     '^@/lib/(.*)$': '<rootDir>/lib/$1',
     '^@/theme/(.*)$': '<rootDir>/theme/$1',
     '^@/interfaces/(.*)$': '<rootDir>/interfaces/$1',
+    '^@/helpers/(.*)$': '<rootDir>/helpers/$1',
+    '^@/models/(.*)$': '<rootDir>/models/$1',
   },
   testEnvironment: 'jest-environment-jsdom',
 };

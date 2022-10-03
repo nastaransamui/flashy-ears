@@ -15,7 +15,7 @@ import createEmotionCache from '@/src/createEmotionCache';
 
 
 //Redux
-import { wrapper} from '@/src/redux/store';
+import { wrapper } from '@/src/redux/store';
 import { Provider } from 'react-redux';
 
 //Styles
@@ -59,6 +59,14 @@ function MyApp({ Component, ...rest }: NextProps) {
   const getLayout = Component.getLayout ?? ((page: ReactNode) => page)
 
   useEffect(() => {
+    // Remove preloader or show javascript disabled warning
+    const preloader = document.getElementById('preloader');
+    if (preloader !== null || undefined) {
+      preloader?.remove();
+    }
+  }, [])
+
+  useEffect(() => {
 
     if (!navigator.cookieEnabled) {
       let cookiesAlert = 'Please allow cookies';
@@ -86,7 +94,7 @@ function MyApp({ Component, ...rest }: NextProps) {
   }, [i18n])
 
 
-  
+
 
 
   return (
@@ -95,25 +103,12 @@ function MyApp({ Component, ...rest }: NextProps) {
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
       <Provider store={store}>
-            <I18nextProvider i18n={i18next}>
-              {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-              <CssBaseline />
-
-              <div suppressHydrationWarning={true}>
-                {/* {typeof window === 'undefined' ? nul */}
-                {getLayout(<Component {...pageProps} t={t} i18n={i18n} ready={ready} key={router.route} router={router} isVercel={isVercel} />)}
-                {/* {typeof window === 'undefined' ? null : (
-                <Component suppressHydrationWarning={true}
-                  router={router}
-                  {...pageProps}
-                  key={router.route}
-                  t={t}
-                  i18n={i18n}
-                  isVercel={isVercel}
-                />
-              )} */}
-              </div>
-            </I18nextProvider>
+        <I18nextProvider i18n={i18next}>
+          <CssBaseline />
+          <div suppressHydrationWarning={true}>
+            {getLayout(<Component {...pageProps} t={t} i18n={i18n} ready={ready} key={router.route} router={router} isVercel={isVercel} />)}
+          </div>
+        </I18nextProvider>
       </Provider>
     </CacheProvider>
   );

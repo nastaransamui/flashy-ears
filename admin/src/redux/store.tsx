@@ -4,21 +4,29 @@ import { AnyAction, Store, } from 'redux';
 import { createWrapper, HYDRATE } from 'next-redux-wrapper';
 import { configureStore } from '@reduxjs/toolkit';
 import { PaletteMode, } from '@mui/material';
+import { hasCookie, getCookies } from 'cookies-next';
+
+export interface Profile {
+  profileImage?: string;
+  userName?: string;
+  _id?: string;
+}
 export interface State {
   adminAccessToken: any;
   adminThemeName: string | null;
   adminThemeType: PaletteMode | null;
   adminLoadingBar: number;
   adminFormSubmit: boolean;
+  profile: Profile;
 }
-
 
 const initialState = {
   adminAccessToken: null,
-  adminThemeName: typeof window !== 'undefined' ? localStorage.getItem('adminThemeName') !== null ? localStorage.getItem('adminThemeName') : 'cloud' : 'cloud',
-  adminThemeType: typeof window !== 'undefined' ? localStorage.getItem('adminThemeType') as PaletteMode !== null ? localStorage.getItem('adminThemeType') as PaletteMode : 'dark' : 'dark',
+  adminThemeName: typeof window !== 'undefined' ? getCookies().adminThemeName as string : 'cloud',
+  adminThemeType: typeof window !== 'undefined' ? getCookies().adminThemeType as PaletteMode : 'dark',
   adminLoadingBar: 0,
   adminFormSubmit: false,
+  profile: {},
 }
 
 
@@ -26,14 +34,13 @@ const initialState = {
 const reducer = (state: State = initialState, action: AnyAction) => {
   switch (action.type) {
     case HYDRATE:
-    // Attention! This will overwrite client state! Real apps should use proper reconciliation.
-
-    // return {...state, ...action.payload};
+      // Attention! This will overwrite client state! Real apps should use proper reconciliation.
+      // console.log(action)
+      return { ...state, ...action.payload };
     case 'SERVER_ACTION':
-    // console.log("action")
     case 'CLIENT_ACTION':
-    // console.log("action")
     case 'ADMIN_ACCESS_TOKEN':
+      // console.log("action")
       return { ...state, adminAccessToken: action.payload };
     case 'ADMIN_THEMENAME':
       return { ...state, adminThemeName: action.payload };
@@ -43,6 +50,8 @@ const reducer = (state: State = initialState, action: AnyAction) => {
       return { ...state, adminLoadingBar: action.payload };
     case 'ADMIN_FORM_SUBMIT':
       return { ...state, adminFormSubmit: action.payload };
+    case 'ADMIN_PROFILE':
+      return { ...state, profile: action.payload };
     default:
       return state;
   }

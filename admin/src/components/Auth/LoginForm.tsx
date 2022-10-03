@@ -7,38 +7,18 @@ import Grid from '@mui/material/Grid';
 import Email from '../Shared/Inputs/Email';
 import Password from '../Shared/Inputs/Password';
 
-import { useState, useEffect } from 'react';
-
 import Button from '@mui/material/Button'
-// import useFormValidate from '../Shared/Inputs/useFormValidate';
 
-import { useForm, Controller } from "react-hook-form";
-import TextField from '@mui/material/TextField';
-import { useDispatch } from 'react-redux';
+import useLoginForm from './useLoginForm';
 
-interface StateProps {
-  email: string;
-  password: string;
-  showPassword: boolean;
-}
+
 const LoginForm = (props: any) => {
   const { classes } = authStyles({})
-  const { t, router } = props;
-  const dispatch = useDispatch();
-  const [values, setValues] = useState<StateProps>({
-    email: '',
-    password: '',
-    showPassword: false,
-  });
+  const { t } = props;
 
-  const { handleSubmit, control } = useForm<StateProps>();
-  const onSubmit = (data: StateProps) => {
-    const body = {...data, strategy: 'local'}
-    dispatch({ type: 'ADMIN_FORM_SUBMIT', payload: true });
-    setTimeout(() => {
-      dispatch({ type: 'ADMIN_FORM_SUBMIT', payload: false });
-    }, 1000);
-  };
+  const { values, setValues, control, handleSubmit, onSubmit } = useLoginForm();
+
+
 
   return (
 
@@ -54,7 +34,7 @@ const LoginForm = (props: any) => {
 
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <Email control={control} name="email" value={values.email} setValues={setValues} variant="outlined"  />
+            <Email control={control} name="email" value={values.email} setValues={setValues} variant="outlined" />
           </Grid>
           <Grid item xs={12}>
             <Password control={control} name="password" value={values.password} setValues={setValues} showPassword={values.showPassword} variant="outlined" />

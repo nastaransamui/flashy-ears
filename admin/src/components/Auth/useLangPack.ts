@@ -36,19 +36,30 @@ const useLangPack = () => {
   }, [adminThemeName, adminThemeType, i18n.language]);
 
   const handleLanguage = (lang: string) => {
-    localStorage.setItem('i18nextLng', lang);
     i18n.changeLanguage(lang);
     setCookie('i18nextLng', lang);
+    dispatch({
+      type: 'ADMIN_LOADINGBAR',
+      payload: 0,
+    });
   };
 
   const handleThemeName = (pallet: string) => {
-    localStorage.setItem('adminThemeName', pallet);
     dispatch({ type: 'ADMIN_THEMENAME', payload: pallet });
+    setCookie('adminThemeName', pallet);
+    dispatch({
+      type: 'ADMIN_LOADINGBAR',
+      payload: 0,
+    });
   };
 
   const handleMode = (modeType: string) => {
-    localStorage.setItem('adminThemeType', modeType);
     dispatch({ type: 'ADMIN_THEMETYPE', payload: modeType });
+    setCookie('adminThemeType', modeType);
+    dispatch({
+      type: 'ADMIN_LOADINGBAR',
+      payload: 0,
+    });
   };
 
   return {

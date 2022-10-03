@@ -30,8 +30,8 @@ export const reducer = (state: State = initialState, action: AnyAction) => {
             return { ...state, adminThemeType: action.payload };
         case 'ADMIN_LOADINGBAR':
             return { ...state, adminLoadingBar: action.payload };
-            case 'ADMIN_FORM_SUBMIT':
-              return { ...state, adminFormSubmit: action.payload };
+        case 'ADMIN_FORM_SUBMIT':
+            return { ...state, adminFormSubmit: action.payload };
         default:
             return state;
     }

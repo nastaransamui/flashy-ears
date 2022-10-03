@@ -38,6 +38,7 @@ describe('load 404 page', () => {
   });
   it('renders the 404 page', async () => {
     const promise = Promise.resolve()
+    // @ts-ignore
     render(<Provider store={store}><Custom404 router={{ route: "/404", push: jest.fn() }} /></Provider>)
     await act(async () => {
       await promise
@@ -46,6 +47,7 @@ describe('load 404 page', () => {
 
   test('404 page should have back button', async () => {
     const promise = Promise.resolve()
+    // @ts-ignore
     render(<Provider store={store}><Custom404 router={{ route: "/404" }} /></Provider>)
     const backButton = screen.getByRole('button')
     expect(backButton).toBeVisible();
@@ -58,6 +60,7 @@ describe('load 404 page', () => {
   test('404 page click back button and go to /', async () => {
     const user = userEvent.setup();
     const promise = Promise.resolve()
+    // @ts-ignore
     render(<Provider store={store}><Custom404 router={{ route: "/404" }} /></Provider>)
     const backButton = screen.getByRole('button')
     await act(async () => {

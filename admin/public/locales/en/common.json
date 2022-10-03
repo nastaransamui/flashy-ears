@@ -44,7 +44,7 @@
   "littleQueen": "Light Blue",
   "brown": "Brown",
   "oceanBlue": "Blue ocean",
-  "Wrong Email": "Email is wrong",
+  "Wrong Email": "{{email}} is a wrong email.",
   "Wrong password": "Password is wrong",
   "serverError": "Somethings go wrong please contact admin.",
   "notAdmin": "You do not have access to admin panel.",
@@ -117,5 +117,6 @@
   "routeChanged": "The value of roles changed.You need to save before continue.",
   "Total": "Total",
   "...less": "...less",
-  "...more": "...more"
+  "...more": "...more",
+  "accessRoleNull": "The role document is empty."
 }
