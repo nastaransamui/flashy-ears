@@ -69,7 +69,6 @@ const useLoginForm = () => {
             dispatch({ type: 'ADMIN_FORM_SUBMIT', payload: false })
           }
         })
-        // ;
       })
   };
 

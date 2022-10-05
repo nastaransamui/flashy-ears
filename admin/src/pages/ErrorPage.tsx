@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import AppWrapper from '@/src/components/Shared/AppWrapper/AppWrapper';
 
 
-interface Props{
+interface Props {
   t: i18n.TFunction;
   i18n: i18n.Module;
   errorCode: string
@@ -14,17 +14,17 @@ interface Props{
 
 const ErrorPage: FC<Props> = (props: any) => {
   const { t, errorCode } = props;
-  const {i18n } = useTranslation();
+  const { i18n } = useTranslation();
   return (
     <AppWrapper>
-    <Error
-      {...props}
-      t={t}
-      i18n={i18n}
-      errorCode={errorCode}
-      text={ t('title')}
-      type="next"
-    />
+      <Error
+        {...props}
+        t={t}
+        i18n={i18n}
+        errorCode={errorCode}
+        text={t('title')}
+        type="next"
+      />
     </AppWrapper>
   );
 };

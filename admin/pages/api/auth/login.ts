@@ -1,11 +1,24 @@
-import apiRoute from '@/helpers/nextConnect';
 import { authenticate, localStrategy } from '@/helpers/passport';
-import type { NextApiRequest, NextApiResponse } from 'next';
 import { dbCheck } from '../../../middleware/dbCheck';
 import passport from 'passport';
 import cors from 'cors';
 import { updateAccessToken } from '@/helpers/hashing';
 import { IUser } from '@/models/Users';
+import nextConnect from 'next-connect';
+import { NextApiRequest, NextApiResponse } from 'next';
+
+const apiRoute = nextConnect<NextApiRequest, NextApiResponse>({
+  onError(error, req, res) {
+    res
+      .status(501)
+      .json({ error: `Sorry something Happened! ${error.message}` });
+  },
+  onNoMatch(req, res) {
+    res
+      .status(405)
+      .json({ success: false, Error: `Method '${req.method}' Not Allowed` });
+  },
+});
 
 type Data = {
   name?: string;
@@ -24,6 +37,7 @@ apiRoute
     try {
       const { strategy } = req.body;
       const user = await authenticate(strategy, req, res);
+      // console.log(user);
       if (!(user as any).message) {
         if ((user as any).isAdmin) {
           const { accessToken, accessRole, errorMessage } =

@@ -1,8 +1,8 @@
 import CryptoJS from 'crypto-js';
 import jwt from 'jsonwebtoken';
-import {IUser} from '../models/Users'
-import Roles, {IRole} from '../models/Roles';
-import { NextApiResponse } from "next";
+import { IUser } from '../models/Users';
+import Roles, { IRole } from '../models/Roles';
+import { NextApiResponse } from 'next';
 
 export function validatePassword(user: IUser, inputPassword: string) {
   const bytes = CryptoJS.AES.decrypt(
@@ -16,39 +16,38 @@ export function validatePassword(user: IUser, inputPassword: string) {
 
 export async function updateAccessToken(user: IUser, res: NextApiResponse) {
   const accessToken = await jwtSign(user);
-  
-    const role = await Roles.findOne(
-      { _id: { $in: user.role_id } },
-      {
-        _id: 0,
-        icon: 0,
-        remark: 0,
-        isActive: 0,
-        users_id: 0,
-        roleName: 0,
-        createdAt: 0,
-        updatedAt: 0,
-        __v: 0,
-      }
-    );
-    if (role == null) {
-      return {
-        accessToken: null,
-        accessRole: null,
-        errorMessage: 'accessRoleNull',
-      };
-    }
 
-    const accessRole = await jwtRole(role);
-    user.accessToken = accessToken;
-    user = await user.save();
-    const { password, ...info } = user._doc;
+  const role = await Roles.findOne(
+    { _id: { $in: user.role_id } },
+    {
+      _id: 0,
+      icon: 0,
+      remark: 0,
+      isActive: 0,
+      users_id: 0,
+      roleName: 0,
+      createdAt: 0,
+      updatedAt: 0,
+      __v: 0,
+    }
+  );
+  if (role == null) {
     return {
-      accessToken: accessToken,
-      accessRole: accessRole,
-      errorMessage: null,
+      accessToken: null,
+      accessRole: null,
+      errorMessage: 'accessRoleNull',
     };
-  
+  }
+
+  const accessRole = await jwtRole(role);
+  user.accessToken = accessToken;
+  user = await user.save();
+  const { password, ...info } = user._doc;
+  return {
+    accessToken: accessToken,
+    accessRole: accessRole,
+    errorMessage: null,
+  };
 }
 
 export async function jwtSign(user: IUser) {
