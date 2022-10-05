@@ -8,11 +8,9 @@ export function isObjectEmpty(obj: object) {
 
 export async function setPageCookies(ctx: NextPageContext, store: any) {
   const profile: any =
-    hasCookie('adminAccessToken') &&
-    unHashProfile(getCookies(ctx)?.adminAccessToken as string);
-
-  !hasCookie('adminThemeType') && setCookie('adminThemeType', 'dark', ctx);
-  !hasCookie('adminThemeName') && setCookie('adminThemeName', 'cloud', ctx);
+    getCookies(ctx).adminAccessToken !== undefined
+      ? unHashProfile(getCookies(ctx)?.adminAccessToken as string)
+      : {};
 
   return {
     ...(await store.dispatch({
@@ -21,15 +19,15 @@ export async function setPageCookies(ctx: NextPageContext, store: any) {
     })),
     ...(await store.dispatch({
       type: 'ADMIN_THEMETYPE',
-      payload: getCookies(ctx).adminThemeType,
+      payload: getCookies(ctx).adminThemeType || 'dark',
     })),
     ...(await store.dispatch({
       type: 'ADMIN_PROFILE',
-      payload: profile.err ? {} : profile,
+      payload: profile,
     })),
     ...(await store.dispatch({
       type: 'ADMIN_THEMENAME',
-      payload: getCookies(ctx).adminThemeName,
+      payload: getCookies(ctx).adminThemeName || 'cloud',
     })),
   };
 }

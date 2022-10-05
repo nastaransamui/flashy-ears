@@ -22,7 +22,6 @@ const SidebarUser: FC<SibebarUserProps> = (props: SibebarUserProps) => {
   const navigate = useNavigate();
   const { profile } = useSelector<State, State>(state => state)
   const { sideBarbgColor, rtlActive, openCollapse, propsMiniActive, stateMiniActive, openAvatar } = props;
-
   const userWrapperClass =
     classes.user
     +
