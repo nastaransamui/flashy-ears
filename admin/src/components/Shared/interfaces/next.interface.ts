@@ -4,6 +4,7 @@ import { ReactNode } from 'react';
 import { EmotionCache } from '@emotion/react';
 export type Page<P = {}> = NextPage<P> & {
   getLayout?: (page: ReactNode) => ReactNode;
+  isVercel?: boolean;
 };
 export type NextProps = AppProps & {
   Component: Page;

@@ -10,7 +10,7 @@ type ObjectKey = keyof typeof brand;
 export default function HeadComponent({ title }: { title: string }) {
   const { i18n } = useTranslation();
 
-const langName = `name_${i18n.language}` as ObjectKey;
+  const langName = `name_${i18n.language}` as ObjectKey;
 
   return (
     <Head>

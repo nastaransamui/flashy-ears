@@ -33,11 +33,11 @@ const Admin: NextPage = (props) => {
 export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(
   (store) => async (ctx) => {
     let props = {}
-    // if (!isObjectEmpty(getCookies(ctx))) {
-    props = {
-      ...(await setPageCookies(ctx as any, store as any))
+    if (!isObjectEmpty(getCookies(ctx))) {
+      props = {
+        ...(await setPageCookies(ctx as any, store as any))
+      }
     }
-    // }
     if (hasCookie('adminAccessToken', ctx)) {
       return {
         redirect: {

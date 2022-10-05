@@ -1,4 +1,4 @@
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { FC } from 'react';
 import SidebarMain from '../Sidebar/SidebarMain';
 
@@ -6,14 +6,13 @@ import { ProDashboardProps } from '@/interfaces/react.interface'
 import prodashboardStyle from './prodashboard-style';
 import NavbarMain from '../Navbar/NavbarMain';
 import Footer from '../Footer/Footer';
-import ReactRouter from '../ReactRouter';
+import ThemeUser from '../Theme/ThemeUser';
 
 
 
 const Prodashboard: FC<ProDashboardProps> = (props: ProDashboardProps) => {
   const { classes, cx } = prodashboardStyle({})
-  const { propsMiniActive } = props
-
+  const { propsMiniActive, rtlActive } = props
   const mainPageMinimize = classes.mainPageMinimize + ' ' + cx({
     [classes.mainPageHandlemainOpen]: propsMiniActive,
     [classes.mainPageHandlemainClose]: !propsMiniActive
@@ -26,12 +25,13 @@ const Prodashboard: FC<ProDashboardProps> = (props: ProDashboardProps) => {
       <span className={mainPageMinimize + ' ' + classes.main} >
         <Outlet />
       </span>
+      <ThemeUser rtlActive={rtlActive} />
       <span className={mainPageMinimize}
         style={{
           display: 'flex',
           width: '100%',
         }}>
-        <Footer {...props} />
+        <Footer />
       </span>
     </div>
   )

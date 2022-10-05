@@ -1,5 +1,14 @@
 import * as i18n from 'i18next';
 
+export interface Lang {
+  id: number;
+  title_en: string;
+  title_fa: string;
+  Lang: string;
+  LangCode: string;
+  Flag: string;
+}
+
 export interface RoutesViews {
   path?: string;
   name_en: string;
@@ -21,9 +30,16 @@ export interface RoutesType {
   views?: RoutesViews[];
 }
 
+export interface ActiveRouteType {
+  name_en: string;
+  name_fa: string;
+  path: string;
+}
+
 export interface CustomPropsTypes {
-  t?: i18n.TFunction;
+  isVercel?: boolean;
   routes?: RoutesType[];
+  propsMiniActive?: boolean;
 }
 
 export type ChildrenProps = {
@@ -31,14 +47,13 @@ export type ChildrenProps = {
 };
 
 export interface ProDashboardProps extends CustomPropsTypes {
-  sidebarMinimizeFunc: Function;
-  propsMiniActive: boolean;
-  color: string;
   handleDrawerToggle: () => void;
+  handleSideBarBgToggle: React.MouseEventHandler;
+  propsMiniActive: boolean;
+  rtlActive: boolean;
   sidebarOpen: boolean;
   sideBarbgColor: string;
-  rtlActive: boolean;
-  handleSideBarBgToggle: React.MouseEventHandler;
+  sidebarMinimizeFunc: () => void;
 }
 
 export interface SibebarUserProps extends CustomPropsTypes {
@@ -48,7 +63,6 @@ export interface SibebarUserProps extends CustomPropsTypes {
   propsMiniActive: boolean;
   stateMiniActive: boolean;
   openAvatar: boolean;
-  handleDrawerToggle: () => void;
 }
 
 export interface DrawerStateType {
@@ -63,8 +77,15 @@ export interface SideBarLinksTypes {
   sideBarbgColor: string;
   rtlActive: boolean;
   propsMiniActive: boolean;
-  stateMiniActive: boolean;
   state: DrawerStateType;
   setState: Function;
   handleDrawerToggle: () => void;
+}
+
+export interface BrandLogoTypes {
+  rtlActive: boolean;
+  stateMiniActive: boolean;
+  propsMiniActive: boolean;
+  sideBarbgColor: string;
+  handleSideBarBgToggle: React.MouseEventHandler;
 }

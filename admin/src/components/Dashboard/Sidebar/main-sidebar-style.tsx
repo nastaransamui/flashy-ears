@@ -1,7 +1,9 @@
 import { makeStyles } from "tss-react/mui";
+import {
+  drawerWidth,
+  drawerMiniWidth
+} from '@/theme/common'
 
-const drawerWidth = 260;
-const drawerMiniWidth = 80;
 const mainSidebarStyle = makeStyles<{}>()((theme) => {
   // console.log(theme)
   return {
@@ -25,12 +27,12 @@ const mainSidebarStyle = makeStyles<{}>()((theme) => {
         boxShadow: theme.shadows[24],
         width: drawerWidth,
         position: 'fixed',
-        display: 'block',
+        // display: 'block',
         top: 0,
         height: '100vh',
-        right: 0,
-        left: 'auto',
-        zIndex: 10,
+        left: theme.direction == 'ltr' ? 0 : 'auto',
+        right: theme.direction == 'ltr' ? 'auto' : 0,
+        zIndex: 40,
         visibility: 'visible',
         overflowY: 'visible',
         borderTop: 'none',

@@ -1,12 +1,4 @@
-interface Lang {
-  id: number;
-  title_en: string;
-  title_fa: string;
-  Lang: string;
-  LangCode: string;
-  Flag: string;
-}
-
+import { Lang } from '@/interfaces/react.interface';
 
 const langName: Lang[] = (module.exports = [
   {

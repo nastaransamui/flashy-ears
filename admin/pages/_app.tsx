@@ -32,7 +32,6 @@ import detector from 'i18next-browser-languagedetector';
 
 import { hasCookie, getCookies } from 'cookies-next';
 
-
 i18next
   .use(detector)
   .use(initReactI18next)
@@ -48,7 +47,8 @@ i18next
 const clientSideEmotionCache = createEmotionCache();
 
 
-const isVercel = process.env.NEXT_PUBLIC_SERVERLESS;
+
+const isVercel = process.env.NEXT_PUBLIC_SERVERLESS == true ? true : false;
 
 function MyApp({ Component, ...rest }: NextProps) {
   const { store, props } = wrapper.useWrappedStore(rest);
@@ -106,7 +106,7 @@ function MyApp({ Component, ...rest }: NextProps) {
         <I18nextProvider i18n={i18next}>
           <CssBaseline />
           <div suppressHydrationWarning={true}>
-            {getLayout(<Component {...pageProps} t={t} i18n={i18n} ready={ready} key={router.route} router={router} isVercel={isVercel} />)}
+            {getLayout(<Component {...pageProps} key={router.route} router={router} isVercel={isVercel} />)}
           </div>
         </I18nextProvider>
       </Provider>

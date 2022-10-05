@@ -59,8 +59,11 @@ const userSideBarStyle = makeStyles<{}>()((theme) => {
       borderLeft: '4px solid transparent',
     },
     caretRTL: {
-      left: '11px',
-      right: 'auto',
+      right: -10,
+      left: 'auto',
+      [theme.breakpoints.down('sm')]: {
+        right: -10,
+      }
     },
     avatarImg: {
       width: '100%',

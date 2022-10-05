@@ -32,7 +32,7 @@ var dashRoutes: RoutesType[] = (module.exports = [
     //layout: '/admin',
     views: [
       {
-        path: '/user-page',
+        path: '/users-page',
         name_en: 'Users List',
         name_fa: 'لیست کاربران',
         mini_en: 'UL',
@@ -62,7 +62,7 @@ var dashRoutes: RoutesType[] = (module.exports = [
     //layout: '/admin',
     views: [
       {
-        path: '/rbac-data',
+        path: '/rbacs-data',
         name_en: 'Roles List',
         name_fa: 'لیست نقش ها',
         mini_en: 'RL',

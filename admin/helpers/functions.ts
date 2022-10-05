@@ -11,8 +11,8 @@ export async function setPageCookies(ctx: NextPageContext, store: any) {
     getCookies(ctx)?.adminAccessToken as string
   );
 
-  !hasCookie('adminThemeType') && setCookie('adminThemeType', 'dark', ctx);
-  !hasCookie('adminThemeName') && setCookie('adminThemeName', 'cloud', ctx);
+  hasCookie('adminThemeType') && setCookie('adminThemeType', 'dark', ctx);
+  hasCookie('adminThemeName') && setCookie('adminThemeName', 'cloud', ctx);
 
   return {
     ...(await store.dispatch({

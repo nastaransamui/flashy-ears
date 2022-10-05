@@ -18,26 +18,16 @@ const SidebarLinks: FC<SideBarLinksTypes> = (props: SideBarLinksTypes) => {
   const { classes, theme, cx } = linkSidebarStyle({})
   const location = useLocation();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const { getCollapseInitialState, routes, sideBarbgColor, rtlActive, propsMiniActive, stateMiniActive, state, setState, handleDrawerToggle } = props;
-
-  // useEffect(() => {
-  //   let isMount = true;
-  //   if (isMount) {
-  //     let nst = {};
-  //     routes.map((route, index) => {
-  //       if (!route?.collapse) {
-  //         console.log(route.path)
-  //         if (location.pathname == route.path) {
-  //           // console.log(location)
-  //         }
-  //       }
-  //     })
-  //   }
-  //   return () => {
-  //     isMount = false;
-  //   }
-  // }, [])
-
+  const {
+    getCollapseInitialState,
+    routes,
+    sideBarbgColor,
+    rtlActive,
+    propsMiniActive,
+    state,
+    setState,
+    handleDrawerToggle } = props;
+  const { stateMiniActive } = state;
   const createLinks = (routes: RoutesType[]) => {
     return routes.map((route, index) => {
 
@@ -217,8 +207,6 @@ const SidebarLinks: FC<SideBarLinksTypes> = (props: SideBarLinksTypes) => {
             to={route.path}
             onClick={(e) => {
               isMobile && handleDrawerToggle();
-              console.log(route.path)
-              // router.asPath = route.layout + route.path;
             }}>
             <span
               className={cx(
@@ -263,6 +251,20 @@ const SidebarLinks: FC<SideBarLinksTypes> = (props: SideBarLinksTypes) => {
   return <List className={
     classes.list + ' ' + classes[sideBarbgColor + 'Background' as keyof typeof classes]
   }>{createLinks(routes)}</List>
+}
+
+SidebarLinks.propTypes = {
+  getCollapseInitialState: PropTypes.func.isRequired,
+  routes: PropTypes.array.isRequired,
+  sideBarbgColor: PropTypes.string.isRequired,
+  rtlActive: PropTypes.bool.isRequired,
+  propsMiniActive: PropTypes.bool.isRequired,
+  state: PropTypes.shape({
+    stateMiniActive: PropTypes.bool.isRequired,
+    openAvatar: PropTypes.bool.isRequired,
+  }).isRequired,
+  setState: PropTypes.func.isRequired,
+  handleDrawerToggle: PropTypes.func.isRequired
 }
 
 export default SidebarLinks;

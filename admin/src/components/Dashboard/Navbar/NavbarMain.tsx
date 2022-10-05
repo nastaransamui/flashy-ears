@@ -1,20 +1,120 @@
 import { FC, createRef } from "react";
 import { ProDashboardProps } from "@/interfaces/react.interface";
+import navbarMainStyle from "./navbar-main-style";
 import AppBar from '@mui/material/AppBar'
-import Button from '@mui/material/Button'
+import PropTypes from 'prop-types'
+import MoreVert from '@mui/icons-material/MoreVert'
+import ViewList from '@mui/icons-material/ViewList'
+import Menu from '@mui/icons-material/Menu'
 import Hidden from '@mui/material/Hidden'
 import IconButton from '@mui/material/IconButton'
 import Toolbar from '@mui/material/Toolbar'
 import brand from '@/public/text/brand'
-import PropTypes from 'prop-types'
+import { useLocation } from "react-router-dom";
+import NavbarLinks from "./NavbarLinks";
 
+import { useTranslation } from "react-i18next";
+import { RoutesType, } from '@/interfaces/react.interface'
+import { Typography } from "@mui/material";
+import { ActiveRouteType } from '@/interfaces/react.interface'
 
 const NavbarMain: FC<ProDashboardProps> = (props: ProDashboardProps) => {
-  const { sidebarMinimizeFunc, rtlActive } = props;
+  const { propsMiniActive, routes, handleDrawerToggle, sidebarMinimizeFunc } =
+    props;
+  const location = useLocation();
+  const { i18n } = useTranslation()
+  const { classes, cx } = navbarMainStyle({});
+  const mainPanel = createRef();
+  const mainPanelClasses =
+    classes.mainPanel +
+    ' ' +
+    cx({
+      [classes.mainPanelSidebarMini]: propsMiniActive,
+    });
+
+  const sidebarMinimize =
+    classes.sidebarMinimize +
+    ' ' +
+    cx({
+      [classes.sidebarHandlemainOpen]: propsMiniActive,
+      [classes.sidebarHandlemainClose]: !propsMiniActive,
+    });
+
+  /**
+   * 
+   * @param routes 
+   * @returns 
+   * Recursive map throw routes and find the name of active route
+   */
+
+  const getActiveRoute = (routes: RoutesType[]) => {
+    let activeRoute = brand[`name_${i18n.language}` as keyof typeof brand]
+
+    let allAccess: ActiveRouteType[] = [];
+    routes.map(function iter(a) {
+      let objectRoute = {
+        name_en: a.name_en,
+        name_fa: a.name_fa,
+        path: a.path
+      }
+      allAccess.push(objectRoute);
+      Array.isArray(a.views) && a.views.map(iter as any);
+    });
+    for (let index = 0; index < allAccess.length; index++) {
+      const element = allAccess[index];
+      if (element.path == location.pathname) {
+        activeRoute = element[`name_${i18n.language}` as keyof typeof element]
+        if (location?.search !== '') {
+          activeRoute = element[`name_${i18n.language}` as keyof typeof element]
+        }
+      }
+    }
+    return activeRoute;
+  }
+
   return (
-    <div style={{ marginLeft: 300 }}>
-      <Button onClick={() => { sidebarMinimizeFunc() }}>Sidebar</Button>
+    <div className={mainPanelClasses} ref={mainPanel as React.RefObject<HTMLDivElement>}>
+      <AppBar className={classes.appBar} color="default">
+        <Toolbar>
+          <Hidden smDown implementation='css'>
+            <div className={sidebarMinimize}>
+              <div className={sidebarMinimize}>
+                {propsMiniActive ? (
+                  <IconButton onClick={sidebarMinimizeFunc} className={classes.justIcon} disableFocusRipple disableRipple>
+                    <ViewList className={classes.sidebarMiniIcon} />
+                  </IconButton>
+                ) : (
+                  <IconButton onClick={sidebarMinimizeFunc} className={classes.justIcon} disableFocusRipple disableRipple>
+                    <MoreVert className={classes.sidebarMiniIcon} />
+                  </IconButton>
+                )}
+              </div>
+            </div>
+          </Hidden>
+          <div className={classes.flex}>
+            <Typography className={classes.title} sx={{ padding: 2 }}>
+              {getActiveRoute(routes as RoutesType[])}
+            </Typography>
+          </div>
+          <Hidden smDown implementation='css'>
+            <NavbarLinks {...props} />
+          </Hidden>
+          <Hidden smUp implementation='css'>
+            <IconButton onClick={handleDrawerToggle}>
+              <Menu />
+            </IconButton>
+          </Hidden>
+        </Toolbar>
+      </AppBar>
     </div>
   )
 }
+
+NavbarMain.propTypes = {
+  propsMiniActive: PropTypes.bool.isRequired,
+  routes: PropTypes.array.isRequired,
+  handleDrawerToggle: PropTypes.func.isRequired,
+  sidebarMinimizeFunc: PropTypes.func.isRequired
+}
+
 export default NavbarMain;

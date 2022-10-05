@@ -21,7 +21,7 @@ const SidebarUser: FC<SibebarUserProps> = (props: SibebarUserProps) => {
   const { t } = useTranslation('dashboard')
   const navigate = useNavigate();
   const { profile } = useSelector<State, State>(state => state)
-  const { sideBarbgColor, rtlActive, openCollapse, propsMiniActive, stateMiniActive, openAvatar, handleDrawerToggle } = props;
+  const { sideBarbgColor, rtlActive, openCollapse, propsMiniActive, stateMiniActive, openAvatar } = props;
 
   const userWrapperClass =
     classes.user

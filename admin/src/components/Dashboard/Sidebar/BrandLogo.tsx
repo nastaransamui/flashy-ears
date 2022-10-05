@@ -7,14 +7,7 @@ import DarkModeIcon from '@mui/icons-material/DarkMode'
 import LightModeIcon from '@mui/icons-material/LightMode';
 import IconButton from '@mui/material/IconButton'
 import { useNavigate } from "react-router-dom";
-
-interface BrandLogoTypes {
-  rtlActive: boolean;
-  stateMiniActive: boolean;
-  propsMiniActive: boolean;
-  sideBarbgColor: string;
-  handleSideBarBgToggle: React.MouseEventHandler;
-}
+import { BrandLogoTypes } from '@/interfaces/react.interface'
 
 const BrandLogo: FC<BrandLogoTypes> = (props: BrandLogoTypes) => {
   const { i18n } = useTranslation();
@@ -73,6 +66,14 @@ const BrandLogo: FC<BrandLogoTypes> = (props: BrandLogoTypes) => {
       </span>
     </div>
   )
+}
+
+BrandLogo.propTypes = {
+  sideBarbgColor: PropTypes.string.isRequired,
+  rtlActive: PropTypes.bool.isRequired,
+  propsMiniActive: PropTypes.bool.isRequired,
+  stateMiniActive: PropTypes.bool.isRequired,
+  handleSideBarBgToggle: PropTypes.func.isRequired,
 }
 
 export default BrandLogo;

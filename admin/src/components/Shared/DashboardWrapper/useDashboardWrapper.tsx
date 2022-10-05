@@ -20,7 +20,6 @@ const useDashboardWrapper = () => {
   );
   const dispatch = useDispatch();
   const { i18n, t } = useTranslation();
-
   const [adminTheme, setAdminTheme] = useState({
     ...appTheme(
       hasCookie('adminThemeName') ? getCookies().adminThemeName as string : 'cloud' as string,

@@ -21,7 +21,7 @@ const Doshboard: NextPage = (props) => {
   return (
     <Fragment>
       <HeadComponent title={t('title')} />
-      <DynamicDashboard t={t} {...props} routes={routes} />
+      <DynamicDashboard  {...props} routes={routes} />
     </Fragment>
   )
 }
@@ -29,10 +29,10 @@ const Doshboard: NextPage = (props) => {
 export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(
   (store) => async (ctx) => {
     let props = {}
-    if (!isObjectEmpty(getCookies(ctx))) {
-      props = {
-        ...(await setPageCookies(ctx as any, store as any))
-      }
+    // if (!isObjectEmpty(getCookies(ctx))) {
+    props = {
+      ...(await setPageCookies(ctx as any, store as any))
+      // }
     }
     if (!hasCookie('adminAccessToken', ctx)) {
       return {

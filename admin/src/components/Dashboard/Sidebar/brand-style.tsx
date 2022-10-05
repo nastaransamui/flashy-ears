@@ -84,7 +84,7 @@ const brandStyle = makeStyles<{}>()((theme) => {
     logoNormalRTL: {
       textAlign: 'right',
       [theme.breakpoints.down('sm')]: {
-        textAlign: 'left',
+        textAlign: 'right',
       },
     },
     sideBarTheme: {

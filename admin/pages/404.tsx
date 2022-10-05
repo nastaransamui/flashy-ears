@@ -13,7 +13,6 @@ const DynamicError = dynamic(() => import('@/src/pages/ErrorPage'), {
 const Custom404: NextPage = (props: any) => {
   const { t, ready, i18n } = useTranslation('404');
   const errorCode = props.router.route.substring(1);
-  console.log(errorCode)
   return (
     <Fragment>
       <HeadComponent title={t('title')} />

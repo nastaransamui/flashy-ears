@@ -1,11 +1,21 @@
 import { makeStyles } from "tss-react/mui";
+import {
+  drawerWidth,
+  drawerMiniWidth
+} from '@/theme/common'
 
 const maindashboardStyle = makeStyles<{}>()((theme) => {
   return {
     MainDashboard: {
-      flex: 4,
-      padding: 10,
-      color: theme.palette.text.color,
+      width: `calc(100% - ${drawerMiniWidth}px)`,
+      // flex: 4,
+      marginTop: 85,
+    },
+    sidebarHandlemainOpen: {
+      transition: 'all .35s ease',
+    },
+    sidebarHandlemainClose: {
+      transition: 'all .35s ease',
     },
   }
 })

@@ -6,8 +6,9 @@ const prodashboardStyle = makeStyles<{}>()((theme) => {
       display: 'flex',
       width: '100%',
       // marginTop: 100,
-      minHeight: '100vh',
-      background: theme.palette.background.default
+      minHeight: '94vh',
+      background: theme.palette.background.default,
+      borderBottom: `1px solid ${theme.palette.primary.main}`,
     },
     mainPageMinimize: {
       float: 'left',

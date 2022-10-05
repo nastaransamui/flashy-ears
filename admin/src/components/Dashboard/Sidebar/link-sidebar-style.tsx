@@ -90,6 +90,7 @@ const linkSidebarStyle = makeStyles<{}>()((theme) => {
     itemTextRTL: {
       // marginRight: '45px',
       // textAlign: 'right',
+      // color: 'blue'
     },
     //Not use
     itemTextMiniRTL: {
@@ -136,8 +137,8 @@ const linkSidebarStyle = makeStyles<{}>()((theme) => {
     },
     itemIconRTL: {
       float: 'right',
-      marginLeft: '15px',
-      marginRight: '20px',
+      marginLeft: '5px',
+      marginRight: '-10px',
     },
     itemIconMini: {
       position: 'absolute',
@@ -146,6 +147,11 @@ const linkSidebarStyle = makeStyles<{}>()((theme) => {
       right: 0,
       bottom: 0,
       top: 0,
+      [theme.breakpoints.down('sm')]: {
+        // left: 'auto',
+        left: theme.direction == 'ltr' ? 0 : 'auto',
+        right: theme.direction == 'ltr' ? 'auto' : 0
+      }
     },
     caret: {
       marginTop: '13px',
@@ -246,7 +252,7 @@ const linkSidebarStyle = makeStyles<{}>()((theme) => {
       },
       '&,&:hover,&:focus': {
         backgroundColor: theme.palette.primary.main,
-        boxShadow: theme.shadows[24],
+        boxShadow: theme.shadows[4],
       },
     },
   }
