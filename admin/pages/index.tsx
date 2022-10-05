@@ -8,7 +8,7 @@ import { wrapper, } from '@/src/redux/store';
 import { GetServerSideProps } from 'next'
 
 import HeadComponent from '@/src/components/head';
-import { hasCookie, getCookies, deleteCookie } from 'cookies-next';
+import { hasCookie, getCookies } from 'cookies-next';
 import dynamic from 'next/dynamic'
 import jwt from 'jsonwebtoken';
 import { unHashProfile } from '@/helpers/unhasshing';

@@ -7,12 +7,12 @@ export function isObjectEmpty(obj: object) {
 }
 
 export async function setPageCookies(ctx: NextPageContext, store: any) {
-  const profile: any = unHashProfile(
-    getCookies(ctx)?.adminAccessToken as string
-  );
+  const profile: any =
+    hasCookie('adminAccessToken') &&
+    unHashProfile(getCookies(ctx)?.adminAccessToken as string);
 
-  hasCookie('adminThemeType') && setCookie('adminThemeType', 'dark', ctx);
-  hasCookie('adminThemeName') && setCookie('adminThemeName', 'cloud', ctx);
+  !hasCookie('adminThemeType') && setCookie('adminThemeType', 'dark', ctx);
+  !hasCookie('adminThemeName') && setCookie('adminThemeName', 'cloud', ctx);
 
   return {
     ...(await store.dispatch({
