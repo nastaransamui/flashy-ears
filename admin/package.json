@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "concurrently \"NODE_ENV=development node user.js\" \"next dev -p 4000\"",
-    "build": "next build",
-    "start": "concurrently \"NODE_ENV=production node user.js\" \"next start -p 4000\"",
+    "build": "concurrently \"NODE_ENV=production node user.js\" \"next build\"",
+    "start": "next start -p 4000",
     "lint": "next lint",
     "post-update": "echo \"codesandbox preview only, need an update\" && yarn upgrade --latest",
     "test": "jest --watchAll --verbose",
