@@ -1,17 +1,22 @@
+import { State } from '@/src/redux/store';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
 type SidebarColor = 'white' | 'black'
 const useDashboard = () => {
   const { i18n } = useTranslation(['dashboard', 'footer', 'users']);
   const rtlActive = i18n.language == 'fa'
-  const [propsMiniActive, setPropsMiniActive] = useState<boolean>(false);
+  const { propsMiniActive } = useSelector<State, State>(state => state)
+  const dispatch = useDispatch()
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
   const [sideBarbgColor, setSideBarbgColor] = useState<SidebarColor>('black');
   const sidebarMinimizeFunc = () => {
-    setPropsMiniActive(!propsMiniActive);
     localStorage.setItem('miniActive', JSON.stringify(!propsMiniActive))
+    dispatch({
+      type: 'PROPS_MINI_ACTIVE',
+      payload: !propsMiniActive,
+    });
   };
-
 
   const handleDrawerToggle = () => {
     setSidebarOpen(!sidebarOpen);
@@ -36,12 +41,12 @@ const useDashboard = () => {
   useEffect(() => {
     let isMount = true;
     if (isMount) {
-
-      setPropsMiniActive(
-        JSON.stringify(localStorage.getItem('miniActive')) == `null`
+      dispatch({
+        type: 'PROPS_MINI_ACTIVE',
+        payload: JSON.stringify(localStorage.getItem('miniActive')) == `null`
           ? false
-          : JSON.parse(localStorage.getItem('miniActive')!)
-      );
+          : JSON.parse(localStorage.getItem('miniActive')!),
+      });
     }
     return () => {
       isMount = false;

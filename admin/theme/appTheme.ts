@@ -39,7 +39,7 @@ const appTheme = (color: string, mode: PaletteMode, dir: string) => {
       mode: mode,
       background: {
         paper: mode === 'dark' ? '#212121' : '#fff',
-        default: mode === 'dark' ? '#424242' : '#f5f5f5',
+        default: mode === 'dark' ? '#424242' : '#EEEEEE',
       },
       primary: palette[color].palette.primary,
       secondary: palette[color].palette.secondary,

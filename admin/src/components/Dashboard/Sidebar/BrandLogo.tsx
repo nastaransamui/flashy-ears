@@ -8,12 +8,15 @@ import LightModeIcon from '@mui/icons-material/LightMode';
 import IconButton from '@mui/material/IconButton'
 import { useNavigate } from "react-router-dom";
 import { BrandLogoTypes } from '@/interfaces/react.interface'
+import { useSelector } from "react-redux";
+import { State } from "@/src/redux/store";
 
 const BrandLogo: FC<BrandLogoTypes> = (props: BrandLogoTypes) => {
   const { i18n } = useTranslation();
   const { classes, cx } = brandStyle({})
   const navigate = useNavigate();
-  const { sideBarbgColor, rtlActive, propsMiniActive, stateMiniActive, handleSideBarBgToggle } = props
+  const { sideBarbgColor, rtlActive, stateMiniActive, handleSideBarBgToggle } = props
+  const { propsMiniActive } = useSelector<State, State>(state => state);
   const logoClasses =
     classes.logo +
     ' ' +
@@ -71,7 +74,6 @@ const BrandLogo: FC<BrandLogoTypes> = (props: BrandLogoTypes) => {
 BrandLogo.propTypes = {
   sideBarbgColor: PropTypes.string.isRequired,
   rtlActive: PropTypes.bool.isRequired,
-  propsMiniActive: PropTypes.bool.isRequired,
   stateMiniActive: PropTypes.bool.isRequired,
   handleSideBarBgToggle: PropTypes.func.isRequired,
 }

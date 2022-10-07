@@ -12,6 +12,8 @@ import SvgIcon from '@mui/material/SvgIcon';
 import { RoutesType, } from '@/interfaces/react.interface'
 import i18next from "i18next";
 import { DrawerStateType, SideBarLinksTypes } from '@/interfaces/react.interface';
+import { useSelector } from "react-redux";
+import { State } from "@/src/redux/store";
 
 
 const SidebarLinks: FC<SideBarLinksTypes> = (props: SideBarLinksTypes) => {
@@ -23,11 +25,11 @@ const SidebarLinks: FC<SideBarLinksTypes> = (props: SideBarLinksTypes) => {
     routes,
     sideBarbgColor,
     rtlActive,
-    propsMiniActive,
     state,
     setState,
     handleDrawerToggle } = props;
   const { stateMiniActive } = state;
+  const { propsMiniActive } = useSelector<State, State>(state => state)
   const createLinks = (routes: RoutesType[]) => {
     return routes.map((route, index) => {
 
@@ -258,7 +260,6 @@ SidebarLinks.propTypes = {
   routes: PropTypes.array.isRequired,
   sideBarbgColor: PropTypes.string.isRequired,
   rtlActive: PropTypes.bool.isRequired,
-  propsMiniActive: PropTypes.bool.isRequired,
   state: PropTypes.shape({
     stateMiniActive: PropTypes.bool.isRequired,
     openAvatar: PropTypes.bool.isRequired,

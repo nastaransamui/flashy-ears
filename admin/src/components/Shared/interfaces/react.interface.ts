@@ -39,7 +39,6 @@ export interface ActiveRouteType {
 export interface CustomPropsTypes {
   isVercel?: boolean;
   routes?: RoutesType[];
-  propsMiniActive?: boolean;
 }
 
 export type ChildrenProps = {
@@ -49,7 +48,6 @@ export type ChildrenProps = {
 export interface ProDashboardProps extends CustomPropsTypes {
   handleDrawerToggle: () => void;
   handleSideBarBgToggle: React.MouseEventHandler;
-  propsMiniActive: boolean;
   rtlActive: boolean;
   sidebarOpen: boolean;
   sideBarbgColor: string;
@@ -60,7 +58,6 @@ export interface SibebarUserProps extends CustomPropsTypes {
   sideBarbgColor: string;
   rtlActive: boolean;
   openCollapse: Function;
-  propsMiniActive: boolean;
   stateMiniActive: boolean;
   openAvatar: boolean;
 }
@@ -76,7 +73,6 @@ export interface SideBarLinksTypes {
   routes: RoutesType[];
   sideBarbgColor: string;
   rtlActive: boolean;
-  propsMiniActive: boolean;
   state: DrawerStateType;
   setState: Function;
   handleDrawerToggle: () => void;
@@ -85,7 +81,6 @@ export interface SideBarLinksTypes {
 export interface BrandLogoTypes {
   rtlActive: boolean;
   stateMiniActive: boolean;
-  propsMiniActive: boolean;
   sideBarbgColor: string;
   handleSideBarBgToggle: React.MouseEventHandler;
 }

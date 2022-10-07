@@ -4,7 +4,11 @@ import { CustomPropsTypes } from "../../Shared/interfaces/react.interface";
 import maindashboardStyle from "./maindashboard-style";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { State } from "@/src/redux/store";
 
+import { db } from '@/src/browserDb';
+import { useLiveQuery } from "dexie-react-hooks";
 
 export function useQuery() {
   const { search } = useLocation();
@@ -14,8 +18,10 @@ export function useQuery() {
 
 const MainDashboard: FC<CustomPropsTypes> = (props: CustomPropsTypes) => {
   const navigate = useNavigate();
-  const { propsMiniActive } = props;
+  const { propsMiniActive } = useSelector<State, State>(state => state)
   const { classes, cx } = maindashboardStyle({})
+  const items = useLiveQuery(() => db.routesDb.toArray()) || [];
+  console.log(items)
   return (
     <Fragment>
       <div className={classes.MainDashboard + " " + cx({
@@ -36,7 +42,7 @@ export const OneUser: FC<CustomPropsTypes> = (props: CustomPropsTypes) => {
   const navigate = useNavigate();
   const { state } = useLocation()
   const location = useLocation()
-  const { propsMiniActive } = props;
+  const { propsMiniActive } = useSelector<State, State>(state => state)
   const { classes, cx } = maindashboardStyle({})
   let query = useQuery();
   let { search } = location;
@@ -60,7 +66,7 @@ export const UserList: FC<CustomPropsTypes> = (props: CustomPropsTypes) => {
   const navigate = useNavigate();
   const { state } = useLocation()
   const location = useLocation()
-  const { propsMiniActive } = props;
+  const { propsMiniActive } = useSelector<State, State>(state => state)
   const { classes, cx } = maindashboardStyle({})
   let query = useQuery();
   let { search } = location;

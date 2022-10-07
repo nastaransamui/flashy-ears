@@ -13,6 +13,8 @@ import NavbarLinks from '../Navbar/NavbarLinks'
 
 import { useRouter } from 'next/router'
 import { useLocation } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { State } from '@/src/redux/store'
 
 const SidebarMain: FC<ProDashboardProps> = (props: ProDashboardProps) => {
   const { classes, cx } = mainSidebarStyle({})
@@ -20,10 +22,10 @@ const SidebarMain: FC<ProDashboardProps> = (props: ProDashboardProps) => {
     sidebarOpen,
     handleDrawerToggle,
     sideBarbgColor,
-    propsMiniActive,
     routes, } = props;
   const router = useRouter()
   const location = useLocation()
+  const { propsMiniActive } = useSelector<State, State>(state => state)
   // this verifies if any of the collapses should be default opened on a rerender of this component
   // for example, on the refresh of the page,
 
@@ -155,7 +157,6 @@ SidebarMain.propTypes = {
   sidebarOpen: PropTypes.bool.isRequired,
   handleDrawerToggle: PropTypes.func.isRequired,
   sideBarbgColor: PropTypes.string.isRequired,
-  propsMiniActive: PropTypes.bool.isRequired,
   handleSideBarBgToggle: PropTypes.func.isRequired,
   routes: PropTypes.array.isRequired,
 }

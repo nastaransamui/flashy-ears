@@ -18,6 +18,8 @@ export interface State {
   adminLoadingBar: number;
   adminFormSubmit: boolean;
   profile: Profile;
+  propsMiniActive: boolean;
+  cardView: boolean;
 }
 
 const initialState = {
@@ -27,6 +29,8 @@ const initialState = {
   adminLoadingBar: 0,
   adminFormSubmit: false,
   profile: {},
+  propsMiniActive: false,
+  cardView: true,
 }
 
 
@@ -52,6 +56,10 @@ const reducer = (state: State = initialState, action: AnyAction) => {
       return { ...state, adminFormSubmit: action.payload };
     case 'ADMIN_PROFILE':
       return { ...state, profile: action.payload };
+    case 'PROPS_MINI_ACTIVE':
+      return { ...state, propsMiniActive: action.payload };
+    case 'CARD_VIEW':
+      return { ...state, cardView: action.payload };
     default:
       return state;
   }

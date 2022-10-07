@@ -7,11 +7,7 @@ import { ProDashboardProps } from '../Shared/interfaces/react.interface';
 import MainDashboard, { OneUser, UserList } from './MainDashboard/MainDashboard';
 import NotFound from './NotFound';
 import PropTypes from 'prop-types'
-
-export function NotFoundPage() {
-  return null;
-}
-
+import Roles from '@/src/components/Rbac/Roles/Roles';
 export function useQuery() {
   const { search } = useLocation();
 
@@ -29,6 +25,7 @@ const ReactRouter: FC<ProDashboardProps> = (props: ProDashboardProps) => {
             <Route path="/users-page" element={<UserList {...props} />} />
             <Route path="/user-page" element={<OneUser {...props} />} />
             <Route path="/user-page/:id" element={<OneUser {...props} />} />
+            <Route path="/rbacs-data" element={<Roles {...props} />} />
             <Route path="*" element={<NotFound {...props} />} />
           </Route>
         </Routes>

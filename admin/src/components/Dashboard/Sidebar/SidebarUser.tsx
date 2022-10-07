@@ -20,8 +20,8 @@ const SidebarUser: FC<SibebarUserProps> = (props: SibebarUserProps) => {
   const { classes, cx, theme } = userSideBarStyle({})
   const { t } = useTranslation('dashboard')
   const navigate = useNavigate();
-  const { profile } = useSelector<State, State>(state => state)
-  const { sideBarbgColor, rtlActive, openCollapse, propsMiniActive, stateMiniActive, openAvatar } = props;
+  const { profile, propsMiniActive } = useSelector<State, State>(state => state)
+  const { sideBarbgColor, rtlActive, openCollapse, stateMiniActive, openAvatar } = props;
   const userWrapperClass =
     classes.user
     +
@@ -159,7 +159,6 @@ SidebarUser.propTypes = {
   openAvatar: PropTypes.bool.isRequired,
   openCollapse: PropTypes.func.isRequired,
   stateMiniActive: PropTypes.bool.isRequired,
-  propsMiniActive: PropTypes.bool.isRequired,
   sideBarbgColor: PropTypes.string.isRequired,
 };
 

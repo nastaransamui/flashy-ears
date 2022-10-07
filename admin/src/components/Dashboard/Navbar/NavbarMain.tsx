@@ -17,11 +17,14 @@ import { useTranslation } from "react-i18next";
 import { RoutesType, } from '@/interfaces/react.interface'
 import { Typography } from "@mui/material";
 import { ActiveRouteType } from '@/interfaces/react.interface'
+import { useSelector } from "react-redux";
+import { State } from "@/src/redux/store";
 
 const NavbarMain: FC<ProDashboardProps> = (props: ProDashboardProps) => {
-  const { propsMiniActive, routes, handleDrawerToggle, sidebarMinimizeFunc } =
+  const { routes, handleDrawerToggle, sidebarMinimizeFunc } =
     props;
   const location = useLocation();
+  const { propsMiniActive } = useSelector<State, State>(state => state)
   const { i18n } = useTranslation()
   const { classes, cx } = navbarMainStyle({});
   const mainPanel = createRef();
@@ -111,7 +114,6 @@ const NavbarMain: FC<ProDashboardProps> = (props: ProDashboardProps) => {
 }
 
 NavbarMain.propTypes = {
-  propsMiniActive: PropTypes.bool.isRequired,
   routes: PropTypes.array.isRequired,
   handleDrawerToggle: PropTypes.func.isRequired,
   sidebarMinimizeFunc: PropTypes.func.isRequired

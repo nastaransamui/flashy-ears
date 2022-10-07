@@ -7,12 +7,15 @@ import prodashboardStyle from './prodashboard-style';
 import NavbarMain from '../Navbar/NavbarMain';
 import Footer from '../Footer/Footer';
 import ThemeUser from '../Theme/ThemeUser';
+import { useSelector } from 'react-redux';
+import { State } from '@/src/redux/store';
 
 
 
 const Prodashboard: FC<ProDashboardProps> = (props: ProDashboardProps) => {
   const { classes, cx } = prodashboardStyle({})
-  const { propsMiniActive, rtlActive } = props
+  const { rtlActive } = props;
+  const { propsMiniActive } = useSelector<State, State>(state => state)
   const mainPageMinimize = classes.mainPageMinimize + ' ' + cx({
     [classes.mainPageHandlemainOpen]: propsMiniActive,
     [classes.mainPageHandlemainClose]: !propsMiniActive

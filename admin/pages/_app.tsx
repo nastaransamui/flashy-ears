@@ -22,6 +22,9 @@ import { Provider } from 'react-redux';
 import '@/styles/globals.css'
 import '@/styles/top-loading-bar.css';
 import '@/styles/ReactToastify.css';
+import '@/styles/animate-slider-horizontal.css'
+import 'animate.css';
+import '../styles/nextjs-material-dashboard-pro.css';
 
 // Translation
 import i18next from 'i18next';

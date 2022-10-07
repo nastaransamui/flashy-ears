@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useEffect } from 'react';
 import type { NextPage } from 'next';
 import { wrapper, } from '@/src/redux/store';
 import { GetServerSideProps } from 'next'
@@ -12,6 +12,7 @@ import routes from '../../routes';
 const DynamicDashboard = dynamic(() => import('@/src/pages/dashboard/Dashboard'), {
   ssr: false,
 })
+
 
 
 const Doshboard: NextPage = (props) => {
