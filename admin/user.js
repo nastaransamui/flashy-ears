@@ -144,14 +144,16 @@ async function createUserIsEmpty() {
           facebook: [],
           google: [],
         });
+        process.exit();
+      } else {
+        process.exit();
       }
     } else {
-      console.log(error);
-      return;
+      process.exit();
     }
   } catch (error) {
     console.log(error);
-    return;
+    process.exit();
   }
 }
 createUserIsEmpty();
