@@ -5,11 +5,18 @@ import { createWrapper, HYDRATE } from 'next-redux-wrapper';
 import { configureStore } from '@reduxjs/toolkit';
 import { PaletteMode, } from '@mui/material';
 import { hasCookie, getCookies } from 'cookies-next';
+import { RoutesType } from '@/interfaces/react.interface';
 
 export interface Profile {
   profileImage?: string;
   userName?: string;
   _id?: string;
+}
+
+export interface TotalDataType {
+  _id: string;
+  userName?: string;
+  profileImage?: string;
 }
 export interface State {
   adminAccessToken: any;
@@ -19,7 +26,10 @@ export interface State {
   adminFormSubmit: boolean;
   profile: Profile;
   propsMiniActive: boolean;
-  cardView: boolean;
+  updateRoutes: RoutesType[];
+  spreadRoutes: RoutesType[];
+  totalData: TotalDataType[];
+  totalCount: number;
 }
 
 const initialState = {
@@ -30,7 +40,10 @@ const initialState = {
   adminFormSubmit: false,
   profile: {},
   propsMiniActive: false,
-  cardView: true,
+  updateRoutes: [],
+  spreadRoutes: [],
+  totalData: [],
+  totalCount: 0
 }
 
 
@@ -58,8 +71,14 @@ const reducer = (state: State = initialState, action: AnyAction) => {
       return { ...state, profile: action.payload };
     case 'PROPS_MINI_ACTIVE':
       return { ...state, propsMiniActive: action.payload };
-    case 'CARD_VIEW':
-      return { ...state, cardView: action.payload };
+    case 'UPDATE_ROUTES':
+      return { ...state, updateRoutes: action.payload };
+    case 'SPREAD_ROUTES':
+      return { ...state, spreadRoutes: action.payload };
+    case 'TOTAL_DATA':
+      return { ...state, totalData: action.payload };
+    case 'TOTAL_COUNT':
+      return { ...state, totalCount: action.payload };
     default:
       return state;
   }

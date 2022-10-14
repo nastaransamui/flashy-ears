@@ -4,6 +4,7 @@ import passport from 'passport';
 import cors from 'cors';
 import { updateAccessToken } from '@/helpers/hashing';
 import { IUser } from '@/models/Users';
+import { AccessRoleType } from '@/models/Roles';
 import nextConnect from 'next-connect';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -25,7 +26,7 @@ type Data = {
   success: boolean;
   error?: string;
   accessToken?: string;
-  accessRole?: string;
+  accessRole?: AccessRoleType[];
 };
 
 passport.use(localStrategy);
@@ -55,7 +56,6 @@ apiRoute
           res.status(401).json({ success: false, error: 'notAdmin' });
         }
       } else {
-        console.log(user);
         res.status(200).json({ success: false, error: (user as any).message });
       }
     } catch (error) {

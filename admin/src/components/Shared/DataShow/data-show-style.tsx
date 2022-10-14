@@ -40,7 +40,7 @@ const dataShowStyle = makeStyles<{}>()((theme) => {
       },
       '& label': {
         right: 29,
-        top: -5,
+        // top: -5,
         textAlign: theme.direction == 'ltr' ? 'left' : 'right',
       },
     },

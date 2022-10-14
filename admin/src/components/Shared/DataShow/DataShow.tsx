@@ -1,15 +1,15 @@
 import PropTypes from 'prop-types'
-import { FC, forwardRef, useRef, LegacyRef, useState, useEffect } from 'react'
+import { FC, forwardRef, LegacyRef } from 'react'
 
 import { styled } from '@mui/material/styles';
 import { Container } from '@mui/material';
 
 import MainHeader from './Header/MainHeader';
 import Pagination from './Pagination';
-import { useSelector } from 'react-redux';
-import { State } from '@/src/redux/store';
 import MainCard from './Cards/MainCard';
 import MainTable from './Table/MainTable';
+import useDataShow, { DataShowCtx } from './useDataShow';
+
 
 const BodyBox = styled(Container)(({ theme }) => ({
   border: '3px solid ',
@@ -21,29 +21,46 @@ const BodyBox = styled(Container)(({ theme }) => ({
 }));
 
 export interface DataShowPropsType {
+  // modelName: string;
+}
+
+export interface PostType {
+  // modelName: string;
 
 }
 
 
 const DataShow: FC<DataShowPropsType> = forwardRef((props: DataShowPropsType, ref: LegacyRef<HTMLDivElement>) => {
-  const widthRef = useRef<HTMLDivElement>(null);
-  const { cardView } = useSelector<State, State>(state => state)
+
+  const {
+    widthRef,
+    cardView,
+    dataShowContext
+  } = useDataShow()
+
 
   return (
     <div ref={ref}>
-      <MainHeader />
-      <BodyBox
-        maxWidth='xl'
-        ref={widthRef}
-        className='animate__animated animate__zoomIn'>
-        <Pagination />
-        {
-          cardView ? <MainCard /> : <MainTable />
-        }
-        <Pagination />
-      </BodyBox>
+      <DataShowCtx.Provider value={dataShowContext}>
+        <MainHeader />
+        <BodyBox
+          maxWidth='xl'
+          ref={widthRef}
+          className='animate__animated animate__zoomIn'>
+          <Pagination />
+          {
+            cardView ? <MainCard /> : <MainTable />
+          }
+          <Pagination />
+        </BodyBox>
+      </DataShowCtx.Provider>
     </div>
   )
 })
+
+
+DataShow.propTypes = {
+  // modelName: PropTypes.string.isRequired
+}
 
 export default DataShow;

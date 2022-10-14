@@ -9,6 +9,8 @@ export interface Lang {
   Flag: string;
 }
 
+export interface RoutesNestedView {}
+
 export interface RoutesViews {
   path?: string;
   name_en: string;
@@ -17,6 +19,12 @@ export interface RoutesViews {
   mini_fa: string;
   state: string;
   collapse?: boolean;
+  access?: boolean;
+  update?: boolean;
+  delete?: boolean;
+  create?: boolean;
+  componentName: string | undefined;
+  modelName: string | undefined;
   views?: RoutesViews[];
 }
 
@@ -27,6 +35,12 @@ export interface RoutesType {
   collapse?: boolean;
   state: string;
   icon?: string;
+  access?: boolean;
+  update?: boolean;
+  delete?: boolean;
+  create?: boolean;
+  componentName: string | undefined;
+  modelName: string | undefined;
   views?: RoutesViews[];
 }
 

@@ -2,12 +2,13 @@ import { Fragment } from 'react';
 import type { NextPage } from 'next';
 import { wrapper, } from '@/src/redux/store';
 import { GetServerSideProps } from 'next'
-import { hasCookie, getCookies, } from 'cookies-next';
+import { hasCookie } from 'cookies-next';
 import { useTranslation, withTranslation } from 'react-i18next';
 import HeadComponent from '@/src/components/head';
-import { isObjectEmpty, setPageCookies } from '@/helpers/functions';
+import { setPageCookies } from '@/helpers/functions';
 import dynamic from 'next/dynamic';
-import routes from '../../../routes';
+import useRoutesUpdate from '@/src/components/Hooks/useRoutesUpdate';
+
 
 const DynamicDashboard = dynamic(() => import('@/src/pages/dashboard/Dashboard'), {
   ssr: false,
@@ -16,12 +17,12 @@ const DynamicDashboard = dynamic(() => import('@/src/pages/dashboard/Dashboard')
 
 const Doshboard: NextPage = (props) => {
   const { t, i18n } = useTranslation('dashboard');
-
+  const updateRoutes = useRoutesUpdate()
 
   return (
     <Fragment>
       <HeadComponent title={t('title')} />
-      <DynamicDashboard {...props} routes={routes} />
+      {updateRoutes.length !== 0 && <DynamicDashboard  {...props} routes={updateRoutes} />}
     </Fragment>
   )
 }

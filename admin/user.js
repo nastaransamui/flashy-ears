@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 require('dotenv').config();
+var toBoolean = require('to-boolean');
 const CryptoJS = require('crypto-js');
 const fs = require('fs');
 const UsersSchema = new mongoose.Schema(
@@ -44,7 +45,30 @@ const UsersSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+const RolesSchema = new mongoose.Schema(
+  {
+    roleName: { type: String, required: true, unique: true, index: true },
+    users_id: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Users' }],
+    isActive: { type: Boolean, default: true },
+    remark: { type: String },
+    icon: String,
+    routes: [
+      {
+        state: String,
+        access: { type: Boolean, default: true },
+        update: { type: Boolean, default: true },
+        delete: { type: Boolean, default: true },
+        create: { type: Boolean, default: true },
+      },
+    ],
+  },
+  {
+    timestamps: true,
+  }
+);
+
 var Users = mongoose.models.Users || mongoose.model('Users', UsersSchema);
+var Roles = mongoose.models.Roles || mongoose.model('Roles', RolesSchema);
 
 const { DATABASE_URL_UAT, DATABASE_URL_LIVE } = process.env;
 
@@ -97,26 +121,30 @@ async function dbConnect() {
     return { success: false, error: error?.toString() };
   }
 }
-
+const userName = process.env.NEXT_PUBLIC_USERNAME;
+const isVercel = toBoolean(process.env.NEXT_PUBLIC_SERVERLESS);
+const cryptoPassword = CryptoJS.AES.encrypt(
+  process.env.NEXT_PUBLIC_PASSWORD,
+  process.env.NEXT_PUBLIC_SECRET_KEY
+).toString();
 async function createUserIsEmpty() {
   try {
     const dbConnected = await dbConnect();
     const { success, error } = dbConnected;
     if (success) {
       let userCollectionIsEmpty = await Users.find();
-      console.log(userCollectionIsEmpty.length);
+
+      const roleJson = fs.readFileSync(
+        process.cwd() + '/jsonDump/superUserRole.json'
+      );
+      let role = JSON.parse(roleJson);
+      let superUserRole = await Roles.findOne({
+        roleName: role.roleName,
+      });
+      console.log(
+        `userCollectionIsEmpty.length: ${userCollectionIsEmpty.length}`
+      );
       if (userCollectionIsEmpty.length == 0) {
-        const userName = process.env.NEXT_PUBLIC_USERNAME;
-        const isVercel =
-          process.env.NEXT_PUBLIC_SERVERLESS == 'true' ? true : false;
-        const cryptoPassword = CryptoJS.AES.encrypt(
-          process.env.NEXT_PUBLIC_PASSWORD,
-          process.env.NEXT_PUBLIC_SECRET_KEY
-        ).toString();
-        const roleJson = fs.readFileSync(
-          process.cwd() + '/jsonDump/superUserRole.json'
-        );
-        let role = JSON.parse(roleJson);
         await Users.create({
           userName: userName,
           password: cryptoPassword,
@@ -144,7 +172,72 @@ async function createUserIsEmpty() {
           facebook: [],
           google: [],
         });
-        process.exit();
+        console.log(`superUserRole: ${superUserRole}`);
+        if (superUserRole == null) {
+          const newRoleValue = await new Roles(role);
+          await newRoleValue.save(async (err, role) => {
+            if (err) {
+              res.status(500).json({ success: false, Error: err });
+            } else {
+              const newlyUserCreatedArray = await Users.find();
+              const userId = newlyUserCreatedArray[0]._id;
+              role.users_id.push(userId);
+              newlyUserCreatedArray[0].role_id.push(role._id);
+              role.save(async (err, newRole) => {
+                if (err) {
+                  res.status(500).json({ success: false, Error: err });
+                } else {
+                  const updatedUser = newlyUserCreatedArray[0];
+                  await updatedUser.save(async (error, user) => {
+                    if (err) {
+                      res.status(500).json({ success: false, Error: err });
+                    } else {
+                      user.save(async (err, newUser) => {
+                        if (err) {
+                          console.log(err);
+                        } else {
+                          console.log('done');
+                          process.exit();
+                        }
+                      });
+                    }
+                  });
+                }
+              });
+            }
+          });
+          // process.exit();
+          console.log(`newRoleValue: ${newRoleValue}`);
+        } else {
+          const newlyUserCreatedArray = await Users.find();
+          const userId = newlyUserCreatedArray[0]._id;
+          superUserRole.users_id.push(userId);
+          newlyUserCreatedArray[0].role_id.push(superUserRole._id);
+          superUserRole.save(async (err, newRole) => {
+            if (err) {
+              console.log(err);
+              process.exit();
+            } else {
+              const updatedUser = newlyUserCreatedArray[0];
+              await updatedUser.save(async (error, user) => {
+                if (error) {
+                  console.log(error);
+                  process.exit();
+                } else {
+                  user.save(async (erroro, newUser) => {
+                    if (erroro) {
+                      console.log(erroro);
+                      process.exit();
+                    } else {
+                      process.exit();
+                    }
+                  });
+                }
+              });
+            }
+          });
+          process.exit();
+        }
       } else {
         process.exit();
       }

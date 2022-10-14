@@ -126,7 +126,7 @@ const NavbarLinks: FC<NavbarLinksTypes> = (props: NavbarLinksTypes) => {
                         onClick={() => {
                           handleCloseProfile();
                           isMobile && handleDrawerToggle();
-                          navigate(`/user-page?_id=${profile._id}`, {
+                          navigate(`/user-page/user?_id=${profile._id}`, {
                             state: profile,
                           })
                         }}>

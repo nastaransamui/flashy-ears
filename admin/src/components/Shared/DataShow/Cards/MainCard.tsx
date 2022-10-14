@@ -1,6 +1,9 @@
-import Grid from '@mui/material/Grid'
+import Grid, { GridSize } from '@mui/material/Grid'
 import { FC, useEffect, useState, createRef, Fragment } from 'react'
-
+import { useSelector } from 'react-redux';
+import { State } from '@/src/redux/store';
+import useCurrentRouteState from '@/hookes/useCurrentRouteState'
+import { useReadLocalStorage } from 'usehooks-ts'
 export interface MainCardTypes { }
 
 const MainCard: FC<MainCardTypes> = ((props: MainCardTypes) => {
@@ -13,6 +16,13 @@ const MainCard: FC<MainCardTypes> = ((props: MainCardTypes) => {
         .map((_, i) => elRefs[i] || createRef())
     );
   }, []);
+
+  const currentRouteState = useCurrentRouteState();
+  const { modelName } = currentRouteState;
+
+  const { totalData } = useSelector<State, State>(state => state)
+  const gridView: GridSize = useReadLocalStorage(`${modelName}_gridView`)!
+
 
   // const setCardStyle = (index, expanded) => {
   //   return {
@@ -33,7 +43,20 @@ const MainCard: FC<MainCardTypes> = ((props: MainCardTypes) => {
   return (
     <Fragment>
       <Grid container spacing={2} style={{ marginTop: 20 }}>
-        Card view come here
+        {totalData.map((a, index) => {
+          return (
+            <Grid
+              item
+              xs={gridView}
+              sm={gridView}
+              md={gridView}
+              lg={gridView}
+              xl={gridView}
+              key={index}>
+              {a.userName}<img src={a?.profileImage} style={{ width: 30, height: 30 }} /><br />
+            </Grid>
+          )
+        })}
       </Grid>
     </Fragment>
   )

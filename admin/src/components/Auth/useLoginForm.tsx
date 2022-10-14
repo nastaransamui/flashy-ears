@@ -2,7 +2,7 @@ import { useState, } from 'react';
 import { useForm } from "react-hook-form";
 import { useDispatch } from 'react-redux';
 
-import { ToastMessage } from '../Shared/CustomToaster/CustomToaster';
+import { ToastMessage } from '@/shared/CustomToaster/CustomToaster';
 
 import axios from 'axios'
 import { toast } from 'react-toastify';
@@ -11,6 +11,7 @@ import { setCookie } from 'cookies-next';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/router';
 import { unHashProfile } from '../../../helpers/unhasshing';
+import { db } from '@/src/browserDb';
 
 
 const api = `/admin/api/auth/login`
@@ -36,7 +37,7 @@ const useLoginForm = () => {
     const body = { ...data, strategy: 'local' }
     dispatch({ type: 'ADMIN_FORM_SUBMIT', payload: true });
     axios.post(api, body)
-      .then((resp) => {
+      .then(async (resp) => {
         const { success, error, accessToken, accessRole } = resp.data
         if (!success) {
           toast(<ToastMessage >{t(`${error}`, { email: data.email })}</ToastMessage>, {
@@ -46,21 +47,32 @@ const useLoginForm = () => {
           })
         } else {
           const profile: any = unHashProfile(accessToken)
-          if (profile.err) {
-            toast(<ToastMessage >{t(`${profile.err}`)}</ToastMessage>, {
+          try {
+            await db.open();
+            await db.routesDb.bulkAdd(accessRole)
+            dispatch({ type: 'ACCESS_ROLE', payload: accessRole })
+            if (profile.err) {
+              toast(<ToastMessage >{t(`${profile.err}`)}</ToastMessage>, {
+                onClose: () => {
+                  dispatch({ type: 'ADMIN_FORM_SUBMIT', payload: false })
+                }
+              })
+            } else {
+              dispatch({ type: 'ADMIN_FORM_SUBMIT', payload: false })
+              dispatch({ type: 'ADMIN_ACCESS_TOKEN', payload: accessToken });
+              dispatch({ type: 'ADMIN_PROFILE', profile })
+              setCookie('adminAccessToken', accessToken);
+              router.push('/dashboard');
+            }
+
+          } catch (error) {
+            console.log(error)
+            toast(<ToastMessage >{(error as Error).message}</ToastMessage>, {
               onClose: () => {
                 dispatch({ type: 'ADMIN_FORM_SUBMIT', payload: false })
               }
             })
-          } else {
-            dispatch({ type: 'ADMIN_FORM_SUBMIT', payload: false })
-            dispatch({ type: 'ADMIN_ACCESS_TOKEN', payload: accessToken });
-            dispatch({ type: 'ADMIN_PROFILE', profile })
-            setCookie('adminAccessToken', accessToken);
-            localStorage.setItem('accessRole', accessRole)
-            router.push('/dashboard');
           }
-
         }
       })
       .catch((error) => {

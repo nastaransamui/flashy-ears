@@ -1,10 +1,14 @@
-import { FC, Fragment, useEffect } from "react";
+import PropTypes from 'prop-types'
+import { FC, Fragment, useEffect, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { styled } from '@mui/material/styles';
 import Switch from '@mui/material/Switch'
 import Grid from '@mui/material/Grid'
-import { useDispatch, useSelector } from "react-redux";
-import { State } from "@/src/redux/store";
+import useCurrentRouteState from '@/hookes/useCurrentRouteState'
+import { useReadLocalStorage } from 'usehooks-ts'
+import { DataShowCtx } from '../useDataShow';
+
+
 
 const cardViewIcon = 'M3 9h4V5H3v4zm0 5h4v-4H3v4zm5 0h4v-4H8v4zm5 0h4v-4h-4v4zM8 9h4V5H8v4zm5-4v4h4V5h-4zm5 9h4v-4h-4v4zM3 19h4v-4H3v4zm5 0h4v-4H8v4zm5 0h4v-4h-4v4zm5 0h4v-4h-4v4zm0-14v4h4V5h-4z'
 const tableViewIcon = 'M21 8H3V4h18v4zm0 2H3v4h18v-4zm0 6H3v4h18v-4z'
@@ -52,26 +56,20 @@ export interface ViewTypeProps {
 
 const ViewType: FC<ViewTypeProps> = ((props: ViewTypeProps) => {
   const { t } = useTranslation()
-  const { cardView } = useSelector<State, State>(state => state)
-  const dispatch = useDispatch();
+  const currentRouteState = useCurrentRouteState();
+  const { modelName } = currentRouteState
+  const { setCardView } = useContext(DataShowCtx);
+  const cardView = useReadLocalStorage(`${modelName}_cardView`)
+
 
   const cardViewsFunc = () => {
-    dispatch({
-      type: 'CARD_VIEW',
-      payload: !cardView
-    })
-    localStorage.setItem('cardView', JSON.stringify(!cardView))
+    setCardView((prevValue: boolean) => !prevValue)
   }
 
   useEffect(() => {
     let isMount = true
     if (isMount) {
-      dispatch({
-        type: 'CARD_VIEW',
-        payload: JSON.stringify(localStorage.getItem('cardView')) == `null`
-          ? true
-          : JSON.parse(localStorage.getItem('cardView')!)
-      })
+      setCardView(() => cardView == null ? true : cardView)
     }
     return () => {
       isMount = false;
@@ -85,7 +83,7 @@ const ViewType: FC<ViewTypeProps> = ((props: ViewTypeProps) => {
       <Grid item>
         <Android12Switch
           color='primary'
-          checked={cardView}
+          checked={cardView == null ? true : cardView as boolean}
           onChange={() => {
             cardViewsFunc()
           }}
@@ -97,5 +95,9 @@ const ViewType: FC<ViewTypeProps> = ((props: ViewTypeProps) => {
     </Fragment>
   )
 })
+
+ViewType.propTypes = {
+
+}
 
 export default ViewType

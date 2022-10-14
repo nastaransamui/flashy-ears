@@ -1,6 +1,6 @@
 import CryptoJS from 'crypto-js';
 import jwt from 'jsonwebtoken';
-import { IUser } from '../models/Users';
+import { IUser } from '@/models/Users';
 import Roles, { IRole } from '../models/Roles';
 import { NextApiResponse } from 'next';
 
@@ -31,6 +31,7 @@ export async function updateAccessToken(user: IUser, res: NextApiResponse) {
       __v: 0,
     }
   );
+
   if (role == null) {
     return {
       accessToken: null,
@@ -39,7 +40,7 @@ export async function updateAccessToken(user: IUser, res: NextApiResponse) {
     };
   }
 
-  const accessRole = await jwtRole(role);
+  const accessRole = role.routes;
   user.accessToken = accessToken;
   user = await user.save();
   const { password, ...info } = user._doc;
@@ -79,16 +80,4 @@ export async function jwtSign(user: IUser) {
     { expiresIn: '7d' }
   );
   return accessToken;
-}
-
-export async function jwtRole(role: IRole) {
-  const accessRole = jwt.sign(
-    {
-      routes: role.routes,
-    },
-    process.env.NEXT_PUBLIC_SECRET_KEY,
-    { expiresIn: '7d' }
-  );
-
-  return accessRole;
 }

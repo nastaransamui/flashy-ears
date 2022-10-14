@@ -1,20 +1,21 @@
 import Dexie, { Table } from 'dexie';
 
 export interface RoutesDbType {
-  id?: string;
-  name: string;
+  _id: string;
+  state: string;
   access: boolean;
+  update: boolean;
+  delete: boolean;
+  create: boolean;
 }
 
 export class MySubClassedDexie extends Dexie {
-  // 'friends' is added by dexie when declaring the stores()
-  // We just tell the typing system this is the case
   routesDb!: Table<RoutesDbType>;
 
   constructor() {
     super('routesDatabase');
     this.version(1).stores({
-      routesDb: '++id, name, access', // Primary key and indexed props
+      routesDb: '_id, state, access, update ,delete, create', // Primary key and indexed props
     });
   }
 }

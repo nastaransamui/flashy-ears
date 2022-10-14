@@ -35,6 +35,8 @@ import detector from 'i18next-browser-languagedetector';
 
 import { hasCookie, getCookies } from 'cookies-next';
 
+var toBoolean = require('to-boolean');
+
 i18next
   .use(detector)
   .use(initReactI18next)
@@ -51,7 +53,7 @@ const clientSideEmotionCache = createEmotionCache();
 
 
 
-const isVercel = process.env.NEXT_PUBLIC_SERVERLESS == true ? true : false;
+const isVercel = toBoolean(process.env.NEXT_PUBLIC_SERVERLESS);;
 
 function MyApp({ Component, ...rest }: NextProps) {
   const { store, props } = wrapper.useWrappedStore(rest);
@@ -61,13 +63,7 @@ function MyApp({ Component, ...rest }: NextProps) {
 
   const getLayout = Component.getLayout ?? ((page: ReactNode) => page)
 
-  useEffect(() => {
-    // Remove preloader or show javascript disabled warning
-    const preloader = document.getElementById('preloader');
-    if (preloader !== null || undefined) {
-      preloader?.remove();
-    }
-  }, [])
+
 
   useEffect(() => {
 
@@ -95,7 +91,6 @@ function MyApp({ Component, ...rest }: NextProps) {
       alert(localStorageAlert);
     }
   }, [i18n])
-
 
 
 

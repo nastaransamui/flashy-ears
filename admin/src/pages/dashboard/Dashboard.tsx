@@ -1,25 +1,36 @@
 import PropTypes from 'prop-types'
 import DashboardWrapper from '@/src/components/Shared/DashboardWrapper/DashboardWrapper';
 import { FC, } from 'react';
-import { unHashProfile } from '@/helpers/unhasshing';
 import { CustomPropsTypes, RoutesType } from '@/interfaces/react.interface'
 import ReactRouter from '@/src/components/Dashboard/ReactRouter';
 import useDashboard from './useDashboard';
-
+import { BrowserRouter } from "react-router-dom";
 
 const Dashboard: FC<CustomPropsTypes> = (props: CustomPropsTypes) => {
 
   const { routes } = props;
-  const accessRole = unHashProfile(localStorage.getItem('accessRole')!)
-
+  const {
+    sidebarMinimizeFunc,
+    handleDrawerToggle,
+    sidebarOpen,
+    sideBarbgColor,
+    rtlActive,
+    handleSideBarBgToggle,
+  } = useDashboard()
   return (
     <div >
       <DashboardWrapper>
-        <ReactRouter
-          {...props}
-          {...useDashboard()}
-          routes={routes as RoutesType[]}
-        />
+        <BrowserRouter basename='/admin/dashboard'>
+          <ReactRouter
+            handleDrawerToggle={handleDrawerToggle}
+            handleSideBarBgToggle={handleSideBarBgToggle}
+            sidebarMinimizeFunc={sidebarMinimizeFunc}
+            rtlActive={rtlActive}
+            sidebarOpen={sidebarOpen}
+            sideBarbgColor={sideBarbgColor}
+            routes={routes as RoutesType[]}
+          />
+        </BrowserRouter>
       </DashboardWrapper>
     </div>
   )

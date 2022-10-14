@@ -5,14 +5,14 @@ import List from '@mui/material/List'
 import ListItemText from '@mui/material/ListItemText'
 import ListItem from '@mui/material/ListItem'
 import useMediaQuery from '@mui/material/useMediaQuery'
-import { FC, useEffect } from "react";
+import { FC, Fragment, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import PropTypes from 'prop-types';
 import SvgIcon from '@mui/material/SvgIcon';
 import { RoutesType, } from '@/interfaces/react.interface'
 import i18next from "i18next";
 import { DrawerStateType, SideBarLinksTypes } from '@/interfaces/react.interface';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { State } from "@/src/redux/store";
 
 
@@ -20,6 +20,7 @@ const SidebarLinks: FC<SideBarLinksTypes> = (props: SideBarLinksTypes) => {
   const { classes, theme, cx } = linkSidebarStyle({})
   const location = useLocation();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const dispatch = useDispatch();
   const {
     getCollapseInitialState,
     routes,
@@ -32,7 +33,6 @@ const SidebarLinks: FC<SideBarLinksTypes> = (props: SideBarLinksTypes) => {
   const { propsMiniActive } = useSelector<State, State>(state => state)
   const createLinks = (routes: RoutesType[]) => {
     return routes.map((route, index) => {
-
       let routeName = `name_${i18next.languages[0]}` as keyof typeof route
       let routeMini = `mini_${i18next.languages[0]}` as keyof typeof route
 
@@ -86,68 +86,71 @@ const SidebarLinks: FC<SideBarLinksTypes> = (props: SideBarLinksTypes) => {
           });
         st[route['state']] = !state[route.state];
         return (
-          <ListItem
-            key={index}
-            className={cx(
-              { [classes.item]: route.icon !== undefined },
-              { [classes.collapseItem]: route.icon === undefined }
-            ) + " " + classes[sideBarbgColor + 'Background' as keyof typeof classes]}>
-            <a
-              href='#'
-              className={navLinkClasses}
-              onClick={(e) => {
-                e.preventDefault();
-                setState((oldState: DrawerStateType) => ({ ...oldState, ...st }));
-              }}>
-              {route.icon !== undefined ? (
-                typeof route.icon == 'string' && (
-                  <SvgIcon className={itemIcon} >
-                    <path d={`${route.icon}`} />
-                  </SvgIcon>
-                )
-              ) : (
-                <span
-                  className={collapseItemMini}
-                  style={{
-                    display:
-                      (rtlActive && propsMiniActive) ||
-                        (rtlActive && !stateMiniActive)
-                        ? 'none'
-                        : 'block',
-                  }}>
-                  {isMobile ? '\xa0' : route[routeMini] as string}
-                </span>
-              )}
-              <ListItemText
-                primary={route[routeName] as string}
-                secondary={
-                  <b
-                    style={{
-                      marginRight: rtlActive ? 181 : 0,
-                    }}
-                    className={
-                      caret +
-                      ' ' +
-                      (state[route.state] ? classes.caretActive : '')
-                    }
-                  />
-                }
-                disableTypography={true}
-                style={{
-                  marginLeft: rtlActive ? 128 : 0,
-                }}
+          <Fragment key={index}>
+            {
+              route.access && <ListItem
                 className={cx(
-                  { [itemText]: route.icon !== undefined },
-                  { [collapseItemText]: route.icon === undefined }
-                )}
-              />
-            </a>
-            <Collapse in={state[route.state]} unmountOnExit>
-              <List className={classes.list + ' ' + classes.collapseList}>
-                {createLinks(route.views as RoutesType[])}
-              </List>
-            </Collapse>
-          </ListItem>
+                  { [classes.item]: route.icon !== undefined },
+                  { [classes.collapseItem]: route.icon === undefined }
+                ) + " " + classes[sideBarbgColor + 'Background' as keyof typeof classes]}>
+                <a
+                  href='#'
+                  className={navLinkClasses}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setState((oldState: DrawerStateType) => ({ ...oldState, ...st }));
+                  }}>
+                  {route.icon !== undefined ? (
+                    typeof route.icon == 'string' && (
+                      <SvgIcon className={itemIcon} >
+                        <path d={`${route.icon}`} />
+                      </SvgIcon>
+                    )
+                  ) : (
+                    <span
+                      className={collapseItemMini}
+                      style={{
+                        display:
+                          (rtlActive && propsMiniActive) ||
+                            (rtlActive && !stateMiniActive)
+                            ? 'none'
+                            : 'block',
+                      }}>
+                      {isMobile ? '\xa0' : route[routeMini] as string}
+                    </span>
+                  )}
+                  <ListItemText
+                    primary={route[routeName] as string}
+                    secondary={
+                      <b
+                        style={{
+                          marginRight: rtlActive ? 181 : 0,
+                        }}
+                        className={
+                          caret +
+                          ' ' +
+                          (state[route.state] ? classes.caretActive : '')
+                        }
+                      />
+                    }
+                    disableTypography={true}
+                    style={{
+                      marginLeft: rtlActive ? 128 : 0,
+                    }}
+                    className={cx(
+                      { [itemText]: route.icon !== undefined },
+                      { [collapseItemText]: route.icon === undefined }
+                    )}
+                  />
+                </a>
+                <Collapse in={state[route.state]} unmountOnExit>
+                  <List className={classes.list + ' ' + classes.collapseList}>
+                    {createLinks(route.views as RoutesType[])}
+                  </List>
+                </Collapse>
+              </ListItem>
+            }
+          </Fragment>
         );
       }
 
@@ -197,55 +200,61 @@ const SidebarLinks: FC<SideBarLinksTypes> = (props: SideBarLinksTypes) => {
           [classes.itemIconRTL]: rtlActive,
           [classes.itemIconMini]: !propsMiniActive && stateMiniActive
         });
-
       return (
-        <ListItem
-          key={index}
-          className={cx(
-            { [classes.item]: route.icon !== undefined },
-            { [classes.collapseItem]: route.icon === undefined }
-          ) + " " + classes[sideBarbgColor + 'Background' as keyof typeof classes]}>
-          <Link
-            to={route.path}
-            onClick={(e) => {
-              isMobile && handleDrawerToggle();
-            }}>
-            <span
+        <Fragment key={index}>
+          {
+            route.access &&
+            <ListItem
+
               className={cx(
-                { [navLinkClasses]: route.icon !== undefined },
-                { [innerNavLinkClasses]: route.icon === undefined }
-              )}>
-              {route.icon !== undefined ? (
-                typeof route.icon === 'string' && (
-                  <SvgIcon className={itemIcon} >
-                    <path d={`${route.icon}`} />
-                  </SvgIcon>
-                )
-              ) : (
+                { [classes.item]: route.icon !== undefined },
+                { [classes.collapseItem]: route.icon === undefined }
+              ) + " " + classes[sideBarbgColor + 'Background' as keyof typeof classes]}>
+              <Link
+                to={route.path}
+                onClick={(e) => {
+                  isMobile && handleDrawerToggle();
+                  dispatch({ type: 'TOTAL_DATA', payload: [] });
+                  dispatch({ type: 'TOTAL_COUNT', payload: 0 });
+                }}>
                 <span
-                  className={collapseItemMini}
-                  style={{
-                    display:
-                      (rtlActive && propsMiniActive) ||
-                        (rtlActive && !stateMiniActive)
-                        ? 'none'
-                        : 'block',
-                  }}>
-                  {isMobile ? '\xa0' : route[routeMini] as string}
+                  className={cx(
+                    { [navLinkClasses]: route.icon !== undefined },
+                    { [innerNavLinkClasses]: route.icon === undefined }
+                  )}>
+                  {route.icon !== undefined ? (
+                    typeof route.icon === 'string' && (
+                      <SvgIcon className={itemIcon} >
+                        <path d={`${route.icon}`} />
+                      </SvgIcon>
+                    )
+                  ) : (
+                    <span
+                      className={collapseItemMini}
+                      style={{
+                        display:
+                          (rtlActive && propsMiniActive) ||
+                            (rtlActive && !stateMiniActive)
+                            ? 'none'
+                            : 'block',
+                      }}>
+                      {isMobile ? '\xa0' : route[routeMini] as string}
+                    </span>
+                  )}
+                  <ListItemText
+                    primary={route[routeName] as string}
+                    disableTypography={true}
+                    style={{ textAlign: rtlActive ? 'right' : 'left' }}
+                    className={cx(
+                      { [itemText]: route.icon !== undefined },
+                      { [collapseItemText]: route.icon === undefined }
+                    )}
+                  />
                 </span>
-              )}
-              <ListItemText
-                primary={route[routeName] as string}
-                disableTypography={true}
-                style={{ textAlign: rtlActive ? 'right' : 'left' }}
-                className={cx(
-                  { [itemText]: route.icon !== undefined },
-                  { [collapseItemText]: route.icon === undefined }
-                )}
-              />
-            </span>
-          </Link>
-        </ListItem>
+              </Link>
+            </ListItem>
+          }
+        </Fragment>
       );
     })
   }

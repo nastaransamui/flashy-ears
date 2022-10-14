@@ -2,6 +2,8 @@ import { State } from '@/src/redux/store';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+
+
 type SidebarColor = 'white' | 'black'
 const useDashboard = () => {
   const { i18n } = useTranslation(['dashboard', 'footer', 'users']);
@@ -10,6 +12,7 @@ const useDashboard = () => {
   const dispatch = useDispatch()
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
   const [sideBarbgColor, setSideBarbgColor] = useState<SidebarColor>('black');
+
   const sidebarMinimizeFunc = () => {
     localStorage.setItem('miniActive', JSON.stringify(!propsMiniActive))
     dispatch({
@@ -27,6 +30,8 @@ const useDashboard = () => {
     localStorage.setItem('sideBarbgColor', sideBarbgColor == 'black' ? 'white' : 'black')
   }
 
+
+  // update sidebar color from local storage
   useEffect(() => {
     let isMount = true;
     if (isMount) {
@@ -38,6 +43,7 @@ const useDashboard = () => {
   }, [])
 
 
+  //Update open or close of side bar from localstorage
   useEffect(() => {
     let isMount = true;
     if (isMount) {
@@ -47,6 +53,7 @@ const useDashboard = () => {
           ? false
           : JSON.parse(localStorage.getItem('miniActive')!),
       });
+
     }
     return () => {
       isMount = false;
@@ -54,7 +61,6 @@ const useDashboard = () => {
   }, [propsMiniActive]);
   return {
     sidebarMinimizeFunc,
-    propsMiniActive,
     handleDrawerToggle,
     sidebarOpen,
     sideBarbgColor,

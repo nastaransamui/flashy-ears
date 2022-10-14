@@ -11,6 +11,8 @@ import axios from "axios";
 import { ToastMessage } from '@/src/components/Shared/CustomToaster/CustomToaster';
 import { toast } from 'react-toastify';
 import { useRouter } from "next/router";
+import { db } from '@/src/browserDb';
+import Dexie, { Table } from 'dexie';
 
 const api = `/admin/api/auth/logout`
 
@@ -96,7 +98,8 @@ const useNavbarLinks = () => {
             type: 'ADMIN_PROFILE',
             payload: {},
           });
-          localStorage.removeItem('accessRole')
+          Dexie.delete('routesDatabase')
+          db.close()
           dispatch({ type: 'ADMIN_FORM_SUBMIT', payload: false });
           router.push('/');
         }

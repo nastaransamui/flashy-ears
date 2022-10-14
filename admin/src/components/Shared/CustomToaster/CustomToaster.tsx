@@ -95,6 +95,6 @@ export const CustomToaster = () => {
         draggableDirection="y"
         draggablePercent={100}
         theme='dark' rtl={rtlActive} />
-      </Fragment>
+    </Fragment>
   )
 }

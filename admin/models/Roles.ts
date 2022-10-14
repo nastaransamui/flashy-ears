@@ -1,5 +1,12 @@
 import mongoose, { Types } from 'mongoose';
 
+export type AccessRoleType = {
+  state: string;
+  access: boolean;
+  update: boolean;
+  delete: boolean;
+  create: boolean;
+};
 export interface IRole {
   _id: Types.ObjectId;
   createdAt: Date;
@@ -11,7 +18,7 @@ export interface IRole {
   isActive: boolean;
   remark: string;
   icon: string;
-  routes: Types.Array<String>
+  routes: AccessRoleType[];
 }
 
 const RolesSchema = new mongoose.Schema<IRole>(
@@ -23,41 +30,11 @@ const RolesSchema = new mongoose.Schema<IRole>(
     icon: String,
     routes: [
       {
-        path: String,
-        'name_en-US': String,
-        name_fa: String,
-        crud: [
-          {
-            name: String,
-            active: Boolean,
-          },
-        ],
-        views: [
-          {
-            path: String,
-            'name_en-US': String,
-            name_fa: String,
-            crud: [
-              {
-                name: String,
-                active: Boolean,
-              },
-            ],
-            views: [
-              {
-                path: String,
-                'name_en-US': String,
-                name_fa: String,
-                crud: [
-                  {
-                    name: String,
-                    active: Boolean,
-                  },
-                ],
-              },
-            ],
-          },
-        ],
+        state: String,
+        access: { type: Boolean, default: true },
+        update: { type: Boolean, default: true },
+        delete: { type: Boolean, default: true },
+        create: { type: Boolean, default: true },
       },
     ],
   },

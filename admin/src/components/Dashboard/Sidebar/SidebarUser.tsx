@@ -125,7 +125,7 @@ const SidebarUser: FC<SibebarUserProps> = (props: SibebarUserProps) => {
                 className={classes.collapseItem}
                 onClick={(e) => {
                   e.preventDefault();
-                  navigate(`/user-page?_id=${profile._id}`, {
+                  navigate(`//user-page/user?_id=${profile._id}`, {
                     state: profile,
                   })
                 }}>

@@ -1,5 +1,4 @@
 import HeadComponent from "@/src/components/head";
-import { wrapper } from "@/src/redux/store";
 import { Fragment } from "react";
 import { withTranslation, useTranslation } from "react-i18next";
 

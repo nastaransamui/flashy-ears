@@ -1,4 +1,5 @@
-import { FC, forwardRef, Fragment, useState } from 'react';
+import PropTypes from 'prop-types'
+import { FC, Fragment, } from 'react';
 import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
 import { styled } from '@mui/material/styles';
@@ -28,7 +29,7 @@ const StyledBox = styled(Container)(({ theme }) => ({
 }));
 
 export interface MainHeaderTypes {
-  // createUrl: string;
+
 }
 
 
@@ -46,10 +47,10 @@ const MainHeader: FC<MainHeaderTypes> = ((props: MainHeaderTypes) => {
           <Grid item xl={2} lg={3} md={3} sm={12} xs={12} className={classes.viewTypeGrid}>
             <ViewType />
           </Grid>
-          <Grid item xl={8.6} lg={6} md={6} sm={12} xs={12} className={classes.searchGrid}>
+          <Grid item xl={8} lg={6} md={6} sm={12} xs={12} className={classes.searchGrid}>
             <SearchHeader />
           </Grid>
-          <Grid item xl={1.4} lg={3} md={3} sm={12} xs={12} className={classes.iconGrid}>
+          <Grid item xl={2} lg={3} md={3} sm={12} xs={12} className={classes.iconGrid}>
             <IconsHeader />
           </Grid>
         </Grid>
@@ -57,5 +58,9 @@ const MainHeader: FC<MainHeaderTypes> = ((props: MainHeaderTypes) => {
     </Fragment>
   )
 })
+
+MainHeader.propTypes = {
+
+}
 
 export default MainHeader;

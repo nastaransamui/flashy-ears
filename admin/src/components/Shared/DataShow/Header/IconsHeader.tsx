@@ -1,26 +1,35 @@
-import { FC, Fragment } from "react";
+import PropTypes from 'prop-types';
+import { FC, Fragment, } from "react";
 
-import Hidden from '@mui/material/Hidden';
 import AddIcon from '@mui/icons-material/Add'
 import GetApp from '@mui/icons-material/GetApp'
 import SortIcon from '@mui/icons-material/Sort';
 import ViewColumnIcon from '@mui/icons-material/ViewColumn';
-import FilterListIcon from '@mui/icons-material/FilterList';
+import PerPageIcon from "./Icons/PerPageIcon";
 import IconButton from '@mui/material/IconButton'
 
-import Divider from '@mui/material/Divider'
 import { useTheme } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import useSpreadCrud from "@/src/components/Hooks/useCurrentRouteState";
+import PerRowIcon from './Icons/PerRowIcon';
 
-export interface IconsHeaderTypes { }
+
+
+export interface IconsHeaderTypes {
+
+}
 
 const IconsHeader: FC<IconsHeaderTypes> = ((props: IconsHeaderTypes) => {
   const theme = useTheme()
+  const navigate = useNavigate()
+  const currentRouteState = useSpreadCrud();
+
+
+
+
   return (
     <Fragment>
-      <Hidden smDown implementation='css'>
-        <Divider orientation="vertical" sx={{ fill: theme.palette.mode == 'dark' ? 'white' : 'black' }} />
-      </Hidden>
-      <IconButton>
+      <IconButton disabled={!currentRouteState.create} onClick={() => navigate('/rbac-data/role')}>
         <AddIcon fontSize='small' sx={{ fill: theme.palette.mode == 'dark' ? 'white' : 'black' }} />
       </IconButton>
       <IconButton>
@@ -29,14 +38,13 @@ const IconsHeader: FC<IconsHeaderTypes> = ((props: IconsHeaderTypes) => {
       <IconButton>
         <SortIcon fontSize='small' sx={{ fill: theme.palette.mode == 'dark' ? 'white' : 'black' }} />
       </IconButton>
-      <IconButton>
-        <ViewColumnIcon fontSize='small' sx={{ fill: theme.palette.mode == 'dark' ? 'white' : 'black' }} />
-      </IconButton>
-      <IconButton>
-        <FilterListIcon fontSize='small' sx={{ fill: theme.palette.mode == 'dark' ? 'white' : 'black' }} />
-      </IconButton>
+      <PerRowIcon />
+      <PerPageIcon />
     </Fragment>
   )
 })
 
+IconsHeader.propTypes = {
+
+}
 export default IconsHeader

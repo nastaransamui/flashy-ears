@@ -61,6 +61,14 @@ const useWrapper = () => {
     }
   }, [adminThemeName, adminThemeType, i18n.language])
 
+  useEffect(() => {
+    // Remove preloader or show javascript disabled warning
+    const preloader = document.getElementById('preloader');
+    if (preloader !== null || undefined) {
+      preloader?.remove();
+    }
+  }, [])
+
   const jss = create({ plugins: [...jssPreset().plugins, rtl()] });
 
   return {

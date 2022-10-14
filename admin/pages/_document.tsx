@@ -18,7 +18,7 @@ class MyDocument extends Document<Props> {
     const theme = appTheme(
       this.props.adminThemeName,
       this.props.adminThemeType,
-      this.props.i18nextLng == 'en' ? 'ltr': 'rtl'
+      this.props.i18nextLng == 'en' ? 'ltr' : 'rtl'
     )
     return (
       <Html lang={this.props.i18nextLng}>
@@ -91,7 +91,7 @@ class MyDocument extends Document<Props> {
             style={{
               position: 'fixed',
               zIndex: 10000,
-              background: `${theme.palette.primary.main}`,
+              background: `${theme.palette.primary.light}`,
               marginTop: -200,
               width: '100%',
               height: '200%',

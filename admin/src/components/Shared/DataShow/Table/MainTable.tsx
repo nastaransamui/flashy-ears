@@ -1,11 +1,16 @@
 import { FC, Fragment } from "react";
 
 import Box from '@mui/material/Box'
+import { useSelector } from 'react-redux';
+import { State } from '@/src/redux/store';
+
+
+
 
 export interface MainTableType { }
 
 const MainTable: FC<MainTableType> = ((props: MainTableType) => {
-
+  const { totalData } = useSelector<State, State>(state => state)
   return (
     <Fragment>
       <Box
@@ -16,7 +21,11 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
           mb: 2,
           mt: 2,
         }}>
-        This is Table view
+        {totalData.map((a) => {
+          return (
+            <span key={a._id}>{a.userName || a._id}<br /></span>
+          )
+        })}
       </Box>
     </Fragment>
   )

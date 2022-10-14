@@ -1,13 +1,41 @@
+import PropTypes from 'prop-types'
 import Grid from '@mui/material/Grid';
 import MuiPagination from '@mui/material/Pagination';
 import Typography from '@mui/material/Typography'
-import { FC } from 'react';
+import { FC, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { State } from '@/src/redux/store';
+import { useReadLocalStorage } from 'usehooks-ts'
+import useCurrentRouteState from '@/hookes/useCurrentRouteState'
+import { DataShowCtx, DataShowInterface } from './useDataShow';
 
-export interface PaginationType { }
+export interface PaginationType {
+
+}
 
 const Pagination: FC<PaginationType> = ((props: PaginationType) => {
   const { t } = useTranslation()
+  const currentRouteState = useCurrentRouteState();
+  const { modelName } = currentRouteState
+  const { setPageNumber, setPerPage } = useContext(DataShowCtx)
+  const { totalCount } = useSelector<State, State>(state => state)
+  const pageNumber = useReadLocalStorage(`${modelName}_pageNumber`)
+  const perPage: number = useReadLocalStorage(`${modelName}_perPage`)!
+  const [count, setCount] = useState(0)
+
+  useEffect(() => {
+    let isMount = true
+    if (isMount) {
+      setPageNumber(() => pageNumber == null ? 1 : pageNumber)
+      setPerPage(() => perPage == null ? 48 : perPage)
+      setCount(() => totalCount == 0 ? totalCount : Math.ceil(totalCount / perPage))
+    }
+    return () => {
+      isMount = false;
+    }
+  }, [pageNumber, perPage, totalCount])
+
   return (
     <Grid
       container
@@ -16,22 +44,17 @@ const Pagination: FC<PaginationType> = ((props: PaginationType) => {
       justifyContent='center'
       alignItems='center'
       sx={{ pb: 2, pt: 2 }}>
-      <Grid item>
+      <Grid item >
         <Typography>
           {t('Page', { ns: 'common' })}: 1
           &nbsp;&nbsp;&nbsp;&nbsp;
-          {t('Total', { ns: 'common' })}: {1}
+          {t('Total', { ns: 'common' })}: {totalCount.toLocaleString()}
         </Typography>
       </Grid>
-      {/* {adminFormSubmit ? (
-      <Grid item component='nav' style={{ height: 30, marginTop: 10 }} />
-    ) : ( */}
-      <Grid item>
+      <Grid item >
         <MuiPagination
-          // count={Math.ceil(total / perPage)}
-          // page={pageNumber}
-          count={1}
-          page={1}
+          count={count}
+          page={pageNumber == null ? 1 : pageNumber as number}
           showLastButton
           showFirstButton
           boundaryCount={2}
@@ -39,14 +62,17 @@ const Pagination: FC<PaginationType> = ((props: PaginationType) => {
           onChange={(e, value) => {
             // cardView && setExpanded({});
             // requestSearch('');
-            // paginationChange(value);
+            setPageNumber((prevValue: number) => value)
           }}
           siblingCount={1}
         />
       </Grid>
-      {/* )} */}
     </Grid>
   )
 })
+
+Pagination.propTypes = {
+
+}
 
 export default Pagination;

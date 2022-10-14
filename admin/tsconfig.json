@@ -24,6 +24,8 @@
       "@/interfaces/*": ["src/components/Shared/interfaces/*"],
       "@/helpers/*": ["helpers/*"],
       "@/models/*": ["models/*"],
+      "@/hookes/*": ["src/components/Hooks/*"],
+      "@/shared/*": ["src/components/Shared/*"],
       "@/root/*": ["/*"]
     },
     "jsxImportSource": "@emotion/react",

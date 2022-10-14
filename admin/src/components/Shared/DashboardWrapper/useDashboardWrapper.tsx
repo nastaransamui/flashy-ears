@@ -62,6 +62,14 @@ const useDashboardWrapper = () => {
 
   const jss = create({ plugins: [...jssPreset().plugins, rtl()] });
 
+  useEffect(() => {
+    // Remove preloader or show javascript disabled warning
+    const preloader = document.getElementById('preloader');
+    if (preloader !== null || undefined) {
+      preloader?.remove();
+    }
+  }, [])
+
   return {
     adminTheme,
     jss,

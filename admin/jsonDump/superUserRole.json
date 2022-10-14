@@ -6,791 +6,242 @@
   "icon": "M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z",
   "routes": [
     {
-      "path": "/dashboard/user-page",
-      "name_en-US": "Users",
-      "name_fa": "کاربران",
-      "crud": [
-        {
-          "name": "read",
-          "active": true
-        },
-        {
-          "name": "delete",
-          "active": true
-        },
-        {
-          "name": "create",
-          "active": true
-        },
-        {
-          "name": "update",
-          "active": true
-        }
-      ],
-      "views": [
-        {
-          "path": "/dashboard/user-page",
-          "name_en-US": "Users List",
-          "name_fa": "لیست کاربران",
-          "crud": [
-            {
-              "name": "read",
-              "active": true
-            },
-            {
-              "name": "delete",
-              "active": true
-            },
-            {
-              "name": "create",
-              "active": true
-            },
-            {
-              "name": "update",
-              "active": true
-            }
-          ],
-          "views": []
-        },
-        {
-          "path": "/dashboard/user-page/user",
-          "name_en-US": "Create user",
-          "name_fa": "ایجاد کاربر ",
-          "crud": [
-            {
-              "name": "read",
-              "active": true
-            },
-            {
-              "name": "delete",
-              "active": true
-            },
-            {
-              "name": "create",
-              "active": true
-            },
-            {
-              "name": "update",
-              "active": true
-            }
-          ],
-          "views": []
-        }
-      ]
+      "state": "dashboardMain",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
     },
     {
-      "path": "/dashboard/rbac-data",
-      "name_en-US": "Roles",
-      "name_fa": "نقش ها",
-      "crud": [
-        {
-          "name": "read",
-          "active": true
-        },
-        {
-          "name": "delete",
-          "active": true
-        },
-        {
-          "name": "create",
-          "active": true
-        },
-        {
-          "name": "update",
-          "active": true
-        }
-      ],
-      "views": [
-        {
-          "path": "/dashboard/rbac-data",
-          "name_en-US": "Roles List",
-          "name_fa": "لیست نقش ها",
-          "crud": [
-            {
-              "name": "read",
-              "active": true
-            },
-            {
-              "name": "delete",
-              "active": true
-            },
-            {
-              "name": "create",
-              "active": true
-            },
-            {
-              "name": "update",
-              "active": true
-            }
-          ],
-          "views": []
-        },
-        {
-          "path": "/dashboard/rbac-data/role",
-          "name_en-US": "Create role",
-          "name_fa": "ایجاد نقش ",
-          "crud": [
-            {
-              "name": "read",
-              "active": true
-            },
-            {
-              "name": "delete",
-              "active": true
-            },
-            {
-              "name": "create",
-              "active": true
-            },
-            {
-              "name": "update",
-              "active": true
-            }
-          ],
-          "views": []
-        }
-      ]
+      "state": "userCollapse",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
     },
     {
-      "path": "/dashboard/main-page-setup",
-      "name_en-US": "Main page setup",
-      "name_fa": "صفحه اصلی",
-      "crud": [
-        {
-          "name": "read",
-          "active": true
-        },
-        {
-          "name": "delete",
-          "active": true
-        },
-        {
-          "name": "create",
-          "active": true
-        },
-        {
-          "name": "update",
-          "active": true
-        }
-      ],
-      "views": [
-        {
-          "path": "/dashboard/main-page-setup",
-          "name_en-US": "Video banner",
-          "name_fa": "بنر ویدیویی",
-          "crud": [
-            {
-              "name": "read",
-              "active": true
-            },
-            {
-              "name": "delete",
-              "active": true
-            },
-            {
-              "name": "create",
-              "active": true
-            },
-            {
-              "name": "update",
-              "active": true
-            }
-          ],
-          "views": [
-            {
-              "path": "/dashboard/main-page-setup/videos",
-              "name_en-US": "Videos List",
-              "name_fa": "فیلم های",
-              "crud": [
-                {
-                  "name": "read",
-                  "active": true
-                },
-                {
-                  "name": "delete",
-                  "active": true
-                },
-                {
-                  "name": "create",
-                  "active": true
-                },
-                {
-                  "name": "update",
-                  "active": true
-                }
-              ]
-            },
-            {
-              "path": "/dashboard/main-page-setup/videos/video",
-              "name_en-US": "Add video",
-              "name_fa": "فیلم",
-              "crud": [
-                {
-                  "name": "read",
-                  "active": true
-                },
-                {
-                  "name": "delete",
-                  "active": true
-                },
-                {
-                  "name": "create",
-                  "active": true
-                },
-                {
-                  "name": "update",
-                  "active": true
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "name_en-US": "Photo slider",
-          "name_fa": "نوار عکس",
-          "crud": [
-            {
-              "name": "read",
-              "active": true
-            },
-            {
-              "name": "delete",
-              "active": true
-            },
-            {
-              "name": "create",
-              "active": true
-            },
-            {
-              "name": "update",
-              "active": true
-            }
-          ],
-          "views": [
-            {
-              "path": "/dashboard/main-page-setup/photos",
-              "name_en-US": "Photos List",
-              "name_fa": "عکس ها",
-              "crud": [
-                {
-                  "name": "read",
-                  "active": true
-                },
-                {
-                  "name": "delete",
-                  "active": true
-                },
-                {
-                  "name": "create",
-                  "active": true
-                },
-                {
-                  "name": "update",
-                  "active": true
-                }
-              ]
-            },
-            {
-              "path": "/dashboard/main-page-setup/photos/photo",
-              "name_en-US": "Add Photo",
-              "name_fa": "عکس",
-              "crud": [
-                {
-                  "name": "read",
-                  "active": true
-                },
-                {
-                  "name": "delete",
-                  "active": true
-                },
-                {
-                  "name": "create",
-                  "active": true
-                },
-                {
-                  "name": "update",
-                  "active": true
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "path": "/dashboard/main-page-setup",
-          "name_en-US": "Features slider",
-          "name_fa": "امکانات",
-          "crud": [
-            {
-              "name": "read",
-              "active": true
-            },
-            {
-              "name": "delete",
-              "active": true
-            },
-            {
-              "name": "create",
-              "active": true
-            },
-            {
-              "name": "update",
-              "active": true
-            }
-          ],
-          "views": [
-            {
-              "path": "/dashboard/main-page-setup/features",
-              "name_en-US": "Features List",
-              "name_fa": "امکانات",
-              "crud": [
-                {
-                  "name": "read",
-                  "active": true
-                },
-                {
-                  "name": "delete",
-                  "active": true
-                },
-                {
-                  "name": "create",
-                  "active": true
-                },
-                {
-                  "name": "update",
-                  "active": true
-                }
-              ]
-            },
-            {
-              "path": "/dashboard/main-page-setup/features/feature",
-              "name_en-US": "Add Feature",
-              "name_fa": "ویژگی",
-              "crud": [
-                {
-                  "name": "read",
-                  "active": true
-                },
-                {
-                  "name": "delete",
-                  "active": true
-                },
-                {
-                  "name": "create",
-                  "active": true
-                },
-                {
-                  "name": "update",
-                  "active": true
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "path": "/dashboard/main-page-setup/about",
-          "name_en-US": "About us",
-          "name_fa": "درباره",
-          "crud": [
-            {
-              "name": "read",
-              "active": true
-            },
-            {
-              "name": "delete",
-              "active": true
-            },
-            {
-              "name": "create",
-              "active": true
-            },
-            {
-              "name": "update",
-              "active": true
-            }
-          ],
-          "views": []
-        }
-      ]
+      "state": "usersList",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
     },
     {
-      "path": "/dashboard",
-      "name_en-US": "Main Data Activation",
-      "name_fa": "فعال سازی داده های اصلی",
-      "crud": [
-        {
-          "name": "read",
-          "active": true
-        },
-        {
-          "name": "delete",
-          "active": true
-        },
-        {
-          "name": "create",
-          "active": true
-        },
-        {
-          "name": "update",
-          "active": true
-        }
-      ],
-      "views": [
-        {
-          "name_en-US": "All",
-          "name_fa": "همه",
-          "crud": [
-            {
-              "name": "read",
-              "active": true
-            },
-            {
-              "name": "delete",
-              "active": true
-            },
-            {
-              "name": "create",
-              "active": true
-            },
-            {
-              "name": "update",
-              "active": true
-            }
-          ],
-          "views": [
-            {
-              "path": "/dashboard/g-locations/countries",
-              "name_en-US": "All countries",
-              "name_fa": "همه کشورها",
-              "crud": [
-                {
-                  "name": "read",
-                  "active": true
-                },
-                {
-                  "name": "delete",
-                  "active": true
-                },
-                {
-                  "name": "create",
-                  "active": true
-                },
-                {
-                  "name": "update",
-                  "active": true
-                }
-              ]
-            },
-            {
-              "path": "/dashboard/g-currencies/currencies",
-              "name_en-US": "All currencies",
-              "name_fa": "همه ارزها",
-              "crud": [
-                {
-                  "name": "read",
-                  "active": true
-                },
-                {
-                  "name": "delete",
-                  "active": true
-                },
-                {
-                  "name": "create",
-                  "active": true
-                },
-                {
-                  "name": "update",
-                  "active": true
-                }
-              ]
-            },
-            {
-              "path": "/dashboard/g-hotels/allhotels",
-              "name_en-US": "All Hotels",
-              "name_fa": "همه هتلها",
-              "crud": [
-                {
-                  "name": "read",
-                  "active": true
-                },
-                {
-                  "name": "delete",
-                  "active": true
-                },
-                {
-                  "name": "create",
-                  "active": true
-                },
-                {
-                  "name": "update",
-                  "active": true
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "name_en-US": "Only actives",
-          "name_fa": "فقط فعال",
-          "crud": [
-            {
-              "name": "read",
-              "active": true
-            },
-            {
-              "name": "delete",
-              "active": true
-            },
-            {
-              "name": "create",
-              "active": true
-            },
-            {
-              "name": "update",
-              "active": true
-            }
-          ],
-          "views": [
-            {
-              "path": "/dashboard/a-locations/countries",
-              "name_en-US": "Active countries",
-              "name_fa": "کشورها فعال",
-              "crud": [
-                {
-                  "name": "read",
-                  "active": true
-                },
-                {
-                  "name": "delete",
-                  "active": true
-                },
-                {
-                  "name": "create",
-                  "active": true
-                },
-                {
-                  "name": "update",
-                  "active": true
-                }
-              ]
-            },
-            {
-              "path": "/dashboard/a-locations/provinces",
-              "name_en-US": "Active provinces/states",
-              "name_fa": "استان ها / ایالتهای فعال",
-              "crud": [
-                {
-                  "name": "read",
-                  "active": true
-                },
-                {
-                  "name": "delete",
-                  "active": true
-                },
-                {
-                  "name": "create",
-                  "active": true
-                },
-                {
-                  "name": "update",
-                  "active": true
-                }
-              ]
-            },
-            {
-              "path": "/dashboard/a-locations/cities",
-              "name_en-US": "Active cities",
-              "name_fa": "شهرها ی فعال",
-              "crud": [
-                {
-                  "name": "read",
-                  "active": true
-                },
-                {
-                  "name": "delete",
-                  "active": true
-                },
-                {
-                  "name": "create",
-                  "active": true
-                },
-                {
-                  "name": "update",
-                  "active": true
-                }
-              ]
-            },
-            {
-              "path": "/dashboard/a-currencies/currencies",
-              "name_en-US": "Active currencies",
-              "name_fa": "ارزهای فعال",
-              "crud": [
-                {
-                  "name": "read",
-                  "active": true
-                },
-                {
-                  "name": "delete",
-                  "active": true
-                },
-                {
-                  "name": "create",
-                  "active": true
-                },
-                {
-                  "name": "update",
-                  "active": true
-                }
-              ]
-            }
-          ]
-        }
-      ]
+      "state": "userSingle",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
     },
     {
-      "path": "/dashboard",
-      "name_en-US": "Agency/Client Data",
-      "name_fa": "اطلاعات آژانس/مشتری",
-      "crud": [
-        {
-          "name": "read",
-          "active": true
-        },
-        {
-          "name": "delete",
-          "active": true
-        },
-        {
-          "name": "create",
-          "active": true
-        },
-        {
-          "name": "update",
-          "active": true
-        }
-      ],
-      "views": [
-        {
-          "path": "/dashboard/client-data/clients",
-          "name_en-US": "Agencies List",
-          "name_fa": "فهرست آژانس ها",
-          "crud": [
-            {
-              "name": "read",
-              "active": true
-            },
-            {
-              "name": "delete",
-              "active": true
-            },
-            {
-              "name": "create",
-              "active": true
-            },
-            {
-              "name": "update",
-              "active": true
-            }
-          ],
-          "views": []
-        },
-        {
-          "path": "/dashboard/client-data/clients/client",
-          "name_en-US": "Add agency",
-          "name_fa": "آژانس اضافه کنید",
-          "crud": [
-            {
-              "name": "read",
-              "active": true
-            },
-            {
-              "name": "delete",
-              "active": true
-            },
-            {
-              "name": "create",
-              "active": true
-            },
-            {
-              "name": "update",
-              "active": true
-            }
-          ],
-          "views": []
-        }
-      ]
+      "state": "roleCollapse",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
     },
     {
-      "path": "/dashboard",
-      "name_en-US": "Hotels Data",
-      "name_fa": "اطلاعات هتلها",
-      "crud": [
-        {
-          "name": "read",
-          "active": true
-        },
-        {
-          "name": "delete",
-          "active": true
-        },
-        {
-          "name": "create",
-          "active": true
-        },
-        {
-          "name": "update",
-          "active": true
-        }
-      ],
-      "views": [
-        {
-          "path": "/dashboard/hotel-data/hotels",
-          "name_en-US": "Hotels List",
-          "name_fa": "فهرست هتلها",
-          "crud": [
-            {
-              "name": "read",
-              "active": true
-            },
-            {
-              "name": "delete",
-              "active": true
-            },
-            {
-              "name": "create",
-              "active": true
-            },
-            {
-              "name": "update",
-              "active": true
-            }
-          ],
-          "views": []
-        },
-        {
-          "path": "/dashboard/hotel-data/hotels/hotel",
-          "name_en-US": "Add hotel",
-          "name_fa": "هتل اضافه کنید",
-          "crud": [
-            {
-              "name": "read",
-              "active": true
-            },
-            {
-              "name": "delete",
-              "active": true
-            },
-            {
-              "name": "create",
-              "active": true
-            },
-            {
-              "name": "update",
-              "active": true
-            }
-          ],
-          "views": []
-        }
-      ]
+      "state": "rolesList",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "roleSingle",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "mainPageCollapse",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "videosCollapse",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "videosList",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "videoSingle",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "photosCollapse",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "photosList",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "photoSingle",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "featuresCollapse",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "featuresList",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "featureSingle",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "aboutSingle",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "mainDataCollapse",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "globalCollapse",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "globalCountries",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "globalCurrencies",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "globalHotels",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "activeCollapse",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "activeCountries",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "activeProvinces",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "activeCities",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "activeCurrencies",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "agencyCollapse",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "agenciesList",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "agencySingle",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "hotelsCollapse",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "hotelsList",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "hotelSingle",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
     }
   ]
 }
