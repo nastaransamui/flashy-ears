@@ -33,5 +33,8 @@
   "userEditSuccess": "User was successfully updated.",
   "Not Found": "result not found",
   "roleName": "Role name",
-  "agentData": "User Agencies information table"
+  "agentData": "User Agencies information table",
+  "cityName": "City Name",
+  "provinceName": "Province Name",
+  "countryName": "Country Name"
 }

@@ -70,8 +70,8 @@
   "6_row": "Two",
   "12_row": "One",
   "sortBy": "Sort result by:",
-  "ASC": "Ascending",
-  "DESC": "Descending",
+  "-1": "Ascending",
+  "1": "Descending",
   "Page": "Page",
   "searchData": "Search in whole data",
   "csvExport": "Export data in csv format",
@@ -119,5 +119,7 @@
   "Total": "Total",
   "...less": "...less",
   "...more": "...more",
-  "accessRoleNull": "The role document is empty."
+  "accessRoleNull": "The role document is empty.",
+  "selected": "Selected",
+  "noRow": "No rows found"
 }

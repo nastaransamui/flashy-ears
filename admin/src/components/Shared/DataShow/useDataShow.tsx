@@ -106,7 +106,7 @@ const useDataShow = () => {
       isMount = false
       abortController.abort();
     }
-  }, [perPage, pageNumber])
+  }, [perPage, pageNumber, sortDirection, sortByField])
 
 
 

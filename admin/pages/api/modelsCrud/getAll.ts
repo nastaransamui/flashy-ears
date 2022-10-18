@@ -7,17 +7,32 @@ import hazelCast from 'middleware/hazelCast';
 import mongoose, { Model } from 'mongoose';
 import Roles, { IRole } from '@/models/Roles';
 import Users, { IUser } from '@/models/Users';
+import Videos, { IVideo } from '@/models/Videos';
+import Photos, { IPhoto } from '@/models/Photos';
+import Features, { IFeature } from '@/models/Features';
 import {
   findAllUsersWithPagginate,
   findAllRolesWithPagginate,
+  findAllVideosWithPagginate,
+  findAllPhotosWithPagginate,
   findAllUsers,
   findAllRoles,
+  findAllVideos,
+  findAllPhotos,
   paginate,
   MultiMapKey,
   MultiMapValue,
+  findAllFeaturesWithPagginate,
+  findAllFeatures,
 } from '@/helpers/dbFinds';
 import type { MultiMap } from 'hazelcast-client/lib/proxy/MultiMap';
-import { addUsersFaker } from '@/lib/faker';
+import {
+  addFeaturesFaker,
+  addPhotosFaker,
+  addRolesFaker,
+  addUsersFaker,
+  addVideosFaker,
+} from '@/lib/faker';
 
 const apiRoute = nextConnect<HazelcastType, NextApiResponse>({
   onError(error, req, res) {
@@ -50,6 +65,10 @@ apiRoute.post(
   hazelCast,
   async (req: HazelcastType, res: NextApiResponse<Data>) => {
     // addUsersFaker();
+    // addRolesFaker();
+    // addVideosFaker();
+    // addPhotosFaker();
+    // addFeaturesFaker();
     try {
       const { modelName, perPage, pageNumber, sortByField, sortDirection } =
         req.body;
@@ -91,6 +110,39 @@ apiRoute.post(
               );
               res.status(200).json({ success: true, ...result });
               break;
+            case 'Videos':
+              var result: Results = await findAllVideos(
+                modelName,
+                sortByField,
+                perPage,
+                pageNumber,
+                sortDirection,
+                multiMap as MultiMap<MultiMapKey, MultiMapValue>
+              );
+              res.status(200).json({ success: true, ...result });
+              break;
+            case 'Photos':
+              var result: Results = await findAllPhotos(
+                modelName,
+                sortByField,
+                perPage,
+                pageNumber,
+                sortDirection,
+                multiMap as MultiMap<MultiMapKey, MultiMapValue>
+              );
+              res.status(200).json({ success: true, ...result });
+              break;
+            case 'Features':
+              var result: Results = await findAllFeatures(
+                modelName,
+                sortByField,
+                perPage,
+                pageNumber,
+                sortDirection,
+                multiMap as MultiMap<MultiMapKey, MultiMapValue>
+              );
+              res.status(200).json({ success: true, ...result });
+              break;
 
             default:
               break;
@@ -116,6 +168,36 @@ apiRoute.post(
           case 'Roles':
             var result: Results = await findAllRolesWithPagginate(
               collection as Model<IRole>,
+              perPage,
+              pageNumber,
+              sortByField,
+              sortDirection
+            );
+            res.status(200).json({ success: true, ...result });
+            break;
+          case 'Videos':
+            var result: Results = await findAllVideosWithPagginate(
+              collection as Model<IVideo>,
+              perPage,
+              pageNumber,
+              sortByField,
+              sortDirection
+            );
+            res.status(200).json({ success: true, ...result });
+            break;
+          case 'Photos':
+            var result: Results = await findAllPhotosWithPagginate(
+              collection as Model<IPhoto>,
+              perPage,
+              pageNumber,
+              sortByField,
+              sortDirection
+            );
+            res.status(200).json({ success: true, ...result });
+            break;
+          case 'Features':
+            var result: Results = await findAllFeaturesWithPagginate(
+              collection as Model<IFeature>,
               perPage,
               pageNumber,
               sortByField,

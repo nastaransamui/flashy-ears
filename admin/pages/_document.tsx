@@ -33,6 +33,10 @@ class MyDocument extends Document<Props> {
             href='https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css'
             rel='stylesheet'
           />
+          <link
+            rel='stylesheet'
+            href='https://fonts.googleapis.com/icon?family=Material+Icons'
+          />
           {/* <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
@@ -74,10 +78,7 @@ class MyDocument extends Document<Props> {
             href='https://fonts.gstatic.com'
             crossOrigin='true'
           />
-          <link
-            rel='stylesheet'
-            href='https://fonts.googleapis.com/icon?family=Material+Icons'
-          />
+          
           <link
             rel='stylesheet'
             href='https://fonts.googleapis.com/icon?family=Material+Icons'

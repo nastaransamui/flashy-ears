@@ -15,7 +15,7 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { useTheme } from "@mui/material";
 import { useReadLocalStorage } from 'usehooks-ts'
 import useCurrentRouteState from '@/hookes/useCurrentRouteState'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { State } from '@/src/redux/store';
 import { DataShowCtx } from '../../useDataShow';
 import CustomPopover from '@/shared/CustomPopover';
@@ -35,6 +35,7 @@ const PerPageIcon: FC<PerPageIconType> = (props: PerPageIconType) => {
   const currentRouteState = useCurrentRouteState();
   const { modelName } = currentRouteState;
   const { setPerPage, setPageNumber } = useContext(DataShowCtx);
+  const dispatch = useDispatch()
 
   const perPageArray = [6, 12, 24, 48, 96]
 
@@ -43,6 +44,10 @@ const PerPageIcon: FC<PerPageIconType> = (props: PerPageIconType) => {
 
   const perPageFunc = (list: number) => {
     setPerPage(() => list)
+    dispatch({
+      type: 'DELETE_IDS',
+      payload: []
+    })
 
     if (Math.ceil(totalCount / list) < pageNumber) {
       setPageNumber(() => Math.ceil(totalCount / list))

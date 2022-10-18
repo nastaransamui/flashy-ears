@@ -139,6 +139,7 @@ const appTheme = (color: string, mode: PaletteMode, dir: string) => {
         
         ::-webkit-scrollbar {
           width: 8px;
+          height: 8px;
           background-color: #121212;
         }
         

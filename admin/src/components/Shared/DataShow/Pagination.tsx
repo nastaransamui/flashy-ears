@@ -4,7 +4,7 @@ import MuiPagination from '@mui/material/Pagination';
 import Typography from '@mui/material/Typography'
 import { FC, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { State } from '@/src/redux/store';
 import { useReadLocalStorage } from 'usehooks-ts'
 import useCurrentRouteState from '@/hookes/useCurrentRouteState'
@@ -23,6 +23,7 @@ const Pagination: FC<PaginationType> = ((props: PaginationType) => {
   const pageNumber = useReadLocalStorage(`${modelName}_pageNumber`)
   const perPage: number = useReadLocalStorage(`${modelName}_perPage`)!
   const [count, setCount] = useState(0)
+  const dispatch = useDispatch();
 
   useEffect(() => {
     let isMount = true
@@ -62,6 +63,10 @@ const Pagination: FC<PaginationType> = ((props: PaginationType) => {
           onChange={(e, value) => {
             // cardView && setExpanded({});
             // requestSearch('');
+            dispatch({
+              type: 'DELETE_IDS',
+              payload: []
+            })
             setPageNumber((prevValue: number) => value)
           }}
           siblingCount={1}

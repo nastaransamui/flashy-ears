@@ -29,18 +29,18 @@ import agencies_fa from '../public/locales/fa/agencies.json';
 import hotels_en from '../public/locales/en/hotels.json';
 import hotels_fa from '../public/locales/fa/hotels.json';
 
-export const defaultNS = 'common'
+export const defaultNS = 'common';
 export const resources = {
   en: {
     common: common_en,
     dashboard: dashboard_en,
     404: error_en,
     footer: footer_en,
-    users: users_en,
-    roles: roles_en,
-    video: video_en,
-    feature: feature_en,
-    photos: photos_en,
+    Users: users_en,
+    Roles: roles_en,
+    Videos: video_en,
+    Features: feature_en,
+    Photos: photos_en,
     about: about_en,
     geoLocations: geoLocations_en,
     dataGridLocale: dataGridLocale_en,
@@ -53,18 +53,16 @@ export const resources = {
     dashboard: dashboard_fa,
     404: error_fa,
     footer: footer_fa,
-    users: users_fa,
-    roles: roles_fa,
-    video: video_fa,
-    feature: feature_fa,
+    Users: users_fa,
+    Roles: roles_fa,
+    Videos: video_fa,
+    Features: feature_fa,
     about: about_fa,
-    photos: photos_fa,
+    Photos: photos_fa,
     geoLocations: geoLocations_fa,
     dataGridLocale: dataGridLocale_fa,
     exchange: exchange_fa,
     agencies: agencies_fa,
     hotels: hotels_fa,
   },
- }
-
-
+};

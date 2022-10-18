@@ -1,15 +1,22 @@
 
-import { useMemo, FC, Fragment, useState, useEffect } from 'react';
+import { useMemo, FC, Fragment } from 'react';
 import Prodashboard from '@/src/components/Dashboard/ProDashboard/Prodashboard';
-import { Routes, Route, BrowserRouter, useLocation, useSearchParams, Navigate } from "react-router-dom";
-import React from "react";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { ProDashboardProps } from '../Shared/interfaces/react.interface';
-import MainDashboard, { OneUser, UserList } from './MainDashboard/MainDashboard';
+import MainDashboard from './MainDashboard/MainDashboard';
 import NotFound from './NotFound';
 import PropTypes from 'prop-types'
+import Users from '@/src/components/Users/Users/Users';
+import User from '@/src/components/Users/User/User';
 import Roles from '@/src/components/Rbac/Roles/Roles';
-import Role from '../Rbac/Role/Role';
-import { RoutesType, RoutesViews } from '@/interfaces/react.interface';
+import Role from '@/src/components/Rbac/Role/Role';
+import Videos from '@/src/components/mainPageSetup/Videos/Videos';
+import Video from '@/src/components/mainPageSetup/Video/Video';
+import Photos from '@/src/components/mainPageSetup/Photos/Photos';
+import Photo from '@/src/components/mainPageSetup/Photo/Photo';
+import Features from '@/src/components/mainPageSetup/Features/Features';
+import Feature from '@/src/components/mainPageSetup/Feature/Feature';
+import { RoutesViews } from '@/interfaces/react.interface';
 import { useSelector } from 'react-redux';
 import { State } from '@/src/redux/store';
 export function useQuery() {
@@ -23,10 +30,16 @@ const ReactRouter: FC<ProDashboardProps> = (props: ProDashboardProps) => {
   const componentsMap = useMemo(() => {
     return {
       MainDashboard,
-      UserList,
-      OneUser,
+      Users,
+      User,
       Roles,
       Role,
+      Videos,
+      Video,
+      Photos,
+      Photo,
+      Features,
+      Feature
     }
   }, [])
 

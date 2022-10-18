@@ -4,7 +4,7 @@
   "UploadFeature": "Upload video",
   "featureDelete": "Delete video",
   "required": "This field is required.",
-  "featureThumb": "Image for video poster.",
+  "imageShow": "Image for video poster.",
   "youTubeId": "Youtube video ID",
   "title_en": "English title of video",
   "title_fa": "Farsi title of video",

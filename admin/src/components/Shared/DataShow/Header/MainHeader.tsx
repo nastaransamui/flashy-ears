@@ -11,7 +11,7 @@ import ViewType from './ViewType';
 import SearchHeader from './SearchHeader';
 import IconsHeader from './IconsHeader';
 
-const StyledBox = styled(Container)(({ theme }) => ({
+export const StyledBox = styled(Container)(({ theme }) => ({
   border: '3px solid ',
   marginTop: 10,
   borderColor: theme.palette.secondary.main,

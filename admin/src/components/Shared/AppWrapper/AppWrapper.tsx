@@ -8,7 +8,7 @@ import { ChildrenProps } from '@/interfaces/react.interface'
 
 import LoadingBar from 'react-top-loading-bar';
 import { CustomToaster } from '@/src/components/Shared/CustomToaster/CustomToaster'
-// @ts-ignore
+
 import CircleToBlockLoading from 'react-loadingg/lib/CircleToBlockLoading';
 import Backdrop from '@mui/material/Backdrop';
 

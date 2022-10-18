@@ -15,8 +15,14 @@ export interface Profile {
 
 export interface TotalDataType {
   _id: string;
-  userName?: string;
-  profileImage?: string;
+  dispalyFields: string[];
+  isActive?: boolean;
+  muiData: {
+    type: string;
+    thumbnail: string;
+    filterable: boolean;
+    icon: string;
+  };
 }
 export interface State {
   adminAccessToken: any;
@@ -30,6 +36,7 @@ export interface State {
   spreadRoutes: RoutesType[];
   totalData: TotalDataType[];
   totalCount: number;
+  deleteIds: string[]
 }
 
 const initialState = {
@@ -43,7 +50,8 @@ const initialState = {
   updateRoutes: [],
   spreadRoutes: [],
   totalData: [],
-  totalCount: 0
+  totalCount: 0,
+  deleteIds: []
 }
 
 
@@ -79,6 +87,8 @@ const reducer = (state: State = initialState, action: AnyAction) => {
       return { ...state, totalData: action.payload };
     case 'TOTAL_COUNT':
       return { ...state, totalCount: action.payload };
+    case 'DELETE_IDS':
+      return { ...state, deleteIds: action.payload };
     default:
       return state;
   }

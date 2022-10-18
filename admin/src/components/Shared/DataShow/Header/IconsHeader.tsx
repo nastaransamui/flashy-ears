@@ -12,6 +12,7 @@ import { useTheme } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import useSpreadCrud from "@/src/components/Hooks/useCurrentRouteState";
 import PerRowIcon from './Icons/PerRowIcon';
+import SortByIcon from './Icons/SortByIcon';
 
 
 
@@ -35,9 +36,7 @@ const IconsHeader: FC<IconsHeaderTypes> = ((props: IconsHeaderTypes) => {
       <IconButton>
         <GetApp fontSize='small' sx={{ fill: theme.palette.mode == 'dark' ? 'white' : 'black' }} />
       </IconButton>
-      <IconButton>
-        <SortIcon fontSize='small' sx={{ fill: theme.palette.mode == 'dark' ? 'white' : 'black' }} />
-      </IconButton>
+      <SortByIcon />
       <PerRowIcon />
       <PerPageIcon />
     </Fragment>

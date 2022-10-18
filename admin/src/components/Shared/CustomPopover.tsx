@@ -24,7 +24,7 @@ const CustomPopover: FC<CustomPopoverTypes> = (props: CustomPopoverTypes) => {
       }}
       sx={
         {
-          top: { xl: 36, lg: 32, md: 32, sm: 13, xs: 13 },
+          // top: { xl: 36, lg: 32, md: 32, sm: 13, xs: 13 },
         }
       }
       anchorOrigin={{

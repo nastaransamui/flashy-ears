@@ -9,7 +9,7 @@
   "youTubeId": "Youtube video ID",
   "title_en": "English title of video",
   "title_fa": "Farsi title of video",
-  "youTubeBanner": "Youtube status",
+  "isYoutube": "Youtube status",
   "topTitle_en": "English Top title of video",
   "topTitle_fa": "Farsi Top title of video",
   "subTitle_en": "English second title of video",
