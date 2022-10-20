@@ -7,6 +7,7 @@ import { State } from '@/src/redux/store';
 import { toast } from 'react-toastify';
 import { ToastMessage } from '@/shared/CustomToaster/CustomToaster';
 import axios from 'axios';
+import { useLocation } from 'react-router-dom';
 
 let url = '/admin/api/modelsCrud/getAll'
 
@@ -22,8 +23,9 @@ export interface DataShowInterface {
 const useDataShow = () => {
   const widthRef = useRef<HTMLDivElement>(null);
   const currentRouteState = useCurrentRouteState();
-  const { modelName } = currentRouteState;
+  const { modelName, predefineDb, activeOnly, path } = currentRouteState;
   const { adminAccessToken } = useSelector<State, State>(state => state)
+  const location = useLocation();
   const dispatch = useDispatch()
   const toastID = `${modelName}_toatId`;
   //Dynamically add locall storage for view
@@ -36,10 +38,9 @@ const useDataShow = () => {
   const [pageNumber, setPageNumber] =
     useLocalStorage(`${modelName}_pageNumber`, 1)
   const [sortByField, setSortByField] =
-    useLocalStorage(`${modelName}_sortByField`, 'createdAt')
+    useLocalStorage(`${modelName}_sortByField`, predefineDb ? 'name' : 'createdAt')
   const [sortDirection, setSortDirection] =
-    useLocalStorage(`${modelName}_sortDirection`, -1)
-
+    useLocalStorage(`${modelName}_sortDirection`, predefineDb ? 1 : -1)
 
   const abortController = new AbortController();
 
@@ -50,7 +51,8 @@ const useDataShow = () => {
       perPage: perPage,
       pageNumber: pageNumber,
       sortByField: sortByField,
-      sortDirection: sortDirection
+      sortDirection: sortDirection,
+      activeOnly: activeOnly
     }
     try {
       axios.post(url, body,
@@ -106,7 +108,7 @@ const useDataShow = () => {
       isMount = false
       abortController.abort();
     }
-  }, [perPage, pageNumber, sortDirection, sortByField])
+  }, [perPage, pageNumber, sortDirection, sortByField, path, activeOnly])
 
 
 

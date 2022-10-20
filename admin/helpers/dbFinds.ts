@@ -2,13 +2,30 @@ import Roles, { IRole } from '@/models/Roles';
 import Users, { IUser } from '@/models/Users';
 import mongoose, { Model } from 'mongoose';
 import Videos, { IVideo } from '@/models/Videos';
-import type { MultiMap } from 'hazelcast-client/lib/proxy/MultiMap';
 import Photos, { IPhoto } from '@/models/Photos';
 import Features, { IFeature } from '@/models/Features';
+import Countries, { ICountry } from '@/models/Countries';
+import Currencies, { ICurrency } from '@/models/Currencies';
+import { firstBy } from 'thenby';
+import type { MultiMap } from 'hazelcast-client/lib/proxy/MultiMap';
 
 export function paginate(array: object[], perPage: number, pageNumber: number) {
   // human-readable page numbers usually start with 1, so we reduce 1 in the first argument
   return array.slice((pageNumber - 1) * perPage, pageNumber * perPage);
+}
+
+export function sort_by(
+  array: object[],
+  sortByField: any,
+  sortDirection: 1 | -1
+) {
+  array = array.sort(
+    firstBy('isActive', 'desc').thenBy(sortByField, {
+      ignoreCase: true,
+      direction: sortDirection,
+    })
+  );
+  return array;
 }
 
 export async function findUserByUsername(username: string) {
@@ -38,6 +55,16 @@ export async function findPhotoById(_id: string) {
 export async function findFeatureById(_id: string) {
   let feature = await Features.findById(_id);
   return feature;
+}
+
+export async function findCountryById(_id: string) {
+  let country = await Countries.findById(_id);
+  return country;
+}
+
+export async function findCurrencyById(_id: string) {
+  let currency = await Currencies.findById(_id);
+  return currency;
 }
 
 export async function findAllUsersWithPagginate(
@@ -123,7 +150,10 @@ export async function findAllUsersWithPagginate(
       },
     },
     {
-      $unwind: '$roleName',
+      $unwind: {
+        path: '$roleName',
+        preserveNullAndEmptyArrays: true,
+      },
     },
     {
       $unset: ['roleData', '__v'],
@@ -148,6 +178,7 @@ export async function findAllUsersWithPagginate(
       },
     },
   ]);
+
   const result = {
     data: dataValue[0].paginatedResults,
     totalCount:
@@ -530,6 +561,297 @@ export async function findAllFeaturesWithPagginate(
   return result;
 }
 
+export async function findAllCountriesWithPagginate(
+  collection: Model<ICountry>,
+  perPage: number,
+  pageNumber: number,
+  sortByField: string,
+  sortDirection: 1 | -1,
+  activeOnly: boolean
+) {
+  const dispalyFields = [
+    'name',
+    'isActive',
+    'isHotelsActive',
+    'iso3',
+    'iso2',
+    'capital',
+    'currency',
+    'native',
+    'numeric_code',
+    'totalUsers',
+    'totalAgents',
+    'totalSuppliers',
+    'totalActiveHotels',
+    'totalStates',
+    'totalCities',
+    'phone_code',
+    'region',
+    'subregion',
+    'timezones',
+    'tld',
+    'latitude',
+    'longitude',
+    'currency_name',
+    'currency_symbol',
+  ];
+  const icon = {
+    ...Object.fromEntries(
+      dispalyFields.map((key) => {
+        return [
+          key,
+          {
+            icon:
+              key == 'isActive' || key == 'isHotelsActive'
+                ? 'CheckBoxIcon'
+                : key == 'capital'
+                ? 'LocationCityIcon'
+                : key == 'currency' ||
+                  key == 'currency_name' ||
+                  key == 'currency_name'
+                ? 'CurrencyExchangeIcon'
+                : key == 'totalActiveHotels'
+                ? 'HotelIcon'
+                : key == 'totalUsers'
+                ? 'BadgeIcon'
+                : key == 'totalAgents' || key == 'totalSuppliers'
+                ? 'AccountBoxIcon'
+                : key == 'tld'
+                ? 'DnsIcon'
+                : key == 'region' || key == 'subregion'
+                ? 'SouthAmericaIcon'
+                : key == 'latitude' || key == 'longitude'
+                ? 'FmdGoodIcon'
+                : key == 'phone_code'
+                ? 'LocalPhoneIcon'
+                : key == 'timezones'
+                ? 'TimelapseIcon'
+                : key == 'name' ||
+                  key == 'iso3' ||
+                  key == 'iso2' ||
+                  key == 'numeric_code'
+                ? 'InfoIcon'
+                : 'TitleIcon',
+          },
+        ];
+      })
+    ),
+  };
+
+  const muiDataObj = {
+    ...Object.fromEntries(
+      dispalyFields.map((key) => [
+        key,
+        {
+          type:
+            key == 'isHotelsActive' || key == 'isActive'
+              ? 'boolean'
+              : key == 'totalUsers' ||
+                key == 'totalAgents' ||
+                key == 'totalSuppliers' ||
+                key == 'totalHotels' ||
+                key == 'totalStates' ||
+                key == 'totalCities'
+              ? 'number'
+              : 'string',
+          thumbnail: key !== 'name' ? '' : 'iso2',
+          width:
+            key == 'name' ||
+            key == 'capital' ||
+            key == 'native' ||
+            key == 'currency_name' ||
+            key == 'totalSuppliers'
+              ? undefined
+              : 150,
+          align:
+            key == 'name' ||
+            key == 'capital' ||
+            key == 'native' ||
+            key == 'currency_name'
+              ? undefined
+              : 'center',
+          filterable: true,
+          ...icon[key],
+        },
+      ])
+    ),
+  };
+  var match = activeOnly ? { isActive: true } : {};
+
+  const dataValue = await collection.aggregate([
+    { $match: match },
+    {
+      $sort: { isActive: -1, [sortByField]: sortDirection },
+    },
+    {
+      $addFields: {
+        dispalyFields: dispalyFields,
+        muiData: muiDataObj,
+        totalStates: { $size: '$states_id' },
+        totalActiveHotels: { $size: '$hotels_id' },
+        totalUsers: { $size: '$users_id' },
+        totalAgents: { $size: '$agents_id' },
+        totalSuppliers: { $size: '$suppliers_id' },
+        totalCities: { $size: '$cities_id' },
+      },
+    },
+    {
+      $facet: {
+        paginatedResults: [
+          { $skip: perPage * (pageNumber - 1) },
+          { $limit: perPage },
+        ],
+        totalCount: [
+          {
+            $count: 'count',
+          },
+        ],
+      },
+    },
+  ]);
+  const result = {
+    data: dataValue[0].paginatedResults,
+    totalCount:
+      dataValue[0].totalCount[0] == undefined
+        ? 0
+        : dataValue[0].totalCount[0].count,
+  };
+  return result;
+}
+
+export async function findAllCurrenciesWithPagginate(
+  collection: Model<ICurrency>,
+  perPage: number,
+  pageNumber: number,
+  sortByField: string,
+  sortDirection: 1 | -1,
+  activeOnly: boolean
+) {
+  const dispalyFields = [
+    'name',
+    'isActive',
+    'iso3',
+    'iso2',
+    'totalAgents',
+    'totalSuppliers',
+    'numeric_code',
+    'currency',
+    'currency_name',
+    'currency_symbol',
+  ];
+  const icon = {
+    ...Object.fromEntries(
+      dispalyFields.map((key) => {
+        return [
+          key,
+          {
+            icon:
+              key == 'isActive'
+                ? 'CheckBoxIcon'
+                : key == 'currency' ||
+                  key == 'currency_name' ||
+                  key == 'currency_name'
+                ? 'CurrencyExchangeIcon'
+                : key == 'totalAgents' || 'totalSuppliers'
+                ? 'AccountBoxIcon'
+                : key == 'name' ||
+                  key == 'iso3' ||
+                  key == 'iso2' ||
+                  key == 'numeric_code'
+                ? 'InfoIcon'
+                : 'TitleIcon',
+          },
+        ];
+      })
+    ),
+  };
+
+  const muiDataObj = {
+    ...Object.fromEntries(
+      dispalyFields.map((key) => [
+        key,
+        {
+          type:
+            key == 'isActive'
+              ? 'boolean'
+              : key == 'totalSuppliers' || key == 'totalAgents'
+              ? 'number'
+              : 'string',
+          thumbnail: key !== 'name' ? '' : 'iso2',
+          width:
+            key == 'name' || key == 'currency_name' || key == 'totalSuppliers'
+              ? undefined
+              : 150,
+          align: key == 'name' || key == 'currency_name' ? undefined : 'center',
+          filterable: true,
+          ...icon[key],
+        },
+      ])
+    ),
+  };
+
+  var match = activeOnly ? { isActive: true } : {};
+
+  const dataValue = await collection.aggregate([
+    { $match: match },
+    {
+      $sort: { isActive: -1, [sortByField]: sortDirection },
+    },
+    {
+      $lookup: {
+        from: 'countries',
+        localField: 'id',
+        foreignField: 'id',
+        as: 'nameData',
+      },
+    },
+    {
+      $addFields: {
+        dispalyFields: dispalyFields,
+        muiData: muiDataObj,
+        totalAgents: { $size: '$agents_id' },
+        totalSuppliers: { $size: '$suppliers_id' },
+      },
+    },
+    {
+      $set: {
+        name: '$nameData.name',
+      },
+    },
+    {
+      $unset: 'nameData',
+    },
+    {
+      $unwind: {
+        path: '$name',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $facet: {
+        paginatedResults: [
+          { $skip: perPage * (pageNumber - 1) },
+          { $limit: perPage },
+        ],
+        totalCount: [
+          {
+            $count: 'count',
+          },
+        ],
+      },
+    },
+  ]);
+
+  const result = {
+    data: dataValue[0].paginatedResults,
+    totalCount:
+      dataValue[0].totalCount[0] == undefined
+        ? 0
+        : dataValue[0].totalCount[0].count,
+  };
+  return result;
+}
+
 export interface MultiMapKey {
   key: string;
 }
@@ -629,7 +951,10 @@ export async function findAllUsers(
       },
     },
     {
-      $unwind: '$roleName',
+      $unwind: {
+        path: '$roleName',
+        preserveNullAndEmptyArrays: true,
+      },
     },
     {
       $unset: 'roleData',
@@ -959,6 +1284,277 @@ export async function findAllFeatures(
       $addFields: {
         dispalyFields: dispalyFields,
         muiData: muiDataObj,
+      },
+    },
+  ]);
+  const result = {
+    data: paginate(dataValue, perPage, pageNumber),
+    totalCount: dataValue.length,
+  };
+  await multiMap.put(
+    `all${modelName}` as unknown as MultiMapKey,
+    dataValue as unknown as MultiMapValue
+  );
+  return result;
+}
+
+export async function findAllCountries(
+  modelName: string,
+  sortByField: string,
+  perPage: number,
+  pageNumber: number,
+  sortDirection: 1 | -1,
+  multiMap: MultiMap<MultiMapKey, MultiMapValue>
+) {
+  var collection = mongoose.model(modelName);
+
+  const dispalyFields = [
+    'name',
+    'isActive',
+    'isHotelsActive',
+    'iso3',
+    'iso2',
+    'capital',
+    'currency',
+    'native',
+    'numeric_code',
+    'totalUsers',
+    'totalAgents',
+    'totalSuppliers',
+    'totalActiveHotels',
+    'totalStates',
+    'totalCities',
+    'phone_code',
+    'region',
+    'subregion',
+    'timezones',
+    'tld',
+    'latitude',
+    'longitude',
+    'currency_name',
+    'currency_symbol',
+  ];
+  const icon = {
+    ...Object.fromEntries(
+      dispalyFields.map((key) => {
+        return [
+          key,
+          {
+            icon:
+              key == 'isActive' || key == 'isHotelsActive'
+                ? 'CheckBoxIcon'
+                : key == 'capital'
+                ? 'LocationCityIcon'
+                : key == 'currency' ||
+                  key == 'currency_name' ||
+                  key == 'currency_name'
+                ? 'CurrencyExchangeIcon'
+                : key == 'totalActiveHotels'
+                ? 'HotelIcon'
+                : key == 'totalUsers'
+                ? 'BadgeIcon'
+                : key == 'totalAgents' || key == 'totalSuppliers'
+                ? 'AccountBoxIcon'
+                : key == 'tld'
+                ? 'DnsIcon'
+                : key == 'region' || key == 'subregion'
+                ? 'SouthAmericaIcon'
+                : key == 'latitude' || key == 'longitude'
+                ? 'FmdGoodIcon'
+                : key == 'phone_code'
+                ? 'LocalPhoneIcon'
+                : key == 'timezones'
+                ? 'TimelapseIcon'
+                : key == 'name' ||
+                  key == 'iso3' ||
+                  key == 'iso2' ||
+                  key == 'numeric_code'
+                ? 'InfoIcon'
+                : 'TitleIcon',
+          },
+        ];
+      })
+    ),
+  };
+
+  const muiDataObj = {
+    ...Object.fromEntries(
+      dispalyFields.map((key) => [
+        key,
+        {
+          type:
+            key == 'isHotelsActive' || key == 'isActive'
+              ? 'boolean'
+              : key == 'totalUsers' ||
+                key == 'totalAgents' ||
+                key == 'totalSuppliers' ||
+                key == 'totalHotels' ||
+                key == 'totalStates' ||
+                key == 'totalCities'
+              ? 'number'
+              : 'string',
+          thumbnail: key !== 'name' ? '' : 'iso2',
+          width:
+            key == 'name' ||
+            key == 'capital' ||
+            key == 'native' ||
+            key == 'currency_name' ||
+            key == 'totalSuppliers'
+              ? undefined
+              : 150,
+          align:
+            key == 'name' ||
+            key == 'capital' ||
+            key == 'native' ||
+            key == 'currency_name'
+              ? undefined
+              : 'center',
+          filterable: true,
+          ...icon[key],
+        },
+      ])
+    ),
+  };
+
+  const dataValue = await collection.aggregate([
+    {
+      $sort: { isActive: -1, [sortByField]: sortDirection },
+    },
+    {
+      $addFields: {
+        dispalyFields: dispalyFields,
+        muiData: muiDataObj,
+        totalStates: { $size: '$states_id' },
+        totalActiveHotels: { $size: '$hotels_id' },
+        totalUsers: { $size: '$users_id' },
+        totalAgents: { $size: '$agents_id' },
+        totalSuppliers: { $size: '$suppliers_id' },
+        totalCities: { $size: '$cities_id' },
+      },
+    },
+  ]);
+  const result = {
+    data: paginate(dataValue, perPage, pageNumber),
+    totalCount: dataValue.length,
+  };
+  await multiMap.put(
+    `all${modelName}` as unknown as MultiMapKey,
+    dataValue as unknown as MultiMapValue
+  );
+  return result;
+}
+
+export async function findAllCurrencies(
+  modelName: string,
+  sortByField: string,
+  perPage: number,
+  pageNumber: number,
+  sortDirection: 1 | -1,
+  multiMap: MultiMap<MultiMapKey, MultiMapValue>
+) {
+  var collection = mongoose.model(modelName);
+
+  const dispalyFields = [
+    'name',
+    'isActive',
+    'iso3',
+    'iso2',
+    'totalAgents',
+    'totalSuppliers',
+    'numeric_code',
+    'currency',
+    'currency_name',
+    'currency_symbol',
+  ];
+  const icon = {
+    ...Object.fromEntries(
+      dispalyFields.map((key) => {
+        return [
+          key,
+          {
+            icon:
+              key == 'isActive'
+                ? 'CheckBoxIcon'
+                : key == 'currency' ||
+                  key == 'currency_name' ||
+                  key == 'currency_name'
+                ? 'CurrencyExchangeIcon'
+                : key == 'totalAgents' || 'totalSuppliers'
+                ? 'AccountBoxIcon'
+                : key == 'name' ||
+                  key == 'iso3' ||
+                  key == 'iso2' ||
+                  key == 'numeric_code'
+                ? 'InfoIcon'
+                : 'TitleIcon',
+          },
+        ];
+      })
+    ),
+  };
+
+  const muiDataObj = {
+    ...Object.fromEntries(
+      dispalyFields.map((key) => [
+        key,
+        {
+          type:
+            key == 'isActive'
+              ? 'boolean'
+              : key == 'totalSuppliers' || key == 'totalAgents'
+              ? 'number'
+              : 'string',
+          thumbnail: key !== 'name' ? '' : 'iso2',
+          width:
+            key == 'name' || key == 'currency_name' || key == 'totalSuppliers'
+              ? undefined
+              : 150,
+          align: key == 'name' || key == 'currency_name' ? undefined : 'center',
+          filterable: true,
+          ...icon[key],
+        },
+      ])
+    ),
+  };
+
+  const dataValue = await collection.aggregate([
+    {
+      $sort: { isActive: -1, [sortByField]: sortDirection },
+    },
+    {
+      $addFields: {
+        dispalyFields: dispalyFields,
+        muiData: muiDataObj,
+      },
+    },
+    {
+      $lookup: {
+        from: 'countries',
+        localField: 'id',
+        foreignField: 'id',
+        as: 'nameData',
+      },
+    },
+    {
+      $addFields: {
+        dispalyFields: dispalyFields,
+        muiData: muiDataObj,
+        totalAgents: { $size: '$agents_id' },
+        totalSuppliers: { $size: '$suppliers_id' },
+      },
+    },
+    {
+      $set: {
+        name: '$nameData.name',
+      },
+    },
+    {
+      $unset: 'nameData',
+    },
+    {
+      $unwind: {
+        path: '$name',
+        preserveNullAndEmptyArrays: true,
       },
     },
   ]);

@@ -22,7 +22,7 @@ export const addUsersFaker = () => {
       folderId: 'so',
       firstName,
       lastName,
-      role_id: [ObjectId('6348d23e94a61b2193d719a7')],
+      role_id: [ObjectId('634e896e83dd2d89c7560810')],
       roleName: 'Super User',
       agents_id: [],
       city_id: [],
@@ -55,7 +55,7 @@ export const addUsersFaker = () => {
       console.log(usersIdArray);
       await Roles.updateOne(
         {
-          _id: ObjectId('6348d23e94a61b2193d719a7'),
+          _id: ObjectId('634e896e83dd2d89c7560810'),
         },
         {
           $push: {

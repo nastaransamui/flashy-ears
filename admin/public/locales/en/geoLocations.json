@@ -64,6 +64,8 @@
   "totalActiveHotels": "Number of hotels",
   "totalUsers": "Number of users",
   "totalAgents": "Number of agents",
+  "totalSuppliers": "Number of Suppliers",
   "isHotelsActive": "Hotels status",
-  "totalHotels": "Number of hotels"
+  "totalHotels": "Number of hotels",
+  "isActive": "Country Status"
 }

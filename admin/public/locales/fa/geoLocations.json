@@ -63,6 +63,8 @@
   "totalActiveHotels": "تعداد هتل ها",
   "totalUsers": "تعداد کاربران",
   "totalAgents": "تعداد نمایندگان",
+  "totalSuppliers": "تعداد تامین کنندگان",
   "isHotelsActive": "وضعیت هتل ها",
-  "totalHotels": "تعداد هتل ها"
+  "totalHotels": "تعداد هتل ها",
+  "isActive": "وضعیت کشور"
 }

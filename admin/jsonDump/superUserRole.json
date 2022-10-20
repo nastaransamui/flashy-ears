@@ -1,6 +1,6 @@
 {
   "roleName": "Super User",
-  "users_id": [],
+  "users_id": [{ "$oid": "634e125be99740ef55a429b7" }],
   "isActive": true,
   "remark": "Super User on entry",
   "icon": "M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z",
@@ -146,6 +146,13 @@
       "create": true
     },
     {
+      "state": "countrySingle",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
       "state": "globalCountries",
       "access": true,
       "update": true,
@@ -196,6 +203,13 @@
     },
     {
       "state": "activeCurrencies",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "currencySingle",
       "access": true,
       "update": true,
       "delete": true,

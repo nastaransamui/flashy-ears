@@ -17,7 +17,13 @@ const apiRoute = nextConnect<HazelcastType, NextApiResponse>({
   },
 });
 
-type EmailStatus = 'roles' | 'users';
+type MultimapType =
+  | 'roles'
+  | 'users'
+  | 'videos'
+  | 'photos'
+  | 'features'
+  | 'countries';
 
 apiRoute.get(
   // verifyToken,
@@ -26,7 +32,7 @@ apiRoute.get(
     const hz = req.hazelCast;
     if (hz) {
       const { query } = req;
-      let model = query.model as EmailStatus;
+      let model = query.model as MultimapType;
 
       var capitalCaseModel = model?.charAt(0).toUpperCase() + model?.slice(1);
       const multiMap = await hz.getMultiMap(`${capitalCaseModel}`);

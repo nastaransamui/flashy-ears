@@ -2,7 +2,7 @@ import { FC, Fragment, useState } from "react";
 
 import Box from '@mui/material/Box'
 import { useDispatch, useSelector } from 'react-redux';
-import { State, TotalDataType } from '@/src/redux/store';
+import { State } from '@/src/redux/store';
 import { DataGrid, GridColDef, GridActionsCellItem, GridRenderCellParams, GridRowParams, GridSelectionModel } from '@mui/x-data-grid';
 import { CustomNoRowsOverlay, CustomToolbar, LocateText } from './functions'
 import { useReadLocalStorage } from 'usehooks-ts'
@@ -20,6 +20,8 @@ import { useNavigate } from 'react-router-dom';
 import { Player } from 'video-react';
 import Avatar from '@mui/material/Avatar'
 import YouTube from 'react-youtube';
+import ToggleOff from '@mui/icons-material/ToggleOff'
+import ToggleOn from '@mui/icons-material/ToggleOn'
 
 export interface MainTableType { }
 
@@ -46,14 +48,16 @@ interface MuiDataType {
   thumbnail: string;
   filterable: boolean;
   icon: string;
+  align?: string | undefined;
+  width?: number | undefined;
 }
 
 const MainTable: FC<MainTableType> = ((props: MainTableType) => {
-  const { totalData, totalCount, profile, deleteIds } = useSelector<State, State>(state => state)
+  const { totalData, totalCount, profile, deleteIds, statusIdsUpdate } = useSelector<State, State>(state => state)
   const dispatch = useDispatch();
   const currentRouteState = useCurrentRouteState();
 
-  const { modelName } = currentRouteState
+  const { modelName, predefineDb, activeOnly } = currentRouteState
   const { t } = useTranslation(modelName)
   const { classes, theme } = mainTableStyles({});
   const navigate = useNavigate()
@@ -65,18 +69,23 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
         let dispalyFields = a['dispalyFields']
         if (dispalyFields?.includes(key)) {
           let muiData = a['muiData'][key as keyof typeof a['muiData']]
+          let align = muiData?.[`align` as keyof typeof muiData]
           m.push({
             field: key,
             headerName: t(key),
-            width: 250,
+            width: muiData?.[`width` as keyof typeof muiData] || 250,
             cellClassName: 'super-app-theme--cell',
             align: 'center',
             headerAlign: 'center',
-            filterable: muiData[`filterable` as keyof typeof muiData],
-            type: muiData[`type` as keyof typeof muiData],
+            filterable: muiData?.[`filterable` as keyof typeof muiData],
+            type: muiData?.[`type` as keyof typeof muiData],
             description: t(`${key}`),
             renderCell: (params: GridRenderCellParams) => {
               switch (true) {
+                case Array.isArray(value):
+                  if (params.row[key].length == 0) return <div key={(key + value.toString())}> {t(key)} : length 0</div>
+                  return <div key={(key + value.toString())}>{params.row[key].length}</div>
+
                 case typeof value == 'boolean':
                   return (
                     <Fragment key={(key + value.toString())}>{params.row[key] ? <Done style={{ color: theme.palette.success.main }} /> : <Close style={{ color: theme.palette.error.main }} />}</Fragment>
@@ -95,10 +104,6 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
                     <span>{new Date(params.formattedValue).toLocaleDateString("en-GB", options)}</span>
                   )
 
-                case Array.isArray(value):
-                  if (value.length == 0) return <div key={(key + value.toString())}> {t(key)} : length 0</div>
-
-                  return <div key={(key + value.toString())}>{value.length}</div>
                 default:
                   switch (true) {
                     case params.formattedValue.length == 0:
@@ -112,7 +117,7 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
                         </Tooltip>
                       )
                     default:
-                      let media = muiData['thumbnail' as keyof typeof muiData]
+                      let media = muiData?.['thumbnail' as keyof typeof muiData]
                       switch (media) {
                         case 'icon' as any:
                           return (
@@ -161,7 +166,23 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
                             </div>
                           )
                         case '' as any:
-                          return <div style={{ display: 'flex', width: '100%' }}>{params.formattedValue.toString()}</div>
+                          //@ts-ignore
+                          return <div style={{ display: 'flex', width: '100%', justifyContent: align }}>{params.formattedValue.toString()}</div>
+                        case 'iso2' as any:
+                          return (
+                            <div style={{ display: 'flex', width: '100%' }}>
+                              {media !== '' as any
+                                ?
+                                <img
+                                  alt=".."
+                                  src={`/admin/flags/128x128/${params.row[media as unknown as keyof typeof params.row]}.png` || '/admin/images/faces/avatar1.jpg'}
+                                  style={{ width: 30, height: 30, borderRadius: '50%' }} /> : null}
+                              <span style={{
+                                marginLeft: theme.direction == 'ltr' ? 5 : 0,
+                                marginRight: theme.direction == 'ltr' ? 0 : 5,
+                              }}>{params.formattedValue.toString()}</span>
+                            </div>
+                          )
                         default:
                           return (
                             <div style={{ display: 'flex', width: '100%' }}>
@@ -222,8 +243,27 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
         <GridActionsCellItem
           label={t('Delete')}
           className='textPrimary'
-          icon={<Delete style={{ color: isDisabled(params) ? theme.palette.action.disabled : theme.palette.error.main }} />}
-          disabled={isDisabled(params)}
+          icon={predefineDb ? isDisabled(params) ?
+            <Tooltip
+              title={t('ToggleOff', { ns: 'common' })}
+              placement='bottom'
+              arrow>
+              <ToggleOff
+                style={{ color: !activeOnly && isDisabled(params) ? theme.palette.action.disabled : theme.palette.error.main }}
+              />
+            </Tooltip> :
+            <Tooltip
+              title={t('ToggleOn', { ns: 'common' })}
+              placement='bottom'
+              arrow>
+              <ToggleOn style={{ color: isDisabled(params) ? theme.palette.action.disabled : theme.palette.success.main }} />
+            </Tooltip> :
+            <Tooltip title={t('Delete', { ns: 'common' })} placement='bottom'
+              arrow>
+              <Delete style={{ color: isDisabled(params) ? theme.palette.action.disabled : theme.palette.error.main }} />
+            </Tooltip>
+          }
+          disabled={!activeOnly && isDisabled(params)}
           onClick={() => {
             if (deleteIds.findIndex((a) => a == params.id) == -1) {
               dispatch({
@@ -247,24 +287,7 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
         return params.row?.isActive;
     }
   }
-  const preventDeletationOnActive = () => {
-    switch (modelName) {
-      case 'Users':
-        return totalData.map((a) => a._id).filter((b) => b !== profile._id).length !== deleteIds.length
-      default:
-        return totalData.filter((b) => !b.isActive).map((a) => a._id).length !== deleteIds.length
-    }
-  }
 
-  const arrayDelete = () => {
-    switch (modelName) {
-      case 'Users':
-        return totalData.map((a) => a._id).filter((b) => b !== profile._id).filter((b) => !deleteIds.includes(b))
-
-      default:
-        return totalData.filter((b) => !b.isActive).map((a) => a._id).filter((b) => !deleteIds.includes(b))
-    }
-  }
 
 
   const deleteIconClicked = () => {
@@ -281,11 +304,6 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
           mb: 2,
           mt: 2,
         }}>
-        {/* {totalData.map((a) => {
-          return (
-            <span key={a._id}>{a.userName || a._id}<br /></span>
-          )
-        })} */}
         <DataGrid
           className={classes.root}
           density='compact'
@@ -303,7 +321,8 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
             switch (modelName) {
               case 'Users':
                 return profile._id !== params.id;
-
+              case "Countries":
+                return activeOnly ? params.row?.isActive : !params.row?.isActive;
               default:
                 return !params.row?.isActive;
             }
@@ -318,10 +337,7 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
           componentsProps={{
             toolbar:
             {
-              deleteIds: deleteIds,
               deleteIconClicked: deleteIconClicked,
-              preventDeletationOnActive: preventDeletationOnActive,
-              arrayDelete: arrayDelete,
             }
           }}
           onRowDoubleClick={(params) => {
@@ -331,12 +347,23 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
           }}
           keepNonExistentRowsSelected
           onSelectionModelChange={(newSelectionModel) => {
-            dispatch({
-              type: 'DELETE_IDS',
-              payload: [...newSelectionModel]
-            })
+            switch (predefineDb) {
+              case true:
+                dispatch({
+                  type: 'STATUS_IDS_UPDATE',
+                  payload: [...newSelectionModel]
+                })
+                break;
+
+              default:
+                dispatch({
+                  type: 'DELETE_IDS',
+                  payload: [...newSelectionModel]
+                })
+                break;
+            }
           }}
-          selectionModel={deleteIds}
+          selectionModel={predefineDb ? statusIdsUpdate : deleteIds}
         />
       </Box>
     </Fragment>

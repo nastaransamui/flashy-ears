@@ -81,7 +81,7 @@ const SortByIcon: FC<SortByIconType> = (props: SortByIconType) => {
   const open = Boolean(anchorEl);
   const id = open ? 'sort-by-popover' : undefined;
   const currentRouteState = useCurrentRouteState();
-  const { modelName } = currentRouteState;
+  const { modelName, predefineDb } = currentRouteState;
   const { t, i18n } = useTranslation(modelName)
   const { totalData } = useSelector<State, State>(state => state)
   const [anchorSTl, setAnchorSTl] = useState<AnchorType>({
@@ -96,8 +96,8 @@ const SortByIcon: FC<SortByIconType> = (props: SortByIconType) => {
   useEffect(() => {
     let isMount = true
     if (isMount) {
-      setSortByField(() => sortByField == null ? 'createdAt' : sortByField)
-      setSortDirection(() => sortDirection == null ? -1 : sortDirection)
+      setSortByField(() => sortByField == null ? predefineDb ? 'name' : 'createdAt' : sortByField)
+      setSortDirection(() => sortDirection == null ? predefineDb ? 1 : -1 : sortDirection)
     }
     return () => {
       isMount = false;
@@ -135,7 +135,7 @@ const SortByIcon: FC<SortByIconType> = (props: SortByIconType) => {
                     let dispalyFields = a['dispalyFields']
                     if (dispalyFields?.includes(key)) {
                       let muiData = a['muiData'][key as keyof typeof a['muiData']]
-                      let icon = muiData['icon' as keyof typeof muiData]
+                      let icon = muiData?.['icon' as keyof typeof muiData]
                       const DynamicIcon = iconMap[icon as unknown as keyof typeof iconMap];
                       return (
                         <Fragment key={(key + value.toString())}>

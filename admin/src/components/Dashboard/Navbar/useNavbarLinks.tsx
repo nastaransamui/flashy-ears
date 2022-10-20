@@ -102,6 +102,10 @@ const useNavbarLinks = () => {
           db.close()
           dispatch({ type: 'ADMIN_FORM_SUBMIT', payload: false });
           router.push('/');
+          localStorage.clear();
+          dispatch({ type: 'TOTAL_DATA', payload: [] });
+          dispatch({ type: 'TOTAL_COUNT', payload: 0 });
+          dispatch({ type: 'DELETE_IDS', payload: [] });
         }
       })
       .catch((error) => {

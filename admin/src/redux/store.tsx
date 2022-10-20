@@ -22,6 +22,8 @@ export interface TotalDataType {
     thumbnail: string;
     filterable: boolean;
     icon: string;
+    width?: number;
+    align?: string;
   };
 }
 export interface State {
@@ -36,7 +38,8 @@ export interface State {
   spreadRoutes: RoutesType[];
   totalData: TotalDataType[];
   totalCount: number;
-  deleteIds: string[]
+  deleteIds: string[];
+  statusIdsUpdate: string[];
 }
 
 const initialState = {
@@ -51,7 +54,8 @@ const initialState = {
   spreadRoutes: [],
   totalData: [],
   totalCount: 0,
-  deleteIds: []
+  deleteIds: [],
+  statusIdsUpdate: []
 }
 
 
@@ -89,6 +93,8 @@ const reducer = (state: State = initialState, action: AnyAction) => {
       return { ...state, totalCount: action.payload };
     case 'DELETE_IDS':
       return { ...state, deleteIds: action.payload };
+    case 'STATUS_IDS_UPDATE':
+      return { ...state, statusIdsUpdate: action.payload };
     default:
       return state;
   }

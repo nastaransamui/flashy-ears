@@ -15,5 +15,8 @@
   "currencyInformation": "اطلاعات ارز",
   "currencyId": "شناسه ارز",
   "currencyEdited": "ارز با موفقیت به روز شد",
-  "totalAgents": "تعداد نمایندگان"
+  "totalAgents": "تعداد نمایندگان",
+  "name": "نام کشور",
+  "isActive": "وضعیت ارز",
+  "totalSuppliers": "تعداد تامین کنندگان"
 }

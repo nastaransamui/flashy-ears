@@ -14,6 +14,7 @@ import i18next from "i18next";
 import { DrawerStateType, SideBarLinksTypes } from '@/interfaces/react.interface';
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "@/src/redux/store";
+import useCurrentRouteState from "@/hookes/useCurrentRouteState";
 
 
 const SidebarLinks: FC<SideBarLinksTypes> = (props: SideBarLinksTypes) => {
@@ -31,6 +32,22 @@ const SidebarLinks: FC<SideBarLinksTypes> = (props: SideBarLinksTypes) => {
     handleDrawerToggle } = props;
   const { stateMiniActive } = state;
   const { propsMiniActive } = useSelector<State, State>(state => state)
+  const currentRouteState = useCurrentRouteState()
+  const { path } = currentRouteState
+  useEffect(() => {
+    let isMount = true
+    if (isMount) {
+      if (location.pathname !== path) {
+        dispatch({ type: 'TOTAL_DATA', payload: [] });
+        dispatch({ type: 'TOTAL_COUNT', payload: 0 });
+      }
+    }
+    return () => {
+      isMount = false
+    }
+  }, [location])
+
+
   const createLinks = (routes: RoutesType[]) => {
     return routes.map((route, index) => {
       let routeName = `name_${i18next.languages[0]}` as keyof typeof route
@@ -214,9 +231,8 @@ const SidebarLinks: FC<SideBarLinksTypes> = (props: SideBarLinksTypes) => {
                 to={route.path}
                 onClick={(e) => {
                   isMobile && handleDrawerToggle();
-                  dispatch({ type: 'TOTAL_DATA', payload: [] });
-                  dispatch({ type: 'TOTAL_COUNT', payload: 0 });
                   dispatch({ type: 'DELETE_IDS', payload: [] });
+                  dispatch({ type: 'STATUS_IDS_UPDATE', payload: [] });
                 }}>
                 <span
                   className={cx(

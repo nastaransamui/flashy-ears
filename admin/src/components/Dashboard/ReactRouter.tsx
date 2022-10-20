@@ -16,6 +16,10 @@ import Photos from '@/src/components/mainPageSetup/Photos/Photos';
 import Photo from '@/src/components/mainPageSetup/Photo/Photo';
 import Features from '@/src/components/mainPageSetup/Features/Features';
 import Feature from '@/src/components/mainPageSetup/Feature/Feature';
+import Countries from '@/src/components/GeoLocations/Countries/Countries';
+import Country from '@/src/components/GeoLocations/Country/Country';
+import Currencies from '@/src/components/Exchange/Currencies/Currencies';
+import Currency from '@/src/components/Exchange/Currency/Currency';
 import { RoutesViews } from '@/interfaces/react.interface';
 import { useSelector } from 'react-redux';
 import { State } from '@/src/redux/store';
@@ -39,7 +43,11 @@ const ReactRouter: FC<ProDashboardProps> = (props: ProDashboardProps) => {
       Photos,
       Photo,
       Features,
-      Feature
+      Feature,
+      Countries,
+      Country,
+      Currencies,
+      Currency
     }
   }, [])
 
@@ -65,7 +73,6 @@ const ReactRouter: FC<ProDashboardProps> = (props: ProDashboardProps) => {
           allRoutes?.map((a) => {
             if (a?.componentName !== undefined) {
               const DynamicComponent = componentsMap[a.componentName as keyof typeof componentsMap];
-
               return (
                 <Fragment key={a.state}>
                   <Route path={a.path} element={

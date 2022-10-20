@@ -10,6 +10,8 @@ import Users, { IUser } from '@/models/Users';
 import Videos, { IVideo } from '@/models/Videos';
 import Photos, { IPhoto } from '@/models/Photos';
 import Features, { IFeature } from '@/models/Features';
+import Countries, { ICountry } from '@/models/Countries';
+import Currencies, { ICurrency } from '@/models/Currencies';
 import {
   findAllUsersWithPagginate,
   findAllRolesWithPagginate,
@@ -24,6 +26,11 @@ import {
   MultiMapValue,
   findAllFeaturesWithPagginate,
   findAllFeatures,
+  findAllCountriesWithPagginate,
+  findAllCountries,
+  sort_by,
+  findAllCurrenciesWithPagginate,
+  findAllCurrencies,
 } from '@/helpers/dbFinds';
 import type { MultiMap } from 'hazelcast-client/lib/proxy/MultiMap';
 import {
@@ -33,6 +40,7 @@ import {
   addUsersFaker,
   addVideosFaker,
 } from '@/lib/faker';
+import { firstBy } from 'thenby';
 
 const apiRoute = nextConnect<HazelcastType, NextApiResponse>({
   onError(error, req, res) {
@@ -70,8 +78,14 @@ apiRoute.post(
     // addPhotosFaker();
     // addFeaturesFaker();
     try {
-      const { modelName, perPage, pageNumber, sortByField, sortDirection } =
-        req.body;
+      const {
+        modelName,
+        perPage,
+        pageNumber,
+        sortByField,
+        sortDirection,
+        activeOnly,
+      } = req.body;
       const hz = req.hazelCast;
       var collection = mongoose.model(modelName);
       if (hz) {
@@ -82,8 +96,18 @@ apiRoute.post(
           for (const value of values as any) {
             res.status(200).json({
               success: true,
-              data: paginate(value, perPage, pageNumber),
-              totalCount: value.length,
+              data: paginate(
+                sort_by(
+                  activeOnly ? value.filter((a: any) => a.isActive) : value,
+                  sortByField,
+                  sortDirection
+                ),
+                perPage,
+                pageNumber
+              ),
+              totalCount: activeOnly
+                ? value.filter((a: any) => a.isActive).length
+                : value.length,
             });
           }
         } else {
@@ -134,6 +158,28 @@ apiRoute.post(
               break;
             case 'Features':
               var result: Results = await findAllFeatures(
+                modelName,
+                sortByField,
+                perPage,
+                pageNumber,
+                sortDirection,
+                multiMap as MultiMap<MultiMapKey, MultiMapValue>
+              );
+              res.status(200).json({ success: true, ...result });
+              break;
+            case 'Countries':
+              var result: Results = await findAllCountries(
+                modelName,
+                sortByField,
+                perPage,
+                pageNumber,
+                sortDirection,
+                multiMap as MultiMap<MultiMapKey, MultiMapValue>
+              );
+              res.status(200).json({ success: true, ...result });
+              break;
+            case 'Currencies':
+              var result: Results = await findAllCurrencies(
                 modelName,
                 sortByField,
                 perPage,
@@ -202,6 +248,28 @@ apiRoute.post(
               pageNumber,
               sortByField,
               sortDirection
+            );
+            res.status(200).json({ success: true, ...result });
+            break;
+          case 'Countries':
+            var result: Results = await findAllCountriesWithPagginate(
+              collection as Model<ICountry>,
+              perPage,
+              pageNumber,
+              sortByField,
+              sortDirection,
+              activeOnly
+            );
+            res.status(200).json({ success: true, ...result });
+            break;
+          case 'Currencies':
+            var result: Results = await findAllCurrenciesWithPagginate(
+              collection as Model<ICurrency>,
+              perPage,
+              pageNumber,
+              sortByField,
+              sortDirection,
+              activeOnly
             );
             res.status(200).json({ success: true, ...result });
             break;

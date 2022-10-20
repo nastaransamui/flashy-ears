@@ -1,0 +1,262 @@
+{
+  "_id": { "$oid": "6350dd3a28c3c4a13a1c7248" },
+  "roleName": "Super User",
+  "users_id": [{ "$oid": "634e125be99740ef55a429b7" }],
+  "isActive": true,
+  "remark": "Super User on entry",
+  "icon": "M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z",
+  "routes": [
+    {
+      "state": "dashboardMain",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "userCollapse",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "usersList",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "userSingle",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "roleCollapse",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "rolesList",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "roleSingle",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "mainPageCollapse",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "videosCollapse",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "videosList",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "videoSingle",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "photosCollapse",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "photosList",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "photoSingle",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "featuresCollapse",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "featuresList",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "featureSingle",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "aboutSingle",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "mainDataCollapse",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "globalCollapse",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "countrySingle",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "globalCountries",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "globalCurrencies",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "globalHotels",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "activeCollapse",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "activeCountries",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "activeProvinces",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "activeCities",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "activeCurrencies",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "currencySingle",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "agencyCollapse",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "agenciesList",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "agencySingle",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "hotelsCollapse",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "hotelsList",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "hotelSingle",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    }
+  ]
+}

@@ -25,7 +25,8 @@ export interface TranslationsCountry {
 }
 
 export interface ICountry {
-  _id: number;
+  _id: Types.ObjectId;
+  id: number;
   createdAt: Date;
   updatedAt: Date;
   _doc?: any;
@@ -36,7 +37,7 @@ export interface ICountry {
   states_id: Types.Array<number>;
   cities_id: Types.Array<number>;
   isHotelsActive: boolean;
-  isCountryActive: boolean;
+  isActive: boolean;
   name: string;
   iso3: string;
   iso2: string;
@@ -60,22 +61,17 @@ export interface ICountry {
 
 const CountriesSchema = new mongoose.Schema<ICountry>(
   {
-    _id: {
+    id: {
       type: Number,
       required: true,
       index: true,
       unique: true,
     },
-    users_id: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Users' }],
-    agents_id: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Agencies' }],
-    hotels_id: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Hotels' }],
-    states_id: [{ type: mongoose.Schema.Types.ObjectId, ref: 'States' }],
-    cities_id: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Cities' }],
-    isHotelsActive: { type: Boolean, default: false },
-    isCountryActive: { type: Boolean, default: false },
     name: { type: String, required: true, unique: true, index: true },
+    isActive: { type: Boolean, default: false },
     iso3: { type: String, required: true, unique: true, index: true },
     iso2: { type: String, required: true, unique: true, index: true },
+    isHotelsActive: { type: Boolean, default: false },
     numeric_code: { type: String, required: true },
     phone_code: { type: String, required: true },
     capital: { type: String, required: false, default: '' },
@@ -86,6 +82,11 @@ const CountriesSchema = new mongoose.Schema<ICountry>(
     native: { type: String, required: true },
     region: { type: String, required: false, default: '' },
     subregion: { type: String, required: false, default: '' },
+    users_id: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Users' }],
+    agents_id: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Agencies' }],
+    hotels_id: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Hotels' }],
+    states_id: [{ type: mongoose.Schema.Types.ObjectId, ref: 'States' }],
+    cities_id: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Cities' }],
     timezones: [
       {
         zoneName: String,
@@ -115,7 +116,7 @@ const CountriesSchema = new mongoose.Schema<ICountry>(
     emoji: { type: String, required: true },
     emojiU: { type: String, required: true },
   },
-  { timestamps: true, _id: false }
+  { timestamps: true }
 );
 
 export default mongoose.models.Countries ||

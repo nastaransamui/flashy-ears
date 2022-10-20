@@ -25,6 +25,8 @@ export interface RoutesViews {
   create?: boolean;
   componentName: string | undefined;
   modelName: string | undefined;
+  predefineDb?: boolean;
+  activeOnly?: boolean;
   views?: RoutesViews[];
 }
 
@@ -41,6 +43,8 @@ export interface RoutesType {
   create?: boolean;
   componentName: string | undefined;
   modelName: string | undefined;
+  predefineDb?: boolean;
+  activeOnly?: boolean;
   views?: RoutesViews[];
 }
 

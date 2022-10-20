@@ -23,10 +23,18 @@ apiRoute.get(
   async (req: HazelcastType, res: NextApiResponse) => {
     const hz = req.hazelCast;
     if (hz) {
-      const multiMapu = await hz.getMultiMap('Users');
-      await multiMapu.destroy();
-      const multiMapRo = await hz.getMultiMap('Roles');
-      await multiMapRo.destroy();
+      const multiMapUsers = await hz.getMultiMap('Users');
+      await multiMapUsers.destroy();
+      const multiMapRoles = await hz.getMultiMap('Roles');
+      await multiMapRoles.destroy();
+      const multiMapVideos = await hz.getMultiMap('Videos');
+      await multiMapVideos.destroy();
+      const multiMapPhotos = await hz.getMultiMap('Photos');
+      await multiMapPhotos.destroy();
+      const multiMapFeatures = await hz.getMultiMap('Features');
+      await multiMapFeatures.destroy();
+      const multiMapCountries = await hz.getMultiMap('Countries');
+      await multiMapCountries.destroy();
       res.status(200).redirect('/admin/dashboard');
       await hz.shutdown();
     } else {

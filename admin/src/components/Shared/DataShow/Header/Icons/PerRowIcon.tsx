@@ -40,7 +40,7 @@ const PerRowIcon: FC<PerRowIconType> = (props: PerRowIconType) => {
     let isMount = true;
     if (isMount) {
 
-      isMobile ? setGridView(() => 12) : setGridView(() => 6)
+      isMobile ? setGridView(() => 12) : setGridView(() => 4)
     }
     return () => {
       isMount = false;
@@ -66,7 +66,7 @@ const PerRowIcon: FC<PerRowIconType> = (props: PerRowIconType) => {
   useEffect(() => {
     let isMount = true
     if (isMount) {
-      setGridView(() => gridView == null ? 2 : gridView)
+      setGridView(() => gridView == null ? 3 : gridView)
     }
     return () => {
       isMount = false;
