@@ -23,6 +23,8 @@
   "phonesTags": "Phone Tag",
   "phoneRemark": "Phone remarks",
   "remark": "Remarks",
+  "tags": "Tag",
+  "number": "Phone",
   "createAgencyProfile": "Create agency",
   "editAgencyProfile": "Edit agency",
   "editAgent": "Agency information",
@@ -35,5 +37,7 @@
   "emailRequire": "Email should be valid.",
   "uploadlogo": "Click to upload logo",
   "changelogo": "Click to change logo",
-  "isDuplicate": "Value is duplicate."
+  "isDuplicate": "Value is duplicate.",
+  "updatedAt": "Last update",
+  "createdAt": "Created date"
 }

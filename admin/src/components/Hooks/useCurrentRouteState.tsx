@@ -11,13 +11,8 @@ const useCurrentRouteState = () => {
   const currentRoute = spreadRoutes.filter((a) => a.path == location.pathname)
   const [currentRouteState, setCurrentRouteState] = useState<RoutesType>({ ...currentRoute[0] })
   useEffect(() => {
-    let isMount = true
-    if (isMount) {
-      setCurrentRouteState({ ...currentRoute[0] })
-    }
-    return () => {
-      isMount = false
-    }
+    setCurrentRouteState({ ...currentRoute[0] })
+    return () => { }
   }, [location])
 
   return currentRouteState;

@@ -30,35 +30,30 @@ const useWrapper = () => {
   });
 
   useEffect(() => {
-    let isMount = true;
-    if (isMount) {
-      // Refresh JSS in SSR
-      // const jssStyles = document.querySelector('#jss-server-side');
-      // if (jssStyles) {
-      //   jssStyles?.parentNode?.removeChild(jssStyles);
-      // }
+    // Refresh JSS in SSR
+    // const jssStyles = document.querySelector('#jss-server-side');
+    // if (jssStyles) {
+    //   jssStyles?.parentNode?.removeChild(jssStyles);
+    // }
 
-      //Update direction
-      document.dir = i18n.language === 'fa' ? 'rtl' : 'ltr';
-      //Update theme
-      setAdminTheme({
-        ...appTheme(
-          adminThemeName as string,
-          adminThemeType as PaletteMode,
-          i18n.language.startsWith('fa') ? 'rtl' : 'ltr'
-        )
-      })
+    //Update direction
+    document.dir = i18n.language === 'fa' ? 'rtl' : 'ltr';
+    //Update theme
+    setAdminTheme({
+      ...appTheme(
+        adminThemeName as string,
+        adminThemeType as PaletteMode,
+        i18n.language.startsWith('fa') ? 'rtl' : 'ltr'
+      )
+    })
 
-      // Remove loading bar
-      dispatch({
-        type: 'ADMIN_LOADINGBAR',
-        payload: 100,
-      });
-    }
+    // Remove loading bar
+    dispatch({
+      type: 'ADMIN_LOADINGBAR',
+      payload: 100,
+    });
 
-    return () => {
-      isMount = false;
-    }
+    return () => { }
   }, [adminThemeName, adminThemeType, i18n.language])
 
   useEffect(() => {

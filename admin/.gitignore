@@ -5,6 +5,10 @@
 /.pnp
 .pnp.js
 
+/jsonDump/countries.json
+/jsonDump/provinces.json
+/jsonDump/cities.json
+
 # testing
 /coverage
 

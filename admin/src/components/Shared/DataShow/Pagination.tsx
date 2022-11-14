@@ -26,15 +26,11 @@ const Pagination: FC<PaginationType> = ((props: PaginationType) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    let isMount = true
-    if (isMount) {
-      setPageNumber(() => pageNumber == null ? 1 : pageNumber)
-      setPerPage(() => perPage == null ? 48 : perPage)
-      setCount(() => totalCount == 0 ? totalCount : Math.ceil(totalCount / perPage))
-    }
-    return () => {
-      isMount = false;
-    }
+    setPageNumber(() => pageNumber == null ? 1 : pageNumber)
+    setPerPage(() => perPage == null ? 48 : perPage)
+    setCount(() => totalCount == 0 ? totalCount : Math.ceil(totalCount / perPage))
+
+    return () => { }
   }, [pageNumber, perPage, totalCount])
 
   return (
@@ -63,6 +59,10 @@ const Pagination: FC<PaginationType> = ((props: PaginationType) => {
           onChange={(e, value) => {
             // cardView && setExpanded({});
             // requestSearch('');
+            dispatch({
+              type: 'FIRST_SEARCH',
+              payload: true
+            })
             dispatch({
               type: 'DELETE_IDS',
               payload: []

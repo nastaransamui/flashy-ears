@@ -35,6 +35,13 @@ apiRoute.get(
       await multiMapFeatures.destroy();
       const multiMapCountries = await hz.getMultiMap('Countries');
       await multiMapCountries.destroy();
+      const multiMapProvinces = await hz.getMultiMap('Provinces');
+      await multiMapProvinces.destroy();
+      const multiMapCities = await hz.getMultiMap('Cities');
+      await multiMapCities.destroy();
+      const multiMapAgencies = await hz.getMultiMap('Agencies');
+      await multiMapAgencies.destroy();
+      console.log('clear catch');
       res.status(200).redirect('/admin/dashboard');
       await hz.shutdown();
     } else {

@@ -43,7 +43,7 @@ const VideoSchema = new mongoose.Schema<IVideo>(
     youTubeId: { type: String },
     finalFolder: { type: String, required: true },
     folderId: { type: String, required: true },
-    isActive: { type: Boolean, required: true },
+    isActive: { type: Boolean, required: true, index: true },
     isYoutube: { type: Boolean, required: true },
     isVercel: { type: Boolean, required: true },
     imageMobileShow: { type: String, required: true },
@@ -55,3 +55,68 @@ const VideoSchema = new mongoose.Schema<IVideo>(
 
 export default mongoose.models.Videos ||
   mongoose.model<IVideo>('Videos', VideoSchema);
+
+export const dispalyFields = [
+  'title_en',
+  'isActive',
+  'isYoutube',
+  'title_fa',
+  'createdAt',
+  'updatedAt',
+  'topTitle_en',
+  'topTitle_fa',
+  'subTitle_en',
+  'subTitle_fa',
+  'button_en',
+  'button_fa',
+  'youTubeId',
+];
+const icon = {
+  ...Object.fromEntries(
+    dispalyFields.map((key) => {
+      return [
+        key,
+        {
+          icon:
+            key == 'isActive'
+              ? 'CheckBoxIcon'
+              : key == 'isYoutube'
+              ? 'CheckBoxOutlineBlank'
+              : key == 'createdAt' || key == 'updatedAt'
+              ? 'EventIcon'
+              : key == 'title_en' || key == 'title_fa'
+              ? 'InfoIcon'
+              : key == 'button_en' || key == 'button_fa'
+              ? 'FlagIcon'
+              : 'TitleIcon',
+        },
+      ];
+    })
+  ),
+};
+
+export const muiDataObj = {
+  ...Object.fromEntries(
+    dispalyFields.map((key) => [
+      key,
+      {
+        type: key == 'isActive' || key == 'isYoutube' ? 'boolean' : 'string',
+        thumbnail:
+          key == 'youTubeId'
+            ? 'youTubeId'
+            : key !== 'title_en'
+            ? ''
+            : 'videoLink',
+        filterable: true,
+        searchable:
+          key == 'isActive' ||
+          key == 'isYoutube' ||
+          key == 'createdAt' ||
+          key == 'updatedAt'
+            ? false
+            : true,
+        ...icon[key],
+      },
+    ])
+  ),
+};

@@ -23,30 +23,35 @@ const CurrenciesSchema = new mongoose.Schema(
 var Currencies =
   mongoose.models.Currencies || mongoose.model('Currencies', CurrenciesSchema);
 
-exports.checkCurrency = async function (DATABASE_PASSWORD, exec) {
-  try {
-    let currencies = await Currencies.find();
-    let currenciesLength = currencies.length;
-    console.log(`currenciesLength: ${currenciesLength}`);
-    if (currenciesLength == 0) {
-      const currenciesDb = path.join(
-        process.cwd(),
-        'jsonDump',
-        'currencies.json'
-      );
-      let exec = require('child_process').exec;
-      var addCurrencyCommand = `/usr/bin/mongoimport --uri mongodb+srv://dbUser:${DATABASE_PASSWORD}@admintypescript.0zjh9yz.mongodb.net/${
-        process.env.NODE_ENV == 'development' ? 'UAT' : 'LIVE'
-      } --collection currencies --type json --file ${currenciesDb}`;
-      exec(addCurrencyCommand, async (err, stdout, stderr) => {
-        // check for errors or if it was succesfuly
-        console.log(`err: ${err}`);
-        // await country.checkCountry(DATABASE_PASSWORD);
-      });
-    } else {
-      // await country.checkCountry(DATABASE_PASSWORD);
-    }
-  } catch (error) {
-    console.log(error);
-  }
+const currenciesDb = path.join(process.cwd(), 'jsonDump', 'currencies.json');
+
+const checkCurrency = {
+  retrieveAll: function (DATABASE_PASSWORD) {
+    return new Promise(async (resolve, reject) => {
+      let length = await mongoose.connection.db
+        .collection('currencies')
+        .estimatedDocumentCount();
+      if (length !== 0) {
+        resolve(length);
+      } else {
+        var addCurrencyCommand = `mongoimport --uri mongodb+srv://dbUser:${DATABASE_PASSWORD}@admintypescript.0zjh9yz.mongodb.net/${
+          process.env.NODE_ENV == 'development' ? 'UAT' : 'LIVE'
+        } --collection currencies --type json --file ${currenciesDb}`;
+        var child = require('child_process').exec(addCurrencyCommand);
+        child.stderr.on('data', (data) => {
+          console.error(`stderr: ${data}`);
+        });
+        child.stdout.pipe(process.stdout);
+        child.on('exit', async () => {
+          resolve(
+            await mongoose.connection.db
+              .collection('currencies')
+              .estimatedDocumentCount()
+          );
+        });
+      }
+    });
+  },
 };
+
+module.exports = checkCurrency;

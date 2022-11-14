@@ -106,6 +106,8 @@ const useNavbarLinks = () => {
           dispatch({ type: 'TOTAL_DATA', payload: [] });
           dispatch({ type: 'TOTAL_COUNT', payload: 0 });
           dispatch({ type: 'DELETE_IDS', payload: [] });
+          dispatch({ type: 'FIRST_SEARCH', payload: false })
+          dispatch({ type: 'FIELD_VALUE', payload: '' })
         }
       })
       .catch((error) => {

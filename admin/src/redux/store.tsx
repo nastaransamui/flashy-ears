@@ -13,18 +13,21 @@ export interface Profile {
   _id?: string;
 }
 
+export interface MuiDataType {
+  type: string;
+  thumbnail: string;
+  filterable: boolean;
+  searchable: boolean;
+  icon: string;
+  width?: number;
+  align?: string;
+}
+
 export interface TotalDataType {
   _id: string;
   dispalyFields: string[];
   isActive?: boolean;
-  muiData: {
-    type: string;
-    thumbnail: string;
-    filterable: boolean;
-    icon: string;
-    width?: number;
-    align?: string;
-  };
+  muiData: MuiDataType;
 }
 export interface State {
   adminAccessToken: any;
@@ -40,6 +43,8 @@ export interface State {
   totalCount: number;
   deleteIds: string[];
   statusIdsUpdate: string[];
+  firstSearch: boolean;
+  fieldValue: string;
 }
 
 const initialState = {
@@ -55,7 +60,10 @@ const initialState = {
   totalData: [],
   totalCount: 0,
   deleteIds: [],
-  statusIdsUpdate: []
+  statusIdsUpdate: [],
+  firstSearch: false,
+  //Search header field value select 
+  fieldValue: ''
 }
 
 
@@ -95,6 +103,10 @@ const reducer = (state: State = initialState, action: AnyAction) => {
       return { ...state, deleteIds: action.payload };
     case 'STATUS_IDS_UPDATE':
       return { ...state, statusIdsUpdate: action.payload };
+    case 'FIRST_SEARCH':
+      return { ...state, firstSearch: action.payload };
+    case 'FIELD_VALUE':
+      return { ...state, fieldValue: action.payload };
     default:
       return state;
   }

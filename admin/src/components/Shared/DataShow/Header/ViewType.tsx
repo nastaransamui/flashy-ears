@@ -67,13 +67,8 @@ const ViewType: FC<ViewTypeProps> = ((props: ViewTypeProps) => {
   }
 
   useEffect(() => {
-    let isMount = true
-    if (isMount) {
-      setCardView(() => cardView == null ? true : cardView)
-    }
-    return () => {
-      isMount = false;
-    }
+    setCardView(() => cardView == null ? true : cardView)
+    return () => { }
   }, [cardView])
 
 

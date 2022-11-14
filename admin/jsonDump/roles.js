@@ -26,26 +26,34 @@ const RolesSchema = new mongoose.Schema(
 
 var Roles = mongoose.models.Roles || mongoose.model('Roles', RolesSchema);
 
-exports.checkRoles = async function (DATABASE_PASSWORD, exec) {
-  try {
-    let roles = await Roles.find();
-    let rolesLength = roles.length;
-    console.log(`rolesLength: ${rolesLength}`);
-    if (rolesLength == 0) {
-      const rolesDb = path.join(process.cwd(), 'jsonDump', 'roles.json');
-      let exec = require('child_process').exec;
-      var addRoleCommand = `/usr/bin/mongoimport --uri mongodb+srv://dbUser:${DATABASE_PASSWORD}@admintypescript.0zjh9yz.mongodb.net/${
-        process.env.NODE_ENV == 'development' ? 'UAT' : 'LIVE'
-      } --collection roles --type json --file ${rolesDb}`;
-      exec(addRoleCommand, async (err, stdout, stderr) => {
-        // check for errors or if it was succesfuly
-        console.log(`err: ${err}`);
-        // await country.checkCountry(DATABASE_PASSWORD);
-      });
-    } else {
-      // await country.checkCountry(DATABASE_PASSWORD);
-    }
-  } catch (error) {
-    console.log(error);
-  }
+const rolesDb = path.join(process.cwd(), 'jsonDump', 'roles.json');
+const checkRoles = {
+  retrieveAll: function (DATABASE_PASSWORD) {
+    return new Promise(async (resolve, reject) => {
+      let length = await mongoose.connection.db
+        .collection('roles')
+        .estimatedDocumentCount();
+      if (length !== 0) {
+        resolve(length);
+      } else {
+        var addRolesCommand = `mongoimport --uri mongodb+srv://dbUser:${DATABASE_PASSWORD}@admintypescript.0zjh9yz.mongodb.net/${
+          process.env.NODE_ENV == 'development' ? 'UAT' : 'LIVE'
+        } --collection roles --type json --file ${rolesDb}`;
+        var child = require('child_process').exec(addRolesCommand);
+        child.stderr.on('data', (data) => {
+          console.error(`stderr: ${data}`);
+        });
+        child.stdout.pipe(process.stdout);
+        child.on('exit', async () => {
+          resolve(
+            await mongoose.connection.db
+              .collection('roles')
+              .estimatedDocumentCount()
+          );
+        });
+      }
+    });
+  },
 };
+
+module.exports = checkRoles;

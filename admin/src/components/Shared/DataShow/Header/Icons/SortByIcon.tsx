@@ -12,7 +12,7 @@ import Check from '@mui/icons-material/Check';
 import { useTranslation } from 'react-i18next';
 import useCurrentRouteState from '@/hookes/useCurrentRouteState'
 import { useReadLocalStorage } from 'usehooks-ts'
-import { DataShowCtx } from '../../useDataShow';
+import { DataShowCtx } from '@/shared/DataShow/useDataShow'
 import CustomPopover from '@/shared/CustomPopover';
 import Sort from '@mui/icons-material/Sort';
 import ArrowRight from '@mui/icons-material/ArrowRight'
@@ -94,14 +94,10 @@ const SortByIcon: FC<SortByIconType> = (props: SortByIconType) => {
   const { setSortByField, setSortDirection } = useContext(DataShowCtx);
   const dispatch = useDispatch();
   useEffect(() => {
-    let isMount = true
-    if (isMount) {
-      setSortByField(() => sortByField == null ? predefineDb ? 'name' : 'createdAt' : sortByField)
-      setSortDirection(() => sortDirection == null ? predefineDb ? 1 : -1 : sortDirection)
-    }
-    return () => {
-      isMount = false;
-    }
+    setSortByField(() => sortByField == null ? predefineDb ? 'name' : 'createdAt' : sortByField)
+    setSortDirection(() => sortDirection == null ? predefineDb ? 1 : -1 : sortDirection)
+
+    return () => { }
   }, [sortByField, sortDirection])
 
   const iconMap = useIconMap();
@@ -138,55 +134,61 @@ const SortByIcon: FC<SortByIconType> = (props: SortByIconType) => {
                       let icon = muiData?.['icon' as keyof typeof muiData]
                       const DynamicIcon = iconMap[icon as unknown as keyof typeof iconMap];
                       return (
-                        <Fragment key={(key + value.toString())}>
-                          <ListItem
-                            disablePadding
-                            className={classes.listItemHover + ' ' + cx({
-                              [classes.listItemActive]: key == sortByField
-                            })}
-                            onClick={() => { }}>
-                            <ListItemButton
-                              onClick={(e) => {
-                                setAnchorSTl((prev) => ({
-                                  0: e.currentTarget as unknown as HTMLButtonElement,
-                                  field: key as string,
-                                }));
-                              }}>
-                              <ListItemIcon >
-                                <Tooltip title={t('filterType', { ns: 'common' })}>
-                                  <IconButton
-                                    size='large'
-                                    disableFocusRipple
-                                    disableRipple>
-                                    {rtlActive ? (
-                                      <ArrowRight
-                                        id="right"
-                                        className={
-                                          classes.listItemHoverSmallArrowRight
-                                        }
-                                      />
-                                    ) : (
-                                      <ArrowLeft
-                                        id="left"
-                                        className={
-                                          classes.listItemHoverSmallArrowLeft
-                                        }
-                                      />
-                                    )}
-                                  </IconButton>
-                                </Tooltip>
-                                <DynamicIcon style={{
-                                  color:
-                                    theme.palette[
-                                      `${i % 2 == 0 ? 'primary' : 'secondary'
-                                      }`
-                                    ].main,
-                                }} />
-                              </ListItemIcon>
-                              <ListItemText primary={t(key)} />
-                            </ListItemButton>
-                          </ListItem>
-                          <Divider />
+                        <Fragment key={(key + value?.toString())}>
+                          {// @ts-ignore
+                            muiData?.filterable && (
+                              <Fragment>
+                                <ListItem
+                                  disablePadding
+                                  className={classes.listItemHover + ' ' + cx({
+                                    [classes.listItemActive]: key == sortByField
+                                  })}
+                                  onClick={() => { }}>
+                                  <ListItemButton
+                                    onClick={(e) => {
+                                      setAnchorSTl((prev) => ({
+                                        0: e.currentTarget as unknown as HTMLButtonElement,
+                                        field: key as string,
+                                      }));
+                                    }}>
+                                    <ListItemIcon >
+                                      <Tooltip title={t('filterType', { ns: 'common' })}>
+                                        <IconButton
+                                          size='large'
+                                          disableFocusRipple
+                                          disableRipple>
+                                          {rtlActive ? (
+                                            <ArrowRight
+                                              id="right"
+                                              className={
+                                                classes.listItemHoverSmallArrowRight
+                                              }
+                                            />
+                                          ) : (
+                                            <ArrowLeft
+                                              id="left"
+                                              className={
+                                                classes.listItemHoverSmallArrowLeft
+                                              }
+                                            />
+                                          )}
+                                        </IconButton>
+                                      </Tooltip>
+                                      <DynamicIcon style={{
+                                        color:
+                                          theme.palette[
+                                            `${i % 2 == 0 ? 'primary' : 'secondary'
+                                            }`
+                                          ].main,
+                                      }} />
+                                    </ListItemIcon>
+                                    <ListItemText primary={t(key)} />
+                                  </ListItemButton>
+                                </ListItem>
+                                <Divider />
+                              </Fragment>
+                            )
+                          }
                         </Fragment>
                       )
                     }

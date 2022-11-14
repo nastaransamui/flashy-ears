@@ -35,16 +35,13 @@ const SidebarLinks: FC<SideBarLinksTypes> = (props: SideBarLinksTypes) => {
   const currentRouteState = useCurrentRouteState()
   const { path } = currentRouteState
   useEffect(() => {
-    let isMount = true
-    if (isMount) {
-      if (location.pathname !== path) {
-        dispatch({ type: 'TOTAL_DATA', payload: [] });
-        dispatch({ type: 'TOTAL_COUNT', payload: 0 });
-      }
+    if (location.pathname !== path) {
+      dispatch({ type: 'TOTAL_DATA', payload: [] });
+      dispatch({ type: 'TOTAL_COUNT', payload: 0 });
+      dispatch({ type: 'FIRST_SEARCH', payload: false })
+      dispatch({ type: 'FIELD_VALUE', payload: '' })
     }
-    return () => {
-      isMount = false
-    }
+    return () => { }
   }, [location])
 
 

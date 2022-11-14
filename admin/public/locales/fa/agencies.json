@@ -24,6 +24,8 @@
   "phonesTags": "تگ تلفن",
   "phoneRemark": "ملاحظات تلفن",
   "remark": "ملاحظات",
+  "tags": "تگ",
+  "number": "تلفن",
   "createAgencyProfile": "آژانس ایجاد کنید",
   "editAgencyProfile": "آژانس ویرایش",
   "editAgent": "اطلاعات آژانس",
@@ -36,5 +38,7 @@
   "emailRequire": "ایمیل باید معتبر باشد.",
   "uploadlogo": "برای آپلود لوگو کلیک کنید",
   "changelogo": "برای تغییر لوگو کلیک کنید",
-  "isDuplicate": "اطلاعات تکراری است"
+  "isDuplicate": "اطلاعات تکراری است",
+  "updatedAt": "آخرین به روز رسانی",
+  "createdAt": "تاریخ ایجاد"
 }

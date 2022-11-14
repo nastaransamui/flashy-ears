@@ -47,15 +47,12 @@ const useRoutesUpdate = () => {
   }
 
   useEffect(() => {
-    let isMount = true;
 
-    if (isMount && window.indexedDB !== undefined) {
+    if (window.indexedDB !== undefined) {
       routesUpdateFromIndexDb()
     }
 
-    return () => {
-      isMount = false
-    }
+    return () => { }
   }, [])
 
   return updateRoutes;

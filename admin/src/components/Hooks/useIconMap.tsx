@@ -21,6 +21,10 @@ import AccountBoxIcon from '@mui/icons-material/AccountBox'
 import DnsIcon from '@mui/icons-material/Dns';
 import TimelapseIcon from '@mui/icons-material/Timelapse';
 import FmdGoodIcon from '@mui/icons-material/FmdGood';
+import Grid3x3Icon from '@mui/icons-material/Grid3x3'
+import HomeIcon from "@mui/icons-material/Home";
+import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 
 const useIconMap = () => {
   const iconMap = useMemo(() => {
@@ -46,7 +50,11 @@ const useIconMap = () => {
       AccountBoxIcon,
       DnsIcon,
       TimelapseIcon,
-      FmdGoodIcon
+      FmdGoodIcon,
+      Grid3x3Icon,
+      HomeIcon,
+      AlternateEmailIcon,
+      AttachMoneyIcon
     }
   }, [])
 

@@ -1,0 +1,18 @@
+{
+  "expand": "مشاهده اطلاعات بیشتر",
+  "notDefine": "این فیلد ارائه نشده است.",
+  "country_name": "نام کشور",
+  "name": "نام ایالت/استان",
+  "type": "نوع",
+  "latitude": "عرض جغرافیایی",
+  "longitude": "طول جغرافیایی",
+  "isActive": "وضعیت ایالت/استان",
+  "iso2": "آلفا-2",
+  "totalActiveHotels": "تعداد هتل ها",
+  "totalUsers": "تعداد کاربران",
+  "totalAgents": "تعداد نمایندگان",
+  "totalSuppliers": "تعداد تامین کنندگان",
+  "isHotelsActive": "وضعیت هتل ها",
+  "totalHotels": "تعداد هتل ها",
+  "totalCities": "تعداد شهرها"
+}

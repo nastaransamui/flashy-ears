@@ -37,25 +37,14 @@ const PerRowIcon: FC<PerRowIconType> = (props: PerRowIconType) => {
   const isTablet = useMediaQuery(theme.breakpoints.only('md'), { noSsr: true })
 
   useEffect(() => {
-    let isMount = true;
-    if (isMount) {
-
-      isMobile ? setGridView(() => 12) : setGridView(() => 4)
-    }
-    return () => {
-      isMount = false;
-    }
+    isMobile ? setGridView(() => 12) : setGridView(() => 4)
+    return () => { }
   }, [isMobile])
 
   useEffect(() => {
-    let isMount = true;
-    if (isMount) {
+    isTablet ? setGridView(() => 6) : setGridView(() => 4)
 
-      isTablet ? setGridView(() => 6) : setGridView(() => 4)
-    }
-    return () => {
-      isMount = false;
-    }
+    return () => { }
   }, [isTablet])
 
 
@@ -64,13 +53,8 @@ const PerRowIcon: FC<PerRowIconType> = (props: PerRowIconType) => {
   }
 
   useEffect(() => {
-    let isMount = true
-    if (isMount) {
-      setGridView(() => gridView == null ? 3 : gridView)
-    }
-    return () => {
-      isMount = false;
-    }
+    setGridView(() => gridView == null ? 3 : gridView)
+    return () => { }
   }, [cardView])
 
 

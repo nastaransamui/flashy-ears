@@ -18,8 +18,14 @@ import Features from '@/src/components/mainPageSetup/Features/Features';
 import Feature from '@/src/components/mainPageSetup/Feature/Feature';
 import Countries from '@/src/components/GeoLocations/Countries/Countries';
 import Country from '@/src/components/GeoLocations/Country/Country';
+import Provinces from '@/src/components/GeoLocations/Provinces/Provinces';
+import Province from '@/src/components/GeoLocations/Province/Province';
+import Cities from '@/src/components/GeoLocations/Cities/Cities';
+import City from '@/src/components/GeoLocations/City/City';
 import Currencies from '@/src/components/Exchange/Currencies/Currencies';
 import Currency from '@/src/components/Exchange/Currency/Currency';
+import Agencies from '@/src/components/Agents/Agencies/Agencies';
+import Agent from '@/src/components/Agents/Agent/Agent';
 import { RoutesViews } from '@/interfaces/react.interface';
 import { useSelector } from 'react-redux';
 import { State } from '@/src/redux/store';
@@ -46,8 +52,14 @@ const ReactRouter: FC<ProDashboardProps> = (props: ProDashboardProps) => {
       Feature,
       Countries,
       Country,
+      Provinces,
+      Province,
+      Cities,
+      City,
       Currencies,
-      Currency
+      Currency,
+      Agencies,
+      Agent
     }
   }, [])
 

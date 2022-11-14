@@ -1,0 +1,15 @@
+{
+  "name": "City name",
+  "state_name": "State/Province name",
+  "country_name": "Country name",
+  "latitude": "Latitude",
+  "longitude": "Longitude",
+  "iso2": "Alpha-2",
+  "totalActiveHotels": "Number of hotels",
+  "totalUsers": "Number of users",
+  "totalAgents": "Number of agents",
+  "totalSuppliers": "Number of Suppliers",
+  "isHotelsActive": "Hotels status",
+  "totalHotels": "Number of hotels",
+  "isActive": "City Status"
+}

@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { State } from '@/src/redux/store';
 import { DataGrid, GridColDef, GridActionsCellItem, GridRenderCellParams, GridRowParams, GridSelectionModel } from '@mui/x-data-grid';
 import { CustomNoRowsOverlay, CustomToolbar, LocateText } from './functions'
+import Typography from '@mui/material/Typography'
 import { useReadLocalStorage } from 'usehooks-ts'
 import useCurrentRouteState from '@/hookes/useCurrentRouteState'
 import { useTranslation } from "react-i18next";
@@ -26,6 +27,7 @@ import ToggleOn from '@mui/icons-material/ToggleOn'
 export interface MainTableType { }
 
 import { makeStyles } from 'tss-react/mui';
+import { PhoneAgentType } from "@/models/Agencies";
 
 export function important<T>(value: T): T {
   return (value + ' !important') as any;
@@ -42,6 +44,30 @@ const mainTableStyles = makeStyles<{}>()((theme) => {
 export function escapeRegExp(value: string) {
   return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
 }
+
+export const PhoneTooltip = ({ value, modelName }: { value: PhoneAgentType[], modelName: string }) => {
+  const theme = useTheme();
+  const { t } = useTranslation(modelName)
+  return (
+    <Tooltip title={
+      value.map((a, i) => (<Typography variant='subtitle1'
+        sx={{
+          borderBottom:
+            i !== value.length - 1
+              ? `1px solid ${theme.palette.secondary.main}`
+              : 'none',
+        }} key={i}>
+        {t(`${Object.keys(a)[1]}`)}: {a.number}<br />
+        {t(`${Object.keys(a)[0]}`)}: {a.tags[0]}<br />
+        {t(`${Object.keys(a)[2]}`)}: {a.remark}
+      </Typography>))
+    } TransitionComponent={Zoom} placement='top' arrow enterTouchDelay={0}>
+      <div >{value[0]?.number}</div>
+      {/*  */}
+
+    </Tooltip>
+  )
+};
 
 interface MuiDataType {
   type: string;
@@ -83,8 +109,17 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
             renderCell: (params: GridRenderCellParams) => {
               switch (true) {
                 case Array.isArray(value):
-                  if (params.row[key].length == 0) return <div key={(key + value.toString())}> {t(key)} : length 0</div>
-                  return <div key={(key + value.toString())}>{params.row[key].length}</div>
+                  if (params.row[key].length == 0) return <div key={(key + value.toString())}> {t(key)} : <Close style={{ position: 'absolute', color: theme.palette.error.main }} /></div>
+                  return (
+                    <div key={(key + value.toString())}>
+                      {
+                        key !== 'phones' ?
+                          params.row[key].length :
+                          <PhoneTooltip value={params.row[key]} modelName={modelName!} />
+
+                      }
+                    </div>
+                  )
 
                 case typeof value == 'boolean':
                   return (
@@ -106,6 +141,8 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
 
                 default:
                   switch (true) {
+                    case params.formattedValue == null:
+                      return (<div>{t('notDefine')}</div>)
                     case params.formattedValue.length == 0:
                       return (
                         <Close style={{ color: theme.palette.error.main }} />
@@ -221,12 +258,17 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
     width: 150,
     cellClassName: 'actions',
     filterable: false,
+    hide: totalCount == 0 ? true : false,
     getActions: (params: GridRowParams) => {
       return [
         <GridActionsCellItem
           label={t('Edit')}
           className='textPrimary'
           onClick={() => {
+            dispatch({
+              type: 'FIRST_SEARCH',
+              firstSearch: false
+            })
             navigate(`/${currentRouteState.path}/${currentRouteState?.modelName?.slice(0, -1)}?_id=${params.id}`, {
               state: params.row,
             })
@@ -314,7 +356,7 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
           columns={columns}
           pageSize={perPage}
           rowsPerPageOptions={[6, 12, 24, 48, 96]}
-          checkboxSelection
+          checkboxSelection={totalCount > 0}
           // disableSelectionOnClick
           paginationMode='server'
           isRowSelectable={(params: GridRowParams) => {
@@ -341,6 +383,10 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
             }
           }}
           onRowDoubleClick={(params) => {
+            dispatch({
+              type: 'FIRST_SEARCH',
+              firstSearch: false
+            })
             navigate(`/${currentRouteState.path}/${currentRouteState?.modelName?.slice(0, -1)}?_id=${params.id}`, {
               state: params.row,
             })

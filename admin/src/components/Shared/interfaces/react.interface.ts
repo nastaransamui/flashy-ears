@@ -25,8 +25,8 @@ export interface RoutesViews {
   create?: boolean;
   componentName: string | undefined;
   modelName: string | undefined;
-  predefineDb?: boolean;
-  activeOnly?: boolean;
+  predefineDb: boolean;
+  activeOnly: boolean;
   views?: RoutesViews[];
 }
 

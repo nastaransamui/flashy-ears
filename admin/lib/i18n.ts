@@ -16,8 +16,12 @@ import feature_en from '../public/locales/en/feature.json';
 import feature_fa from '../public/locales/fa/feature.json';
 import about_en from '../public/locales/en/about.json';
 import about_fa from '../public/locales/fa/about.json';
-import geoLocations_en from '../public/locales/en/geoLocations.json';
-import geoLocations_fa from '../public/locales/fa/geoLocations.json';
+import countries_en from '../public/locales/en/countries.json';
+import countries_fa from '../public/locales/fa/countries.json';
+import provinces_en from '../public/locales/en/provinces.json';
+import provinces_fa from '../public/locales/fa/provinces.json';
+import cities_en from '../public/locales/en/cities.json';
+import cities_fa from '../public/locales/fa/cities.json';
 import error_en from '../public/locales/en/404.json';
 import error_fa from '../public/locales/fa/404.json';
 import dataGridLocale_en from '../public/locales/en/dataGridLocale.json';
@@ -42,10 +46,12 @@ export const resources = {
     Features: feature_en,
     Photos: photos_en,
     about: about_en,
-    Countries: geoLocations_en,
+    Countries: countries_en,
+    Provinces: provinces_en,
+    Cities: cities_en,
     dataGridLocale: dataGridLocale_en,
     Currencies: exchange_en,
-    agencies: agencies_en,
+    Agencies: agencies_en,
     hotels: hotels_en,
   },
   fa: {
@@ -59,10 +65,12 @@ export const resources = {
     Features: feature_fa,
     about: about_fa,
     Photos: photos_fa,
-    Countries: geoLocations_fa,
+    Countries: countries_fa,
+    Provinces: provinces_fa,
+    Cities: cities_fa,
     dataGridLocale: dataGridLocale_fa,
     Currencies: exchange_fa,
-    agencies: agencies_fa,
+    Agencies: agencies_fa,
     hotels: hotels_fa,
   },
 };

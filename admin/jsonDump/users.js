@@ -46,28 +46,35 @@ const UsersSchema = new mongoose.Schema(
 
 var Users = mongoose.models.Users || mongoose.model('Users', UsersSchema);
 
-exports.checkUsers = async function (DATABASE_PASSWORD, exec) {
-  try {
-    let users = await Users.find();
-    let usersLength = users.length;
-    console.log(`usersLength: ${usersLength}`);
-    if (usersLength == 0) {
-      const usersDb = path.join(process.cwd(), 'jsonDump', 'users.json');
+const usersDb = path.join(process.cwd(), 'jsonDump', 'users.json');
 
-      let exec = require('child_process').exec;
-      var addUserCommand = `/usr/bin/mongoimport --uri mongodb+srv://dbUser:${DATABASE_PASSWORD}@admintypescript.0zjh9yz.mongodb.net/${
-        process.env.NODE_ENV == 'development' ? 'UAT' : 'LIVE'
-      } --collection users --type json --file ${usersDb}`;
-      exec(addUserCommand, async (err, stdout, stderr) => {
-        // check for errors or if it was succesfuly
-        console.log(`err: ${err}`);
-        console.log(usersDb);
-        // await roles.checkRoles(DATABASE_PASSWORD);
-      });
-    } else {
-      // await roles.checkRoles(DATABASE_PASSWORD);
-    }
-  } catch (error) {
-    console.log(error);
-  }
+const checkUsers = {
+  retrieveAll: function (DATABASE_PASSWORD) {
+    return new Promise(async (resolve, reject) => {
+      let length = await mongoose.connection.db
+        .collection('users')
+        .estimatedDocumentCount();
+      if (length !== 0) {
+        resolve(length);
+      } else {
+        var addUserCommand = `mongoimport --uri mongodb+srv://dbUser:${DATABASE_PASSWORD}@admintypescript.0zjh9yz.mongodb.net/${
+          process.env.NODE_ENV == 'development' ? 'UAT' : 'LIVE'
+        } --collection users --type json --file ${usersDb}`;
+        var child = require('child_process').exec(addUserCommand);
+        child.stderr.on('data', (data) => {
+          console.error(`stderr: ${data}`);
+        });
+        child.stdout.pipe(process.stdout);
+        child.on('exit', async () => {
+          resolve(
+            await mongoose.connection.db
+              .collection('users')
+              .estimatedDocumentCount()
+          );
+        });
+      }
+    });
+  },
 };
+
+module.exports = checkUsers;

@@ -29,6 +29,7 @@ const dataShowStyle = makeStyles<{}>()((theme) => {
     },
     searchSelect: {
       minWidth: '90%',
+      maxWidth: 40,
       marginRight: theme.direction == 'ltr' ? 0 : 10,
       marginLeft: 10
     },
@@ -39,8 +40,7 @@ const dataShowStyle = makeStyles<{}>()((theme) => {
         textAlign: theme.direction == 'ltr' ? 'left' : 'right',
       },
       '& label': {
-        right: 29,
-        // top: -5,
+        right: theme.direction == 'ltr' ? 29 : 50,
         textAlign: theme.direction == 'ltr' ? 'left' : 'right',
       },
     },
@@ -54,6 +54,48 @@ const dataShowStyle = makeStyles<{}>()((theme) => {
       position: 'absolute',
       left: theme.direction == 'ltr' ? -2 : 'auto',
       right: 25
+    },
+
+    phone: {
+      borderColor: theme.palette.primary.main + '!important',
+      '& .MuiOutlinedInput-root': {
+        '& fieldset': {
+          borderColor: theme.palette.primary.main,
+        },
+        '&:hover fieldset': {
+          borderColor: theme.palette.primary.main,
+        },
+        '&.Mui-focused fieldset': {
+          borderColor: theme.palette.primary.main,
+        },
+      },
+      '& label.Mui-focused': {
+        color: theme.palette.primary.main,
+      },
+      '& .MuiInputLabel-shrink': {
+        color: theme.palette.text.color,
+      },
+      '& input': {
+        color: theme.palette.text.color,
+        '&:focus': {
+          color: theme.palette.text.color,
+        },
+        '&:hover': {
+          color: theme.palette.text.color,
+        },
+      },
+    },
+    phoneMenu: {
+      background: theme.palette.background.paper + '!important',
+      color: `${theme.palette.text.color} !important`,
+      '& p': {
+        color: `${theme.palette.text.color} !important`,
+      },
+      '& li': {
+        '&:hover': {
+          background: theme.palette.primary.main,
+        },
+      },
     },
   }
 })

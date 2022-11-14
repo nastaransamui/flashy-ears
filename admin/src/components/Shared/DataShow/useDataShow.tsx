@@ -100,12 +100,8 @@ const useDataShow = () => {
   }
 
   useEffect(() => {
-    let isMount = true;
-    if (isMount) {
-      allResults()
-    }
+    allResults()
     return () => {
-      isMount = false
       abortController.abort();
     }
   }, [perPage, pageNumber, sortDirection, sortByField, path, activeOnly])

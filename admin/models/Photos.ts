@@ -34,7 +34,7 @@ const PhotosSchema = new mongoose.Schema<IPhoto>(
     button_fa: { type: String, required: true },
     finalFolder: { type: String, required: true },
     folderId: { type: String, required: true },
-    isActive: { type: Boolean, required: true },
+    isActive: { type: Boolean, required: true, index: true },
     isVercel: { type: Boolean, required: true },
     imageShow: { type: String, required: true },
     imageShowKey: { type: String, required: true },
@@ -44,3 +44,56 @@ const PhotosSchema = new mongoose.Schema<IPhoto>(
 
 export default mongoose.models.Photos ||
   mongoose.model<IPhoto>('Photos', PhotosSchema);
+
+export const dispalyFields = [
+  'title_en',
+  'isActive',
+  'title_fa',
+  'topTitle_en',
+  'topTitle_fa',
+  'subTitle_en',
+  'subTitle_fa',
+  'button_en',
+  'button_fa',
+  'createdAt',
+  'updatedAt',
+];
+const icon = {
+  ...Object.fromEntries(
+    dispalyFields.map((key) => {
+      return [
+        key,
+        {
+          icon:
+            key == 'isActive'
+              ? 'CheckBoxIcon'
+              : key == 'createdAt' || key == 'updatedAt'
+              ? 'EventIcon'
+              : key == 'title_en' || key == 'title_fa'
+              ? 'InfoIcon'
+              : key == 'button_en' || key == 'button_fa'
+              ? 'FlagIcon'
+              : 'TitleIcon',
+        },
+      ];
+    })
+  ),
+};
+
+export const muiDataObj = {
+  ...Object.fromEntries(
+    dispalyFields.map((key) => [
+      key,
+      {
+        type: key == 'isActive' ? 'boolean' : 'string',
+        thumbnail: key !== 'title_en' ? '' : 'imageShow',
+        filterable: true,
+        searchable:
+          key == 'isActive' || key == 'createdAt' || key == 'updatedAt'
+            ? false
+            : true,
+        ...icon[key],
+      },
+    ])
+  ),
+};

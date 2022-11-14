@@ -23,7 +23,10 @@ type MultimapType =
   | 'videos'
   | 'photos'
   | 'features'
-  | 'countries';
+  | 'countries'
+  | 'provinces'
+  | 'cities'
+  | 'agencies';
 
 apiRoute.get(
   // verifyToken,

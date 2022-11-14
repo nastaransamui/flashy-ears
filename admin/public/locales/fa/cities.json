@@ -1,0 +1,15 @@
+{
+  "name": "نام شهر",
+  "state_name": "نام ایالت/استان",
+  "country_name": "نام کشور",
+  "latitude": "عرض جغرافیایی",
+  "longitude": "طول جغرافیایی",
+  "iso2": "آلفا-2",
+  "totalActiveHotels": "تعداد هتل ها",
+  "totalUsers": "تعداد کاربران",
+  "totalAgents": "تعداد نمایندگان",
+  "totalSuppliers": "تعداد تامین کنندگان",
+  "isHotelsActive": "وضعیت هتل ها",
+  "totalHotels": "تعداد هتل ها",
+  "isActive": "وضعیت شهر"
+}

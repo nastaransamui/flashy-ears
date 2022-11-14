@@ -1,0 +1,18 @@
+{
+  "expand": "See more information",
+  "notDefine": "This field not provided.",
+  "country_name": "Country name",
+  "name": "Province/State name",
+  "type": "Province/State Type",
+  "latitude": "Latitude",
+  "longitude": "Longitude",
+  "isActive": "Province Status",
+  "iso2": "Alpha-2",
+  "totalActiveHotels": "Number of hotels",
+  "totalUsers": "Number of users",
+  "totalAgents": "Number of agents",
+  "totalSuppliers": "Number of Suppliers",
+  "isHotelsActive": "Hotels status",
+  "totalHotels": "Number of hotels",
+  "totalCities": "Number of cities"
+}

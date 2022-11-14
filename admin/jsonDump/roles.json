@@ -196,7 +196,21 @@
       "create": true
     },
     {
+      "state": "provinceSingle",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
       "state": "activeCities",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "citySingle",
       "access": true,
       "update": true,
       "delete": true,

@@ -21,18 +21,13 @@ const useLangPack = () => {
     mode: adminThemeType,
   });
   useEffect(() => {
-    let isMount = true;
-    if (isMount) {
-      setValues((oldValues) => ({
-        ...oldValues,
-        lang: i18n.language,
-        paletteName: adminThemeName,
-        mode: adminThemeType,
-      }));
-    }
-    return () => {
-      isMount = false;
-    };
+    setValues((oldValues) => ({
+      ...oldValues,
+      lang: i18n.language,
+      paletteName: adminThemeName,
+      mode: adminThemeType,
+    }));
+    return () => {};
   }, [adminThemeName, adminThemeType, i18n.language]);
 
   const handleLanguage = (lang: string) => {

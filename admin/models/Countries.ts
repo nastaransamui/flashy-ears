@@ -33,6 +33,7 @@ export interface ICountry {
   save?: any;
   users_id: Types.Array<Types.ObjectId>;
   agents_id: Types.Array<Types.ObjectId>;
+  suppliers_id: Types.Array<Types.ObjectId>;
   hotels_id: Types.Array<Types.ObjectId>;
   states_id: Types.Array<number>;
   cities_id: Types.Array<number>;
@@ -68,13 +69,15 @@ const CountriesSchema = new mongoose.Schema<ICountry>(
       unique: true,
     },
     name: { type: String, required: true, unique: true, index: true },
-    isActive: { type: Boolean, default: false },
+    isActive: { type: Boolean, default: false, index: true },
     iso3: { type: String, required: true, unique: true, index: true },
     iso2: { type: String, required: true, unique: true, index: true },
     isHotelsActive: { type: Boolean, default: false },
     numeric_code: { type: String, required: true },
     phone_code: { type: String, required: true },
     capital: { type: String, required: false, default: '' },
+    states_id: [{ type: mongoose.Schema.Types.ObjectId, ref: 'States' }],
+    cities_id: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Cities' }],
     currency: { type: String, required: true },
     currency_name: { type: String, required: true },
     currency_symbol: { type: String, required: true },
@@ -85,8 +88,7 @@ const CountriesSchema = new mongoose.Schema<ICountry>(
     users_id: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Users' }],
     agents_id: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Agencies' }],
     hotels_id: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Hotels' }],
-    states_id: [{ type: mongoose.Schema.Types.ObjectId, ref: 'States' }],
-    cities_id: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Cities' }],
+    suppliers_id: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Suppliers' }],
     timezones: [
       {
         zoneName: String,
@@ -121,3 +123,129 @@ const CountriesSchema = new mongoose.Schema<ICountry>(
 
 export default mongoose.models.Countries ||
   mongoose.model<ICountry>('Countries', CountriesSchema);
+
+export const dispalyFields = [
+  'name',
+  'isActive',
+  'isHotelsActive',
+  'iso3',
+  'iso2',
+  'capital',
+  'currency',
+  'native',
+  'numeric_code',
+  'totalUsers',
+  'totalAgents',
+  'totalSuppliers',
+  'totalActiveHotels',
+  'totalStates',
+  'totalCities',
+  'phone_code',
+  'region',
+  'subregion',
+  'timezones',
+  'tld',
+  'latitude',
+  'longitude',
+  'currency_name',
+  'currency_symbol',
+];
+const icon = {
+  ...Object.fromEntries(
+    dispalyFields.map((key) => {
+      return [
+        key,
+        {
+          icon:
+            key == 'isActive' || key == 'isHotelsActive'
+              ? 'CheckBoxIcon'
+              : key == 'capital'
+              ? 'LocationCityIcon'
+              : key == 'currency' ||
+                key == 'currency_name' ||
+                key == 'currency_name'
+              ? 'CurrencyExchangeIcon'
+              : key == 'totalActiveHotels'
+              ? 'HotelIcon'
+              : key == 'totalUsers'
+              ? 'BadgeIcon'
+              : key == 'totalAgents' || key == 'totalSuppliers'
+              ? 'AccountBoxIcon'
+              : key == 'tld'
+              ? 'DnsIcon'
+              : key == 'region' || key == 'subregion'
+              ? 'SouthAmericaIcon'
+              : key == 'latitude' || key == 'longitude'
+              ? 'FmdGoodIcon'
+              : key == 'phone_code'
+              ? 'LocalPhoneIcon'
+              : key == 'timezones'
+              ? 'TimelapseIcon'
+              : key == 'name' ||
+                key == 'iso3' ||
+                key == 'iso2' ||
+                key == 'numeric_code'
+              ? 'InfoIcon'
+              : 'TitleIcon',
+        },
+      ];
+    })
+  ),
+};
+
+export const muiDataObj = {
+  ...Object.fromEntries(
+    dispalyFields.map((key) => [
+      key,
+      {
+        type:
+          key == 'isHotelsActive' || key == 'isActive'
+            ? 'boolean'
+            : key == 'totalUsers' ||
+              key == 'totalAgents' ||
+              key == 'totalSuppliers' ||
+              key == 'totalHotels' ||
+              key == 'totalStates' ||
+              key == 'totalCities'
+            ? 'number'
+            : 'string',
+        thumbnail: key !== 'name' ? '' : 'iso2',
+        width:
+          key == 'name' ||
+          key == 'capital' ||
+          key == 'native' ||
+          key == 'currency_name' ||
+          key == 'totalSuppliers'
+            ? undefined
+            : 150,
+        align:
+          key == 'name' ||
+          key == 'capital' ||
+          key == 'native' ||
+          key == 'currency_name'
+            ? undefined
+            : 'center',
+        filterable: true,
+        searchable:
+          key == 'isActive' ||
+          key == 'isHotelsActive' ||
+          key == 'createdAt' ||
+          key == 'updatedAt' ||
+          key == 'totalUsers' ||
+          key == 'totalAgents' ||
+          key == 'totalSuppliers' ||
+          key == 'totalActiveHotels' ||
+          key == 'totalStates' ||
+          key == 'totalCities' ||
+          key == 'timezones' ||
+          key == 'latitude' ||
+          key == 'longitude' ||
+          key == 'currency_symbol' ||
+          key == 'native'
+            ? false
+            : true,
+        ...icon[key],
+      },
+    ])
+  ),
+};

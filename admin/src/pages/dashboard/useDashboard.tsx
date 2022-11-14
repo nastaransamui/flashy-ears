@@ -33,31 +33,21 @@ const useDashboard = () => {
 
   // update sidebar color from local storage
   useEffect(() => {
-    let isMount = true;
-    if (isMount) {
-      setSideBarbgColor(localStorage.getItem('sideBarbgColor') == null ? 'black' : localStorage.getItem('sideBarbgColor') as SidebarColor)
-    }
-    return () => {
-      isMount = false
-    }
+    setSideBarbgColor(localStorage.getItem('sideBarbgColor') == null ? 'black' : localStorage.getItem('sideBarbgColor') as SidebarColor)
+    return () => { }
   }, [])
 
 
   //Update open or close of side bar from localstorage
   useEffect(() => {
-    let isMount = true;
-    if (isMount) {
-      dispatch({
-        type: 'PROPS_MINI_ACTIVE',
-        payload: JSON.stringify(localStorage.getItem('miniActive')) == `null`
-          ? false
-          : JSON.parse(localStorage.getItem('miniActive')!),
-      });
+    dispatch({
+      type: 'PROPS_MINI_ACTIVE',
+      payload: JSON.stringify(localStorage.getItem('miniActive')) == `null`
+        ? false
+        : JSON.parse(localStorage.getItem('miniActive')!),
+    });
 
-    }
-    return () => {
-      isMount = false;
-    };
+    return () => { };
   }, [propsMiniActive]);
   return {
     sidebarMinimizeFunc,

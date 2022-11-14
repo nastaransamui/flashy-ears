@@ -23,6 +23,7 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { styled } from '@mui/material/styles';
+import { PhoneTooltip } from '@/shared/DataShow/Table/MainTable'
 export interface MainCardTypes { }
 
 type InputProps = {
@@ -344,14 +345,25 @@ const MainCard: FC<MainCardTypes> = ((props: MainCardTypes) => {
                                         `${i % 2 == 0 ? 'primary' : 'secondary'
                                         }`
                                       ].main,
-                                  }} />{t(key)}:{value.length}
+                                  }} />
+                                  {
+                                    key !== 'phones'
+                                      ? <>{t(key)}:{value.length}</>
+                                      : <>{t(key)}{" "}: &nbsp; <PhoneTooltip value={value} modelName={modelName!} /></>
+                                  }
                                 </div>)
 
                             default:
                               switch (true) {
+                                case value == null:
+                                  return (
+                                    <div key={(key + value?.toString())} style={{ display: 'flex', justifyContent: 'flex-start' }}>
+                                      {t(key)} : {t('notDefine')}
+                                    </div>
+                                  )
                                 case value.length == 0:
                                   return (
-                                    <div key={(key + value.toString())} style={{ display: 'flex', justifyContent: 'flex-start' }}>
+                                    <div key={(key + value?.toString())} style={{ display: 'flex', justifyContent: 'flex-start' }}>
                                       <DynamicIcon style={{
                                         color:
                                           theme.palette[

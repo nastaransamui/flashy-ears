@@ -11,7 +11,10 @@ import Videos, { IVideo } from '@/models/Videos';
 import Photos, { IPhoto } from '@/models/Photos';
 import Features, { IFeature } from '@/models/Features';
 import Countries, { ICountry } from '@/models/Countries';
+import Provinces, { IProvince } from '@/models/Provinces';
+import Cities, { ICity } from '@/models/Cities';
 import Currencies, { ICurrency } from '@/models/Currencies';
+import Agencies, { IAgent } from '@/models/Agencies';
 import {
   findAllUsersWithPagginate,
   findAllRolesWithPagginate,
@@ -28,9 +31,15 @@ import {
   findAllFeatures,
   findAllCountriesWithPagginate,
   findAllCountries,
+  findAllProvincesWithPagginate,
+  findAllProvinces,
+  findAllCitiesWithPagginate,
+  findAllCities,
   sort_by,
   findAllCurrenciesWithPagginate,
   findAllCurrencies,
+  findAllAgenciesWithPagginate,
+  findAllAgencies,
 } from '@/helpers/dbFinds';
 import type { MultiMap } from 'hazelcast-client/lib/proxy/MultiMap';
 import {
@@ -39,8 +48,13 @@ import {
   addRolesFaker,
   addUsersFaker,
   addVideosFaker,
+  updateCountryStates,
+  updateProvince,
+  updateCities,
+  updateCountryCities,
+  updateProvincesCities,
+  addAgenciesFaker,
 } from '@/lib/faker';
-import { firstBy } from 'thenby';
 
 const apiRoute = nextConnect<HazelcastType, NextApiResponse>({
   onError(error, req, res) {
@@ -72,11 +86,17 @@ apiRoute.post(
   dbCheck,
   hazelCast,
   async (req: HazelcastType, res: NextApiResponse<Data>) => {
-    // addUsersFaker();
-    // addRolesFaker();
-    // addVideosFaker();
-    // addPhotosFaker();
-    // addFeaturesFaker();
+    // addUsersFaker(2000);
+    // addRolesFaker(2000);
+    // addVideosFaker(2000);
+    // addPhotosFaker(2000);
+    // addFeaturesFaker(2000);
+    // addAgenciesFaker(2000);
+    // updateProvince();
+    // updateCountryStates();
+    // updateCities();
+    // updateCountryCities();
+    // updateProvincesCities();
     try {
       const {
         modelName,
@@ -174,6 +194,29 @@ apiRoute.post(
                 perPage,
                 pageNumber,
                 sortDirection,
+                multiMap as MultiMap<MultiMapKey, MultiMapValue>,
+                activeOnly
+              );
+              res.status(200).json({ success: true, ...result });
+              break;
+            case 'Provinces':
+              var result: Results = await findAllProvinces(
+                modelName,
+                sortByField,
+                perPage,
+                pageNumber,
+                sortDirection,
+                multiMap as MultiMap<MultiMapKey, MultiMapValue>
+              );
+              res.status(200).json({ success: true, ...result });
+              break;
+            case 'Cities':
+              var result: Results = await findAllCities(
+                modelName,
+                sortByField,
+                perPage,
+                pageNumber,
+                sortDirection,
                 multiMap as MultiMap<MultiMapKey, MultiMapValue>
               );
               res.status(200).json({ success: true, ...result });
@@ -189,8 +232,20 @@ apiRoute.post(
               );
               res.status(200).json({ success: true, ...result });
               break;
+            case 'Agencies':
+              var result: Results = await findAllAgencies(
+                modelName,
+                sortByField,
+                perPage,
+                pageNumber,
+                sortDirection,
+                multiMap as MultiMap<MultiMapKey, MultiMapValue>
+              );
+              res.status(200).json({ success: true, ...result });
+              break;
 
             default:
+              res.status(200).json({ success: true, data: [], totalCount: 0 });
               break;
           }
           // res
@@ -262,6 +317,28 @@ apiRoute.post(
             );
             res.status(200).json({ success: true, ...result });
             break;
+          case 'Provinces':
+            var result: Results = await findAllProvincesWithPagginate(
+              collection as Model<IProvince>,
+              perPage,
+              pageNumber,
+              sortByField,
+              sortDirection,
+              activeOnly
+            );
+            res.status(200).json({ success: true, ...result });
+            break;
+          case 'Cities':
+            var result: Results = await findAllCitiesWithPagginate(
+              collection as Model<ICity>,
+              perPage,
+              pageNumber,
+              sortByField,
+              sortDirection,
+              activeOnly
+            );
+            res.status(200).json({ success: true, ...result });
+            break;
           case 'Currencies':
             var result: Results = await findAllCurrenciesWithPagginate(
               collection as Model<ICurrency>,
@@ -273,8 +350,19 @@ apiRoute.post(
             );
             res.status(200).json({ success: true, ...result });
             break;
-
+          case 'Agencies':
+            var result: Results = await findAllAgenciesWithPagginate(
+              collection as Model<IAgent>,
+              perPage,
+              pageNumber,
+              sortByField,
+              sortDirection,
+              activeOnly
+            );
+            res.status(200).json({ success: true, ...result });
+            break;
           default:
+            res.status(200).json({ success: true, data: [], totalCount: 0 });
             break;
         }
       }

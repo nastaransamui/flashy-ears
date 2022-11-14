@@ -1,11 +1,55 @@
-import Roles, { IRole } from '@/models/Roles';
-import Users, { IUser } from '@/models/Users';
 import mongoose, { Model } from 'mongoose';
-import Videos, { IVideo } from '@/models/Videos';
-import Photos, { IPhoto } from '@/models/Photos';
-import Features, { IFeature } from '@/models/Features';
-import Countries, { ICountry } from '@/models/Countries';
-import Currencies, { ICurrency } from '@/models/Currencies';
+import Users, {
+  IUser,
+  dispalyFields as usersDisplayField,
+  muiDataObj as usersMuiDataObj,
+} from '@/models/Users';
+import Roles, {
+  IRole,
+  dispalyFields as rolesDisplayField,
+  muiDataObj as rolesMuiDataObj,
+} from '@/models/Roles';
+import Videos, {
+  IVideo,
+  dispalyFields as videosDisplayField,
+  muiDataObj as videosMuiDataObj,
+} from '@/models/Videos';
+import Photos, {
+  IPhoto,
+  dispalyFields as photosDisplayField,
+  muiDataObj as photosMuiDataObj,
+} from '@/models/Photos';
+import Features, {
+  IFeature,
+  dispalyFields as featuresDisplayField,
+  muiDataObj as featuresMuiDataObj,
+} from '@/models/Features';
+import Countries, {
+  ICountry,
+  dispalyFields as countriesDisplayField,
+  muiDataObj as countriesMuiDataObj,
+} from '@/models/Countries';
+import Provinces, {
+  IProvince,
+  dispalyFields as provincesDisplayField,
+  muiDataObj as provincesMuiDataObj,
+} from '@/models/Provinces';
+import Cities, {
+  ICity,
+  dispalyFields as citiesDisplayField,
+  muiDataObj as citiesMuiDataObj,
+} from '@/models/Cities';
+import Currencies, {
+  ICurrency,
+  dispalyFields as currenciesDisplayField,
+  muiDataObj as currenciesMuiDataObj,
+} from '@/models/Currencies';
+import Agencies, {
+  IAgent,
+  dispalyFields as agenciesDisplayField,
+  muiDataObj as agenciesMuiDataObj,
+} from '@/models/Agencies';
+
 import { firstBy } from 'thenby';
 import type { MultiMap } from 'hazelcast-client/lib/proxy/MultiMap';
 
@@ -62,9 +106,23 @@ export async function findCountryById(_id: string) {
   return country;
 }
 
+export async function findProvinceById(_id: string) {
+  let province = await Provinces.findById(_id);
+  return province;
+}
+
+export async function findCityById(_id: string) {
+  let city = await Cities.findById(_id);
+  return city;
+}
+
 export async function findCurrencyById(_id: string) {
   let currency = await Currencies.findById(_id);
   return currency;
+}
+export async function findAgentById(_id: string) {
+  let agent = await Agencies.findById(_id);
+  return agent;
 }
 
 export async function findAllUsersWithPagginate(
@@ -74,63 +132,6 @@ export async function findAllUsersWithPagginate(
   sortByField: string,
   sortDirection: 1 | -1
 ) {
-  const dispalyFields = [
-    'userName',
-    'firstName',
-    'lastName',
-    'cityName',
-    'roleName',
-    'provinceName',
-    'countryName',
-    'position',
-    'aboutMe',
-    'createdAt',
-    'updatedAt',
-    'isAdmin',
-  ];
-
-  const icon = {
-    ...Object.fromEntries(
-      dispalyFields.map((key) => {
-        return [
-          key,
-          {
-            icon:
-              key == 'userName'
-                ? 'EmailIcon'
-                : key == 'firstName' || key == 'lastName'
-                ? 'BadgeIcon'
-                : key == 'cityName' || key == 'provinceName'
-                ? 'LocationCityIcon'
-                : key == 'countryName'
-                ? 'FlagIcon'
-                : key == 'roleName'
-                ? 'DisplaySettingsIcon'
-                : key == 'position'
-                ? 'Public'
-                : key == 'createdAt' || key == 'updatedAt'
-                ? 'EventIcon'
-                : key == 'aboutMe'
-                ? 'InfoIcon'
-                : 'People',
-          },
-        ];
-      })
-    ),
-  };
-  const muiDataObj = {
-    ...Object.fromEntries(
-      dispalyFields.map((key) => [
-        key,
-        {
-          type: key !== 'isAdmin' ? 'string' : 'boolean',
-          thumbnail: key !== 'userName' ? '' : 'profileImage',
-          filterable: true,
-          ...icon[key],
-        },
-      ])
-    ),
-  };
   const dataValue = await collection.aggregate([
     { $project: { password: 0, accessToken: 0 } },
     {
@@ -160,8 +161,8 @@ export async function findAllUsersWithPagginate(
     },
     {
       $addFields: {
-        dispalyFields: dispalyFields,
-        muiData: muiDataObj,
+        dispalyFields: usersDisplayField,
+        muiData: usersMuiDataObj,
       },
     },
     {
@@ -196,64 +197,14 @@ export async function findAllRolesWithPagginate(
   sortByField: string,
   sortDirection: 1 | -1
 ) {
-  const dispalyFields = [
-    'roleName',
-    'isActive',
-    'remark',
-    'createdAt',
-    'updatedAt',
-    'routes',
-  ];
-
-  const icon = {
-    ...Object.fromEntries(
-      dispalyFields.map((key) => {
-        return [
-          key,
-          {
-            icon:
-              key == 'roleName'
-                ? 'HomeWork'
-                : key == 'remark'
-                ? 'People'
-                : key == 'createdAt' || key == 'updatedAt'
-                ? 'EventIcon'
-                : key == 'routes'
-                ? 'InfoIcon'
-                : 'People',
-          },
-        ];
-      })
-    ),
-  };
-
-  const muiDataObj = {
-    ...Object.fromEntries(
-      dispalyFields.map((key) => [
-        key,
-        {
-          type:
-            key == 'isActive'
-              ? 'boolean'
-              : key == 'routes'
-              ? 'number'
-              : 'string',
-          thumbnail: key !== 'roleName' ? '' : 'icon',
-          filterable: true,
-          ...icon[key],
-        },
-      ])
-    ),
-  };
-
   const dataValue = await collection.aggregate([
     {
       $sort: { [sortByField]: sortDirection },
     },
     {
       $addFields: {
-        dispalyFields: dispalyFields,
-        muiData: muiDataObj,
+        dispalyFields: rolesDisplayField,
+        muiData: rolesMuiDataObj,
       },
     },
     {
@@ -287,72 +238,14 @@ export async function findAllVideosWithPagginate(
   sortByField: string,
   sortDirection: 1 | -1
 ) {
-  const dispalyFields = [
-    'title_en',
-    'isActive',
-    'isYoutube',
-    'title_fa',
-    'createdAt',
-    'updatedAt',
-    'topTitle_en',
-    'topTitle_fa',
-    'subTitle_en',
-    'subTitle_fa',
-    'button_en',
-    'button_fa',
-    'youTubeId',
-  ];
-  const icon = {
-    ...Object.fromEntries(
-      dispalyFields.map((key) => {
-        return [
-          key,
-          {
-            icon:
-              key == 'isActive'
-                ? 'CheckBoxIcon'
-                : key == 'isYoutube'
-                ? 'CheckBoxOutlineBlank'
-                : key == 'createdAt' || key == 'updatedAt'
-                ? 'EventIcon'
-                : key == 'title_en' || key == 'title_fa'
-                ? 'InfoIcon'
-                : key == 'button_en' || key == 'button_fa'
-                ? 'FlagIcon'
-                : 'TitleIcon',
-          },
-        ];
-      })
-    ),
-  };
-
-  const muiDataObj = {
-    ...Object.fromEntries(
-      dispalyFields.map((key) => [
-        key,
-        {
-          type: key == 'isActive' || key == 'isYoutube' ? 'boolean' : 'string',
-          thumbnail:
-            key == 'youTubeId'
-              ? 'youTubeId'
-              : key !== 'title_en'
-              ? ''
-              : 'videoLink',
-          filterable: true,
-          ...icon[key],
-        },
-      ])
-    ),
-  };
-
   const dataValue = await collection.aggregate([
     {
       $sort: { [sortByField]: sortDirection },
     },
     {
       $addFields: {
-        dispalyFields: dispalyFields,
-        muiData: muiDataObj,
+        dispalyFields: videosDisplayField,
+        muiData: videosMuiDataObj,
       },
     },
     {
@@ -387,63 +280,14 @@ export async function findAllPhotosWithPagginate(
   sortByField: string,
   sortDirection: 1 | -1
 ) {
-  const dispalyFields = [
-    'title_en',
-    'isActive',
-    'title_fa',
-    'topTitle_en',
-    'topTitle_fa',
-    'subTitle_en',
-    'subTitle_fa',
-    'button_en',
-    'button_fa',
-    'createdAt',
-    'updatedAt',
-  ];
-  const icon = {
-    ...Object.fromEntries(
-      dispalyFields.map((key) => {
-        return [
-          key,
-          {
-            icon:
-              key == 'isActive'
-                ? 'CheckBoxIcon'
-                : key == 'createdAt' || key == 'updatedAt'
-                ? 'EventIcon'
-                : key == 'title_en' || key == 'title_fa'
-                ? 'InfoIcon'
-                : key == 'button_en' || key == 'button_fa'
-                ? 'FlagIcon'
-                : 'TitleIcon',
-          },
-        ];
-      })
-    ),
-  };
-
-  const muiDataObj = {
-    ...Object.fromEntries(
-      dispalyFields.map((key) => [
-        key,
-        {
-          type: key == 'isActive' ? 'boolean' : 'string',
-          thumbnail: key !== 'title_en' ? '' : 'imageShow',
-          filterable: true,
-          ...icon[key],
-        },
-      ])
-    ),
-  };
-
   const dataValue = await collection.aggregate([
     {
       $sort: { [sortByField]: sortDirection },
     },
     {
       $addFields: {
-        dispalyFields: dispalyFields,
-        muiData: muiDataObj,
+        dispalyFields: photosDisplayField,
+        muiData: photosMuiDataObj,
       },
     },
     {
@@ -477,64 +321,14 @@ export async function findAllFeaturesWithPagginate(
   sortByField: string,
   sortDirection: 1 | -1
 ) {
-  const dispalyFields = [
-    'title_en',
-    'title_fa',
-    'isActive',
-    'isYoutube',
-    'createdAt',
-    'updatedAt',
-    'youTubeId',
-  ];
-  const icon = {
-    ...Object.fromEntries(
-      dispalyFields.map((key) => {
-        return [
-          key,
-          {
-            icon:
-              key == 'isActive'
-                ? 'CheckBoxIcon'
-                : key == 'isYoutube'
-                ? 'CheckBoxOutlineBlank'
-                : key == 'createdAt' || key == 'updatedAt'
-                ? 'EventIcon'
-                : key == 'title_en' || key == 'title_fa'
-                ? 'InfoIcon'
-                : 'TitleIcon',
-          },
-        ];
-      })
-    ),
-  };
-
-  const muiDataObj = {
-    ...Object.fromEntries(
-      dispalyFields.map((key) => [
-        key,
-        {
-          type: key == 'isActive' || key == 'isYoutube' ? 'boolean' : 'string',
-          thumbnail:
-            key == 'youTubeId'
-              ? 'youTubeId'
-              : key !== 'title_en'
-              ? ''
-              : 'videoLink',
-          filterable: true,
-          ...icon[key],
-        },
-      ])
-    ),
-  };
-
   const dataValue = await collection.aggregate([
     {
       $sort: { [sortByField]: sortDirection },
     },
     {
       $addFields: {
-        dispalyFields: dispalyFields,
-        muiData: muiDataObj,
+        dispalyFields: featuresDisplayField,
+        muiData: featuresMuiDataObj,
       },
     },
     {
@@ -569,113 +363,6 @@ export async function findAllCountriesWithPagginate(
   sortDirection: 1 | -1,
   activeOnly: boolean
 ) {
-  const dispalyFields = [
-    'name',
-    'isActive',
-    'isHotelsActive',
-    'iso3',
-    'iso2',
-    'capital',
-    'currency',
-    'native',
-    'numeric_code',
-    'totalUsers',
-    'totalAgents',
-    'totalSuppliers',
-    'totalActiveHotels',
-    'totalStates',
-    'totalCities',
-    'phone_code',
-    'region',
-    'subregion',
-    'timezones',
-    'tld',
-    'latitude',
-    'longitude',
-    'currency_name',
-    'currency_symbol',
-  ];
-  const icon = {
-    ...Object.fromEntries(
-      dispalyFields.map((key) => {
-        return [
-          key,
-          {
-            icon:
-              key == 'isActive' || key == 'isHotelsActive'
-                ? 'CheckBoxIcon'
-                : key == 'capital'
-                ? 'LocationCityIcon'
-                : key == 'currency' ||
-                  key == 'currency_name' ||
-                  key == 'currency_name'
-                ? 'CurrencyExchangeIcon'
-                : key == 'totalActiveHotels'
-                ? 'HotelIcon'
-                : key == 'totalUsers'
-                ? 'BadgeIcon'
-                : key == 'totalAgents' || key == 'totalSuppliers'
-                ? 'AccountBoxIcon'
-                : key == 'tld'
-                ? 'DnsIcon'
-                : key == 'region' || key == 'subregion'
-                ? 'SouthAmericaIcon'
-                : key == 'latitude' || key == 'longitude'
-                ? 'FmdGoodIcon'
-                : key == 'phone_code'
-                ? 'LocalPhoneIcon'
-                : key == 'timezones'
-                ? 'TimelapseIcon'
-                : key == 'name' ||
-                  key == 'iso3' ||
-                  key == 'iso2' ||
-                  key == 'numeric_code'
-                ? 'InfoIcon'
-                : 'TitleIcon',
-          },
-        ];
-      })
-    ),
-  };
-
-  const muiDataObj = {
-    ...Object.fromEntries(
-      dispalyFields.map((key) => [
-        key,
-        {
-          type:
-            key == 'isHotelsActive' || key == 'isActive'
-              ? 'boolean'
-              : key == 'totalUsers' ||
-                key == 'totalAgents' ||
-                key == 'totalSuppliers' ||
-                key == 'totalHotels' ||
-                key == 'totalStates' ||
-                key == 'totalCities'
-              ? 'number'
-              : 'string',
-          thumbnail: key !== 'name' ? '' : 'iso2',
-          width:
-            key == 'name' ||
-            key == 'capital' ||
-            key == 'native' ||
-            key == 'currency_name' ||
-            key == 'totalSuppliers'
-              ? undefined
-              : 150,
-          align:
-            key == 'name' ||
-            key == 'capital' ||
-            key == 'native' ||
-            key == 'currency_name'
-              ? undefined
-              : 'center',
-          filterable: true,
-          ...icon[key],
-        },
-      ])
-    ),
-  };
   var match = activeOnly ? { isActive: true } : {};
 
   const dataValue = await collection.aggregate([
@@ -685,8 +372,8 @@ export async function findAllCountriesWithPagginate(
     },
     {
       $addFields: {
-        dispalyFields: dispalyFields,
-        muiData: muiDataObj,
+        dispalyFields: countriesDisplayField,
+        muiData: countriesMuiDataObj,
         totalStates: { $size: '$states_id' },
         totalActiveHotels: { $size: '$hotels_id' },
         totalUsers: { $size: '$users_id' },
@@ -719,6 +406,167 @@ export async function findAllCountriesWithPagginate(
   return result;
 }
 
+export async function findAllProvincesWithPagginate(
+  collection: Model<IProvince>,
+  perPage: number,
+  pageNumber: number,
+  sortByField: string,
+  sortDirection: 1 | -1,
+  activeOnly: boolean
+) {
+  var match = activeOnly ? { isActive: true } : {};
+
+  const dataValue = await collection.aggregate([
+    { $match: match },
+    {
+      $sort: { isActive: -1, [sortByField]: sortDirection },
+    },
+    {
+      $lookup: {
+        from: 'countries',
+        localField: 'country_id',
+        foreignField: 'id',
+        as: 'countryData',
+      },
+    },
+    {
+      $set: {
+        country_name: '$countryData.name',
+      },
+    },
+    {
+      $unwind: {
+        path: '$country_name',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $unset: ['countryData', '__v'],
+    },
+    {
+      $addFields: {
+        dispalyFields: provincesDisplayField,
+        muiData: provincesMuiDataObj,
+        totalActiveHotels: { $size: '$hotels_id' },
+        totalUsers: { $size: '$users_id' },
+        totalAgents: { $size: '$agents_id' },
+        totalSuppliers: { $size: '$suppliers_id' },
+        totalCities: { $size: '$cities_id' },
+      },
+    },
+    {
+      $facet: {
+        paginatedResults: [
+          { $skip: perPage * (pageNumber - 1) },
+          { $limit: perPage },
+        ],
+        totalCount: [
+          {
+            $count: 'count',
+          },
+        ],
+      },
+    },
+  ]);
+  const result = {
+    data: dataValue[0].paginatedResults,
+    totalCount:
+      dataValue[0].totalCount[0] == undefined
+        ? 0
+        : dataValue[0].totalCount[0].count,
+  };
+  return result;
+}
+
+export async function findAllCitiesWithPagginate(
+  collection: Model<ICity>,
+  perPage: number,
+  pageNumber: number,
+  sortByField: string,
+  sortDirection: 1 | -1,
+  activeOnly: boolean
+) {
+  var match = activeOnly ? { isActive: true } : {};
+
+  const dataValue = await collection.aggregate(
+    [
+      { $match: match },
+      {
+        $sort: { [sortByField]: sortDirection },
+      },
+      // {
+      //   $lookup: {
+      //     from: 'countries',
+      //     localField: 'country_id',
+      //     foreignField: 'id',
+      //     as: 'countryData',
+      //   },
+      // },
+      // {
+      //   $lookup: {
+      //     from: 'provinces',
+      //     localField: 'state_id',
+      //     foreignField: 'id',
+      //     as: 'provinceData',
+      //   },
+      // },
+      // {
+      //   $set: {
+      //     country_name: '$countryData.name',
+      //     state_name: '$provinceData.name',
+      //   },
+      // },
+      // {
+      //   $unwind: {
+      //     path: '$country_name',
+      //     preserveNullAndEmptyArrays: true,
+      //   },
+      // },
+      // {
+      //   $unwind: {
+      //     path: '$state_name',
+      //     preserveNullAndEmptyArrays: true,
+      //   },
+      // },
+      // {
+      //   $unset: ['countryData', 'provinceData', '__v'],
+      // },
+      {
+        $addFields: {
+          dispalyFields: citiesDisplayField,
+          muiData: citiesMuiDataObj,
+          totalActiveHotels: { $size: '$hotels_id' },
+          totalUsers: { $size: '$users_id' },
+          totalAgents: { $size: '$agents_id' },
+          totalSuppliers: { $size: '$suppliers_id' },
+        },
+      },
+      {
+        $facet: {
+          paginatedResults: [
+            { $skip: perPage * (pageNumber - 1) },
+            { $limit: perPage },
+          ],
+          totalCount: [
+            {
+              $count: 'count',
+            },
+          ],
+        },
+      },
+    ],
+    { allowDiskUse: true }
+  );
+  const result = {
+    data: dataValue[0].paginatedResults,
+    totalCount:
+      dataValue[0].totalCount[0] == undefined
+        ? 0
+        : dataValue[0].totalCount[0].count,
+  };
+  return result;
+}
+
 export async function findAllCurrenciesWithPagginate(
   collection: Model<ICurrency>,
   perPage: number,
@@ -727,69 +575,6 @@ export async function findAllCurrenciesWithPagginate(
   sortDirection: 1 | -1,
   activeOnly: boolean
 ) {
-  const dispalyFields = [
-    'name',
-    'isActive',
-    'iso3',
-    'iso2',
-    'totalAgents',
-    'totalSuppliers',
-    'numeric_code',
-    'currency',
-    'currency_name',
-    'currency_symbol',
-  ];
-  const icon = {
-    ...Object.fromEntries(
-      dispalyFields.map((key) => {
-        return [
-          key,
-          {
-            icon:
-              key == 'isActive'
-                ? 'CheckBoxIcon'
-                : key == 'currency' ||
-                  key == 'currency_name' ||
-                  key == 'currency_name'
-                ? 'CurrencyExchangeIcon'
-                : key == 'totalAgents' || 'totalSuppliers'
-                ? 'AccountBoxIcon'
-                : key == 'name' ||
-                  key == 'iso3' ||
-                  key == 'iso2' ||
-                  key == 'numeric_code'
-                ? 'InfoIcon'
-                : 'TitleIcon',
-          },
-        ];
-      })
-    ),
-  };
-
-  const muiDataObj = {
-    ...Object.fromEntries(
-      dispalyFields.map((key) => [
-        key,
-        {
-          type:
-            key == 'isActive'
-              ? 'boolean'
-              : key == 'totalSuppliers' || key == 'totalAgents'
-              ? 'number'
-              : 'string',
-          thumbnail: key !== 'name' ? '' : 'iso2',
-          width:
-            key == 'name' || key == 'currency_name' || key == 'totalSuppliers'
-              ? undefined
-              : 150,
-          align: key == 'name' || key == 'currency_name' ? undefined : 'center',
-          filterable: true,
-          ...icon[key],
-        },
-      ])
-    ),
-  };
-
   var match = activeOnly ? { isActive: true } : {};
 
   const dataValue = await collection.aggregate([
@@ -807,8 +592,8 @@ export async function findAllCurrenciesWithPagginate(
     },
     {
       $addFields: {
-        dispalyFields: dispalyFields,
-        muiData: muiDataObj,
+        dispalyFields: currenciesDisplayField,
+        muiData: currenciesMuiDataObj,
         totalAgents: { $size: '$agents_id' },
         totalSuppliers: { $size: '$suppliers_id' },
       },
@@ -852,6 +637,110 @@ export async function findAllCurrenciesWithPagginate(
   return result;
 }
 
+export async function findAllAgenciesWithPagginate(
+  collection: Model<IAgent>,
+  perPage: number,
+  pageNumber: number,
+  sortByField: string,
+  sortDirection: 1 | -1,
+  activeOnly: boolean
+) {
+  const dataValue = await collection.aggregate([
+    {
+      $sort: { [sortByField]: sortDirection },
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'accountManager_id',
+        foreignField: '_id',
+        as: 'accountManagerData',
+      },
+    },
+    {
+      $set: {
+        accountManager: '$accountManagerData.userName',
+      },
+    },
+    {
+      $unwind: {
+        path: '$accountManager',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: 'countries',
+        localField: 'country_id',
+        foreignField: '_id',
+        as: 'countryData',
+      },
+    },
+    {
+      $set: {
+        countryName: '$countryData.name',
+      },
+    },
+    {
+      $unwind: {
+        path: '$countryName',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: 'provinces',
+        localField: 'province_id',
+        foreignField: '_id',
+        as: 'provinceData',
+      },
+    },
+    {
+      $set: {
+        provinceName: '$provinceData.name',
+      },
+    },
+    {
+      $unwind: {
+        path: '$provinceName',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $unset: ['accountManagerData', 'countryData', 'provinceData', '__v'],
+    },
+    {
+      $addFields: {
+        dispalyFields: agenciesDisplayField,
+        muiData: agenciesMuiDataObj,
+      },
+    },
+    {
+      $facet: {
+        paginatedResults: [
+          { $skip: perPage * (pageNumber - 1) },
+          { $limit: perPage },
+        ],
+        totalCount: [
+          {
+            $count: 'count',
+          },
+        ],
+      },
+    },
+  ]);
+
+  const result = {
+    data: dataValue[0].paginatedResults,
+    totalCount:
+      dataValue[0].totalCount[0] == undefined
+        ? 0
+        : dataValue[0].totalCount[0].count,
+  };
+
+  return result;
+}
+
 export interface MultiMapKey {
   key: string;
 }
@@ -867,64 +756,6 @@ export async function findAllUsers(
   sortDirection: 1 | -1,
   multiMap: MultiMap<MultiMapKey, MultiMapValue>
 ) {
-  const dispalyFields = [
-    'userName',
-    'firstName',
-    'lastName',
-    'cityName',
-    'roleName',
-    'provinceName',
-    'countryName',
-    'position',
-    'aboutMe',
-    'createdAt',
-    'updatedAt',
-    'isAdmin',
-  ];
-
-  const icon = {
-    ...Object.fromEntries(
-      dispalyFields.map((key) => {
-        return [
-          key,
-          {
-            icon:
-              key == 'userName'
-                ? 'EmailIcon'
-                : key == 'firstName' || key == 'lastName'
-                ? 'BadgeIcon'
-                : key == 'cityName' || key == 'provinceName'
-                ? 'LocationCityIcon'
-                : key == 'countryName'
-                ? 'FlagIcon'
-                : key == 'roleName'
-                ? 'DisplaySettingsIcon'
-                : key == 'position'
-                ? 'Public'
-                : key == 'createdAt' || key == 'updatedAt'
-                ? 'EventIcon'
-                : key == 'aboutMe'
-                ? 'InfoIcon'
-                : 'People',
-          },
-        ];
-      })
-    ),
-  };
-  const muiDataObj = {
-    ...Object.fromEntries(
-      dispalyFields.map((key) => [
-        key,
-        {
-          type: key !== 'isAdmin' ? 'string' : 'boolean',
-          thumbnail: key !== 'userName' ? '' : 'profileImage',
-          filterable: true,
-          ...icon[key],
-        },
-      ])
-    ),
-  };
-
   var collection = mongoose.model(modelName);
   const dataValue = await collection.aggregate([
     { $project: { password: 0, accessToken: 0 } },
@@ -941,8 +772,8 @@ export async function findAllUsers(
     },
     {
       $addFields: {
-        dispalyFields: dispalyFields,
-        muiData: muiDataObj,
+        dispalyFields: usersDisplayField,
+        muiData: usersMuiDataObj,
       },
     },
     {
@@ -979,63 +810,15 @@ export async function findAllRoles(
   multiMap: MultiMap<MultiMapKey, MultiMapValue>
 ) {
   var collection = mongoose.model(modelName);
-  const dispalyFields = [
-    'roleName',
-    'isActive',
-    'remark',
-    'createdAt',
-    'updatedAt',
-    'routes',
-  ];
 
-  const icon = {
-    ...Object.fromEntries(
-      dispalyFields.map((key) => {
-        return [
-          key,
-          {
-            icon:
-              key == 'roleName'
-                ? 'HomeWork'
-                : key == 'remark'
-                ? 'People'
-                : key == 'createdAt' || key == 'updatedAt'
-                ? 'EventIcon'
-                : key == 'routes'
-                ? 'InfoIcon'
-                : 'People',
-          },
-        ];
-      })
-    ),
-  };
-
-  const muiDataObj = {
-    ...Object.fromEntries(
-      dispalyFields.map((key) => [
-        key,
-        {
-          type:
-            key == 'isActive'
-              ? 'boolean'
-              : key == 'routes'
-              ? 'number'
-              : 'string',
-          thumbnail: key !== 'roleName' ? '' : 'icon',
-          filterable: true,
-          ...icon[key],
-        },
-      ])
-    ),
-  };
   const dataValue = await collection.aggregate([
     {
       $sort: { [sortByField]: sortDirection },
     },
     {
       $addFields: {
-        dispalyFields: dispalyFields,
-        muiData: muiDataObj,
+        dispalyFields: rolesDisplayField,
+        muiData: rolesMuiDataObj,
       },
     },
   ]);
@@ -1059,63 +842,6 @@ export async function findAllVideos(
   multiMap: MultiMap<MultiMapKey, MultiMapValue>
 ) {
   var collection = mongoose.model(modelName);
-  const dispalyFields = [
-    'title_en',
-    'isActive',
-    'isYoutube',
-    'title_fa',
-    'createdAt',
-    'updatedAt',
-    'topTitle_en',
-    'topTitle_fa',
-    'subTitle_en',
-    'subTitle_fa',
-    'button_en',
-    'button_fa',
-    'youTubeId',
-  ];
-  const icon = {
-    ...Object.fromEntries(
-      dispalyFields.map((key) => {
-        return [
-          key,
-          {
-            icon:
-              key == 'isActive'
-                ? 'CheckBoxIcon'
-                : key == 'isYoutube'
-                ? 'CheckBoxOutlineBlank'
-                : key == 'createdAt' || key == 'updatedAt'
-                ? 'EventIcon'
-                : key == 'title_en' || key == 'title_fa'
-                ? 'InfoIcon'
-                : key == 'button_en' || key == 'button_fa'
-                ? 'FlagIcon'
-                : 'TitleIcon',
-          },
-        ];
-      })
-    ),
-  };
-
-  const muiDataObj = {
-    ...Object.fromEntries(
-      dispalyFields.map((key) => [
-        key,
-        {
-          type: key == 'isActive' || key == 'isYoutube' ? 'boolean' : 'string',
-          thumbnail:
-            key == 'youTubeId'
-              ? 'youTubeId'
-              : key !== 'title_en'
-              ? ''
-              : 'videoLink',
-          filterable: true,
-          ...icon[key],
-        },
-      ])
-    ),
-  };
 
   const dataValue = await collection.aggregate([
     {
@@ -1123,8 +849,8 @@ export async function findAllVideos(
     },
     {
       $addFields: {
-        dispalyFields: dispalyFields,
-        muiData: muiDataObj,
+        dispalyFields: videosDisplayField,
+        muiData: videosMuiDataObj,
       },
     },
   ]);
@@ -1148,62 +874,15 @@ export async function findAllPhotos(
   multiMap: MultiMap<MultiMapKey, MultiMapValue>
 ) {
   var collection = mongoose.model(modelName);
-  const dispalyFields = [
-    'title_en',
-    'isActive',
-    'title_fa',
-    'topTitle_en',
-    'topTitle_fa',
-    'subTitle_en',
-    'subTitle_fa',
-    'button_en',
-    'button_fa',
-    'createdAt',
-    'updatedAt',
-  ];
-  const icon = {
-    ...Object.fromEntries(
-      dispalyFields.map((key) => {
-        return [
-          key,
-          {
-            icon:
-              key == 'isActive'
-                ? 'CheckBoxIcon'
-                : key == 'createdAt' || key == 'updatedAt'
-                ? 'EventIcon'
-                : key == 'title_en' || key == 'title_fa'
-                ? 'InfoIcon'
-                : key == 'button_en' || key == 'button_fa'
-                ? 'FlagIcon'
-                : 'TitleIcon',
-          },
-        ];
-      })
-    ),
-  };
 
-  const muiDataObj = {
-    ...Object.fromEntries(
-      dispalyFields.map((key) => [
-        key,
-        {
-          type: key == 'isActive' ? 'boolean' : 'string',
-          thumbnail: key !== 'title_en' ? '' : 'imageShow',
-          filterable: true,
-          ...icon[key],
-        },
-      ])
-    ),
-  };
   const dataValue = await collection.aggregate([
     {
       $sort: { [sortByField]: sortDirection },
     },
     {
       $addFields: {
-        dispalyFields: dispalyFields,
-        muiData: muiDataObj,
+        dispalyFields: photosDisplayField,
+        muiData: photosMuiDataObj,
       },
     },
   ]);
@@ -1227,63 +906,15 @@ export async function findAllFeatures(
   multiMap: MultiMap<MultiMapKey, MultiMapValue>
 ) {
   var collection = mongoose.model(modelName);
-  const dispalyFields = [
-    'title_en',
-    'title_fa',
-    'isActive',
-    'isYoutube',
-    'createdAt',
-    'updatedAt',
-    'youTubeId',
-  ];
-  const icon = {
-    ...Object.fromEntries(
-      dispalyFields.map((key) => {
-        return [
-          key,
-          {
-            icon:
-              key == 'isActive'
-                ? 'CheckBoxIcon'
-                : key == 'isYoutube'
-                ? 'CheckBoxOutlineBlank'
-                : key == 'createdAt' || key == 'updatedAt'
-                ? 'EventIcon'
-                : key == 'title_en' || key == 'title_fa'
-                ? 'InfoIcon'
-                : 'TitleIcon',
-          },
-        ];
-      })
-    ),
-  };
 
-  const muiDataObj = {
-    ...Object.fromEntries(
-      dispalyFields.map((key) => [
-        key,
-        {
-          type: key == 'isActive' || key == 'isYoutube' ? 'boolean' : 'string',
-          thumbnail:
-            key == 'youTubeId'
-              ? 'youTubeId'
-              : key !== 'title_en'
-              ? ''
-              : 'videoLink',
-          filterable: true,
-          ...icon[key],
-        },
-      ])
-    ),
-  };
   const dataValue = await collection.aggregate([
     {
       $sort: { [sortByField]: sortDirection },
     },
     {
       $addFields: {
-        dispalyFields: dispalyFields,
-        muiData: muiDataObj,
+        dispalyFields: featuresDisplayField,
+        muiData: featuresMuiDataObj,
       },
     },
   ]);
@@ -1304,117 +935,10 @@ export async function findAllCountries(
   perPage: number,
   pageNumber: number,
   sortDirection: 1 | -1,
-  multiMap: MultiMap<MultiMapKey, MultiMapValue>
+  multiMap: MultiMap<MultiMapKey, MultiMapValue>,
+  activeOnly: boolean
 ) {
   var collection = mongoose.model(modelName);
-
-  const dispalyFields = [
-    'name',
-    'isActive',
-    'isHotelsActive',
-    'iso3',
-    'iso2',
-    'capital',
-    'currency',
-    'native',
-    'numeric_code',
-    'totalUsers',
-    'totalAgents',
-    'totalSuppliers',
-    'totalActiveHotels',
-    'totalStates',
-    'totalCities',
-    'phone_code',
-    'region',
-    'subregion',
-    'timezones',
-    'tld',
-    'latitude',
-    'longitude',
-    'currency_name',
-    'currency_symbol',
-  ];
-  const icon = {
-    ...Object.fromEntries(
-      dispalyFields.map((key) => {
-        return [
-          key,
-          {
-            icon:
-              key == 'isActive' || key == 'isHotelsActive'
-                ? 'CheckBoxIcon'
-                : key == 'capital'
-                ? 'LocationCityIcon'
-                : key == 'currency' ||
-                  key == 'currency_name' ||
-                  key == 'currency_name'
-                ? 'CurrencyExchangeIcon'
-                : key == 'totalActiveHotels'
-                ? 'HotelIcon'
-                : key == 'totalUsers'
-                ? 'BadgeIcon'
-                : key == 'totalAgents' || key == 'totalSuppliers'
-                ? 'AccountBoxIcon'
-                : key == 'tld'
-                ? 'DnsIcon'
-                : key == 'region' || key == 'subregion'
-                ? 'SouthAmericaIcon'
-                : key == 'latitude' || key == 'longitude'
-                ? 'FmdGoodIcon'
-                : key == 'phone_code'
-                ? 'LocalPhoneIcon'
-                : key == 'timezones'
-                ? 'TimelapseIcon'
-                : key == 'name' ||
-                  key == 'iso3' ||
-                  key == 'iso2' ||
-                  key == 'numeric_code'
-                ? 'InfoIcon'
-                : 'TitleIcon',
-          },
-        ];
-      })
-    ),
-  };
-
-  const muiDataObj = {
-    ...Object.fromEntries(
-      dispalyFields.map((key) => [
-        key,
-        {
-          type:
-            key == 'isHotelsActive' || key == 'isActive'
-              ? 'boolean'
-              : key == 'totalUsers' ||
-                key == 'totalAgents' ||
-                key == 'totalSuppliers' ||
-                key == 'totalHotels' ||
-                key == 'totalStates' ||
-                key == 'totalCities'
-              ? 'number'
-              : 'string',
-          thumbnail: key !== 'name' ? '' : 'iso2',
-          width:
-            key == 'name' ||
-            key == 'capital' ||
-            key == 'native' ||
-            key == 'currency_name' ||
-            key == 'totalSuppliers'
-              ? undefined
-              : 150,
-          align:
-            key == 'name' ||
-            key == 'capital' ||
-            key == 'native' ||
-            key == 'currency_name'
-              ? undefined
-              : 'center',
-          filterable: true,
-          ...icon[key],
-        },
-      ])
-    ),
-  };
 
   const dataValue = await collection.aggregate([
     {
@@ -1422,8 +946,8 @@ export async function findAllCountries(
     },
     {
       $addFields: {
-        dispalyFields: dispalyFields,
-        muiData: muiDataObj,
+        dispalyFields: countriesDisplayField,
+        muiData: countriesMuiDataObj,
         totalStates: { $size: '$states_id' },
         totalActiveHotels: { $size: '$hotels_id' },
         totalUsers: { $size: '$users_id' },
@@ -1434,7 +958,167 @@ export async function findAllCountries(
     },
   ]);
   const result = {
-    data: paginate(dataValue, perPage, pageNumber),
+    data: paginate(
+      dataValue.filter((a) => activeOnly && a.isActive),
+      perPage,
+      pageNumber
+    ),
+    totalCount: dataValue.length,
+  };
+  await multiMap.put(
+    `all${modelName}` as unknown as MultiMapKey,
+    dataValue as unknown as MultiMapValue
+  );
+  return result;
+}
+
+export async function findAllProvinces(
+  modelName: string,
+  sortByField: string,
+  perPage: number,
+  pageNumber: number,
+  sortDirection: 1 | -1,
+  multiMap: MultiMap<MultiMapKey, MultiMapValue>
+) {
+  var collection = mongoose.model(modelName);
+
+  const dataValue = await collection.aggregate([
+    {
+      $sort: { isActive: -1, [sortByField]: sortDirection },
+    },
+    {
+      $addFields: {
+        dispalyFields: provincesDisplayField,
+        muiData: provincesMuiDataObj,
+      },
+    },
+    {
+      $lookup: {
+        from: 'countries',
+        localField: 'country_id',
+        foreignField: 'id',
+        as: 'countryData',
+      },
+    },
+    {
+      $set: {
+        country_name: '$countryData.name',
+      },
+    },
+    {
+      $unwind: {
+        path: '$country_name',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $unset: ['countryData', '__v'],
+    },
+    {
+      $addFields: {
+        dispalyFields: provincesDisplayField,
+        muiData: provincesMuiDataObj,
+        totalActiveHotels: { $size: '$hotels_id' },
+        totalUsers: { $size: '$users_id' },
+        totalAgents: { $size: '$agents_id' },
+        totalSuppliers: { $size: '$suppliers_id' },
+        totalCities: { $size: '$cities_id' },
+      },
+    },
+  ]);
+  const result = {
+    data: paginate(
+      dataValue.filter((a) => a.isActive),
+      perPage,
+      pageNumber
+    ),
+    totalCount: dataValue.length,
+  };
+  await multiMap.put(
+    `all${modelName}` as unknown as MultiMapKey,
+    dataValue as unknown as MultiMapValue
+  );
+  return result;
+}
+
+export async function findAllCities(
+  modelName: string,
+  sortByField: string,
+  perPage: number,
+  pageNumber: number,
+  sortDirection: 1 | -1,
+  multiMap: MultiMap<MultiMapKey, MultiMapValue>
+) {
+  var collection = mongoose.model(modelName);
+
+  const dataValue = await collection.aggregate(
+    [
+      { $match: { isActive: true } },
+      {
+        $sort: { [sortByField]: sortDirection },
+      },
+      // {
+      //   $addFields: {
+      //     dispalyFields: dispalyFields,
+      //     muiData: muiDataObj,
+      //   },
+      // },
+      // {
+      //   $lookup: {
+      //     from: 'countries',
+      //     localField: 'country_id',
+      //     foreignField: 'id',
+      //     as: 'countryData',
+      //   },
+      // },
+      // {
+      //   $lookup: {
+      //     from: 'provinces',
+      //     localField: 'state_id',
+      //     foreignField: 'id',
+      //     as: 'provinceData',
+      //   },
+      // },
+      // {
+      //   $set: {
+      //     country_name: '$countryData.name',
+      //     state_name: '$provinceData.name',
+      //   },
+      // },
+      // {
+      //   $unwind: {
+      //     path: '$country_name',
+      //     preserveNullAndEmptyArrays: true,
+      //   },
+      // },
+      // {
+      //   $unwind: {
+      //     path: '$state_name',
+      //     preserveNullAndEmptyArrays: true,
+      //   },
+      // },
+      // {
+      //   $unset: ['countryData', 'provinceData', '__v'],
+      // },
+      {
+        $addFields: {
+          dispalyFields: citiesDisplayField,
+          muiData: citiesMuiDataObj,
+          totalActiveHotels: { $size: '$hotels_id' },
+          totalUsers: { $size: '$users_id' },
+          totalAgents: { $size: '$agents_id' },
+          totalSuppliers: { $size: '$suppliers_id' },
+        },
+      },
+    ],
+    { allowDiskUse: true }
+  );
+  const result = {
+    data: paginate(
+      dataValue.filter((a) => a.isActive),
+      perPage,
+      pageNumber
+    ),
     totalCount: dataValue.length,
   };
   await multiMap.put(
@@ -1454,77 +1138,14 @@ export async function findAllCurrencies(
 ) {
   var collection = mongoose.model(modelName);
 
-  const dispalyFields = [
-    'name',
-    'isActive',
-    'iso3',
-    'iso2',
-    'totalAgents',
-    'totalSuppliers',
-    'numeric_code',
-    'currency',
-    'currency_name',
-    'currency_symbol',
-  ];
-  const icon = {
-    ...Object.fromEntries(
-      dispalyFields.map((key) => {
-        return [
-          key,
-          {
-            icon:
-              key == 'isActive'
-                ? 'CheckBoxIcon'
-                : key == 'currency' ||
-                  key == 'currency_name' ||
-                  key == 'currency_name'
-                ? 'CurrencyExchangeIcon'
-                : key == 'totalAgents' || 'totalSuppliers'
-                ? 'AccountBoxIcon'
-                : key == 'name' ||
-                  key == 'iso3' ||
-                  key == 'iso2' ||
-                  key == 'numeric_code'
-                ? 'InfoIcon'
-                : 'TitleIcon',
-          },
-        ];
-      })
-    ),
-  };
-
-  const muiDataObj = {
-    ...Object.fromEntries(
-      dispalyFields.map((key) => [
-        key,
-        {
-          type:
-            key == 'isActive'
-              ? 'boolean'
-              : key == 'totalSuppliers' || key == 'totalAgents'
-              ? 'number'
-              : 'string',
-          thumbnail: key !== 'name' ? '' : 'iso2',
-          width:
-            key == 'name' || key == 'currency_name' || key == 'totalSuppliers'
-              ? undefined
-              : 150,
-          align: key == 'name' || key == 'currency_name' ? undefined : 'center',
-          filterable: true,
-          ...icon[key],
-        },
-      ])
-    ),
-  };
-
   const dataValue = await collection.aggregate([
     {
       $sort: { isActive: -1, [sortByField]: sortDirection },
     },
     {
       $addFields: {
-        dispalyFields: dispalyFields,
-        muiData: muiDataObj,
+        dispalyFields: currenciesDisplayField,
+        muiData: currenciesMuiDataObj,
       },
     },
     {
@@ -1537,8 +1158,8 @@ export async function findAllCurrencies(
     },
     {
       $addFields: {
-        dispalyFields: dispalyFields,
-        muiData: muiDataObj,
+        dispalyFields: currenciesDisplayField,
+        muiData: currenciesMuiDataObj,
         totalAgents: { $size: '$agents_id' },
         totalSuppliers: { $size: '$suppliers_id' },
       },
@@ -1555,6 +1176,97 @@ export async function findAllCurrencies(
       $unwind: {
         path: '$name',
         preserveNullAndEmptyArrays: true,
+      },
+    },
+  ]);
+  const result = {
+    data: paginate(dataValue, perPage, pageNumber),
+    totalCount: dataValue.length,
+  };
+  await multiMap.put(
+    `all${modelName}` as unknown as MultiMapKey,
+    dataValue as unknown as MultiMapValue
+  );
+  return result;
+}
+
+export async function findAllAgencies(
+  modelName: string,
+  sortByField: string,
+  perPage: number,
+  pageNumber: number,
+  sortDirection: 1 | -1,
+  multiMap: MultiMap<MultiMapKey, MultiMapValue>
+) {
+  var collection = mongoose.model(modelName);
+  const dataValue = await collection.aggregate([
+    {
+      $sort: { [sortByField]: sortDirection },
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'accountManager_id',
+        foreignField: '_id',
+        as: 'accountManagerData',
+      },
+    },
+    {
+      $set: {
+        accountManager: '$accountManagerData.userName',
+      },
+    },
+    {
+      $unwind: {
+        path: '$accountManager',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: 'countries',
+        localField: 'country_id',
+        foreignField: '_id',
+        as: 'countryData',
+      },
+    },
+    {
+      $set: {
+        countryName: '$countryData.name',
+      },
+    },
+    {
+      $unwind: {
+        path: '$countryName',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: 'provinces',
+        localField: 'province_id',
+        foreignField: '_id',
+        as: 'provinceData',
+      },
+    },
+    {
+      $set: {
+        provinceName: '$provinceData.name',
+      },
+    },
+    {
+      $unwind: {
+        path: '$provinceName',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $unset: ['accountManagerData', 'countryData', 'provinceData', '__v'],
+    },
+    {
+      $addFields: {
+        dispalyFields: agenciesDisplayField,
+        muiData: agenciesMuiDataObj,
       },
     },
   ]);

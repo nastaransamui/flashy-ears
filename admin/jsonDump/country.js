@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 require('dotenv').config();
 
 const path = require('path');
+const fs = require('fs');
 
 const CountriesSchema = new mongoose.Schema(
   {
@@ -65,27 +66,35 @@ const CountriesSchema = new mongoose.Schema(
 var Countries =
   mongoose.models.Countries || mongoose.model('Countries', CountriesSchema);
 
-exports.checkCountry = async function (DATABASE_PASSWORD, exec) {
-  try {
-    let countries = await Countries.find();
-    let countriesLength = countries.length;
-    console.log(`countriesLength: ${countriesLength}`);
-    if (countriesLength == 0) {
-      const countriesDb = path.join(
-        process.cwd(),
-        'jsonDump',
-        'countries.json'
-      );
-      let exec = require('child_process').exec;
-      var addCountryCommand = `/usr/bin/mongoimport --uri mongodb+srv://dbUser:${DATABASE_PASSWORD}@admintypescript.0zjh9yz.mongodb.net/${
-        process.env.NODE_ENV == 'development' ? 'UAT' : 'LIVE'
-      } --collection countries --type json --file ${countriesDb}`;
-      exec(addCountryCommand, (err, stdout, stderr) => {
-        // check for errors or if it was succesfuly
-        console.log(`err: ${err}`);
-      });
-    }
-  } catch (error) {
-    console.log(error);
-  }
+const countriesDb = path.join(process.cwd(), 'jsonDump', 'countries.json');
+
+const checkCountries = {
+  retrieveAll: function (DATABASE_PASSWORD) {
+    return new Promise(async (resolve, reject) => {
+      let length = await mongoose.connection.db
+        .collection('countries')
+        .estimatedDocumentCount();
+      if (length !== 0) {
+        resolve(length);
+      } else {
+        var addCountryCommand = `mongoimport --uri mongodb+srv://dbUser:${DATABASE_PASSWORD}@admintypescript.0zjh9yz.mongodb.net/${
+          process.env.NODE_ENV == 'development' ? 'UAT' : 'LIVE'
+        } --collection countries --type json --file ${countriesDb}`;
+        var child = require('child_process').exec(addCountryCommand);
+        child.stderr.on('data', (data) => {
+          console.error(`stderr: ${data}`);
+        });
+        child.stdout.pipe(process.stdout);
+        child.on('exit', async () => {
+          resolve(
+            await mongoose.connection.db
+              .collection('countries')
+              .estimatedDocumentCount()
+          );
+        });
+      }
+    });
+  },
 };
+
+module.exports = checkCountries;

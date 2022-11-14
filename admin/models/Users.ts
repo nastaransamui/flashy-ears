@@ -55,7 +55,7 @@ const UsersSchema = new mongoose.Schema<IUser>(
     countryName: { type: String },
     position: { type: String },
     aboutMe: { type: String },
-    isAdmin: { type: Boolean, default: false },
+    isAdmin: { type: Boolean, default: false, index: true },
     isVercel: { type: Boolean },
     accessToken: { type: String, default: '' },
     twitter: [
@@ -76,3 +76,65 @@ const UsersSchema = new mongoose.Schema<IUser>(
 
 export default mongoose.models.Users ||
   mongoose.model<IUser>('Users', UsersSchema);
+
+export const dispalyFields = [
+  'userName',
+  'firstName',
+  'lastName',
+  'cityName',
+  'roleName',
+  'provinceName',
+  'countryName',
+  'position',
+  'aboutMe',
+  'createdAt',
+  'updatedAt',
+  'isAdmin',
+];
+
+const icon = {
+  ...Object.fromEntries(
+    dispalyFields.map((key) => {
+      return [
+        key,
+        {
+          icon:
+            key == 'userName'
+              ? 'EmailIcon'
+              : key == 'firstName' || key == 'lastName'
+              ? 'BadgeIcon'
+              : key == 'cityName' || key == 'provinceName'
+              ? 'LocationCityIcon'
+              : key == 'countryName'
+              ? 'FlagIcon'
+              : key == 'roleName'
+              ? 'DisplaySettingsIcon'
+              : key == 'position'
+              ? 'Public'
+              : key == 'createdAt' || key == 'updatedAt'
+              ? 'EventIcon'
+              : key == 'aboutMe'
+              ? 'InfoIcon'
+              : 'People',
+        },
+      ];
+    })
+  ),
+};
+export const muiDataObj = {
+  ...Object.fromEntries(
+    dispalyFields.map((key) => [
+      key,
+      {
+        type: key !== 'isAdmin' ? 'string' : 'boolean',
+        thumbnail: key !== 'userName' ? '' : 'profileImage',
+        filterable: true,
+        searchable:
+          key == 'isAdmin' || key == 'createdAt' || key == 'updatedAt'
+            ? false
+            : true,
+        ...icon[key],
+      },
+    ])
+  ),
+};
