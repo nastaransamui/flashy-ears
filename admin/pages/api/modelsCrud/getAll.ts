@@ -85,7 +85,7 @@ apiRoute.post(
   verifyToken,
   dbCheck,
   hazelCast,
-  async (req: HazelcastType, res: NextApiResponse<Data>) => {
+  async (req: HazelcastType, res: NextApiResponse<Data>, next: () => void) => {
     // addUsersFaker(2000);
     // addRolesFaker(2000);
     // addVideosFaker(2000);

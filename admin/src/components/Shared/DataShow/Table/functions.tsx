@@ -214,9 +214,9 @@ export const CustomToolbar = (props: CustomToolbarType) => {
       {
         deleteIds.length == 0 && statusIdsUpdate.length == 0 ?
           <Fragment>
-            <GridToolbarFilterButton />
-            <GridToolbarColumnsButton />
-            <GridToolbarDensitySelector />
+            <GridToolbarFilterButton nonce={undefined} onResize={undefined} onResizeCapture={undefined} />
+            <GridToolbarColumnsButton nonce={undefined} onResize={undefined} onResizeCapture={undefined} />
+            <GridToolbarDensitySelector nonce={undefined} onResize={undefined} onResizeCapture={undefined} />
           </Fragment>
           :
           <Fragment>

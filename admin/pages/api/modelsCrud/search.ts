@@ -12,6 +12,7 @@ import {
   searchAllCurrencies,
   searchAllProvince,
   searchFeatures,
+  searchModelsHZ,
   searchPhotos,
   searchRoles,
   searchUsers,
@@ -54,7 +55,22 @@ apiRoute.post(
       const { modelName, activeOnly, filterValue, fieldValue } = req.body;
       const hz = req.hazelCast;
       const searchRegex = new RegExp(escapeRegExp(filterValue), 'i');
+      // console.log(hz);
       if (hz) {
+        const multiMap = await hz.getMultiMap(modelName);
+        const dataIsExist = await multiMap.containsKey(`all${modelName}`);
+        if (dataIsExist) {
+          const values = await multiMap.get(`all${modelName}`);
+          var result: Results = await searchModelsHZ(
+            filterValue,
+            fieldValue,
+            values,
+            modelName,
+            activeOnly
+          );
+          res.status(200).json({ success: true, ...result });
+          await hz.shutdown();
+        }
       } else {
         switch (modelName) {
           case 'Users':

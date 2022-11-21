@@ -3,7 +3,7 @@ import { FC, Fragment, useState } from "react";
 import Box from '@mui/material/Box'
 import { useDispatch, useSelector } from 'react-redux';
 import { State } from '@/src/redux/store';
-import { DataGrid, GridColDef, GridActionsCellItem, GridRenderCellParams, GridRowParams, GridSelectionModel } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridActionsCellItem, GridRenderCellParams, GridRowParams, } from '@mui/x-data-grid';
 import { CustomNoRowsOverlay, CustomToolbar, LocateText } from './functions'
 import Typography from '@mui/material/Typography'
 import { useReadLocalStorage } from 'usehooks-ts'
@@ -262,6 +262,7 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
     getActions: (params: GridRowParams) => {
       return [
         <GridActionsCellItem
+          nonce={undefined} onResize={undefined} onResizeCapture={undefined}
           label={t('Edit')}
           className='textPrimary'
           onClick={() => {
@@ -283,6 +284,7 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
             </Tooltip>
           } />,
         <GridActionsCellItem
+          nonce={undefined} onResize={undefined} onResizeCapture={undefined}
           label={t('Delete')}
           className='textPrimary'
           icon={predefineDb ? isDisabled(params) ?

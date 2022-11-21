@@ -957,14 +957,17 @@ export async function findAllCountries(
       },
     },
   ]);
+  console.log(dataValue);
+  console.log(collection);
   const result = {
     data: paginate(
-      dataValue.filter((a) => activeOnly && a.isActive),
+      activeOnly ? dataValue.filter((a) => a.isActive) : dataValue,
       perPage,
       pageNumber
     ),
     totalCount: dataValue.length,
   };
+  console.log(result);
   await multiMap.put(
     `all${modelName}` as unknown as MultiMapKey,
     dataValue as unknown as MultiMapValue
@@ -983,6 +986,7 @@ export async function findAllProvinces(
   var collection = mongoose.model(modelName);
 
   const dataValue = await collection.aggregate([
+    { $match: { isActive: true } },
     {
       $sort: { isActive: -1, [sortByField]: sortDirection },
     },
