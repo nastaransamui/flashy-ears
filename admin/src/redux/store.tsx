@@ -28,6 +28,7 @@ export interface TotalDataType {
   dispalyFields: string[];
   isActive?: boolean;
   muiData: MuiDataType;
+  createdAt: Date;
 }
 export interface State {
   adminAccessToken: any;

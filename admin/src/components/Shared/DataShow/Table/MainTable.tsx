@@ -169,39 +169,43 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
                             </div>
                           )
                         case 'videoLink' as any:
-                          return (
-                            <div style={{ display: 'flex', width: '100%' }}>
-                              <Avatar sx={{ width: 30, height: 30 }}>
-                                <Player
-                                  autoPlay
-                                  aspectRatio='auto'
-                                  fluid={false}
-                                  preload='auto'
-                                  muted
-                                  src={params.row[media as unknown as keyof typeof params.row]}
-                                />
-                              </Avatar>
-                              <span style={{
-                                marginLeft: theme.direction == 'ltr' ? 5 : 0,
-                                marginRight: theme.direction == 'ltr' ? 0 : 5,
-                              }}>{params.formattedValue.toString()}</span>
-                            </div>
-                          )
+                          if (!params.row.isYoutube) {
+                            return (
+                              <div style={{ display: 'flex', width: '100%' }}>
+                                <Avatar sx={{ width: 30, height: 30, }}>
+                                  <Player
+                                    autoPlay
+                                    aspectRatio='auto'
+                                    fluid={false}
+                                    preload='auto'
+                                    muted
+                                    src={params.row[media as unknown as keyof typeof params.row]}
+                                  />
+                                </Avatar>
+                                <span style={{
+                                  marginLeft: theme.direction == 'ltr' ? 5 : 0,
+                                  marginRight: theme.direction == 'ltr' ? 0 : 5,
+                                }}>{params.formattedValue.toString()}</span>
+                              </div>
+                            )
+                          }
                         case 'youTubeId' as any:
-                          return (
-                            <div style={{ display: 'flex', width: '100%' }}>
-                              <Avatar sx={{ width: 30, height: 30 }}>
-                                <YouTube
-                                  videoId={params.row[media as unknown as keyof typeof params.row]}
-                                  opts={{ playerVars: { autoplay: 1 } }}
-                                />
-                              </Avatar>
-                              <span style={{
-                                marginLeft: theme.direction == 'ltr' ? 5 : 0,
-                                marginRight: theme.direction == 'ltr' ? 0 : 5,
-                              }}>{params.formattedValue.toString()}</span>
-                            </div>
-                          )
+                          if (params.row.isYoutube) {
+                            return (
+                              <div style={{ display: 'flex', width: '100%' }}>
+                                <Avatar sx={{ width: 30, height: 30 }}>
+                                  <YouTube
+                                    videoId={params.row.youTubeId}
+                                    opts={{ playerVars: { autoplay: 1 } }}
+                                  />
+                                </Avatar>
+                                <span style={{
+                                  marginLeft: theme.direction == 'ltr' ? 5 : 0,
+                                  marginRight: theme.direction == 'ltr' ? 0 : 5,
+                                }}>{params.formattedValue.toString()}</span>
+                              </div>
+                            )
+                          }
                         case '' as any:
                           //@ts-ignore
                           return <div style={{ display: 'flex', width: '100%', justifyContent: align }}>{params.formattedValue.toString()}</div>
