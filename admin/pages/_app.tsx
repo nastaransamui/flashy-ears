@@ -25,6 +25,7 @@ import '@/styles/ReactToastify.css';
 import '@/styles/animate-slider-horizontal.css'
 import 'animate.css';
 import '../styles/nextjs-material-dashboard-pro.css';
+import 'video-react/dist/video-react.css'
 
 // Translation
 import i18next from 'i18next';

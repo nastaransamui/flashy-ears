@@ -1,5 +1,5 @@
 import Grid, { GridSize } from '@mui/material/Grid'
-import { FC, useEffect, useState, createRef, Fragment } from 'react'
+import { FC, useEffect, useState, createRef, Fragment, } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { State, MuiDataType } from '@/src/redux/store';
 import useCurrentRouteState from '@/hookes/useCurrentRouteState'
@@ -34,7 +34,6 @@ import Avatar from '@mui/material/Avatar';
 import Edit from '@mui/icons-material/Edit'
 import Delete from '@mui/icons-material/Delete'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Player } from 'video-react';
 import YouTube from 'react-youtube';
 import ListSubheader from '@mui/material/ListSubheader';
@@ -42,11 +41,6 @@ import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import DraftsIcon from '@mui/icons-material/Drafts';
-import SendIcon from '@mui/icons-material/Send';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import StarBorder from '@mui/icons-material/StarBorder';
 import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 export interface MainCardTypes {
@@ -107,6 +101,8 @@ const MainCard: FC = (() => {
   const { totalData, deleteIds, profile, statusIdsUpdate, totalCount } = useSelector<State, State>(state => state)
   const gridView: GridSize = useReadLocalStorage(`${modelName}_gridView`)!
   const perPage: number = useReadLocalStorage(`${modelName}_perPage`)!
+  const cardView: boolean = useReadLocalStorage(`${modelName}_cardView`)!
+
   const iconMap = useIconMap()
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -123,7 +119,6 @@ const MainCard: FC = (() => {
     }
   };
   const theme = useTheme()
-
   const [elRefs, setElRefs] = useState([]);
   useEffect(() => {
     // add  refs
@@ -132,8 +127,7 @@ const MainCard: FC = (() => {
         .fill(0)
         .map((_, i) => elRefs[i] || createRef())
     );
-  }, [perPage]);
-
+  }, [perPage, gridView, totalData, cardView]);
 
   const setCardStyle = (index: number, expanded: { [key: string]: boolean }) => {
     return {
@@ -207,8 +201,7 @@ const MainCard: FC = (() => {
       borderRadius: `12px 12px 12px 12px`,
       pb: expanded[index] ? 2 : 0,
       position: 'absolute',
-      //@ts-ignore
-      width: elRefs[index]?.current?.offsetWidth,
+      width: elRefs[index]?.['current']?.[`offsetWidth`],
       zIndex: expanded[index] ? 4 : 1,
     };
   };
@@ -309,6 +302,7 @@ const MainCard: FC = (() => {
         </StyledBox>
         {totalData.map((a: MainCardTypes, index) => {
           var options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: "2-digit", minute: "2-digit" } as const;
+
           return (
             <Grid
               item
@@ -324,25 +318,23 @@ const MainCard: FC = (() => {
                     avatar={
                       Object.entries(a.muiData).map(([key, value], i) => {
                         let media = value?.['thumbnail' as keyof typeof value]
-                        const DynamicIcon = iconMap[value?.icon as unknown as keyof typeof iconMap];
                         switch (media) {
                           case 'icon' as any:
                             return (
                               <Avatar sx={{ bgcolor: theme.palette.primary.main }} key={i} >
-                                <DynamicIcon color='secondary' />
+                                <SvgIcon color='secondary' >
+                                  <path d={a.icon} />
+                                </SvgIcon>
                               </Avatar>
                             )
                           case 'videoLink' as any:
                             if (!a.isYoutube) {
                               return (
-                                <Avatar key={i} >
-                                  <Player
-                                    autoPlay
-                                    aspectRatio='auto'
-                                    fluid={false}
-                                    preload='auto'
-                                    muted
-                                    src={a?.['videoLink' as string as keyof typeof a['videoLink']]}
+                                <Avatar key={i} style={{ border: 0, objectFit: 'cover' }} >
+                                  <img
+                                    style={{ border: 0, objectFit: 'cover', width: 40, height: 40, borderRadius: '50%' }}
+                                    alt=''
+                                    src={a?.[`videoPoster`] || a?.[`imageShow`]}
                                   />
                                 </Avatar>
                               )
@@ -352,10 +344,11 @@ const MainCard: FC = (() => {
                           case 'youTubeId' as any:
                             if (a.isYoutube) {
                               return (
-                                <Avatar key={i} >
-                                  <YouTube
-                                    videoId={a?.['youTubeId' as string as keyof typeof a['youTubeId']]}
-                                    opts={{ playerVars: { autoplay: 1 } }}
+                                <Avatar key={i} style={{ border: 0, objectFit: 'cover' }} >
+                                  <img
+                                    style={{ border: 0, objectFit: 'cover', width: 40, height: 40, borderRadius: '50%' }}
+                                    alt=''
+                                    src={a?.[`videoPoster`] || a?.[`imageShow`]}
                                   />
                                 </Avatar>
                               )
@@ -365,11 +358,15 @@ const MainCard: FC = (() => {
                           case 'profileImage' as any:
                           case 'logoImage' as any:
                           case 'imageShow' as any:
+                            const replaceImage =
+                              media == 'profileImage' ? '/admin/images/faces/avatar1.jpg' :
+                                media == 'logoImage' ? '/admin/images/faces/avatar1.jpg' : a?.[media]
                             return (
-                              <Avatar key={i} >
+                              <Avatar key={i} style={{ border: 0, objectFit: 'cover' }} >
                                 <img
+                                  style={{ border: 0, objectFit: 'cover', width: 40, height: 40, borderRadius: '50%' }}
                                   alt=''
-                                  src={a?.[media]}
+                                  src={a?.[media] || replaceImage}
                                 />
                               </Avatar>
                             )
@@ -377,6 +374,7 @@ const MainCard: FC = (() => {
                             return (
                               <Avatar key={i} >
                                 <img
+                                  style={{ border: 0, width: 70, height: 70, borderRadius: '50%' }}
                                   alt=''
                                   src={`/admin/flags/128x128/${a?.['iso2' as string as keyof typeof a['iso2']]}.png`}
                                 />
@@ -430,12 +428,185 @@ const MainCard: FC = (() => {
                               }} /></Tooltip>} />
                     }
                     title={<Tooltip title={a[a.dispalyFields[0]]} arrow>
-                      <span>{a[a.dispalyFields[0]].length <= 21 ? a[a.dispalyFields[0]] : a[a.dispalyFields[0]].slice(0, 21) + '...'}</span>
+                      {(() => {
+                        switch (gridView) {
+                          case 12:
+                            return <span>{a[a.dispalyFields[0]]}</span>
+                          case 6:
+                            return <span>{a[a.dispalyFields[0]]}</span>
+                          case 4:
+                            return <span>{a[a.dispalyFields[0]]}</span>
+                          case 3:
+                            return <span>{a[a.dispalyFields[0]].slice(0, 10) + '...'}</span>
+                          default:
+                            return <span>{a[a.dispalyFields[0]].slice(0, 5) + '...'}</span>
+                        }
+                      })()}
+
                     </Tooltip>}
-                    subheader={new Date(a.createdAt).toLocaleDateString("en-GB", options)}
+                    subheader={
+                      <Tooltip title={new Date(a.createdAt).toLocaleDateString("en-GB", options)} arrow>
+                        {(() => {
+                          switch (gridView) {
+                            case 12:
+                              return <span>{new Date(a.createdAt).toLocaleDateString("en-GB", options)}</span>
+                            case 6:
+                              return <span>{new Date(a.createdAt).toLocaleDateString("en-GB", options)}</span>
+                            case 4:
+                              return <span>{new Date(a.createdAt).toLocaleDateString("en-GB", options)}</span>
+                            case 3:
+                              return <span>{new Date(a.createdAt).toLocaleDateString("en-GB", options).slice(0, 20) + '...'}</span>
+                            default:
+                              return <span>{new Date(a.createdAt).toLocaleDateString("en-GB", options).slice(0, 5) + '...'}</span>
+                          }
+                        })()}
+                      </Tooltip>
+                    }
                   />
                   <CardContent >
-
+                    {Object.entries(a.muiData).map(([key, value], i) => {
+                      let media = value?.['thumbnail' as keyof typeof value]
+                      switch (media) {
+                        case 'icon' as any:
+                          return (
+                            <CardMedia key={i} sx={{
+                              border: `solid 1px ${theme.palette.secondary.main}`,
+                              maxWidth: '130px',
+                              maxHeight: '130px',
+                              minWidth: '130px',
+                              minHeight: '130px',
+                              margin: '-10px auto 0',
+                              borderRadius: '50%',
+                              overflow: 'hidden',
+                              padding: '0',
+                              display: 'flex',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                            }}>
+                              <Avatar sx={{
+                                maxWidth: '130px',
+                                maxHeight: '130px',
+                                minWidth: '130px',
+                                minHeight: '130px',
+                              }}>
+                                <SvgIcon color='secondary' sx={{
+                                  maxWidth: '60px',
+                                  maxHeight: '60px',
+                                  minWidth: '60px',
+                                  minHeight: '60px',
+                                }}>
+                                  <path d={a.icon} />
+                                </SvgIcon>
+                              </Avatar>
+                            </CardMedia>
+                          )
+                        case 'videoLink' as any:
+                          return (
+                            <CardMedia key={i}
+                              sx={{
+                                minHeight: '100%'
+                              }}
+                            >
+                              {a.isYoutube ?
+                                <YouTube
+                                  videoId={a?.['youTubeId' as string as keyof typeof a['youTubeId']]}
+                                  style={{
+                                    borderRadius: 15,
+                                    zIndex: 1,
+                                    // display: 'flex',
+                                    height:
+                                      gridView == 2 ? 130
+                                        : gridView == 3 ? 200
+                                          : gridView == 4 ? 300
+                                            : gridView == 6 ? 400 : 700,
+                                    overflow: 'hidden',
+                                  }}
+                                  opts={{
+                                    width: gridView == 2 ? elRefs[index]?.['current']?.[`offsetWidth`] - 30 : '100%',
+                                    height:
+                                      gridView == 2 ? 130
+                                        : gridView == 3 ? 200
+                                          : gridView == 4 ? 300
+                                            : gridView == 6 ? 400 : 700,
+                                    playerVars: {
+                                      autoplay: 1,
+                                      cc_load_policy: 0,
+                                      hl: i18n.language,
+                                      controls: 0,
+                                      loop: true,
+                                      modestbranding: 1,
+                                      rel: 0,
+                                      showinfo: 0,
+                                      mute: 1,
+                                      origin: process.env.NEXT_PUBLIC_ADMIN_URL,
+                                      fs: 0,
+                                    }
+                                  }}
+                                /> : <Player
+                                  aspectRatio='auto'
+                                  autoPlay
+                                  width={elRefs[index]?.['current']?.[`offsetWidth`] == undefined ? '100%' : elRefs[index]?.['current']?.[`offsetWidth`] - 30}
+                                  height={
+                                    gridView == 2 ? 130
+                                      : gridView == 3 ? 200
+                                        : gridView == 4 ? 300
+                                          : gridView == 6 ? 400 : 700
+                                  }
+                                  fluid={false}
+                                  preload='auto'
+                                  muted
+                                  src={a?.['videoLink' as string as keyof typeof a['videoLink']]}
+                                />}
+                            </CardMedia>
+                          )
+                        case 'profileImage' as any:
+                        case 'logoImage' as any:
+                        case 'imageShow' as any:
+                          const replaceImage =
+                            media == 'profileImage' ? '/admin/images/faces/avatar1.jpg' :
+                              media == 'logoImage' ? '/admin/images/faces/avatar1.jpg' : a?.[media]
+                          return (
+                            <CardMedia
+                              key={i}
+                              component="img"
+                              height="194"
+                              sx={{
+                                maxWidth: '130px',
+                                maxHeight: '130px',
+                                minWidth: '130px',
+                                minHeight: '130px',
+                                margin: '-10px auto 0',
+                                borderRadius: '50%',
+                                overflow: 'hidden',
+                              }}
+                              image={a?.[media] || replaceImage}
+                              alt=""
+                            />
+                          )
+                        case 'iso2' as any:
+                          return (
+                            <CardMedia
+                              key={i}
+                              component="img"
+                              height="194"
+                              sx={{
+                                maxWidth: '200px',
+                                maxHeight: gridView == 2 ? '90px' : '130px',
+                                minWidth: gridView == 2 ? elRefs[index]?.['current']?.[`offsetWidth`] - 30 : '200px',
+                                minHeight: gridView == 2 ? '90px' : '130px',
+                                margin: '-10px auto 15px',
+                                borderRadius: 5,
+                                objectFit: "revert",
+                                overflow: 'hidden',
+                              }}
+                              image={`/admin/flags/256x256/${a?.['iso2' as string as keyof typeof a['iso2']].toLowerCase()}.png`}
+                              alt=""
+                            />
+                          )
+                      }
+                    })}
+                    {/*  */}
+                    {/*  */}
                     <CardActions disableSpacing sx={{ padding: 0 }}>
                       <IconButton aria-label="add to favorites" onClick={() => {
                         dispatch({
@@ -494,7 +665,7 @@ const MainCard: FC = (() => {
 
                       <Box sx={setBoxStyle(index, expanded)}>
                         <List
-                          sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+                          sx={{ width: '100%', bgcolor: 'background.paper' }}
                           component="nav"
                           aria-labelledby="nested-list-subheader"
                           disablePadding
