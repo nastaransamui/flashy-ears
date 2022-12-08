@@ -33,19 +33,40 @@ const PerRowIcon: FC<PerRowIconType> = (props: PerRowIconType) => {
   const cardView: boolean = useReadLocalStorage(`${modelName}_cardView`)!
   const { setGridView } = useContext(DataShowCtx);
 
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'), { noSsr: true })
-  const isTablet = useMediaQuery(theme.breakpoints.only('md'), { noSsr: true })
+  const xs = useMediaQuery(theme.breakpoints.only('xs'));
+  const sm = useMediaQuery(theme.breakpoints.only('sm'));
+  const md = useMediaQuery(theme.breakpoints.only('md'));
+  const lg = useMediaQuery(theme.breakpoints.only('lg'));
+  const xl = useMediaQuery(theme.breakpoints.only('xl'));
+  const [disabled, setDisabled] = useState({
+    2: false,
+    3: false,
+    4: false,
+    6: false,
+    12: false
+  })
 
   useEffect(() => {
-    isMobile ? setGridView(() => 12) : setGridView(() => 4)
-    return () => { }
-  }, [isMobile])
-
-  useEffect(() => {
-    isTablet ? setGridView(() => 6) : setGridView(() => 4)
-
-    return () => { }
-  }, [isTablet])
+    if (xs) {
+      setGridView(() => 12)
+      setDisabled((prev) => ({ ...prev, 2: true, 3: true, 4: true, 6: true }))
+    }
+    if (sm) {
+      setGridView(() => 6)
+      setDisabled((prev) => ({ ...prev, 2: true, 3: true, 4: true, 6: false, 12: false }))
+    }
+    if (md) {
+      setGridView(() => 6)
+      setDisabled((prev) => ({ ...prev, 2: true, 3: true, 4: true, 6: false, 12: false }))
+    }
+    if (lg) {
+      setGridView(() => 4)
+      setDisabled((prev) => ({ ...prev, 2: true, 3: false, 4: false, 6: false, 12: false }))
+    }
+    if (xl) {
+      setDisabled((prev) => ({ ...prev, 2: false, 3: false, 4: false, 6: false, 12: false }))
+    }
+  }, [xs, sm, md, lg, xl,])
 
 
   const gridNumberFunc = (list: 2 | 3 | 4 | 6 | 12) => {
@@ -75,7 +96,6 @@ const PerRowIcon: FC<PerRowIconType> = (props: PerRowIconType) => {
             </Tooltip>
             <CustomPopover id={id} setAnchor={setAnchorEl} open={open} anchor={anchorEl} >
               <List
-                // className={classes.IconsList}
                 sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
                 dense
                 disablePadding
@@ -86,8 +106,11 @@ const PerRowIcon: FC<PerRowIconType> = (props: PerRowIconType) => {
                     <Fragment key={index}>
                       <ListItem
                         disablePadding
+                        disabled={disabled[list as keyof typeof disabled]}
                         onClick={() => {
-                          gridNumberFunc(list as 2 | 3 | 4 | 6 | 12)
+                          if (!disabled[list as keyof typeof disabled]) {
+                            gridNumberFunc(list as 2 | 3 | 4 | 6 | 12)
+                          }
                           setAnchorEl(null);
                         }}>
                         <ListItemButton>

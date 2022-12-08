@@ -159,7 +159,7 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
                         case 'icon' as any:
                           return (
                             <div style={{ display: 'flex', width: '100%' }}>
-                              <SvgIcon >
+                              <SvgIcon color='secondary'>
                                 <path d={`${params.row[media as unknown as keyof typeof params.row]}`} />
                               </SvgIcon>
                               <span style={{
@@ -266,7 +266,9 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
     getActions: (params: GridRowParams) => {
       return [
         <GridActionsCellItem
-          nonce={undefined} onResize={undefined} onResizeCapture={undefined}
+          nonce={undefined}
+          onResize={undefined}
+          onResizeCapture={undefined}
           label={t('Edit')}
           className='textPrimary'
           onClick={() => {
@@ -326,7 +328,6 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
   ]
 
   const isDisabled = (params: GridRowParams) => {
-    console.log()
     switch (modelName) {
       case 'Users':
         return profile._id == params.id;
@@ -341,7 +342,6 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
   const deleteIconClicked = () => {
     console.log(deleteIds)
   }
-
   return (
     <Fragment>
       <Box
@@ -377,7 +377,6 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
           }}
           rowCount={totalCount}
           experimentalFeatures={{ newEditingApi: true }}
-          // rowHeight={130}
           components={{
             Toolbar: CustomToolbar,
             NoRowsOverlay: CustomNoRowsOverlay,

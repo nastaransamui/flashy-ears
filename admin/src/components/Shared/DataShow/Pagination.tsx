@@ -57,7 +57,6 @@ const Pagination: FC<PaginationType> = ((props: PaginationType) => {
           boundaryCount={2}
           color='primary'
           onChange={(e, value) => {
-            // cardView && setExpanded({});
             // requestSearch('');
             dispatch({
               type: 'FIRST_SEARCH',

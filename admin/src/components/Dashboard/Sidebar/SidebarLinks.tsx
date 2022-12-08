@@ -40,6 +40,7 @@ const SidebarLinks: FC<SideBarLinksTypes> = (props: SideBarLinksTypes) => {
       dispatch({ type: 'TOTAL_COUNT', payload: 0 });
       dispatch({ type: 'FIRST_SEARCH', payload: false })
       dispatch({ type: 'FIELD_VALUE', payload: '' })
+      dispatch({ type: 'EXPANDED', payload: {} })
     }
     return () => { }
   }, [location])
@@ -230,6 +231,7 @@ const SidebarLinks: FC<SideBarLinksTypes> = (props: SideBarLinksTypes) => {
                   isMobile && handleDrawerToggle();
                   dispatch({ type: 'DELETE_IDS', payload: [] });
                   dispatch({ type: 'STATUS_IDS_UPDATE', payload: [] });
+                  dispatch({ type: 'EXPANDED', payload: {} })
                 }}>
                 <span
                   className={cx(

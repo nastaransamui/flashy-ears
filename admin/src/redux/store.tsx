@@ -30,6 +30,21 @@ export interface TotalDataType {
   muiData: MuiDataType;
   createdAt: Date;
 }
+
+export interface MainCardTypes {
+  videoLink?: string;
+  isYoutube?: boolean;
+  youTubeId?: string;
+  _id: string;
+  dispalyFields: string[];
+  isActive?: boolean;
+  muiData: MuiDataType;
+  imageShow?: string;
+  iso2?: string;
+  profileImage?: string;
+  createdAt: Date;
+  [key: string]: any
+}
 export interface State {
   adminAccessToken: any;
   adminThemeName: string | null;
@@ -46,6 +61,7 @@ export interface State {
   statusIdsUpdate: string[];
   firstSearch: boolean;
   fieldValue: string;
+  expanded: { [key: string]: boolean }
 }
 
 const initialState = {
@@ -64,7 +80,8 @@ const initialState = {
   statusIdsUpdate: [],
   firstSearch: false,
   //Search header field value select 
-  fieldValue: ''
+  fieldValue: '',
+  expanded: {}
 }
 
 
@@ -108,6 +125,8 @@ const reducer = (state: State = initialState, action: AnyAction) => {
       return { ...state, firstSearch: action.payload };
     case 'FIELD_VALUE':
       return { ...state, fieldValue: action.payload };
+    case 'EXPANDED':
+      return { ...state, expanded: action.payload };
     default:
       return state;
   }

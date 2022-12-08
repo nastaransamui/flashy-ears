@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { State } from "@/src/redux/store";
+import FirstRow from "./FirstRow";
 
 
 export function useQuery() {
@@ -24,9 +25,7 @@ const MainDashboard: FC<CustomPropsTypes> = (props: CustomPropsTypes) => {
         [classes.sidebarHandlemainOpen]: propsMiniActive,
         [classes.sidebarHandlemainClose]: !propsMiniActive,
       })}>
-        MainDashboar page come here
-        <Button onClick={() => { navigate("/users-page") }}>to users-page</Button>
-        <Button onClick={() => { navigate("/rbacs-data") }}>/rbacs-data</Button>
+        <FirstRow />
       </div>
     </Fragment>
   )
