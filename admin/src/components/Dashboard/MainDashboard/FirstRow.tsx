@@ -245,7 +245,6 @@ const FirstRow: FC = (() => {
           {
             firstRow?.success ? Object.entries(firstRow?.data[0] as { key: string; value: { color: string, firstNumber: string, secondNumber: string; footer_icon: string; deactive: string; } }).map(([key, value], i) => {
               const color = value['color' as keyof typeof value];
-              console.log(classes[`${color}` as keyof typeof classes])
               return (
                 <Fragment key={i}>
                   <Grid item xs={12} sm={6} md={6} lg={12 / Object.keys(firstRow?.data[0]).length} >

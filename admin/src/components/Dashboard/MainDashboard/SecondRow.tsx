@@ -208,7 +208,6 @@ const SecondRow: FC = (() => {
                   <TableBody>
                     {
                       dataTable(mapData).map((_data: any, index: number) => {
-                        console.log(_data)
                         return (
                           <TableRow key={index} className={classes.tableRowBody} >
                             {
