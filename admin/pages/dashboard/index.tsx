@@ -8,6 +8,8 @@ import HeadComponent from '@/src/components/head';
 import { isObjectEmpty, setPageCookies } from '@/helpers/functions';
 import dynamic from 'next/dynamic';
 
+import { getFirstRow } from 'apiCalls/getFirstRow';
+
 import useRoutesUpdate from '@/src/components/Hooks/useRoutesUpdate';
 const DynamicDashboard = dynamic(() => import('@/src/pages/dashboard/Dashboard'), {
   ssr: false,
@@ -30,11 +32,16 @@ const Doshboard: NextPage = (props) => {
 
 export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(
   (store) => async (ctx) => {
+    const firstRow = await getFirstRow();
     let props = {}
 
     if (!isObjectEmpty(getCookies(ctx))) {
       props = {
-        ...(await setPageCookies(ctx as any, store as any))
+        ...(await setPageCookies(ctx as any, store as any)),
+        ...(store.dispatch({
+          type: 'FIRST_ROW',
+          payload: firstRow,
+        })),
       }
     }
 

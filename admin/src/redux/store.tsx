@@ -62,6 +62,7 @@ export interface State {
   firstSearch: boolean;
   fieldValue: string;
   expanded: { [key: string]: boolean }
+  firstRow: { [key: string]: any }
 }
 
 const initialState = {
@@ -81,7 +82,8 @@ const initialState = {
   firstSearch: false,
   //Search header field value select 
   fieldValue: '',
-  expanded: {}
+  expanded: {},
+  firstRow: {}
 }
 
 
@@ -127,6 +129,8 @@ const reducer = (state: State = initialState, action: AnyAction) => {
       return { ...state, fieldValue: action.payload };
     case 'EXPANDED':
       return { ...state, expanded: action.payload };
+    case 'FIRST_ROW':
+      return { ...state, firstRow: action.payload };
     default:
       return state;
   }
