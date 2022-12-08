@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { State } from "@/src/redux/store";
 import FirstRow from "./FirstRow";
+import SecondRow from "./SecondRow";
 
 
 export function useQuery() {
@@ -26,6 +27,7 @@ const MainDashboard: FC<CustomPropsTypes> = (props: CustomPropsTypes) => {
         [classes.sidebarHandlemainClose]: !propsMiniActive,
       })}>
         <FirstRow />
+        <SecondRow />
       </div>
     </Fragment>
   )

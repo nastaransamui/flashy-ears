@@ -3,9 +3,9 @@ import { makeStyles } from "tss-react/mui";
 const prodashboardStyle = makeStyles<{}>()((theme) => {
   return {
     main: {
-      display: 'flex',
+      // display: 'flex',
       width: '100%',
-      // marginTop: 100,
+      // marginTop: 1,
       minHeight: '94vh',
       background: theme.palette.background.default,
       borderBottom: `1px solid ${theme.palette.primary.main}`,

@@ -4,7 +4,7 @@ import createEmotionServer from '@emotion/server/create-instance';
 import createEmotionCache from '@/src/createEmotionCache';
 import appTheme from '@/theme/appTheme';
 import { getCookies, hasCookie } from 'cookies-next';
-
+import Script from 'next/script';
 interface Props {
   adminThemeName?: any;
   adminThemeType?: any;
@@ -36,6 +36,12 @@ class MyDocument extends Document<Props> {
           <link
             rel='stylesheet'
             href='https://fonts.googleapis.com/icon?family=Material+Icons'
+          />
+          <link
+            rel='stylesheet'
+            href='https://cdnjs.cloudflare.com/ajax/libs/jvectormap/2.0.5/jquery-jvectormap.css'
+            type='text/css'
+            media='screen'
           />
           {/* <link
             rel="stylesheet"

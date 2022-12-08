@@ -23,9 +23,11 @@ import '@/styles/globals.css'
 import '@/styles/top-loading-bar.css';
 import '@/styles/ReactToastify.css';
 import '@/styles/animate-slider-horizontal.css'
+
 import 'animate.css';
 import '../styles/nextjs-material-dashboard-pro.css';
 import 'video-react/dist/video-react.css'
+import '@react-jvectormap/lib/jquery-jvectormap.css'
 
 // Translation
 import i18next from 'i18next';
@@ -35,6 +37,7 @@ import { defaultNS, resources } from '@/lib/i18n';
 import detector from 'i18next-browser-languagedetector';
 
 import { hasCookie, getCookies } from 'cookies-next';
+import Script from 'next/script';
 
 var toBoolean = require('to-boolean');
 
@@ -63,7 +66,12 @@ function MyApp({ Component, ...rest }: NextProps) {
 
 
   const getLayout = Component.getLayout ?? ((page: ReactNode) => page)
-
+  useEffect(() => {
+    // Load Jquery
+    typeof document !== 'undefined'
+      ? (window.jQuery = window.$ = require('jquery'))
+      : null;
+  }, []);
 
 
   useEffect(() => {
@@ -101,6 +109,9 @@ function MyApp({ Component, ...rest }: NextProps) {
       <Head>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
+      {/* <Script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js' />
+      <Script src='https://cdnjs.cloudflare.com/ajax/libs/jvectormap/2.0.5/jquery-jvectormap.min.js' />
+      <Script src='/admin/js/jquery-jvectormap-world-mill-en.js' /> */}
       <Provider store={store}>
         <I18nextProvider i18n={i18next}>
           <CssBaseline />
