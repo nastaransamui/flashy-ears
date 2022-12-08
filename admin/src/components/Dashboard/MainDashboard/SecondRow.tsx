@@ -189,7 +189,6 @@ const SecondRow: FC = (() => {
 
     return result;
   };
-
   return (
     <Grid container spacing={1}>
       <Grid item xs={12}>
