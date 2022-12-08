@@ -13,7 +13,7 @@ import dynamic from 'next/dynamic'
 import jwt from 'jsonwebtoken';
 import { unHashProfile } from '@/helpers/unhasshing';
 import { isObjectEmpty, setPageCookies } from '@/helpers/functions';
-
+import { getFirstRow } from 'apiCalls/getFirstRow';
 const DynamicLogin = dynamic(() => import('@/src/pages/login/LoginPage'), {
   ssr: false,
 })
@@ -32,10 +32,15 @@ const Admin: NextPage = (props) => {
 
 export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(
   (store) => async (ctx) => {
+    const firstRow = await getFirstRow();
     let props = {}
     if (!isObjectEmpty(getCookies(ctx))) {
       props = {
-        ...(await setPageCookies(ctx as any, store as any))
+        ...(await setPageCookies(ctx as any, store as any)),
+        ...(store.dispatch({
+          type: 'FIRST_ROW',
+          payload: firstRow,
+        })),
       }
     }
     if (hasCookie('adminAccessToken', ctx)) {
