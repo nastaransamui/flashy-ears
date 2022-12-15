@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import type { NextPage } from 'next';
 import { wrapper, } from '@/src/redux/store';
 import { GetServerSideProps } from 'next'
-import { hasCookie } from 'cookies-next';
+import { hasCookie, getCookies } from 'cookies-next';
 import { useTranslation, withTranslation } from 'react-i18next';
 import HeadComponent from '@/src/components/head';
 import { setPageCookies } from '@/helpers/functions';
@@ -29,7 +29,7 @@ const Doshboard: NextPage = (props) => {
 
 export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(
   (store) => async (ctx) => {
-    const firstRow = await getFirstRow();
+    const firstRow = await getFirstRow(getCookies(ctx).adminAccessToken!);
     let props = {}
     props = {
       ...(await setPageCookies(ctx as any, store as any)),

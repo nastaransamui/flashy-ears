@@ -32,10 +32,9 @@ const Doshboard: NextPage = (props) => {
 
 export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(
   (store) => async (ctx) => {
-    const firstRow = await getFirstRow();
     let props = {}
-
     if (!isObjectEmpty(getCookies(ctx))) {
+      const firstRow = await getFirstRow(getCookies(ctx).adminAccessToken!);
       props = {
         ...(await setPageCookies(ctx as any, store as any)),
         ...(store.dispatch({

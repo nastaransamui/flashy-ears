@@ -30,7 +30,9 @@ const IconsHeader: FC<IconsHeaderTypes> = ((props: IconsHeaderTypes) => {
 
   return (
     <Fragment>
-      <IconButton disabled={!currentRouteState.create} onClick={() => navigate('/rbac-data/role')}>
+      <IconButton disabled={!currentRouteState.create} onClick={() => {
+        navigate(`/${currentRouteState.path}/${currentRouteState?.modelName?.slice(0, -1)}`)
+      }}>
         <AddIcon fontSize='small' sx={{ fill: theme.palette.mode == 'dark' ? 'white' : 'black' }} />
       </IconButton>
       <IconButton>

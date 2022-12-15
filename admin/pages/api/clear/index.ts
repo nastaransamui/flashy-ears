@@ -39,6 +39,8 @@ apiRoute.get(
       await multiMapProvinces.destroy();
       const multiMapCities = await hz.getMultiMap('Cities');
       await multiMapCities.destroy();
+      const multiMapCurrencies = await hz.getMultiMap('Currencies');
+      await multiMapCurrencies.destroy();
       const multiMapAgencies = await hz.getMultiMap('Agencies');
       await multiMapAgencies.destroy();
       console.log('clear catch');

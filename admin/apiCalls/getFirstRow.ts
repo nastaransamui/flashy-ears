@@ -2,21 +2,21 @@ import axios from 'axios';
 
 const url = `${process.env.NEXT_PUBLIC_ADMIN_URL}/api/dashboard/firstRow`;
 
-export const getFirstRow = async () => {
+export const getFirstRow = async (adminAccessToken: string) => {
   let firstRow;
   try {
     firstRow = await axios
-      .post(url, {
+      .get(url, {
         headers: {
           'Content-Type': 'application/json',
+          token: `Brearer ${adminAccessToken}`,
         },
       })
       .then((res) => {
         return res?.data;
       })
       .catch((error) => {
-        console.log(error);
-        return [];
+        return [error.response.data.Error || error.message];
       });
     return firstRow;
   } catch (error) {

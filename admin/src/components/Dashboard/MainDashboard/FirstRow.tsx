@@ -1,4 +1,4 @@
-import { FC, Fragment } from 'react';
+import { FC, Fragment, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { makeStyles } from 'tss-react/mui';
@@ -9,42 +9,13 @@ import { useTheme } from '@mui/material';
 import SvgIcon from '@mui/material/SvgIcon';
 
 import Loading from '@/shared/Loading';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { State } from '@/src/redux/store';
 import { useTranslation } from 'react-i18next';
+import { getFirstRow } from 'apiCalls/getFirstRow';
 
 var _ = require('lodash');
 
-type FacetDataType = {
-  totalUsers: {
-    _id: string;
-    totalUsers: number;
-    activeUsers: number;
-    deactiveUsers: number;
-    header_icon: string;
-  };
-  totalAgents: {
-    _id: string;
-    totalUsers: number;
-    activeUsers: number;
-    deactiveUsers: number;
-    header_icon: string;
-  };
-  totalCurrency: {
-    _id: string;
-    totalUsers: number;
-    activeUsers: number;
-    deactiveUsers: number;
-    header_icon: string;
-  };
-  totalCountries: {
-    _id: string;
-    totalUsers: number;
-    activeUsers: number;
-    deactiveUsers: number;
-    header_icon: string;
-  };
-};
 
 const cardStyles = makeStyles<{}>()((theme) => {
   return {
@@ -232,8 +203,26 @@ export const tableValuesLocaleConvert = (value: string, rtlActive: boolean) => {
 
 const FirstRow: FC = (() => {
   const { classes, theme } = cardStyles({});
-  const { firstRow } = useSelector<State, State>((state) => state);
-  const { i18n } = useTranslation()
+  const { firstRow, adminAccessToken } = useSelector<State, State>((state) => state);
+  const { t, i18n } = useTranslation('common')
+  const dispatch = useDispatch()
+
+  const something = async () => {
+    const firstRow = await getFirstRow(adminAccessToken)
+    const { success, data } = firstRow;
+    if (success) {
+      dispatch({
+        type: 'FIRST_ROW',
+        payload: firstRow
+      })
+    }
+  }
+
+  useEffect(() => {
+    if (firstRow.length == 0) {
+      something()
+    }
+  }, [firstRow])
 
   return (
     <Grid container spacing={1}>
@@ -283,7 +272,15 @@ const FirstRow: FC = (() => {
                 </Fragment>
               )
             })
-              : <div>somehgin wrong</div>
+              : <Grid item xs={12} sm={6} md={6} lg={12}>
+                <div style={{
+                  minHeight: 110,
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: "center",
+                  padding: 10,
+                }} className={classes.card}>{t('firstRowError')}</div>
+              </Grid>
           }
         </>
       }

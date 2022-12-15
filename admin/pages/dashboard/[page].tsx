@@ -28,7 +28,7 @@ const Doshboard: NextPage = (props) => {
 
 export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(
   (store) => async (ctx) => {
-    const firstRow = await getFirstRow();
+    const firstRow = await getFirstRow(getCookies(ctx).adminAccessToken!);
     let props = {}
 
     props = {

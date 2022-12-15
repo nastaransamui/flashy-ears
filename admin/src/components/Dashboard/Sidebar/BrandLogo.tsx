@@ -55,7 +55,7 @@ const BrandLogo: FC<BrandLogoTypes> = (props: BrandLogoTypes) => {
         <img src={`/admin${brand[`img_${i18n.language}` as keyof typeof brand]}`} className={classes.img} />
       </span>
       <span className={logoNormal} >
-        {brand[`name_${i18n.language}` as keyof typeof brand]}
+        <span onClick={() => navigate('/')}>{brand[`name_${i18n.language}` as keyof typeof brand]}</span>
         <IconButton
           disableRipple
           disableFocusRipple

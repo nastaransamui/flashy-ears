@@ -1,4 +1,4 @@
-import { FC, Fragment, useState } from "react";
+import { FC, Fragment, useContext, useState } from "react";
 
 import Box from '@mui/material/Box'
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next";
 import SvgIcon from '@mui/material/SvgIcon';
 import Close from '@mui/icons-material/Close';
 import Done from '@mui/icons-material/Done';
-import { useTheme } from '@mui/material';
+import { IconButton, useTheme } from '@mui/material';
 import Tooltip from '@mui/material/Tooltip'
 import Zoom from '@mui/material/Zoom'
 import Edit from '@mui/icons-material/Edit'
@@ -28,6 +28,7 @@ export interface MainTableType { }
 
 import { makeStyles } from 'tss-react/mui';
 import { PhoneAgentType } from "@/models/Agencies";
+import { DataShowCtx } from "@/shared/DataShow/useDataShow";
 
 export function important<T>(value: T): T {
   return (value + ' !important') as any;
@@ -82,7 +83,7 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
   const { totalData, totalCount, profile, deleteIds, statusIdsUpdate } = useSelector<State, State>(state => state)
   const dispatch = useDispatch();
   const currentRouteState = useCurrentRouteState();
-
+  const { singleDeleteClicked, singleStatusClicked } = useContext(DataShowCtx)
   const { modelName, predefineDb, activeOnly } = currentRouteState
   const { t } = useTranslation(modelName)
   const { classes, theme } = mainTableStyles({});
@@ -240,9 +241,6 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
                             </div>
                           )
                       }
-                    // return (
-
-                    // );
                   }
               }
             }
@@ -298,7 +296,9 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
               title={t('ToggleOff', { ns: 'common' })}
               placement='bottom'
               arrow>
-              <ToggleOff
+              <ToggleOff onClick={() => {
+                singleStatusClicked(params.id, 'diactivate')
+              }}
                 style={{ color: !activeOnly && isDisabled(params) ? theme.palette.action.disabled : theme.palette.error.main }}
               />
             </Tooltip> :
@@ -306,22 +306,22 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
               title={t('ToggleOn', { ns: 'common' })}
               placement='bottom'
               arrow>
-              <ToggleOn style={{ color: isDisabled(params) ? theme.palette.action.disabled : theme.palette.success.main }} />
+              <ToggleOn onClick={() => {
+                singleStatusClicked(params.id, 'activate')
+              }} style={{ color: isDisabled(params) ? theme.palette.action.disabled : theme.palette.success.main }} />
             </Tooltip> :
             <Tooltip title={t('Delete', { ns: 'common' })} placement='bottom'
               arrow>
-              <Delete style={{ color: isDisabled(params) ? theme.palette.action.disabled : theme.palette.error.main }} />
+              <Delete onClick={() => {
+                if (deleteIds.findIndex((a) => a == params.id) == -1) {
+                  singleDeleteClicked(params.id)
+                }
+              }} style={{ color: isDisabled(params) ? theme.palette.action.disabled : theme.palette.error.main }} />
             </Tooltip>
+
           }
           disabled={!activeOnly && isDisabled(params)}
-          onClick={() => {
-            if (deleteIds.findIndex((a) => a == params.id) == -1) {
-              dispatch({
-                type: 'DELETE_IDS',
-                payload: [...deleteIds, params.id]
-              })
-            }
-          }} />,
+          onClick={() => { }} />,
       ]
     }
   }
@@ -338,10 +338,6 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
   }
 
 
-
-  const deleteIconClicked = () => {
-    console.log(deleteIds)
-  }
   return (
     <Fragment>
       <Box
@@ -370,6 +366,9 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
               case 'Users':
                 return profile._id !== params.id;
               case "Countries":
+              case "Provinces":
+              case "Cities":
+              case "Currencies":
                 return activeOnly ? params.row?.isActive : !params.row?.isActive;
               default:
                 return !params.row?.isActive;
@@ -381,12 +380,7 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
             Toolbar: CustomToolbar,
             NoRowsOverlay: CustomNoRowsOverlay,
           }}
-          componentsProps={{
-            toolbar:
-            {
-              deleteIconClicked: deleteIconClicked,
-            }
-          }}
+          componentsProps={{ toolbar: {} }}
           onRowDoubleClick={(params) => {
             dispatch({
               type: 'FIRST_SEARCH',

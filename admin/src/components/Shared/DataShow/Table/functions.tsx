@@ -151,12 +151,10 @@ export const CustomNoRowsOverlay = () => {
   );
 };
 
-interface CustomToolbarType {
-  deleteIconClicked: Function;
-}
 
-export const CustomToolbar = (props: CustomToolbarType) => {
-  const { deleteIconClicked } = props;
+
+export const CustomToolbar = () => {
+
   const { deleteIds, statusIdsUpdate } = useSelector<State, State>(state => state)
 
   return (
@@ -176,5 +174,5 @@ export const CustomToolbar = (props: CustomToolbarType) => {
 };
 
 CustomToolbar.propTypes = {
-  deleteIconClicked: PropTypes.func.isRequired,
+
 }

@@ -266,6 +266,12 @@ export async function searchAllCountries(
       $addFields: {
         dispalyFields: countriesDisplayField,
         muiData: countriesMuiDataObj,
+        totalStates: { $size: '$states_id' },
+        totalCities: { $size: '$cities_id' },
+        totalActiveHotels: { $size: '$hotels_id' },
+        totalUsers: { $size: '$users_id' },
+        totalAgents: { $size: '$agents_id' },
+        totalSuppliers: { $size: '$suppliers_id' },
         autoCompleteImg: {
           $concat: ['/admin/flags/128x128/', '$iso2', '.png'],
         },
@@ -303,6 +309,11 @@ export async function searchAllProvince(
       $addFields: {
         dispalyFields: provincesDisplayField,
         muiData: provincesMuiDataObj,
+        totalCities: { $size: '$cities_id' },
+        totalActiveHotels: { $size: '$hotels_id' },
+        totalUsers: { $size: '$users_id' },
+        totalAgents: { $size: '$agents_id' },
+        totalSuppliers: { $size: '$suppliers_id' },
         autoCompleteImg: {
           $concat: ['/admin/flags/128x128/', '$iso2', '.png'],
         },
@@ -337,6 +348,10 @@ export async function searchAllCities(searchRegex: RegExp, fieldValue: string) {
       $addFields: {
         dispalyFields: citiesDisplayField,
         muiData: citiesMuiDataObj,
+        totalActiveHotels: { $size: '$hotels_id' },
+        totalUsers: { $size: '$users_id' },
+        totalAgents: { $size: '$agents_id' },
+        totalSuppliers: { $size: '$suppliers_id' },
         autoCompleteImg: {
           $concat: ['/admin/flags/128x128/', '$iso2', '.png'],
         },
@@ -381,6 +396,8 @@ export async function searchAllCurrencies(
       $addFields: {
         dispalyFields: currenciesDisplayField,
         muiData: currenciesMuiDataObj,
+        totalAgents: { $size: '$agents_id' },
+        totalSuppliers: { $size: '$suppliers_id' },
         autoCompleteImg: {
           $concat: ['/admin/flags/128x128/', '$iso2', '.png'],
         },

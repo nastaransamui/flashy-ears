@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useContext } from "react";
 
 //Mui Components
 import { useTheme } from '@mui/material';
@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
 import useCurrentRouteState from '@/hookes/useCurrentRouteState';
 import { useTranslation } from 'react-i18next';
-
+import { DataShowCtx } from "@/shared/DataShow/useDataShow";
 
 //Components
 import MultipleExpand from '@/shared/StyledComponents/MultipleExpand';
@@ -30,6 +30,7 @@ export interface CardActionsType {
 const CardActions: FC<CardActionsType> = (({ fieldObject, index }) => {
   const currentRouteState = useCurrentRouteState();
   const { modelName, predefineDb, activeOnly } = currentRouteState;
+  const { singleDeleteClicked, singleStatusClicked } = useContext(DataShowCtx)
   const { profile } = useSelector<State, State>(state => state)
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -53,6 +54,10 @@ const CardActions: FC<CardActionsType> = (({ fieldObject, index }) => {
           type: 'FIRST_SEARCH',
           firstSearch: false
         })
+        dispatch({
+          type: 'DELETE_IDS',
+          payload: []
+        })
         navigate(`/${currentRouteState.path}/${currentRouteState?.modelName?.slice(0, -1)}?_id=${fieldObject._id}`, {
           state: fieldObject,
         })
@@ -62,8 +67,11 @@ const CardActions: FC<CardActionsType> = (({ fieldObject, index }) => {
           <Edit style={{ color: theme.palette.primary.main }} />
         </Tooltip>
       </IconButton>
-      <IconButton aria-label="share">
-        {predefineDb ? isDisabled(fieldObject) ?
+
+      {predefineDb ? isDisabled(fieldObject) ?
+        <IconButton aria-label="share" onClick={() => {
+          singleStatusClicked(fieldObject._id, 'diactivate')
+        }}>
           <Tooltip
             title={t('ToggleOff', { ns: 'common' })}
             placement='bottom'
@@ -71,19 +79,27 @@ const CardActions: FC<CardActionsType> = (({ fieldObject, index }) => {
             <ToggleOff
               style={{ color: !activeOnly && isDisabled(fieldObject) ? theme.palette.action.disabled : theme.palette.error.main }}
             />
-          </Tooltip> :
+          </Tooltip>
+        </IconButton> :
+        <IconButton aria-label="share" onClick={() => {
+          singleStatusClicked(fieldObject._id, 'active')
+        }}>
           <Tooltip
             title={t('ToggleOn', { ns: 'common' })}
             placement='bottom'
             arrow>
             <ToggleOn style={{ color: isDisabled(fieldObject) ? theme.palette.action.disabled : theme.palette.success.main }} />
-          </Tooltip> :
+          </Tooltip>
+        </IconButton> :
+        <IconButton aria-label="share" onClick={() => {
+          singleDeleteClicked(fieldObject._id)
+        }}>
           <Tooltip title={t('Delete', { ns: 'common' })} placement='bottom'
             arrow>
             <Delete style={{ color: isDisabled(fieldObject) ? theme.palette.action.disabled : theme.palette.error.main }} />
           </Tooltip>
-        }
-      </IconButton>
+        </IconButton>
+      }
       <MultipleExpand index={index} />
     </MuiCardActions>
   )

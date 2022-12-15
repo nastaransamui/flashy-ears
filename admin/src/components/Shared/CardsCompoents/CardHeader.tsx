@@ -119,7 +119,7 @@ const CardHeader: FC<CardHeaderType> = ((props: CardHeaderType) => {
                 onChange={() => {
                   switch (predefineDb) {
                     case true:
-                      if (deleteIds.findIndex((b) => b == fieldsObject._id) == -1) {
+                      if (statusIdsUpdate.findIndex((b) => b == fieldsObject._id) == -1) {
                         dispatch({
                           type: 'STATUS_IDS_UPDATE',
                           payload: [...statusIdsUpdate, fieldsObject._id]

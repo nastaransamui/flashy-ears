@@ -63,12 +63,18 @@ export function sort_by(
   sortByField: any,
   sortDirection: 1 | -1
 ) {
-  array = array.sort(
-    firstBy('isActive', 'desc').thenBy(sortByField, {
-      ignoreCase: true,
-      direction: sortDirection,
-    })
-  );
+  if (sortByField !== 'isActive') {
+    array = array.sort(
+      firstBy('isActive', 'desc').thenBy(sortByField, {
+        ignoreCase: true,
+        direction: sortDirection,
+      })
+    );
+  } else {
+    array = array.sort(
+      firstBy(sortByField, { ignoreCase: true, direction: sortDirection })
+    );
+  }
   return array;
 }
 
@@ -375,11 +381,11 @@ export async function findAllCountriesWithPagginate(
         dispalyFields: countriesDisplayField,
         muiData: countriesMuiDataObj,
         totalStates: { $size: '$states_id' },
+        totalCities: { $size: '$cities_id' },
         totalActiveHotels: { $size: '$hotels_id' },
         totalUsers: { $size: '$users_id' },
         totalAgents: { $size: '$agents_id' },
         totalSuppliers: { $size: '$suppliers_id' },
-        totalCities: { $size: '$cities_id' },
       },
     },
     {
@@ -447,11 +453,11 @@ export async function findAllProvincesWithPagginate(
       $addFields: {
         dispalyFields: provincesDisplayField,
         muiData: provincesMuiDataObj,
+        totalCities: { $size: '$cities_id' },
         totalActiveHotels: { $size: '$hotels_id' },
         totalUsers: { $size: '$users_id' },
         totalAgents: { $size: '$agents_id' },
         totalSuppliers: { $size: '$suppliers_id' },
-        totalCities: { $size: '$cities_id' },
       },
     },
     {
@@ -949,16 +955,15 @@ export async function findAllCountries(
         dispalyFields: countriesDisplayField,
         muiData: countriesMuiDataObj,
         totalStates: { $size: '$states_id' },
+        totalCities: { $size: '$cities_id' },
         totalActiveHotels: { $size: '$hotels_id' },
         totalUsers: { $size: '$users_id' },
         totalAgents: { $size: '$agents_id' },
         totalSuppliers: { $size: '$suppliers_id' },
-        totalCities: { $size: '$cities_id' },
       },
     },
   ]);
-  console.log(dataValue);
-  console.log(collection);
+
   const result = {
     data: paginate(
       activeOnly ? dataValue.filter((a) => a.isActive) : dataValue,
@@ -967,7 +972,7 @@ export async function findAllCountries(
     ),
     totalCount: dataValue.length,
   };
-  console.log(result);
+
   await multiMap.put(
     `all${modelName}` as unknown as MultiMapKey,
     dataValue as unknown as MultiMapValue
@@ -1022,11 +1027,11 @@ export async function findAllProvinces(
       $addFields: {
         dispalyFields: provincesDisplayField,
         muiData: provincesMuiDataObj,
+        totalCities: { $size: '$cities_id' },
         totalActiveHotels: { $size: '$hotels_id' },
         totalUsers: { $size: '$users_id' },
         totalAgents: { $size: '$agents_id' },
         totalSuppliers: { $size: '$suppliers_id' },
-        totalCities: { $size: '$cities_id' },
       },
     },
   ]);

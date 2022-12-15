@@ -20,7 +20,7 @@ const Pagination: FC<PaginationType> = ((props: PaginationType) => {
   const { modelName } = currentRouteState
   const { setPageNumber, setPerPage } = useContext(DataShowCtx)
   const { totalCount } = useSelector<State, State>(state => state)
-  const pageNumber = useReadLocalStorage(`${modelName}_pageNumber`)
+  const pageNumber: number = useReadLocalStorage(`${modelName}_pageNumber`)!
   const perPage: number = useReadLocalStorage(`${modelName}_perPage`)!
   const [count, setCount] = useState(0)
   const dispatch = useDispatch();
@@ -29,7 +29,11 @@ const Pagination: FC<PaginationType> = ((props: PaginationType) => {
     setPageNumber(() => pageNumber == null ? 1 : pageNumber)
     setPerPage(() => perPage == null ? 48 : perPage)
     setCount(() => totalCount == 0 ? totalCount : Math.ceil(totalCount / perPage))
-
+    if (totalCount > 0) {
+      if (pageNumber > totalCount / perPage) {
+        setPageNumber(Math.ceil(totalCount / perPage))
+      }
+    }
     return () => { }
   }, [pageNumber, perPage, totalCount])
 
@@ -64,6 +68,10 @@ const Pagination: FC<PaginationType> = ((props: PaginationType) => {
             })
             dispatch({
               type: 'DELETE_IDS',
+              payload: []
+            })
+            dispatch({
+              type: 'STATUS_IDS_UPDATE',
               payload: []
             })
             setPageNumber((prevValue: number) => value)

@@ -1,4 +1,4 @@
-import { FC, Fragment } from "react";
+import { FC, Fragment, useContext } from "react";
 
 //Mui Components
 import Typography from "@mui/material/Typography";
@@ -20,6 +20,7 @@ import { State } from '@/src/redux/store';
 //Hooks
 import useCurrentRouteState from '@/hookes/useCurrentRouteState';
 import { useTranslation } from 'react-i18next';
+import { DataShowCtx } from "@/shared/DataShow/useDataShow";
 
 const DeleteHeader: FC = (() => {
 
@@ -28,7 +29,8 @@ const DeleteHeader: FC = (() => {
   const dispatch = useDispatch();
   const currentRouteState = useCurrentRouteState();
   const { modelName, predefineDb, activeOnly } = currentRouteState;
-  const { t } = useTranslation('common')
+  const { t } = useTranslation('common');
+  const { multipleDeleteClicked, multipleStatusClicked } = useContext(DataShowCtx)
   const preventStatusChange = () => {
     switch (activeOnly) {
       case true:
@@ -86,7 +88,7 @@ const DeleteHeader: FC = (() => {
             <IconButton
               disableRipple
               onClick={() => {
-                // deleteIconClicked(deleteIds);
+                multipleStatusClicked('diactivate')
               }}>
               <ToggleOff
                 style={{ color: theme.palette.error.main }}
@@ -100,7 +102,7 @@ const DeleteHeader: FC = (() => {
               <IconButton
                 disableRipple
                 onClick={() => {
-                  // deleteIconClicked(deleteIds);
+                  multipleStatusClicked('active')
                 }}>
                 <ToggleOn style={{ color: theme.palette.success.main }} />
               </IconButton>
@@ -109,7 +111,7 @@ const DeleteHeader: FC = (() => {
             <IconButton
               disableRipple
               onClick={() => {
-                // deleteIconClicked(deleteIds);
+                multipleDeleteClicked();
               }}>
               <DeleteIcon style={{ color: theme.palette.secondary.main }} />
             </IconButton>

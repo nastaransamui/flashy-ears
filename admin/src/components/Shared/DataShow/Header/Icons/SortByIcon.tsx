@@ -263,6 +263,10 @@ const SortByIcon: FC<SortByIconType> = (props: SortByIconType) => {
                           type: 'DELETE_IDS',
                           payload: []
                         })
+                        dispatch({
+                          type: 'STATUS_IDS_UPDATE',
+                          payload: []
+                        })
                       }}>
                       <ListItemButton>
                         <ListItemIcon>

@@ -8,8 +8,12 @@ import { toast } from 'react-toastify';
 import { ToastMessage } from '@/shared/CustomToaster/CustomToaster';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
+import CustomAlert from '../CustomAlert/CustomAlert';
+import { getFirstRow } from 'apiCalls/getFirstRow';
 
-let url = '/admin/api/modelsCrud/getAll'
+let getAllUrl = '/admin/api/modelsCrud/getAll';
+let deleteUrl = '/admin/api/modelsCrud/delete';
+let statusUrl = '/admin/api/modelsCrud/status';
 
 export interface DataShowInterface {
   setCardView: Function;
@@ -18,13 +22,17 @@ export interface DataShowInterface {
   setPageNumber: Function;
   setSortByField: Function;
   setSortDirection: Function;
+  multipleDeleteClicked: Function;
+  singleDeleteClicked: Function;
+  multipleStatusClicked: Function;
+  singleStatusClicked: Function;
 }
 
 const useDataShow = () => {
   const widthRef = useRef<HTMLDivElement>(null);
   const currentRouteState = useCurrentRouteState();
   const { modelName, predefineDb, activeOnly, path } = currentRouteState;
-  const { adminAccessToken } = useSelector<State, State>(state => state)
+  const { adminAccessToken, deleteIds, statusIdsUpdate } = useSelector<State, State>(state => state)
   const location = useLocation();
   const dispatch = useDispatch()
   const toastID = `${modelName}_toatId`;
@@ -43,19 +51,19 @@ const useDataShow = () => {
     useLocalStorage(`${modelName}_sortDirection`, predefineDb ? 1 : -1)
 
   const abortController = new AbortController();
-
+  const body = {
+    modelName: modelName,
+    perPage: perPage,
+    pageNumber: pageNumber,
+    sortByField: sortByField,
+    sortDirection: sortDirection,
+    activeOnly: activeOnly
+  }
   const allResults = async () => {
     dispatch({ type: 'ADMIN_FORM_SUBMIT', payload: true });
-    const body = {
-      modelName: modelName,
-      perPage: perPage,
-      pageNumber: pageNumber,
-      sortByField: sortByField,
-      sortDirection: sortDirection,
-      activeOnly: activeOnly
-    }
+
     try {
-      axios.post(url, body,
+      axios.post(getAllUrl, body,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -79,7 +87,7 @@ const useDataShow = () => {
           }
         })
         .catch(function (error) {
-          toast(<ToastMessage >{error.response.data.error}</ToastMessage>, {
+          toast(<ToastMessage >{error.response.data.Error || error.message}</ToastMessage>, {
             onClose: () => {
               dispatch({ type: 'ADMIN_FORM_SUBMIT', payload: false })
               toast.dismiss()
@@ -98,13 +106,116 @@ const useDataShow = () => {
       })
     }
   }
+  const sweetAlert = CustomAlert();
 
   useEffect(() => {
     allResults()
     return () => {
       abortController.abort();
     }
-  }, [perPage, pageNumber, sortDirection, sortByField, path, activeOnly])
+  }, [perPage, pageNumber, sortDirection, sortByField, path, activeOnly]);
+
+
+  const deleteResults = async (arrayOfIds: string[]) => {
+    dispatch({ type: 'ADMIN_FORM_SUBMIT', payload: true });
+    axios.delete(deleteUrl, {
+      headers: {
+        'Content-Type': 'application/json',
+        token: `Brearer ${adminAccessToken}`,
+      },
+      data: { ...body, arrayOfIds }
+    })
+      .then(async function (resp) {
+        dispatch({ type: 'ADMIN_FORM_SUBMIT', payload: false });
+        const { success, totalCount, data, error } = resp.data
+        if (success) {
+          dispatch({ type: 'TOTAL_DATA', payload: data });
+          dispatch({ type: 'TOTAL_COUNT', payload: totalCount });
+          dispatch({ type: 'ADMIN_FORM_SUBMIT', payload: false });
+          dispatch({ type: 'DELETE_IDS', payload: [] });
+          dispatch({ type: 'FIRST_SEARCH', payload: '' });
+          dispatch({ type: 'FIELD_VALUE', payload: '' });
+          dispatch({ type: 'FIRST_ROW', payload: [] });
+        } else {
+          toast(<ToastMessage >{error}</ToastMessage>, {
+            onClose: () => {
+              dispatch({ type: 'ADMIN_FORM_SUBMIT', payload: false })
+              toast.dismiss()
+            },
+            toastId: toastID
+          })
+        }
+      })
+      .catch(function (error) {
+        toast(<ToastMessage >{error.response.data.Error || error.message}</ToastMessage>, {
+          onClose: () => {
+            dispatch({ type: 'ADMIN_FORM_SUBMIT', payload: false })
+            toast.dismiss()
+          },
+          toastId: toastID
+        })
+      });
+  }
+
+  const statusUpdateResult = async (arrayOfIds: string[], status: string) => {
+    dispatch({ type: 'ADMIN_FORM_SUBMIT', payload: true });
+    axios.post(statusUrl, { ...body, arrayOfIds, status },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          token: `Brearer ${adminAccessToken}`,
+        }
+      })
+      .then(function (resp) {
+        dispatch({ type: 'ADMIN_FORM_SUBMIT', payload: false });
+        const { success, totalCount, data, error } = resp.data
+        if (success) {
+          dispatch({ type: 'TOTAL_DATA', payload: data });
+          dispatch({ type: 'TOTAL_COUNT', payload: totalCount });
+          dispatch({ type: 'ADMIN_FORM_SUBMIT', payload: false });
+          dispatch({ type: 'STATUS_IDS_UPDATE', payload: [] });
+          dispatch({ type: 'FIRST_SEARCH', payload: '' });
+          dispatch({ type: 'FIELD_VALUE', payload: '' });
+          dispatch({ type: 'FIRST_ROW', payload: [] });
+        } else {
+          toast(<ToastMessage >{error}</ToastMessage>, {
+            onClose: () => {
+              dispatch({ type: 'ADMIN_FORM_SUBMIT', payload: false })
+              toast.dismiss()
+            },
+            toastId: toastID
+          })
+        }
+      })
+      .catch(function (error) {
+        toast(<ToastMessage >{error.response.data.Error || error.message}</ToastMessage>, {
+          onClose: () => {
+            dispatch({ type: 'ADMIN_FORM_SUBMIT', payload: false })
+            toast.dismiss()
+          },
+          toastId: toastID
+        })
+      });
+  }
+
+
+  const multipleDeleteClicked = () => {
+    sweetAlert(deleteIds, 'delete', deleteResults)
+  }
+
+  const singleDeleteClicked = (_id: string) => {
+    // console.log([_id])
+    sweetAlert([_id], 'delete', deleteResults);
+  }
+
+  const multipleStatusClicked = (status: string) => {
+    sweetAlert(statusIdsUpdate, status, statusUpdateResult)
+  }
+
+  const singleStatusClicked = (_id: string, status: string) => {
+    // console.log([_id])
+    sweetAlert([_id], status, statusUpdateResult);
+  }
 
 
 
@@ -115,6 +226,10 @@ const useDataShow = () => {
     setPageNumber: setPageNumber,
     setSortByField: setSortByField,
     setSortDirection: setSortDirection,
+    multipleDeleteClicked: multipleDeleteClicked,
+    singleDeleteClicked: singleDeleteClicked,
+    multipleStatusClicked: multipleStatusClicked,
+    singleStatusClicked: singleStatusClicked,
   }
 
 
@@ -133,6 +248,10 @@ export const DataShowCtx = createContext<DataShowInterface>({
   setPageNumber: () => { },
   setSortByField: () => { },
   setSortDirection: () => { },
+  multipleDeleteClicked: () => { },
+  singleDeleteClicked: () => { },
+  multipleStatusClicked: () => { },
+  singleStatusClicked: () => { },
 });
 
 export default useDataShow
