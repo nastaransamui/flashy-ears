@@ -1,13 +1,21 @@
 import { FC } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+
+//Components
+import BackButton from '@/shared/BackButton';
+import EditCountry from './EditCountry';
+import countryHook from "./countryHook";
+
 interface CountryTypes { }
 const Country: FC<CountryTypes> = ((props: CountryTypes) => {
+  const { currentRouteState } = countryHook();
 
-  const { state } = useLocation()
-
-  // state !== null && delete state.muiData
   return (
-    <div style={{ marginTop: 100 }}>Country  {JSON.stringify(state)}</div>
+    <div style={{ marginTop: 100, wordBreak: 'break-word' }}>
+      <BackButton pushUrl={currentRouteState.path} />
+      <br />
+      <EditCountry />
+
+    </div>
   )
 })
 

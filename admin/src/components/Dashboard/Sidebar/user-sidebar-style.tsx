@@ -126,10 +126,11 @@ const userSideBarStyle = makeStyles<{}>()((theme) => {
       margin: '0',
       padding: '6px 15px',
       '&:hover': {
-        background: alpha(
-          theme.palette.secondary.light,
-          theme.palette.action.activatedOpacity
-        ),
+        background:
+          alpha(
+            theme.palette.secondary.light,
+            theme.palette.action.activatedOpacity
+          ),
       },
     },
     userCaret: {
@@ -230,6 +231,16 @@ const userSideBarStyle = makeStyles<{}>()((theme) => {
         opacity: 1,
       },
     },
+    myProfileDrop: {
+      outline: 'none',
+      backgroundColor:
+        alpha(
+          theme.palette.secondary.light,
+          theme.palette.action.activatedOpacity
+        ),
+      boxShadow: 'none',
+
+    }
   }
 })
 

@@ -9,7 +9,6 @@ import { ToastMessage } from '@/shared/CustomToaster/CustomToaster';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import CustomAlert from '../CustomAlert/CustomAlert';
-import { getFirstRow } from 'apiCalls/getFirstRow';
 
 let getAllUrl = '/admin/api/modelsCrud/getAll';
 let deleteUrl = '/admin/api/modelsCrud/delete';
@@ -35,7 +34,7 @@ const useDataShow = () => {
   const { adminAccessToken, deleteIds, statusIdsUpdate } = useSelector<State, State>(state => state)
   const location = useLocation();
   const dispatch = useDispatch()
-  const toastID = `${modelName}_toatId`;
+  const toastID = `${modelName}_toastId`;
   //Dynamically add locall storage for view
   const [cardView, setCardView] =
     useLocalStorage(`${modelName}_cardView`, true)

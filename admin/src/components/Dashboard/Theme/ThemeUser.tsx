@@ -23,10 +23,14 @@ import themeList from '@/theme/palette'
 import { useTranslation } from "react-i18next";
 
 import useThemeUser from './useThemeUser'
+import { DrawerStateType } from "@/shared/interfaces/react.interface";
 
+import { useSelector } from 'react-redux';
+import { State } from '@/src/redux/store';
 
 export interface ThemeUserTypes {
-  rtlActive: boolean
+  rtlActive: boolean;
+  state: DrawerStateType
 }
 
 export interface TabPanelTypes {
@@ -47,7 +51,8 @@ const TabPanel: FC<TabPanelTypes> = (props: TabPanelTypes) => {
 
 const ThemeUser: FC<ThemeUserTypes> = (props: ThemeUserTypes) => {
   const { t } = useTranslation('common');
-  const { rtlActive } = props
+
+  const { rtlActive, state } = props
   const {
     classes,
     cx,
@@ -61,7 +66,7 @@ const ThemeUser: FC<ThemeUserTypes> = (props: ThemeUserTypes) => {
     adminThemeName,
     changeAdminTheme,
     changeHomePageTheme
-  } = useThemeUser()
+  } = useThemeUser(state)
 
   return (
     <Fragment>

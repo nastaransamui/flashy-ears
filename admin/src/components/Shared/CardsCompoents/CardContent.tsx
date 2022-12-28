@@ -115,7 +115,8 @@ const CardContent: FC<CardContentTypes> = ((props: CardContentTypes) => {
         setCardHeight(350)
       }
       if (lg) {
-        setCardHeight(elRefs?.['current']?.[`offsetWidth`])
+        // console.log(elRefs?.['current']?.[`offsetWidth`])
+        setCardHeight(200)
       }
       if (xl) {
         setCardHeight(gridView == 2 ? 130

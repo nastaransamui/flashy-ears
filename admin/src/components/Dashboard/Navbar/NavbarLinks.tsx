@@ -23,6 +23,7 @@ import Dashboard from '@mui/icons-material/Dashboard';
 import { CustomPropsTypes } from '@/interfaces/react.interface';
 import useNavbarLinks from './useNavbarLinks'
 import navbarLinksStyle from './navbar-links-style';
+import useCurrentRouteState from '@/hookes/useCurrentRouteState';
 
 export interface NavbarLinksTypes extends CustomPropsTypes {
   rtlActive: boolean;
@@ -37,7 +38,8 @@ const NavbarLinks: FC<NavbarLinksTypes> = (props: NavbarLinksTypes) => {
   const { rtlActive, handleDrawerToggle, sideBarbgColor } = props;
   const { classes, cx, theme } = navbarLinksStyle({ sideBarbgColor: sideBarbgColor as SidebarColor })
 
-
+  const currentRouteState = useCurrentRouteState();
+  const { modelName } = currentRouteState;
   const wrapper =
     classes.wrapper +
     ' ' +
@@ -49,12 +51,14 @@ const NavbarLinks: FC<NavbarLinksTypes> = (props: NavbarLinksTypes) => {
     [classes.dropdownItemRTL]: rtlActive,
   });
 
+
   return (
     <div className={wrapper}>
       <div className={classes.managerClasses}>
         {!isMobile && (
           <IconButton
             onClick={() => {
+              localStorage.removeItem(`${modelName}_Lookup`)
               navigate('/');
             }}
             className={classes.buttonLink}>
@@ -121,12 +125,12 @@ const NavbarLinks: FC<NavbarLinksTypes> = (props: NavbarLinksTypes) => {
                         style={{ display: 'flex', flexDirection: 'row' }}
                         role={undefined}
                         dense
-                        button
                         className={dropdownItem + ' ' + classes.languagePack}
                         onClick={() => {
                           handleCloseProfile();
                           isMobile && handleDrawerToggle();
-                          navigate(`/users-page/user?_id=${profile._id}`, {
+                          localStorage.removeItem(`${modelName}_Lookup`)
+                          navigate(`/users-page/User?_id=${profile._id}`, {
                             state: profile,
                           })
                         }}>
@@ -146,6 +150,7 @@ const NavbarLinks: FC<NavbarLinksTypes> = (props: NavbarLinksTypes) => {
                         className={dropdownItem + ' ' + classes.languagePack}
                         onClick={() => {
                           isMobile && handleDrawerToggle();
+                          localStorage.removeItem(`${modelName}_Lookup`)
                           logOut();
                         }}>
                         <LogoutIcon color='primary' />

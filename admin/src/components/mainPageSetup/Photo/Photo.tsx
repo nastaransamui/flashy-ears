@@ -1,12 +1,25 @@
 import { FC } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+
+//Components
+import BackButton from '@/shared/BackButton';
+import EditPhoto from './EditPhoto';
+import CreatePhoto from "./CreatePhoto";
+
 interface PhotoTypes { }
 const Photo: FC<PhotoTypes> = ((props: PhotoTypes) => {
 
-  const { state } = useLocation()
+  const { search } = useLocation()
   // state !== null && delete state.muiData
   return (
-    <div style={{ marginTop: 100 }}>Photo  {JSON.stringify(state)}</div>
+    <div style={{ marginTop: 100, wordBreak: 'break-word' }}>
+      <BackButton pushUrl='/main-page-setup/photos' />
+      <br />
+      {
+        search == '' ? <CreatePhoto /> : <EditPhoto />
+      }
+
+    </div>
   )
 })
 

@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { CSSProperties, FC } from "react";
 
 //Mui Components
 import { useTheme } from '@mui/material';
@@ -10,6 +10,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Tooltip from '@mui/material/Tooltip'
 import Checkbox from '@mui/material/Checkbox';
 import { GridSize } from '@mui/material/Grid'
+import Typography from '@mui/material/Typography'
 
 
 
@@ -37,7 +38,8 @@ const CardHeader: FC<CardHeaderType> = ((props: CardHeaderType) => {
 
   const currentRouteState = useCurrentRouteState();
   const { modelName, predefineDb, activeOnly } = currentRouteState;
-  const { t } = useTranslation(modelName);
+  const { t, i18n } = useTranslation(modelName);
+  const rtlActive = i18n.language == 'fa';
   const dispatch = useDispatch();
   const gridView: GridSize = useReadLocalStorage(`${modelName}_gridView`)!
 
@@ -54,8 +56,12 @@ const CardHeader: FC<CardHeaderType> = ((props: CardHeaderType) => {
   }
 
   const date = fieldsObject.createdAt !== undefined ?
-    new Date(fieldsObject.createdAt).toLocaleDateString("en-GB", options) :
-    new Date().toLocaleTimeString("en-GB", options)
+    new Date(fieldsObject.createdAt).toLocaleDateString(rtlActive ? 'fa-IR' : "en-GB", options) :
+    new Date().toLocaleTimeString(rtlActive ? 'fa-IR' : "en-GB", options)
+
+  const title = fieldsObject[fieldsObject.dispalyFields[0]]
+
+  const titleStyle: CSSProperties = { paddingRight: rtlActive ? 8 : 0, display: 'flex', flexDirection: rtlActive ? 'row-reverse' : 'row' }
 
   return (
     <MuiCardHeader
@@ -148,20 +154,29 @@ const CardHeader: FC<CardHeaderType> = ((props: CardHeaderType) => {
                   }
                 }} /></Tooltip>} />
       }
-      title={<Tooltip title={fieldsObject[fieldsObject.dispalyFields[0]]} placement='bottom'
+      title={<Tooltip title={title} placement='bottom'
         arrow>
         {(() => {
           switch (gridView) {
             case 12:
-              return <span>{fieldsObject[fieldsObject.dispalyFields[0]]}</span>
+              return <span style={{ paddingRight: rtlActive ? 8 : 0 }}>{title}</span>
             case 6:
-              return <span>{fieldsObject[fieldsObject.dispalyFields[0]]}</span>
+              return <span style={{ paddingRight: rtlActive ? 8 : 0 }}>{title}</span>
             case 4:
-              return <span>{fieldsObject[fieldsObject.dispalyFields[0]].slice(0, 20) + '...'}</span>
+              return <span style={titleStyle}>
+                <Typography variant="body2">{title.slice(0, 20)}</Typography>
+                {title.length > 20 && <Typography variant="body2">...</Typography>}
+              </span>
             case 3:
-              return <span>{fieldsObject[fieldsObject.dispalyFields[0]].slice(0, 10) + '...'}</span>
+              return <span style={titleStyle} >
+                <Typography variant="body2">{title.slice(0, 10)}</Typography>
+                {title.length > 10 && <Typography variant="body2">...</Typography>}
+              </span>
             default:
-              return <span>{fieldsObject[fieldsObject.dispalyFields[0]].slice(0, 5) + '...'}</span>
+              return <span style={titleStyle}>
+                <Typography variant="body2">{title.slice(0, 5)}</Typography>
+                {title.length > 5 && <Typography variant="body2">...</Typography>}
+              </span>
           }
         })()}
 
@@ -171,15 +186,21 @@ const CardHeader: FC<CardHeaderType> = ((props: CardHeaderType) => {
           {(() => {
             switch (gridView) {
               case 12:
-                return <span>{date}</span>
+                return <span style={{ paddingRight: rtlActive ? 8 : 0 }}>{date}</span>
               case 6:
-                return <span>{date}</span>
+                return <span style={{ paddingRight: rtlActive ? 8 : 0 }}>{date}</span>
               case 4:
-                return <span>{date}</span>
+                return <span style={{ paddingRight: rtlActive ? 8 : 0 }}>{date}</span>
               case 3:
-                return <span>{date.slice(0, 20) + '...'}</span>
+                return <span style={titleStyle}>
+                  <Typography variant="body2">{date.slice(0, 21)}</Typography>
+                  {date.length > 21 && <Typography variant="body2">...</Typography>}
+                </span>
               default:
-                return <span>{date.slice(0, 5) + '...'}</span>
+                return <span style={titleStyle}>
+                  <Typography variant="body2">{date.slice(0, 6)}</Typography>
+                  {date.length > 6 && <Typography variant="body2">...</Typography>}
+                </span>
             }
           })()}
         </Tooltip>

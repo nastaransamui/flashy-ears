@@ -18,14 +18,16 @@ import { State } from '@/src/redux/store'
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
+  rtlActive: boolean;
 }
 
 const ExpandMore = styled((props: ExpandMoreProps) => {
-  const { expand, ...other } = props;
+  const { expand, rtlActive, ...other } = props;
   return <IconButton {...other} />;
-})(({ theme, expand }) => ({
+})(({ theme, expand, rtlActive }) => ({
   transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-  marginLeft: 'auto',
+  marginLeft: rtlActive ? '' : 'auto',
+  marginRight: rtlActive ? 'auto' : '',
   transition: theme.transitions.create('transform', {
     duration: theme.transitions.duration.shortest,
   }),
@@ -37,9 +39,10 @@ export interface ExpandTypes {
 
 const MultipleExpand: FC<ExpandTypes> = (({ index }: ExpandTypes) => {
 
-  const { t } = useTranslation('common');
+  const { t, i18n } = useTranslation('common');
   const { expanded } = useSelector<State, State>(state => state);
   const dispatch = useDispatch();
+  const rtlActive = i18n.language == 'fa';
 
   const handleExpandClick = (index: number) => {
     dispatch({
@@ -51,6 +54,7 @@ const MultipleExpand: FC<ExpandTypes> = (({ index }: ExpandTypes) => {
   return (
     <ExpandMore
       expand={expanded[index]}
+      rtlActive={rtlActive}
       onClick={() => handleExpandClick(index)}
       aria-expanded={expanded[index]}
       aria-label="show more"

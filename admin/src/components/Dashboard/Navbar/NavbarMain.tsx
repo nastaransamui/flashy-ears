@@ -19,15 +19,19 @@ import { Typography } from "@mui/material";
 import { ActiveRouteType } from '@/interfaces/react.interface'
 import { useSelector } from "react-redux";
 import { State } from "@/src/redux/store";
+import { useQuery } from "@/src/components/Dashboard/ReactRouter";
 
 const NavbarMain: FC<ProDashboardProps> = (props: ProDashboardProps) => {
   const { routes, handleDrawerToggle, sidebarMinimizeFunc } =
     props;
   const location = useLocation();
-  const { propsMiniActive } = useSelector<State, State>(state => state)
-  const { i18n } = useTranslation()
+  const { propsMiniActive, profile } = useSelector<State, State>(state => state)
+  const { t, i18n } = useTranslation()
   const { classes, cx } = navbarMainStyle({});
   const mainPanel = createRef();
+
+  let query = useQuery();
+  const _id = query.get('_id');
   const mainPanelClasses =
     classes.mainPanel +
     ' ' +
@@ -52,13 +56,13 @@ const NavbarMain: FC<ProDashboardProps> = (props: ProDashboardProps) => {
 
   const getActiveRoute = (routes: RoutesType[]) => {
     let activeRoute = brand[`name_${i18n.language}` as keyof typeof brand]
-
     let allAccess: ActiveRouteType[] = [];
     routes.map(function iter(a) {
       let objectRoute = {
         name_en: a.name_en,
         name_fa: a.name_fa,
-        path: a.path
+        path: a.path,
+        editUrl: a?.editUrl
       }
       allAccess.push(objectRoute);
       Array.isArray(a.views) && a.views.map(iter as any);
@@ -68,7 +72,13 @@ const NavbarMain: FC<ProDashboardProps> = (props: ProDashboardProps) => {
       if (element.path == location.pathname) {
         activeRoute = element[`name_${i18n.language}` as keyof typeof element]
         if (location?.search !== '') {
-          activeRoute = element[`name_${i18n.language}` as keyof typeof element]
+          activeRoute = _id == profile?._id ? profile.userName as string : element[`name_${i18n.language}` as keyof typeof element] + t('editSidebar') as string
+        }
+      } else {
+        if (location?.search !== '') {
+          if (element.editUrl == location.pathname) {
+            activeRoute = element[`name_${i18n.language}` as keyof typeof element] + t('editSidebar') as string
+          }
         }
       }
     }

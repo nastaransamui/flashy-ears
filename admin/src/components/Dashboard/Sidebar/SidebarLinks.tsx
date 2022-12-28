@@ -15,6 +15,7 @@ import { DrawerStateType, SideBarLinksTypes } from '@/interfaces/react.interface
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "@/src/redux/store";
 import useCurrentRouteState from "@/hookes/useCurrentRouteState";
+import { useTranslation } from "react-i18next";
 
 
 const SidebarLinks: FC<SideBarLinksTypes> = (props: SideBarLinksTypes) => {
@@ -22,6 +23,7 @@ const SidebarLinks: FC<SideBarLinksTypes> = (props: SideBarLinksTypes) => {
   const location = useLocation();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const dispatch = useDispatch();
+  const { t } = useTranslation('common')
   const {
     getCollapseInitialState,
     routes,
@@ -29,10 +31,12 @@ const SidebarLinks: FC<SideBarLinksTypes> = (props: SideBarLinksTypes) => {
     rtlActive,
     state,
     setState,
-    handleDrawerToggle } = props;
+    handleDrawerToggle,
+    openCollapse } = props;
   const { stateMiniActive } = state;
   const { propsMiniActive } = useSelector<State, State>(state => state)
   const currentRouteState = useCurrentRouteState()
+  const { modelName } = currentRouteState;
   const { path } = currentRouteState
   useEffect(() => {
     if (location.pathname !== path) {
@@ -41,6 +45,7 @@ const SidebarLinks: FC<SideBarLinksTypes> = (props: SideBarLinksTypes) => {
       dispatch({ type: 'FIRST_SEARCH', payload: false })
       dispatch({ type: 'FIELD_VALUE', payload: '' })
       dispatch({ type: 'EXPANDED', payload: {} })
+      // localStorage.removeItem(`${modelName}_Lookup`)
     }
     return () => { }
   }, [location])
@@ -175,8 +180,11 @@ const SidebarLinks: FC<SideBarLinksTypes> = (props: SideBarLinksTypes) => {
         ' ' +
         cx({
           [' ' + classes[sideBarbgColor as keyof typeof classes]]: location.pathname == route.path,
+          [' ' + classes.editLinkButton]: location.pathname == route?.editUrl
         });
+      if (location.search !== '' && location.pathname == route?.editUrl) {
 
+      }
       const collapseItemMini =
         classes.collapseItemMini +
         ' ' +
@@ -189,6 +197,7 @@ const SidebarLinks: FC<SideBarLinksTypes> = (props: SideBarLinksTypes) => {
         ' ' +
         cx({
           [' ' + classes[sideBarbgColor as keyof typeof classes]]: location.pathname == route.path,
+          [' ' + classes.editLinkButton]: location.pathname == route?.editUrl
         });
       const itemText =
         classes.itemText +
@@ -205,7 +214,7 @@ const SidebarLinks: FC<SideBarLinksTypes> = (props: SideBarLinksTypes) => {
         cx({
           [classes.collapseItemTextMini]: !propsMiniActive && stateMiniActive,
           [classes.collapseItemTextMiniRTL]:
-            rtlActive && propsMiniActive && stateMiniActive,
+            propsMiniActive && stateMiniActive,
           [classes.collapseItemTextRTL]: rtlActive,
         });
       const itemIcon =
@@ -215,6 +224,7 @@ const SidebarLinks: FC<SideBarLinksTypes> = (props: SideBarLinksTypes) => {
           [classes.itemIconRTL]: rtlActive,
           [classes.itemIconMini]: !propsMiniActive && stateMiniActive
         });
+
       return (
         <Fragment key={index}>
           {
@@ -231,7 +241,9 @@ const SidebarLinks: FC<SideBarLinksTypes> = (props: SideBarLinksTypes) => {
                   isMobile && handleDrawerToggle();
                   dispatch({ type: 'DELETE_IDS', payload: [] });
                   dispatch({ type: 'STATUS_IDS_UPDATE', payload: [] });
-                  dispatch({ type: 'EXPANDED', payload: {} })
+                  dispatch({ type: 'EXPANDED', payload: {} });
+                  localStorage.removeItem(`${modelName}_Lookup`)
+                  state?.openAvatar && openCollapse('openAvatar');
                 }}>
                 <span
                   className={cx(
@@ -249,8 +261,8 @@ const SidebarLinks: FC<SideBarLinksTypes> = (props: SideBarLinksTypes) => {
                       className={collapseItemMini}
                       style={{
                         display:
-                          (rtlActive && propsMiniActive) ||
-                            (rtlActive && !stateMiniActive)
+                          (propsMiniActive) ||
+                            (!stateMiniActive)
                             ? 'none'
                             : 'block',
                       }}>
@@ -258,8 +270,14 @@ const SidebarLinks: FC<SideBarLinksTypes> = (props: SideBarLinksTypes) => {
                     </span>
                   )}
                   <ListItemText
-                    primary={route[routeName] as string}
-                    disableTypography={true}
+                    primary={
+                      location.pathname == route?.editUrl && location?.search !== '' ?
+                        route[routeName] + t('editSidebar') as string :
+                        route[routeName] as string}
+                    disableTypography={location.pathname == route?.editUrl && location?.search !== '' ? false : true}
+                    primaryTypographyProps={{
+                      variant: 'caption'
+                    }}
                     style={{ textAlign: rtlActive ? 'right' : 'left' }}
                     className={cx(
                       { [itemText]: route.icon !== undefined },

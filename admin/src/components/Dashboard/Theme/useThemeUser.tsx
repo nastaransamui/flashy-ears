@@ -6,13 +6,15 @@ import themeUserStyle from "./theme-user-style";
 import { useSelector, useDispatch } from "react-redux";
 import { State } from "@/src/redux/store";
 import { setCookie } from 'cookies-next';
+import { DrawerStateType } from "@/shared/interfaces/react.interface";
 
-const useThemeUser = () => {
-  const { classes, theme, cx } = themeUserStyle({})
+const useThemeUser = (state: DrawerStateType) => {
+  const { adminThemeName, propsMiniActive } = useSelector<State, State>((state) => state);
+  let drawerOpen = !propsMiniActive && propsMiniActive ? false : !propsMiniActive && !state.stateMiniActive ? true : state.stateMiniActive && !propsMiniActive ? false : true
+  const { classes, theme, cx } = themeUserStyle({ drawerOpen })
   const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
   const [openDrawer, setOpenDrawer] = useState(false);
   const [tab, setTab] = useState(0);
-  const { adminThemeName } = useSelector<State, State>((state) => state);
   const dispatch = useDispatch();
 
   const handleToggleOpenTheme = () => {

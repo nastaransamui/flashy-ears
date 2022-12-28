@@ -28,17 +28,18 @@ const useStyles = makeStyles<{}>()(() => {
 });
 
 const Loading = ({ color }: { color: string }) => {
-  const { classes } = useStyles({});
+  const { classes, theme } = useStyles({});
 
   return (
     <div>
       <div className={classes.wrapperDiv}>
         <div className={classes.iconWrapper}>
-          <CircleToBlockLoading color={color} />
+          <CircleToBlockLoading color={color !== '' ? color : theme.palette.primary.main} />
         </div>
       </div>
     </div>
   );
 };
+
 
 export default Loading;

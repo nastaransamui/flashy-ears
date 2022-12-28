@@ -36,5 +36,8 @@
   "agentData": "User Agencies information table",
   "cityName": "City Name",
   "provinceName": "Province Name",
-  "countryName": "Country Name"
+  "countryName": "Country Name",
+  "userdata": "Profile Info",
+  "rolesdata": "Access Info",
+  "agentsData": "Agencies Info"
 }

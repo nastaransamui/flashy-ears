@@ -37,5 +37,8 @@
   "agentData": "جدول اطلاعات آژانس های کاربر",
   "cityName": "نام شهر",
   "provinceName": "نام ایالت/استان",
-  "countryName": "نام کشور"
+  "countryName": "نام کشور",
+  "userdata": "مشخصات",
+  "rolesdata": "دسترسی اطلاعات",
+  "agentsData": "اطلاعات آژانس"
 }

@@ -26,6 +26,7 @@ import { PhoneTooltip } from '@/shared/DataShow/Table/MainTable'
 
 import { State, MainCardTypes } from "@/src/redux/store";
 
+
 export interface CardCollapseAreaTypes {
   elRefs: any;
   index: number;
@@ -39,7 +40,8 @@ const CardCollapseArea = forwardRef<Ref, CardCollapseAreaTypes>(({ elRefs, index
   const { expanded } = useSelector<State, State>(state => state)
   const currentRouteState = useCurrentRouteState();
   const { modelName } = currentRouteState;
-  const { t } = useTranslation(modelName);
+  const { t, i18n } = useTranslation(modelName);
+  const rtlActive = i18n.language == 'fa';
 
   const setBoxStyle = (index: number, expanded: { [key: string]: boolean }) => {
     return {
@@ -81,7 +83,7 @@ const CardCollapseArea = forwardRef<Ref, CardCollapseAreaTypes>(({ elRefs, index
                 case key == "createdAt":
                 case key == "updatedAt":
                   var options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: "2-digit", minute: "2-digit" } as const;
-                  primaryValue = new Date(value).toLocaleDateString("en-GB", options)
+                  primaryValue = new Date(value).toLocaleDateString(rtlActive ? 'fa-IR' : "en-GB", options)
                   break;
                 default:
                   switch (true) {
@@ -101,7 +103,9 @@ const CardCollapseArea = forwardRef<Ref, CardCollapseAreaTypes>(({ elRefs, index
                         default:
                         case value.length > 70:
                           primaryValue = <Tooltip title={value} TransitionComponent={Zoom} placement='top' arrow>
-                            <span>{value.length >= 30 ? value.slice(0, 30) + '...' : value.toString()}</span>
+                            <span style={{ display: 'flex', flexDirection: 'row' }}>
+                              {value.length >= 30 ? (rtlActive ? '...' + value.slice(0, 30) : value.slice(0, 30) + '...') : value.toString()}
+                            </span>
                           </Tooltip>
                           break;
                       }
@@ -110,8 +114,11 @@ const CardCollapseArea = forwardRef<Ref, CardCollapseAreaTypes>(({ elRefs, index
                   break;
               }
               return (
-                <ListItemButton key={key} disableTouchRipple sx={{ borderTop: `1px solid ${theme.palette.primary.main}` }}>
-                  <ListItemIcon >
+                <ListItemButton
+                  key={key}
+                  disableTouchRipple
+                  sx={{ borderTop: `1px solid ${theme.palette.primary.main}`, textAlign: rtlActive ? 'right' : 'left' }}>
+                  <ListItemIcon style={{ minWidth: 35 }} >
                     <DynamicIcon style={{
                       color:
                         theme.palette[
@@ -120,7 +127,7 @@ const CardCollapseArea = forwardRef<Ref, CardCollapseAreaTypes>(({ elRefs, index
                         ].main,
                     }} />
                   </ListItemIcon>
-                  <ListItemText sx={{ marginTop: 0, marginBottom: 0 }} primary={primaryValue} secondary={t(key)} />
+                  <ListItemText sx={{ marginTop: 0, marginBottom: 0, }} primary={primaryValue} secondary={t(key)} />
                 </ListItemButton>
               )
             }

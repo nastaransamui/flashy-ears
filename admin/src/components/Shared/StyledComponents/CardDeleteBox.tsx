@@ -30,6 +30,8 @@ export const StyledBox = styled(Container)<InputProps>(({ theme, dispay }) => ({
     minHeight: 30,
   },
   display: dispay,
+  '--animate-duration': '1s',
+  '--animate-delay': '1s'
 }));
 
 const CardDeleteBox: FC<DeleteBoxPropsType> = (({ children }: DeleteBoxPropsType) => {
@@ -40,7 +42,7 @@ const CardDeleteBox: FC<DeleteBoxPropsType> = (({ children }: DeleteBoxPropsType
       dispay={deleteIds.length !== 0 || statusIdsUpdate.length !== 0 ? 'flex' : 'none'}
       disableGutters
       maxWidth='xl'
-      className='animate__animated animate__zoomIn'>
+      className={`animate__animated animate__zoomIn`}>
       {children}
     </StyledBox>
   )

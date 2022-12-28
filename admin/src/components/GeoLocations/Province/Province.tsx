@@ -1,13 +1,21 @@
 import { FC } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+
+//Components
+import BackButton from '@/shared/BackButton';
+import EditProvince from './EditProvince';
+import pronvinceHook from "./provinceHook";
+
 interface ProvinceTypes { }
 const Province: FC<ProvinceTypes> = ((props: ProvinceTypes) => {
+  const { currentRouteState } = pronvinceHook();
 
-  const { state } = useLocation()
-
-  // state !== null && delete state.muiData
   return (
-    <div style={{ marginTop: 100 }}>Province  {JSON.stringify(state)}</div>
+    <div style={{ marginTop: 100, wordBreak: 'break-word' }}>
+      <BackButton pushUrl={currentRouteState.path} />
+      <br />
+      <EditProvince />
+
+    </div>
   )
 })
 

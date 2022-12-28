@@ -122,5 +122,9 @@
   "accessRoleNull": "The role document is empty.",
   "selected": "Selected",
   "noRow": "No rows found",
-  "firstRowError": "Something goes wrong please get in touch with the admin."
+  "firstRowError": "Something goes wrong please get in touch with the admin.",
+  "editSidebar": " (On Edit)",
+  "previous": "previous",
+  "next": "next",
+  "finish": "finish"
 }

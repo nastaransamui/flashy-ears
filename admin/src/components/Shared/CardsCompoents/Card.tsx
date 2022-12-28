@@ -13,7 +13,7 @@ interface Props {
 export type Ref = HTMLDivElement;
 const Card = forwardRef<Ref, Props>(({ children, index }, ref) => {
 
-  const { expanded } = useSelector<State, State>(state => state)
+  const { expanded, deleteIds, statusIdsUpdate } = useSelector<State, State>(state => state)
 
   const setCardStyle = (index: number, expanded: { [key: string]: boolean }) => {
     return {
@@ -27,6 +27,8 @@ const Card = forwardRef<Ref, Props>(({ children, index }, ref) => {
               !Object.values(expanded)[0]
               ? 1
               : 0.2,
+      minHeight: 280,
+      boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px'
     };
   };
   return (

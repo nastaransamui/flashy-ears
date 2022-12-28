@@ -1,15 +1,9 @@
 
-import PropsType from 'prop-types'
 import DataShow from '@/src/components/Shared/DataShow/DataShow';
 import { FC } from 'react';
 import PageContainer from '@/shared/PageContainer';
 
-export interface UsersPropsType {
-
-}
-
-const Users: FC<UsersPropsType> = (props: UsersPropsType) => {
-
+const Users: FC = () => {
   return (
     <PageContainer>
       <DataShow />
@@ -17,6 +11,5 @@ const Users: FC<UsersPropsType> = (props: UsersPropsType) => {
   )
 }
 
-Users.propTypes = {}
 
 export default Users;

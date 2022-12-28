@@ -28,8 +28,7 @@ const Dashboard: FC<CustomPropsTypes> = (props: CustomPropsTypes) => {
             rtlActive={rtlActive}
             sidebarOpen={sidebarOpen}
             sideBarbgColor={sideBarbgColor}
-            routes={routes as RoutesType[]}
-          />
+            routes={routes as RoutesType[]} state={undefined} setState={undefined} getCollapseInitialState={() => { }} />
         </BrowserRouter>
       </DashboardWrapper>
     </div>

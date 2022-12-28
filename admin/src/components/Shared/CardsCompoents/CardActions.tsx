@@ -48,7 +48,7 @@ const CardActions: FC<CardActionsType> = (({ fieldObject, index }) => {
   }
 
   return (
-    <MuiCardActions disableSpacing sx={{ padding: 0 }}>
+    <MuiCardActions disableSpacing sx={{ padding: 0, }}>
       <IconButton aria-label="edit" onClick={() => {
         dispatch({
           type: 'FIRST_SEARCH',
@@ -69,7 +69,7 @@ const CardActions: FC<CardActionsType> = (({ fieldObject, index }) => {
       </IconButton>
 
       {predefineDb ? isDisabled(fieldObject) ?
-        <IconButton aria-label="share" onClick={() => {
+        <IconButton aria-label="toggleOff" onClick={() => {
           singleStatusClicked(fieldObject._id, 'diactivate')
         }}>
           <Tooltip
@@ -81,7 +81,7 @@ const CardActions: FC<CardActionsType> = (({ fieldObject, index }) => {
             />
           </Tooltip>
         </IconButton> :
-        <IconButton aria-label="share" onClick={() => {
+        <IconButton aria-label="ToggleOn" onClick={() => {
           singleStatusClicked(fieldObject._id, 'active')
         }}>
           <Tooltip
@@ -91,7 +91,7 @@ const CardActions: FC<CardActionsType> = (({ fieldObject, index }) => {
             <ToggleOn style={{ color: isDisabled(fieldObject) ? theme.palette.action.disabled : theme.palette.success.main }} />
           </Tooltip>
         </IconButton> :
-        <IconButton aria-label="share" onClick={() => {
+        <IconButton aria-label="Delete" onClick={() => {
           singleDeleteClicked(fieldObject._id)
         }}>
           <Tooltip title={t('Delete', { ns: 'common' })} placement='bottom'

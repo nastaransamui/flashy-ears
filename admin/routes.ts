@@ -44,6 +44,8 @@ var dashRoutes: RoutesType[] = (module.exports = [
         modelName: 'Users',
         predefineDb: false,
         activeOnly: false,
+        editUrl: '/users-page/User',
+        lookUps: ['agentsData'],
       },
       {
         path: '/users-page/user',
@@ -81,6 +83,8 @@ var dashRoutes: RoutesType[] = (module.exports = [
         modelName: 'Roles',
         predefineDb: false,
         activeOnly: false,
+        editUrl: '/rbacs-data/Role',
+        lookUps: ['userData'],
       },
       {
         path: '/rbacs-data/role',
@@ -131,6 +135,7 @@ var dashRoutes: RoutesType[] = (module.exports = [
             modelName: 'Videos',
             predefineDb: false,
             activeOnly: false,
+            editUrl: '/main-page-setup/videos/Video',
           },
           {
             path: '/main-page-setup/videos/video',
@@ -169,6 +174,7 @@ var dashRoutes: RoutesType[] = (module.exports = [
             modelName: 'Photos',
             predefineDb: false,
             activeOnly: false,
+            editUrl: '/main-page-setup/photos/Photo',
           },
           {
             path: '/main-page-setup/photos/photo',
@@ -208,6 +214,7 @@ var dashRoutes: RoutesType[] = (module.exports = [
             modelName: 'Features',
             predefineDb: false,
             activeOnly: false,
+            editUrl: '/main-page-setup/features/Feature',
           },
           {
             path: '/main-page-setup/features/feature',
@@ -269,6 +276,15 @@ var dashRoutes: RoutesType[] = (module.exports = [
             modelName: 'Countries',
             predefineDb: true,
             activeOnly: false,
+            editUrl: '/g-locations/g-countries/Countrie',
+            lookUps: [
+              'statesData',
+              'citiesData',
+              'userData',
+              'agentsData',
+              'suppliersData',
+              'hotelsData',
+            ],
             views: [
               {
                 path: '/g-locations/g-countries/Countrie',
@@ -281,6 +297,7 @@ var dashRoutes: RoutesType[] = (module.exports = [
                 modelName: 'Countries',
                 predefineDb: true,
                 activeOnly: false,
+                editUrl: '/g-locations/g-countries/Countrie',
               },
             ],
           },
@@ -295,6 +312,8 @@ var dashRoutes: RoutesType[] = (module.exports = [
             modelName: 'Currencies',
             predefineDb: true,
             activeOnly: false,
+            editUrl: '/g-currencies/currencies/Currencie',
+            lookUps: ['agentsData', 'suppliersData'],
             views: [
               {
                 path: '/g-currencies/currencies/Currencie',
@@ -307,6 +326,7 @@ var dashRoutes: RoutesType[] = (module.exports = [
                 modelName: 'Currencies',
                 predefineDb: true,
                 activeOnly: false,
+                editUrl: '/g-currencies/currencies/Currencie',
               },
             ],
           },
@@ -347,6 +367,15 @@ var dashRoutes: RoutesType[] = (module.exports = [
             icon: Public.type?.render().props.children.props.d,
             predefineDb: true,
             activeOnly: true,
+            editUrl: '/a-locations/a-countries/Countrie',
+            lookUps: [
+              'statesData',
+              'citiesData',
+              'userData',
+              'agentsData',
+              'suppliersData',
+              'hotelsData',
+            ],
             views: [
               {
                 path: '/a-locations/a-countries/Countrie',
@@ -359,12 +388,13 @@ var dashRoutes: RoutesType[] = (module.exports = [
                 modelName: 'Countries',
                 predefineDb: true,
                 activeOnly: true,
+                editUrl: '/a-locations/a-countries/Countrie',
               },
             ],
           },
           {
             path: '/a-locations/provinces',
-            name_en: 'Active provinces/states',
+            name_en: 'Active provinces',
             name_fa: 'استان ها / ایالتهای فعال',
             mini_en: 'AP',
             mini_fa: ' ا',
@@ -375,6 +405,14 @@ var dashRoutes: RoutesType[] = (module.exports = [
             icon: SouthAmerica.type?.render().props.children.props.d,
             predefineDb: true,
             activeOnly: true,
+            editUrl: '/a-locations/provinces/Province',
+            lookUps: [
+              'citiesData',
+              'userData',
+              'agentsData',
+              'suppliersData',
+              'hotelsData',
+            ],
             views: [
               {
                 path: '/a-locations/provinces/Province',
@@ -387,6 +425,7 @@ var dashRoutes: RoutesType[] = (module.exports = [
                 modelName: 'Provinces',
                 predefineDb: true,
                 activeOnly: true,
+                editUrl: '/a-locations/provinces/Province',
               },
             ],
           },
@@ -403,6 +442,8 @@ var dashRoutes: RoutesType[] = (module.exports = [
             icon: Apartment.type?.render().props.children.props.d,
             predefineDb: true,
             activeOnly: true,
+            editUrl: '/a-locations/cities/Citie',
+            lookUps: ['userData', 'agentsData', 'suppliersData', 'hotelsData'],
             views: [
               {
                 path: '/a-locations/cities/Citie',
@@ -415,6 +456,7 @@ var dashRoutes: RoutesType[] = (module.exports = [
                 modelName: 'Cities',
                 predefineDb: true,
                 activeOnly: true,
+                editUrl: '/a-locations/cities/Citie',
               },
             ],
           },
@@ -431,6 +473,8 @@ var dashRoutes: RoutesType[] = (module.exports = [
             icon: AttachMoney.type?.render().props.children.props.d,
             predefineDb: true,
             activeOnly: true,
+            editUrl: '/a-currencies/currencies/Currencie',
+            lookUps: ['agentsData', 'suppliersData'],
             views: [
               {
                 path: '/a-currencies/currencies/Currencie',
@@ -443,6 +487,7 @@ var dashRoutes: RoutesType[] = (module.exports = [
                 modelName: 'Currencies',
                 predefineDb: true,
                 activeOnly: true,
+                editUrl: '/a-currencies/currencies/Currencie',
               },
             ],
           },
@@ -482,6 +527,7 @@ var dashRoutes: RoutesType[] = (module.exports = [
         modelName: 'Agencies',
         predefineDb: false,
         activeOnly: false,
+        editUrl: '/agencies-data/agencies/Agencie',
       },
       {
         path: '/agencies-data/agencies/Agencie',

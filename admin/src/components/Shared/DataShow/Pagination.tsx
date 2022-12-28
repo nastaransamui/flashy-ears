@@ -47,7 +47,7 @@ const Pagination: FC<PaginationType> = ((props: PaginationType) => {
       sx={{ pb: 2, pt: 2 }}>
       <Grid item >
         <Typography>
-          {t('Page', { ns: 'common' })}: 1
+          {t('Page', { ns: 'common' })}: {pageNumber}
           &nbsp;&nbsp;&nbsp;&nbsp;
           {t('Total', { ns: 'common' })}: {totalCount.toLocaleString()}
         </Typography>

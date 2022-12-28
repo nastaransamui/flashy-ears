@@ -1,4 +1,4 @@
-import React, { createRef, useState, FC } from 'react'
+import React, { createRef, useState, FC, useEffect } from 'react'
 import mainSidebarStyle from './main-sidebar-style'
 import Drawer from '@mui/material/Drawer'
 import Hidden from '@mui/material/Hidden'
@@ -15,6 +15,8 @@ import { useRouter } from 'next/router'
 import { useLocation } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { State } from '@/src/redux/store'
+import { useQuery } from "@/src/components/Dashboard/ReactRouter";
+
 
 const SidebarMain: FC<ProDashboardProps> = (props: ProDashboardProps) => {
   const { classes, cx } = mainSidebarStyle({})
@@ -22,47 +24,27 @@ const SidebarMain: FC<ProDashboardProps> = (props: ProDashboardProps) => {
     sidebarOpen,
     handleDrawerToggle,
     sideBarbgColor,
-    routes, } = props;
+    routes,
+    state,
+    setState,
+    getCollapseInitialState } = props;
   const router = useRouter()
   const location = useLocation()
-  const { propsMiniActive } = useSelector<State, State>(state => state)
-  // this verifies if any of the collapses should be default opened on a rerender of this component
-  // for example, on the refresh of the page,
+  const { propsMiniActive, profile } = useSelector<State, State>(state => state)
 
-  const getCollapseInitialState = (routes: RoutesType[]) => {
-    for (let i = 0; i < routes?.length; i++) {
-      if (routes[i].collapse && getCollapseInitialState(routes[i].views as RoutesType[])) {
-        return true;
-      } else if (typeof routes[i].path !== 'undefined' && routes[i].path.endsWith(location.pathname)) {
-        return true;
-      }
-    }
-    return false;
-  };
-  // this creates the intial state of this component based on the collapse routes
-  // that it gets through this.props.routes
+  let query = useQuery();
+  const _id = query.get('_id');
 
-  const getCollapseStates = (routes: RoutesType[]) => {
-    let initialState = {};
-    routes.map((prop) => {
-      if (prop.collapse) {
-        initialState = {
-          [prop.state]: getCollapseInitialState(prop?.views as RoutesType[]),
-          ...getCollapseStates(prop?.views as RoutesType[]),
-          ...initialState,
-        };
-      }
-      return null;
-    });
-    return initialState;
-  };
 
   const mainPanel = createRef();
-  const [state, setState] = useState<DrawerStateType>({
-    stateMiniActive: true,
-    openAvatar: false,
-    ...getCollapseStates(routes as RoutesType[])
-  });
+
+  //Open user if in profile
+
+  useEffect(() => {
+    if (_id == profile._id) {
+      openCollapse('openAvatar')
+    }
+  }, [_id])
 
 
   const sidebarWrapper =
@@ -77,7 +59,7 @@ const SidebarMain: FC<ProDashboardProps> = (props: ProDashboardProps) => {
   const openCollapse = (collapse: string) => {
     var st: { [key: string]: boolean; } = {};
     st[collapse] = !state[collapse as keyof typeof state];
-    setState((oldState) => ({ ...oldState, ...st }));
+    setState((oldState: DrawerStateType) => ({ ...oldState, ...st }));
   };
 
   return (
@@ -98,7 +80,7 @@ const SidebarMain: FC<ProDashboardProps> = (props: ProDashboardProps) => {
             <SidebarUser openCollapse={openCollapse} {...props} stateMiniActive={state.stateMiniActive} openAvatar={state.openAvatar!} />
             <NavbarLinks {...props} />
             <SidebarLinks
-              getCollapseInitialState={getCollapseInitialState}
+              openCollapse={openCollapse}
               routes={routes as RoutesType[]}
               {...props}
               state={state as DrawerStateType}
@@ -116,8 +98,8 @@ const SidebarMain: FC<ProDashboardProps> = (props: ProDashboardProps) => {
       <Hidden smDown implementation='css'>
         <Drawer
           data-testid="drawer"
-          onMouseOver={() => { setState((oldState) => ({ ...oldState, stateMiniActive: false })) }}
-          onMouseOut={() => { setState((oldState) => ({ ...oldState, stateMiniActive: true })) }}
+          onMouseOver={() => { setState((oldState: DrawerStateType) => ({ ...oldState, stateMiniActive: false })) }}
+          onMouseOut={() => { setState((oldState: DrawerStateType) => ({ ...oldState, stateMiniActive: true })) }}
           anchor={rtlActive ? 'right' : 'left'}
           variant="permanent"
           open
@@ -133,7 +115,7 @@ const SidebarMain: FC<ProDashboardProps> = (props: ProDashboardProps) => {
           <span className={sidebarWrapper + ' ' + classes[sideBarbgColor + 'Scroll' as keyof typeof classes]}>
             <SidebarUser openCollapse={openCollapse} {...props} stateMiniActive={state.stateMiniActive} openAvatar={state.openAvatar!} />
             <SidebarLinks
-              getCollapseInitialState={getCollapseInitialState}
+              openCollapse={openCollapse}
               routes={routes as RoutesType[]}
               {...props}
               state={state as DrawerStateType}

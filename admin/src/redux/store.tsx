@@ -62,7 +62,8 @@ export interface State {
   firstSearch: boolean;
   fieldValue: string;
   expanded: { [key: string]: boolean }
-  firstRow: { [key: string]: any }
+  firstRow: { [key: string]: any },
+  reRunSingleGet: boolean;
 }
 
 const initialState = {
@@ -83,7 +84,8 @@ const initialState = {
   //Search header field value select 
   fieldValue: '',
   expanded: {},
-  firstRow: {}
+  firstRow: {},
+  reRunSingleGet: false,
 }
 
 
@@ -131,6 +133,8 @@ const reducer = (state: State = initialState, action: AnyAction) => {
       return { ...state, expanded: action.payload };
     case 'FIRST_ROW':
       return { ...state, firstRow: action.payload };
+    case 'RERUN_SINGLE_GET':
+      return { ...state, reRunSingleGet: action.payload };
     default:
       return state;
   }

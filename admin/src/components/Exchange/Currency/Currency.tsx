@@ -1,13 +1,21 @@
 import { FC } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+//Components
+import BackButton from '@/shared/BackButton';
+import EditCurrency from './EditCurrency';
+import currencyHook from "./currencyHook";
+
+
 interface CurrencyTypes { }
 const Currency: FC<CurrencyTypes> = ((props: CurrencyTypes) => {
+  const { currentRouteState } = currencyHook();
 
-  const { state } = useLocation()
-
-  // state !== null && delete state.muiData
   return (
-    <div style={{ marginTop: 100 }}>Currency  {JSON.stringify(state)}</div>
+    <div style={{ marginTop: 100, wordBreak: 'break-word' }}>
+      <BackButton pushUrl={currentRouteState.path} />
+      <br />
+      <EditCurrency />
+
+    </div>
   )
 })
 

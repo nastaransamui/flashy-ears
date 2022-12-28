@@ -1,7 +1,10 @@
 import { makeStyles } from "tss-react/mui";
 import { alpha } from "@mui/system";
-
-const themeUserStyle = makeStyles<{}>()((theme) => {
+import {
+  drawerWidth,
+  drawerMiniWidth
+} from '@/theme/common'
+const themeUserStyle = makeStyles<{ drawerOpen: boolean }>()((theme, drawerOpen) => {
   return {
     active: {
       border: `1px solid ${theme.palette.primary.main}`
@@ -15,16 +18,22 @@ const themeUserStyle = makeStyles<{}>()((theme) => {
       position: 'fixed',
       display: 'flex',
       flexDirection: 'column',
-      right: theme.direction == 'ltr' ? 10 : 'auto',
-      left: theme.direction == 'ltr' ? 'auto' : 10,
-      top: '84%',
-      zIndex: 999,
+      transition: 'all 0.33s cubic-bezier(0.685, 0.0473, 0.346, 1)',
+      transform: `translateX(calc(100vw - 100 %))`,
+      left: theme.direction == 'ltr' ? drawerOpen.drawerOpen ? drawerWidth : drawerMiniWidth : 'auto',
+      right: theme.direction == 'ltr' ? 'auto' : drawerOpen.drawerOpen ? drawerWidth : drawerMiniWidth,
+      top: '85%',
+      zIndex: 9,
       borderRadius: 8,
       boxShadow: theme.shadows[4],
       padding: theme.spacing(0.5),
       border: `1px solid ${theme.palette.primary.main}`,
       background: alpha(theme.palette.background.paper, 0.6),
       backdropFilter: 'saturate(180%) blur(20px)',
+      [theme.breakpoints.down('sm')]: {
+        left: theme.direction == 'ltr' ? 0 : 'auto',
+        right: theme.direction == 'ltr' ? 'auto' : 0
+      },
       [theme.breakpoints.down('xs')]: {
         top: '45%',
       },

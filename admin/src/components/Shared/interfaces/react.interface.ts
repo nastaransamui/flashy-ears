@@ -28,6 +28,8 @@ export interface RoutesViews {
   predefineDb: boolean;
   activeOnly: boolean;
   views?: RoutesViews[];
+  editUrl?: string;
+  lookUps?: string[];
 }
 
 export interface RoutesType {
@@ -46,12 +48,15 @@ export interface RoutesType {
   predefineDb?: boolean;
   activeOnly?: boolean;
   views?: RoutesViews[];
+  editUrl?: string;
+  lookUps?: string[];
 }
 
 export interface ActiveRouteType {
   name_en: string;
   name_fa: string;
   path: string;
+  editUrl: any;
 }
 
 export interface CustomPropsTypes {
@@ -70,6 +75,9 @@ export interface ProDashboardProps extends CustomPropsTypes {
   sidebarOpen: boolean;
   sideBarbgColor: string;
   sidebarMinimizeFunc: () => void;
+  state: any;
+  setState: any;
+  getCollapseInitialState: Function;
 }
 
 export interface SibebarUserProps extends CustomPropsTypes {
@@ -94,6 +102,7 @@ export interface SideBarLinksTypes {
   state: DrawerStateType;
   setState: Function;
   handleDrawerToggle: () => void;
+  openCollapse: Function;
 }
 
 export interface BrandLogoTypes {

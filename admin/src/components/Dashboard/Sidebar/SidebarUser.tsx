@@ -15,11 +15,17 @@ import { useNavigate, createSearchParams } from 'react-router-dom'
 import { FC } from 'react'
 import { SibebarUserProps } from '../../Shared/interfaces/react.interface'
 import { useTranslation } from 'react-i18next'
+import { useQuery } from "@/src/components/Dashboard/ReactRouter";
+import useCurrentRouteState from '@/hookes/useCurrentRouteState';
 
 const SidebarUser: FC<SibebarUserProps> = (props: SibebarUserProps) => {
   const { classes, cx, theme } = userSideBarStyle({})
   const { t } = useTranslation('dashboard')
   const navigate = useNavigate();
+  const currentRouteState = useCurrentRouteState();
+  const { modelName } = currentRouteState;
+  let query = useQuery();
+  const _id = query.get('_id');
   const { profile, propsMiniActive } = useSelector<State, State>(state => state)
   const { sideBarbgColor, rtlActive, openCollapse, stateMiniActive, openAvatar } = props;
   const userWrapperClass =
@@ -125,14 +131,17 @@ const SidebarUser: FC<SibebarUserProps> = (props: SibebarUserProps) => {
                 className={classes.collapseItem}
                 onClick={(e) => {
                   e.preventDefault();
-                  navigate(`/users-page/user?_id=${profile._id}`, {
+                  localStorage.removeItem(`${modelName}_Lookup`)
+                  navigate(`/users-page/User?_id=${profile._id}`, {
                     state: profile,
                   })
+                  openCollapse('openAvatar');
                 }}>
                 <a
                   href='/admin/dashboard/user-page'
                   className={
-                    classes.itemLink + ' ' + classes.userCollapseLinks
+                    classes.itemLink + ' ' + classes.userCollapseLinks + ' ' + `${_id == profile._id ? classes.myProfileDrop : ' '}`
+                    // _id == profile._id ? classes.myProfileDrop : ''
                   }>
                   {!isMobile && (
                     <span className={collapseItemMini}>

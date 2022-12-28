@@ -99,7 +99,7 @@ const linkSidebarStyle = makeStyles<{}>()((theme) => {
     collapseItemText: {
       margin: '0 20px 0 0',
       position: 'relative',
-      transform: 'translateX(0px)',
+      transform: theme.direction == 'rtl' ? 'translateX(0px)' : 'translateX(25px)',
       opacity: '1',
       whiteSpace: 'nowrap',
       display: 'block',
@@ -107,7 +107,7 @@ const linkSidebarStyle = makeStyles<{}>()((theme) => {
       fontSize: '14px',
     },
     collapseItemTextMiniRTL: {
-      transform: 'translate3d(25px, 0, 0) !important',
+      transform: theme.direction == 'rtl' ? 'translate3d(25px, 0, 0) !important' : 'translate3d(0, 0, 0) !important',
     },
     collapseItemTextMini: {
       [theme.breakpoints.up('md')]: {
@@ -255,6 +255,24 @@ const linkSidebarStyle = makeStyles<{}>()((theme) => {
         boxShadow: theme.shadows[4],
       },
     },
+    editLinkButton: {
+      '& div': {
+        color: theme.palette.secondary.light,
+        transform: theme.direction == 'rtl' ? 'translate3d(25px, 0, 0) !important' : 'translate3d(15px, 0, 0) !important',
+      },
+      '& span': {
+        color: theme.palette.secondary.contrastText,
+
+      },
+      '&,&:hover,&:focus': {
+        backgroundColor: alpha(
+          theme.palette.primary.light,
+          theme.palette.action.activatedOpacity
+        ),
+
+        boxShadow: theme.shadows[4],
+      },
+    }
   }
 })
 

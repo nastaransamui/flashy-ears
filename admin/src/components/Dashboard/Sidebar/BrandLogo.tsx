@@ -10,11 +10,14 @@ import { useNavigate } from "react-router-dom";
 import { BrandLogoTypes } from '@/interfaces/react.interface'
 import { useSelector } from "react-redux";
 import { State } from "@/src/redux/store";
+import useCurrentRouteState from '@/hookes/useCurrentRouteState';
 
 const BrandLogo: FC<BrandLogoTypes> = (props: BrandLogoTypes) => {
   const { i18n } = useTranslation();
   const { classes, cx } = brandStyle({})
   const navigate = useNavigate();
+  const currentRouteState = useCurrentRouteState();
+  const { modelName } = currentRouteState;
   const { sideBarbgColor, rtlActive, stateMiniActive, handleSideBarBgToggle } = props
   const { propsMiniActive } = useSelector<State, State>(state => state);
   const logoClasses =
@@ -51,11 +54,17 @@ const BrandLogo: FC<BrandLogoTypes> = (props: BrandLogoTypes) => {
 
   return (
     <div className={logoClasses}>
-      <span className={logoMini} onClick={() => navigate('/')}>
+      <span className={logoMini} onClick={() => {
+        localStorage.removeItem(`${modelName}_Lookup`)
+        navigate('/')
+      }}>
         <img src={`/admin${brand[`img_${i18n.language}` as keyof typeof brand]}`} className={classes.img} />
       </span>
       <span className={logoNormal} >
-        <span onClick={() => navigate('/')}>{brand[`name_${i18n.language}` as keyof typeof brand]}</span>
+        <span onClick={() => {
+          localStorage.removeItem(`${modelName}_Lookup`)
+          navigate('/')
+        }}>{brand[`name_${i18n.language}` as keyof typeof brand]}</span>
         <IconButton
           disableRipple
           disableFocusRipple
