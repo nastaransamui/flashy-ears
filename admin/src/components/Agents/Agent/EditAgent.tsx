@@ -14,7 +14,7 @@ import Loading from "@/shared/Loading";
 
 const EditAgent: FC = (() => {
 
-  const { _id, singleData } = useSingleData();
+  const { _id, singleData } = useSingleData('edit');
   const { values,
     handleAgentdataChange,
     handleContactDataChange,

@@ -32,10 +32,10 @@ const editUserHook = (singleData: any) => {
     },
     {
       agentsData: singleData?.agentsData,
-      totalAgents: singleData?.agents_id.length
+      totalAgents: singleData?.agents_id?.length
     }
   ]);
-
+  console.log(singleData)
   useEffect(() => {
     if (singleData !== null) {
       setValues([

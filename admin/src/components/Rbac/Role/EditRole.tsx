@@ -12,7 +12,7 @@ import LookUpsPagination from "@/shared/Lookups/LookUpsPagination";
 
 const EditRole: FC = (() => {
 
-  const { _id, singleData } = useSingleData();
+  const { _id, singleData } = useSingleData('edit');
   const {
     values,
     handleRoutesChange,

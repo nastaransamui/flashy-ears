@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { State } from "@/src/redux/store";
 
 const editCityHook = () => {
-  const { _id, singleData } = useSingleData();
+  const { _id, singleData } = useSingleData('edit');
   const dispatch = useDispatch();
   const { reRunSingleGet } = useSelector<State, State>(state => state);
   const [values, setValues] = useState([

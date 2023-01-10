@@ -6,7 +6,7 @@ import { State } from "@/src/redux/store";
 const editCountryHook = () => {
   const {
     _id,
-    singleData } = useSingleData();
+    singleData } = useSingleData('edit');
   const dispatch = useDispatch();
   const { reRunSingleGet } = useSelector<State, State>(state => state);
   const [values, setValues] = useState([
@@ -59,7 +59,7 @@ const editCountryHook = () => {
       totalHotels: singleData?.hotels_id.length
     },
   ]);
-  // console.log(singleData)
+  console.log(singleData)
 
   useEffect(() => {
     if (singleData !== null) {

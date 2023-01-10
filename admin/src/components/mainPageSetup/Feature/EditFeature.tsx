@@ -9,7 +9,7 @@ import StepsWizards from "@/shared/StepsWizard/StepsWizard";
 
 
 const EditFeature: FC = (() => {
-  const { _id, singleData } = useSingleData();
+  const { _id, singleData } = useSingleData('edit');
   const {
     values,
     hangleTitlesChange,

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { State } from "@/src/redux/store";
 
 const editCurrencyHook = () => {
-  const { _id, singleData } = useSingleData();
+  const { _id, singleData } = useSingleData('edit');
   const dispatch = useDispatch();
   const { reRunSingleGet } = useSelector<State, State>(state => state);
   const [values, setValues] = useState([
@@ -21,11 +21,11 @@ const editCurrencyHook = () => {
     },
     {
       agentsData: singleData?.agentsData,
-      totalAgents: singleData?.agents_id.length
+      totalAgents: singleData?.agents_id?.length
     },
     {
       suppliersData: singleData?.suppliersData,
-      totalSuppliers: singleData?.suppliers_id.length
+      totalSuppliers: singleData?.suppliers_id?.length
     },
   ]);
   console.log(singleData)

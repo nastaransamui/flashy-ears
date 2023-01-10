@@ -21,7 +21,7 @@ export interface SingleDataInterface {
   setLookupsFilter: Function;
 }
 
-const useSingleData = () => {
+const useSingleData = (componet: 'edit' | 'context') => {
   let { state } = useLocation();
   const dispatch = useDispatch();
   const [singleData, setSingleData] = useState(state);
@@ -105,10 +105,12 @@ const useSingleData = () => {
   }
 
 
-
   useEffect(() => {
     if (state == null && _id !== null || reRunSingleGet) {
-      getSingleData();
+      //Todo
+      if (componet == 'edit') {
+        getSingleData();
+      }
     }
     return () => {
       abortController.abort();

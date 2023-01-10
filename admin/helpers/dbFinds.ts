@@ -1809,6 +1809,933 @@ export interface MultiMapValue {
   value: object[];
 }
 
+export const findMuliMapFunctions: FindFunctionsType = {};
+
+findMuliMapFunctions.findUsersById = async function findUsersById(
+  _id: string,
+  lookupsFilter: any,
+  hz: any,
+  multiMap: any
+) {
+  const indexOfAgentsData = lookupsFilter.findIndex((a: any) =>
+    Object.keys(a).some((e) => /agentsData/g.test(e))
+  );
+  const multiMapAgents = await hz.getMultiMap('Agencies');
+  const agentsExist = await multiMapAgents.containsKey(`allAgencies`);
+  const multiMapRoles = await hz.getMultiMap('Roles');
+  const rolesExist = await multiMapRoles.containsKey(`allRoles`);
+
+  let finalUser = {};
+  if (!agentsExist || !rolesExist) {
+    finalUser = await findFunctions[
+      `findUsersById` as keyof typeof findFunctions
+    ]?.(_id, lookupsFilter);
+  } else {
+    const users = await multiMap.get(`allUsers`);
+    for (const user of users as any) {
+      let currentUser = user.filter((a: any) => a._id == _id);
+      const agencies = await multiMapAgents.get('allAgencies');
+      for (const agents of agencies as any) {
+        let findAgents = agents.filter((a: any) =>
+          currentUser[0].agents_id.includes(a._id)
+        );
+        let filterAgents = findAgents.map(
+          ({
+            dispalyFields,
+            muiData,
+            ...rest
+          }: {
+            dispalyFields: string[];
+            muiData: string[];
+          }) => rest
+        );
+        let sortAgents = paginate(
+          sort_by(
+            filterAgents,
+            [lookupsFilter[indexOfAgentsData][`Users_agentsData_sortByField`]],
+            lookupsFilter[indexOfAgentsData][`Users_agentsData_sortDirection`]
+          ),
+          lookupsFilter[indexOfAgentsData][`Users_agentsData_perPage`],
+          lookupsFilter[indexOfAgentsData][`Users_agentsData_pageNumber`]
+        );
+        currentUser[0].agentsData = sortAgents;
+      }
+      const roles = await multiMapRoles.get('allRoles');
+      for (const role of roles as any) {
+        let relatedRole = role.filter((a: any) =>
+          currentUser[0].role_id.includes(a._id)
+        );
+        let lastRole = relatedRole.map(
+          ({ users_id, ...rest }: { users_id: string[] }) => rest
+        );
+        currentUser[0].roleData = lastRole;
+      }
+      finalUser = currentUser[0];
+    }
+  }
+
+  return finalUser;
+};
+
+findMuliMapFunctions.findRolesById = async function findRolesById(
+  _id: string,
+  lookupsFilter: any,
+  hz: any,
+  multiMap: any
+) {
+  const indexOfUserData = lookupsFilter.findIndex((a: any) =>
+    Object.keys(a).some((e) => /userData/g.test(e))
+  );
+  const multiMapUsers = await hz.getMultiMap('Users');
+  const usersExist = await multiMapUsers.containsKey(`allUsers`);
+
+  let finalRole = {};
+  if (!usersExist) {
+    finalRole = await findFunctions[
+      `findRolesById` as keyof typeof findFunctions
+    ]?.(_id, lookupsFilter);
+  } else {
+    const roles = await multiMap.get(`allRoles`);
+    for (const role of roles) {
+      let currentRole = role.filter((a: any) => a._id == _id);
+      let filterRole = currentRole.map(
+        ({
+          dispalyFields,
+          muiData,
+          ...rest
+        }: {
+          dispalyFields: string[];
+          muiData: string[];
+        }) => rest
+      );
+      const multiUsers = await multiMapUsers.get('allUsers');
+      for (const users of multiUsers as any) {
+        let finalUsers = users.filter((a: any) =>
+          filterRole[0].users_id.includes(a._id)
+        );
+        let filterUsers = finalUsers.map(
+          ({
+            dispalyFields,
+            muiData,
+            ...rest
+          }: {
+            dispalyFields: string[];
+            muiData: string[];
+          }) => rest
+        );
+        let sortUsers = paginate(
+          sort_by(
+            filterUsers,
+            [lookupsFilter[indexOfUserData][`Roles_userData_sortByField`]],
+            lookupsFilter[indexOfUserData][`Roles_userData_sortDirection`]
+          ),
+          lookupsFilter[indexOfUserData][`Roles_userData_perPage`],
+          lookupsFilter[indexOfUserData][`Roles_userData_pageNumber`]
+        );
+        filterRole[0].userData = sortUsers;
+        finalRole = filterRole[0];
+      }
+    }
+  }
+
+  return finalRole;
+};
+
+findMuliMapFunctions.findVideosById = async function findVideosById(
+  _id: string,
+  lookupsFilter: any,
+  hz: any,
+  multiMap: any
+) {
+  const videos = await multiMap.get(`allVideos`);
+  for (const video of videos) {
+    let currentVideo = video.filter((a: any) => a._id == _id);
+    let filterVideo = currentVideo.map(
+      ({
+        dispalyFields,
+        muiData,
+        ...rest
+      }: {
+        dispalyFields: string[];
+        muiData: string[];
+      }) => rest
+    );
+    return filterVideo[0];
+  }
+};
+
+findMuliMapFunctions.findPhotosById = async function findPhotosById(
+  _id: string,
+  lookupsFilter: any,
+  hz: any,
+  multiMap: any
+) {
+  const photos = await multiMap.get(`allPhotos`);
+  for (const photo of photos) {
+    let currentPhoto = photo.filter((a: any) => a._id == _id);
+    let filterPhoto = currentPhoto.map(
+      ({
+        dispalyFields,
+        muiData,
+        ...rest
+      }: {
+        dispalyFields: string[];
+        muiData: string[];
+      }) => rest
+    );
+    return filterPhoto[0];
+  }
+};
+
+findMuliMapFunctions.findFeaturesById = async function findFeaturesById(
+  _id: string,
+  lookupsFilter: any,
+  hz: any,
+  multiMap: any
+) {
+  const features = await multiMap.get(`allFeatures`);
+  for (const feature of features) {
+    let currentFeature = feature.filter((a: any) => a._id == _id);
+    let filterFeature = currentFeature.map(
+      ({
+        dispalyFields,
+        muiData,
+        ...rest
+      }: {
+        dispalyFields: string[];
+        muiData: string[];
+      }) => rest
+    );
+    return filterFeature[0];
+  }
+};
+
+findMuliMapFunctions.findCountriesById = async function findCountriesById(
+  _id: string,
+  lookupsFilter: any,
+  hz: any,
+  multiMap: any
+) {
+  const indexOfStateData = lookupsFilter.findIndex((a: any) =>
+    Object.keys(a).some((e) => /statesData/g.test(e))
+  );
+  const indexOfCitiesData = lookupsFilter.findIndex((a: any) =>
+    Object.keys(a).some((e) => /citiesData/g.test(e))
+  );
+
+  const indexOfUserData = lookupsFilter.findIndex((a: any) =>
+    Object.keys(a).some((e) => /userData/g.test(e))
+  );
+
+  const indexOfAgentsData = lookupsFilter.findIndex((a: any) =>
+    Object.keys(a).some((e) => /agentsData/g.test(e))
+  );
+
+  const indexOfSuppliersData = lookupsFilter.findIndex((a: any) =>
+    Object.keys(a).some((e) => /suppliersData/g.test(e))
+  );
+
+  const indexOfHotelsData = lookupsFilter.findIndex((a: any) =>
+    Object.keys(a).some((e) => /hotelsData/g.test(e))
+  );
+
+  const multiMapProvinces = await hz.getMultiMap('Provinces');
+  const provincesExist = await multiMapProvinces.containsKey(`allProvinces`);
+  const multiMapCities = await hz.getMultiMap('Cities');
+  const citiesExist = await multiMapCities.containsKey(`allCities`);
+  const multiMapUsers = await hz.getMultiMap('Users');
+  const usersExist = await multiMapUsers.containsKey(`allUsers`);
+  const multiMapAgents = await hz.getMultiMap('Agencies');
+  const agentsExist = await multiMapAgents.containsKey(`allAgencies`);
+  //Todo check hotel and supplier multipmap
+  let finalCountry = {};
+  console.log({ provincesExist, citiesExist, usersExist, agentsExist });
+  if (!provincesExist || !citiesExist || !usersExist || !agentsExist) {
+    finalCountry = await findFunctions[
+      `findCountriesById` as keyof typeof findFunctions
+    ]?.(_id, lookupsFilter);
+  } else {
+    const countriesData = await multiMap.get(`allCountries`);
+    for (const countries of countriesData as any) {
+      let currentCountry = countries.filter((a: any) => a._id == _id);
+      let filterCountry = currentCountry.map(
+        ({
+          dispalyFields,
+          muiData,
+          ...rest
+        }: {
+          dispalyFields: string[];
+          muiData: string[];
+        }) => rest
+      );
+      const provincesData = await multiMapProvinces.get('allProvinces');
+      for (const provinces of provincesData) {
+        let findProvinces = provinces.filter((a: any) =>
+          filterCountry[0].states_id.includes(a._id)
+        );
+        let filterProvinces = findProvinces.map(
+          ({
+            dispalyFields,
+            muiData,
+            ...rest
+          }: {
+            dispalyFields: string[];
+            muiData: string[];
+          }) => rest
+        );
+        let sortProvinces = paginate(
+          sort_by(
+            filterProvinces,
+            [
+              lookupsFilter[indexOfStateData][
+                `Countries_statesData_sortByField`
+              ],
+            ],
+            lookupsFilter[indexOfStateData][
+              `Countries_statesData_sortDirection`
+            ]
+          ),
+          lookupsFilter[indexOfStateData][`Countries_statesData_perPage`],
+          lookupsFilter[indexOfStateData][`Countries_statesData_pageNumber`]
+        );
+        filterCountry[0].statesData = sortProvinces;
+      }
+
+      const citiesData = await multiMapCities.get('allCities');
+      for (const cities of citiesData) {
+        let findCities = cities.filter((a: any) =>
+          filterCountry[0].cities_id.includes(a._id)
+        );
+        let filterCities = findCities.map(
+          ({
+            dispalyFields,
+            muiData,
+            ...rest
+          }: {
+            dispalyFields: string[];
+            muiData: string[];
+          }) => rest
+        );
+        let sortCities = paginate(
+          sort_by(
+            filterCities,
+            [
+              lookupsFilter[indexOfCitiesData][
+                `Countries_citiesData_sortByField`
+              ],
+            ],
+            lookupsFilter[indexOfCitiesData][
+              `Countries_citiesData_sortDirection`
+            ]
+          ),
+          lookupsFilter[indexOfCitiesData][`Countries_citiesData_perPage`],
+          lookupsFilter[indexOfCitiesData][`Countries_citiesData_pageNumber`]
+        );
+        filterCountry[0].citiesData = sortCities;
+      }
+
+      const usersData = await multiMapUsers.get('allUsers');
+      for (const users of usersData) {
+        let findUsers = users.filter((a: any) =>
+          filterCountry[0].users_id.includes(a._id)
+        );
+        let filterUsers = findUsers.map(
+          ({
+            dispalyFields,
+            muiData,
+            ...rest
+          }: {
+            dispalyFields: string[];
+            muiData: string[];
+          }) => rest
+        );
+        let sortUsers = paginate(
+          sort_by(
+            filterUsers,
+            [lookupsFilter[indexOfUserData][`Countries_userData_sortByField`]],
+            lookupsFilter[indexOfUserData][`Countries_userData_sortDirection`]
+          ),
+          lookupsFilter[indexOfUserData][`Countries_userData_perPage`],
+          lookupsFilter[indexOfUserData][`Countries_userData_pageNumber`]
+        );
+        filterCountry[0].userData = sortUsers;
+      }
+
+      const agentsData = await multiMapAgents.get('allAgencies');
+      for (const agents of agentsData) {
+        let findAgents = agents.filter((a: any) =>
+          filterCountry[0].agents_id.includes(a._id)
+        );
+        let filterAgents = findAgents.map(
+          ({
+            dispalyFields,
+            muiData,
+            ...rest
+          }: {
+            dispalyFields: string[];
+            muiData: string[];
+          }) => rest
+        );
+        let sortAgents = paginate(
+          sort_by(
+            filterAgents,
+            [
+              lookupsFilter[indexOfAgentsData][
+                `Countries_agentsData_sortByField`
+              ],
+            ],
+            lookupsFilter[indexOfAgentsData][
+              `Countries_agentsData_sortDirection`
+            ]
+          ),
+          lookupsFilter[indexOfAgentsData][`Countries_agentsData_perPage`],
+          lookupsFilter[indexOfAgentsData][`Countries_agentsData_pageNumber`]
+        );
+        filterCountry[0].agentsData = sortAgents;
+      }
+
+      filterCountry[0].suppliersData = [];
+      filterCountry[0].hotelsData = [];
+
+      finalCountry = filterCountry[0];
+    }
+  }
+
+  return finalCountry;
+};
+
+findMuliMapFunctions.findProvincesById = async function findProvincesById(
+  _id: string,
+  lookupsFilter: any,
+  hz: any,
+  multiMap: any
+) {
+  const indexOfCitiesData = lookupsFilter.findIndex((a: any) =>
+    Object.keys(a).some((e) => /citiesData/g.test(e))
+  );
+
+  const indexOfUserData = lookupsFilter.findIndex((a: any) =>
+    Object.keys(a).some((e) => /userData/g.test(e))
+  );
+
+  const indexOfAgentsData = lookupsFilter.findIndex((a: any) =>
+    Object.keys(a).some((e) => /agentsData/g.test(e))
+  );
+
+  const indexOfSuppliersData = lookupsFilter.findIndex((a: any) =>
+    Object.keys(a).some((e) => /suppliersData/g.test(e))
+  );
+
+  const indexOfHotelsData = lookupsFilter.findIndex((a: any) =>
+    Object.keys(a).some((e) => /hotelsData/g.test(e))
+  );
+
+  const multiMapCities = await hz.getMultiMap('Cities');
+  const citiesExist = await multiMapCities.containsKey(`allCities`);
+  const multiMapUsers = await hz.getMultiMap('Users');
+  const usersExist = await multiMapUsers.containsKey(`allUsers`);
+  const multiMapAgents = await hz.getMultiMap('Agencies');
+  const agentsExist = await multiMapAgents.containsKey(`allAgencies`);
+  //Todo check hotel and supplier multipmap
+  let finalCountry = {};
+
+  if (!citiesExist || !usersExist || !agentsExist) {
+    finalCountry = await findFunctions[
+      `findProvincesById` as keyof typeof findFunctions
+    ]?.(_id, lookupsFilter);
+  } else {
+    const provincesData = await multiMap.get(`allProvinces`);
+    for (const provinces of provincesData as any) {
+      let currentProvince = provinces.filter((a: any) => a._id == _id);
+      let filterProvince = currentProvince.map(
+        ({
+          dispalyFields,
+          muiData,
+          ...rest
+        }: {
+          dispalyFields: string[];
+          muiData: string[];
+        }) => rest
+      );
+
+      const citiesData = await multiMapCities.get('allCities');
+      for (const cities of citiesData) {
+        let findCities = cities.filter((a: any) =>
+          filterProvince[0].cities_id.includes(a._id)
+        );
+        let filterCities = findCities.map(
+          ({
+            dispalyFields,
+            muiData,
+            ...rest
+          }: {
+            dispalyFields: string[];
+            muiData: string[];
+          }) => rest
+        );
+        let sortCities = paginate(
+          sort_by(
+            filterCities,
+            [
+              lookupsFilter[indexOfCitiesData][
+                `Provinces_citiesData_sortByField`
+              ],
+            ],
+            lookupsFilter[indexOfCitiesData][
+              `Provinces_citiesData_sortDirection`
+            ]
+          ),
+          lookupsFilter[indexOfCitiesData][`Provinces_citiesData_perPage`],
+          lookupsFilter[indexOfCitiesData][`Provinces_citiesData_pageNumber`]
+        );
+        filterProvince[0].citiesData = sortCities;
+      }
+
+      const usersData = await multiMapUsers.get('allUsers');
+      for (const users of usersData) {
+        let findUsers = users.filter((a: any) =>
+          filterProvince[0].users_id.includes(a._id)
+        );
+        let filterUsers = findUsers.map(
+          ({
+            dispalyFields,
+            muiData,
+            ...rest
+          }: {
+            dispalyFields: string[];
+            muiData: string[];
+          }) => rest
+        );
+        let sortUsers = paginate(
+          sort_by(
+            filterUsers,
+            [lookupsFilter[indexOfUserData][`Provinces_userData_sortByField`]],
+            lookupsFilter[indexOfUserData][`Provinces_userData_sortDirection`]
+          ),
+          lookupsFilter[indexOfUserData][`Provinces_userData_perPage`],
+          lookupsFilter[indexOfUserData][`Provinces_userData_pageNumber`]
+        );
+        filterProvince[0].userData = sortUsers;
+      }
+
+      const agentsData = await multiMapAgents.get('allAgencies');
+      for (const agents of agentsData) {
+        let findAgents = agents.filter((a: any) =>
+          filterProvince[0].agents_id.includes(a._id)
+        );
+        let filterAgents = findAgents.map(
+          ({
+            dispalyFields,
+            muiData,
+            ...rest
+          }: {
+            dispalyFields: string[];
+            muiData: string[];
+          }) => rest
+        );
+        let sortAgents = paginate(
+          sort_by(
+            filterAgents,
+            [
+              lookupsFilter[indexOfAgentsData][
+                `Provinces_agentsData_sortByField`
+              ],
+            ],
+            lookupsFilter[indexOfAgentsData][
+              `Provinces_agentsData_sortDirection`
+            ]
+          ),
+          lookupsFilter[indexOfAgentsData][`Provinces_agentsData_perPage`],
+          lookupsFilter[indexOfAgentsData][`Provinces_agentsData_pageNumber`]
+        );
+        filterProvince[0].agentsData = sortAgents;
+      }
+
+      filterProvince[0].suppliersData = [];
+      filterProvince[0].hotelsData = [];
+
+      finalCountry = filterProvince[0];
+    }
+  }
+
+  return finalCountry;
+};
+
+findMuliMapFunctions.findCitiesById = async function findCitiesById(
+  _id: string,
+  lookupsFilter: any,
+  hz: any,
+  multiMap: any
+) {
+  const indexOfUserData = lookupsFilter.findIndex((a: any) =>
+    Object.keys(a).some((e) => /userData/g.test(e))
+  );
+
+  const indexOfAgentsData = lookupsFilter.findIndex((a: any) =>
+    Object.keys(a).some((e) => /agentsData/g.test(e))
+  );
+
+  const indexOfSuppliersData = lookupsFilter.findIndex((a: any) =>
+    Object.keys(a).some((e) => /suppliersData/g.test(e))
+  );
+
+  const indexOfHotelsData = lookupsFilter.findIndex((a: any) =>
+    Object.keys(a).some((e) => /hotelsData/g.test(e))
+  );
+
+  const multiMapUsers = await hz.getMultiMap('Users');
+  const usersExist = await multiMapUsers.containsKey(`allUsers`);
+  const multiMapAgents = await hz.getMultiMap('Agencies');
+  const agentsExist = await multiMapAgents.containsKey(`allAgencies`);
+  //Todo check hotel and supplier multipmap
+  let finalCountry = {};
+
+  if (!usersExist || !agentsExist) {
+    finalCountry = await findFunctions[
+      `findCitiesById` as keyof typeof findFunctions
+    ]?.(_id, lookupsFilter);
+  } else {
+    const citiesData = await multiMap.get(`allCities`);
+    for (const cities of citiesData as any) {
+      let currentCity = cities.filter((a: any) => a._id == _id);
+      let filterCity = currentCity.map(
+        ({
+          dispalyFields,
+          muiData,
+          ...rest
+        }: {
+          dispalyFields: string[];
+          muiData: string[];
+        }) => rest
+      );
+      const usersData = await multiMapUsers.get('allUsers');
+      for (const users of usersData) {
+        let findUsers = users.filter((a: any) =>
+          filterCity[0].users_id.includes(a._id)
+        );
+        let filterUsers = findUsers.map(
+          ({
+            dispalyFields,
+            muiData,
+            ...rest
+          }: {
+            dispalyFields: string[];
+            muiData: string[];
+          }) => rest
+        );
+        let sortUsers = paginate(
+          sort_by(
+            filterUsers,
+            [lookupsFilter[indexOfUserData][`Cities_userData_sortByField`]],
+            lookupsFilter[indexOfUserData][`Cities_userData_sortDirection`]
+          ),
+          lookupsFilter[indexOfUserData][`Cities_userData_perPage`],
+          lookupsFilter[indexOfUserData][`Cities_userData_pageNumber`]
+        );
+        filterCity[0].userData = sortUsers;
+      }
+
+      const agentsData = await multiMapAgents.get('allAgencies');
+      for (const agents of agentsData) {
+        let findAgents = agents.filter((a: any) =>
+          filterCity[0].agents_id.includes(a._id)
+        );
+        let filterAgents = findAgents.map(
+          ({
+            dispalyFields,
+            muiData,
+            ...rest
+          }: {
+            dispalyFields: string[];
+            muiData: string[];
+          }) => rest
+        );
+        let sortAgents = paginate(
+          sort_by(
+            filterAgents,
+            [lookupsFilter[indexOfAgentsData][`Cities_agentsData_sortByField`]],
+            lookupsFilter[indexOfAgentsData][`Cities_agentsData_sortDirection`]
+          ),
+          lookupsFilter[indexOfAgentsData][`Cities_agentsData_perPage`],
+          lookupsFilter[indexOfAgentsData][`Cities_agentsData_pageNumber`]
+        );
+        filterCity[0].agentsData = sortAgents;
+      }
+
+      filterCity[0].suppliersData = [];
+      filterCity[0].hotelsData = [];
+
+      finalCountry = filterCity[0];
+    }
+  }
+
+  return finalCountry;
+};
+
+findMuliMapFunctions.findCurrenciesById = async function findCurrenciesById(
+  _id: string,
+  lookupsFilter: any,
+  hz: any,
+  multiMap: any
+) {
+  const indexOfAgentsData = lookupsFilter.findIndex((a: any) =>
+    Object.keys(a).some((e) => /agentsData/g.test(e))
+  );
+
+  const indexOfSuppliersData = lookupsFilter.findIndex((a: any) =>
+    Object.keys(a).some((e) => /suppliersData/g.test(e))
+  );
+  const multiMapAgents = await hz.getMultiMap('Agencies');
+  const agentsExist = await multiMapAgents.containsKey(`allAgencies`);
+  //Todo check supplier multipmap
+  let finalCurrency = {};
+  if (!agentsExist) {
+    finalCurrency = await findFunctions[
+      `findCurrenciesById` as keyof typeof findFunctions
+    ]?.(_id, lookupsFilter);
+  } else {
+    const currencyData = await multiMap.get(`allCurrencies`);
+    for (const currencies of currencyData as any) {
+      let currentCurrency = currencies.filter((a: any) => a._id == _id);
+      let filterCurrency = currentCurrency.map(
+        ({
+          dispalyFields,
+          muiData,
+          ...rest
+        }: {
+          dispalyFields: string[];
+          muiData: string[];
+        }) => rest
+      );
+
+      const agentsData = await multiMapAgents.get('allAgencies');
+      for (const agents of agentsData) {
+        let findAgents = agents.filter((a: any) =>
+          filterCurrency[0].agents_id.includes(a._id)
+        );
+        let filterAgents = findAgents.map(
+          ({
+            dispalyFields,
+            muiData,
+            ...rest
+          }: {
+            dispalyFields: string[];
+            muiData: string[];
+          }) => rest
+        );
+        let sortAgents = paginate(
+          sort_by(
+            filterAgents,
+            [
+              lookupsFilter[indexOfAgentsData][
+                `Currencies_agentsData_sortByField`
+              ],
+            ],
+            lookupsFilter[indexOfAgentsData][
+              `Currencies_agentsData_sortDirection`
+            ]
+          ),
+          lookupsFilter[indexOfAgentsData][`Currencies_agentsData_perPage`],
+          lookupsFilter[indexOfAgentsData][`Currencies_agentsData_pageNumber`]
+        );
+        filterCurrency[0].agentsData = sortAgents;
+      }
+
+      filterCurrency[0].suppliersData = [];
+
+      finalCurrency = filterCurrency[0];
+    }
+  }
+
+  return finalCurrency;
+};
+
+findMuliMapFunctions.findAgenciesById = async function findAgenciesById(
+  _id: string,
+  lookupsFilter: any,
+  hz: any,
+  multiMap: any
+) {
+  const multiMapCountries = await hz.getMultiMap('Countries');
+  const countriesExist = await multiMapCountries.containsKey(`allCountries`);
+  const multiMapProvinces = await hz.getMultiMap('Provinces');
+  const provincesExist = await multiMapProvinces.containsKey(`allProvinces`);
+  const multiMapCities = await hz.getMultiMap('Cities');
+  const citiesExist = await multiMapCities.containsKey(`allCities`);
+  const multiMapUsers = await hz.getMultiMap('Users');
+  const usersExist = await multiMapUsers.containsKey(`allUsers`);
+
+  let finalAgent = {};
+
+  if (!countriesExist || !provincesExist || !citiesExist || !usersExist) {
+    finalAgent = await findFunctions[
+      `findAgenciesById` as keyof typeof findFunctions
+    ]?.(_id, lookupsFilter);
+  } else {
+    const agenciesData = await multiMap.get(`allAgencies`);
+
+    for (const agencies of agenciesData) {
+      let currentAgent = agencies.filter((a: any) => a._id == _id);
+      let filterAgent = currentAgent.map(
+        ({
+          dispalyFields,
+          muiData,
+          ...rest
+        }: {
+          dispalyFields: string[];
+          muiData: string[];
+        }) => rest
+      );
+
+      const countriesData = await multiMapCountries.get(`allCountries`);
+      for (const countries of countriesData) {
+        let agentCountry = countries.filter((a: any) =>
+          filterAgent[0].country_id.includes(a._id)
+        );
+        let countryName = agentCountry.map((a: any) => a.name);
+        filterAgent[0].countryName = countryName?.toString();
+      }
+
+      const provincesData = await multiMapProvinces.get(`allProvinces`);
+      for (const provinces of provincesData) {
+        let agentProvince = provinces.filter((a: any) =>
+          filterAgent[0].province_id.includes(a._id)
+        );
+        let provinceName = agentProvince.map((a: any) => a.name);
+        filterAgent[0].provinceName = provinceName?.toString();
+      }
+
+      const citiesData = await multiMapCities.get(`allCities`);
+      for (const cities of citiesData) {
+        let agentCity = cities.filter((a: any) =>
+          filterAgent[0].city_id.includes(a._id)
+        );
+        let cityName = agentCity.map((a: any) => a.name);
+        filterAgent[0].cityName = cityName?.toString();
+      }
+
+      const usersData = await multiMapUsers.get(`allUsers`);
+      for (const users of usersData) {
+        let accountManager = users.filter((a: any) =>
+          filterAgent[0].accountManager_id.includes(a._id)
+        );
+        let accountManagerFilter = accountManager.map(
+          ({
+            dispalyFields,
+            muiData,
+            twitter,
+            google,
+            facebook,
+            roleName,
+            role_id,
+            province_id,
+            profileImageKey,
+            folderId,
+            finalFolder,
+            country_id,
+            city_id,
+            ...rest
+          }: {
+            dispalyFields: string[];
+            muiData: string[];
+            twitter: string[];
+            google: string[];
+            facebook: string[];
+            roleName: string;
+            role_id: string[];
+            province_id: string[];
+            profileImageKey: string;
+            folderId: string;
+            finalFolder: string;
+            country_id: string[];
+            city_id: string[];
+          }) => rest
+        );
+
+        let userUpdated = users.filter((a: any) =>
+          filterAgent[0].userUpdated.includes(a._id)
+        );
+        let userUpdatedFilter = userUpdated.map(
+          ({
+            dispalyFields,
+            muiData,
+            twitter,
+            google,
+            facebook,
+            roleName,
+            role_id,
+            province_id,
+            profileImageKey,
+            folderId,
+            finalFolder,
+            country_id,
+            city_id,
+            ...rest
+          }: {
+            dispalyFields: string[];
+            muiData: string[];
+            twitter: string[];
+            google: string[];
+            facebook: string[];
+            roleName: string;
+            role_id: string[];
+            province_id: string[];
+            profileImageKey: string;
+            folderId: string;
+            finalFolder: string;
+            country_id: string[];
+            city_id: string[];
+          }) => rest
+        );
+
+        let userCreated = users.filter((a: any) =>
+          filterAgent[0].userCreated.includes(a._id)
+        );
+        let userCreatedFilter = userCreated.map(
+          ({
+            dispalyFields,
+            muiData,
+            twitter,
+            google,
+            facebook,
+            roleName,
+            role_id,
+            province_id,
+            profileImageKey,
+            folderId,
+            finalFolder,
+            country_id,
+            city_id,
+            ...rest
+          }: {
+            dispalyFields: string[];
+            muiData: string[];
+            twitter: string[];
+            google: string[];
+            facebook: string[];
+            roleName: string;
+            role_id: string[];
+            province_id: string[];
+            profileImageKey: string;
+            folderId: string;
+            finalFolder: string;
+            country_id: string[];
+            city_id: string[];
+          }) => rest
+        );
+
+        filterAgent[0].accountManagerData = accountManagerFilter;
+        filterAgent[0].userUpdatedData = userUpdatedFilter;
+        filterAgent[0].userCreatedData = userCreatedFilter;
+      }
+
+      finalAgent = filterAgent[0];
+    }
+  }
+
+  return finalAgent;
+};
+
 export async function findAllUsers(
   modelName: string,
   sortByField: string,

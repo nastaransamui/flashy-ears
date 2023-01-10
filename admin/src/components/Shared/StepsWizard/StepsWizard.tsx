@@ -35,7 +35,7 @@ const StepsWizards: FC<StepsWizardsPropTypes> = ((props: StepsWizardsPropTypes) 
   const { classes, theme } = stepsWizardStyles({});
   const { propsMiniActive } = useSelector<State, State>((state) => state);
 
-  const { singleDataContext } = useSingleData();
+  const { singleDataContext } = useSingleData('context');
   const wizard = useRef<any>();
   const [mainWizardWidth, setMainWizardWidth] = useState(0)
 

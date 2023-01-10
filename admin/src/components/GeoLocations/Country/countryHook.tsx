@@ -1,10 +1,11 @@
 import { useEffect } from "react";
-import useSingleData from '@/hookes/useSingleData'
 import useCurrentRouteState from '@/hookes/useCurrentRouteState';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useQuery } from "@/src/components/Dashboard/ReactRouter";
 
 const countryHook = () => {
-  const { _id, singleData } = useSingleData();
+  let query = useQuery();
+  const _id = query.get('_id');
   const currentRouteState = useCurrentRouteState();
   const navigate = useNavigate();
 

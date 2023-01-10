@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import StepsWizards from "@/shared/StepsWizard/StepsWizard";
 
 const EditVideo: FC = (() => {
-  const { _id, singleData } = useSingleData();
+  const { _id, singleData } = useSingleData('edit');
   const {
     values,
     handleTitlesChange,

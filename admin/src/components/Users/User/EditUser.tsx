@@ -14,7 +14,7 @@ import LookUpsPagination from "@/shared/Lookups/LookUpsPagination";
 
 const EditUser: FC = (() => {
 
-  const { _id, singleData } = useSingleData();
+  const { _id, singleData } = useSingleData('edit');
   const { values,
     handleRolesdataChange,
     handleAgentsDataChange } = editUserHook(singleData)

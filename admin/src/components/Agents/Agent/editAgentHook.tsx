@@ -52,7 +52,7 @@ const editAgentHook = (singleData: any) => {
       accountManagerData: [],
     }
   ]);
-
+  console.log(singleData)
   useEffect(() => {
     if (singleData !== null) {
       setValues([

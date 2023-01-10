@@ -6,7 +6,7 @@ import { dbCheck } from 'middleware/dbCheck';
 import hazelCast from 'middleware/hazelCast';
 import mongoose, { Model } from 'mongoose';
 import type { MultiMap } from 'hazelcast-client/lib/proxy/MultiMap';
-import { findFunctions } from '@/helpers/dbFinds';
+import { findFunctions, findMuliMapFunctions } from '@/helpers/dbFinds';
 
 const apiRoute = nextConnect<HazelcastType, NextApiResponse>({
   onError(error, req, res) {
@@ -38,9 +38,22 @@ apiRoute.post(
       const hz = req.hazelCast;
       var collection = mongoose.model(modelName);
       if (hz) {
-        res.status(401).json({ success: false, Error: 'update Hz' });
+        const multiMap = await hz.getMultiMap(modelName);
+        const dataIsExist = await multiMap.containsKey(`all${modelName}`);
+        console.log(req.body);
+        if (dataIsExist) {
+          const data = await findMuliMapFunctions[
+            `find${modelName}ById` as keyof typeof findMuliMapFunctions
+          ]?.(_id, lookupsFilter, hz, multiMap);
+          res.status(200).json({ success: true, data: data });
+          await hz.shutdown();
+        } else {
+          const data = await findFunctions[
+            `find${modelName}ById` as keyof typeof findFunctions
+          ]?.(_id, lookupsFilter);
+          res.status(200).json({ success: true, data: data });
+        }
       } else {
-        // const func = findUsersById;
         const data = await findFunctions[
           `find${modelName}ById` as keyof typeof findFunctions
         ]?.(_id, lookupsFilter);
