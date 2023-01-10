@@ -52,13 +52,14 @@ const BrandLogo: FC<BrandLogoTypes> = (props: BrandLogoTypes) => {
       [classes.sideBarThemeRTL]: rtlActive,
     })
 
+
   return (
     <div className={logoClasses}>
       <span className={logoMini} onClick={() => {
         localStorage.removeItem(`${modelName}_Lookup`)
         navigate('/')
       }}>
-        <img src={`/admin${brand[`img_${i18n.language}` as keyof typeof brand]}`} className={classes.img} />
+        <img src={`/admin${brand[`img_${sideBarbgColor}` as keyof typeof brand]}`} className={classes.img} />
       </span>
       <span className={logoNormal} >
         <span onClick={() => {

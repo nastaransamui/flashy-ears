@@ -19,7 +19,7 @@ const EditRole: FC = (() => {
     handleCrudChange,
     handleUsersChange
   } = editRoleHook(singleData);
-  console.log(singleData)
+  // console.log(singleData)
   const { t } = useTranslation('Roles')
   return (
     <Fragment>
@@ -30,7 +30,9 @@ const EditRole: FC = (() => {
             stepComponent: () => <div>{JSON.stringify(values[0])}</div>,
             stepId: 'name',
             isValidated: () => true,
-            handleChange: () => { console.log(`handle  ${t('name')} change`) },
+            handleChange: () => {
+              // console.log(`handle  ${t('name')} change`)
+            },
             values: values[0]
           },
           {
@@ -38,7 +40,9 @@ const EditRole: FC = (() => {
             stepComponent: () => <div>{JSON.stringify(values[1])}</div>,
             stepId: 'routes',
             isValidated: () => true,
-            handleChange: () => { console.log(`handle  ${t('routes')} change`) },
+            handleChange: () => {
+              // console.log(`handle  ${t('routes')} change`)
+            },
             values: values[1]
           },
           {
@@ -46,7 +50,9 @@ const EditRole: FC = (() => {
             stepComponent: () => <div>{JSON.stringify(values[2])}</div>,
             stepId: 'crud',
             isValidated: () => true,
-            handleChange: () => { console.log(`handle  ${t('crud')} change`) },
+            handleChange: () => {
+              // console.log(`handle  ${t('crud')} change`) 
+            },
             values: values[2]
           },
           singleData?.isActive && {
@@ -62,7 +68,7 @@ const EditRole: FC = (() => {
             isValidated: () => true,
             handleChange: () => {
               handleUsersChange();
-              console.log(`handle  ${t('users')} change`)
+              // console.log(`handle  ${t('users')} change`)
             },
             values: values[3]
           },

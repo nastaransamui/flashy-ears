@@ -68,7 +68,7 @@ export interface State {
 
 const initialState = {
   adminAccessToken: null,
-  adminThemeName: typeof window !== 'undefined' ? getCookies().adminThemeName as string : 'cloud',
+  adminThemeName: typeof window !== 'undefined' ? getCookies().adminThemeName as string : 'grayscale',
   adminThemeType: typeof window !== 'undefined' ? getCookies().adminThemeType as PaletteMode : 'dark',
   adminLoadingBar: 0,
   adminFormSubmit: false,

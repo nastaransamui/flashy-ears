@@ -6,7 +6,6 @@ declare global {
       NEXT_PUBLIC_ADMIN_URL: string;
       NEXT_PBULIC_FOLDER_PUBLIC_UAT: string;
       NEXT_PBULIC_FOLDER_PUBLIC_LIVE: string;
-      NEXT_PUBLIC_API_LINK: string;
       NEXT_PUBLIC_HOME_VERCEL: string;
       NEXT_PUBLIC_ADMIN_VERCEL: string;
       NEXT_PUBLIC_SECRET_KEY: string;

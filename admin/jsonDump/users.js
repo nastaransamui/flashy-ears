@@ -57,7 +57,7 @@ const checkUsers = {
       if (length !== 0) {
         resolve(length);
       } else {
-        var addUserCommand = `mongoimport --uri mongodb+srv://dbUser:${DATABASE_PASSWORD}@admintypescript.0zjh9yz.mongodb.net/${
+        var addUserCommand = `mongoimport --uri mongodb+srv://dbUser:${DATABASE_PASSWORD}@flashy-ears.saj8sxg.mongodb.net/${
           process.env.NODE_ENV == 'development' ? 'UAT' : 'LIVE'
         } --collection users --type json --file ${usersDb}`;
         var child = require('child_process').exec(addUserCommand);

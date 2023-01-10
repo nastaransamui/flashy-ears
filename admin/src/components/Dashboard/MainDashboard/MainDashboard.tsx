@@ -19,8 +19,8 @@ const MainDashboard: FC<CustomPropsTypes> = (props: CustomPropsTypes) => {
         [classes.sidebarHandlemainOpen]: propsMiniActive,
         [classes.sidebarHandlemainClose]: !propsMiniActive,
       })}>
-        <FirstRow />
-        <SecondRow />
+        {/* <FirstRow />
+        <SecondRow /> */}
       </div>
     </Fragment>
   )

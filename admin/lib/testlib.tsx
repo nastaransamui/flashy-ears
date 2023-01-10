@@ -15,7 +15,7 @@ export interface State {
 const initialState = {
     adminAccessToken: null,
     adminLoadingBar: 0,
-    adminThemeName: 'cloud',
+    adminThemeName: 'grayscale',
     adminThemeType: 'dark',
     adminFormSubmit: false,
 }

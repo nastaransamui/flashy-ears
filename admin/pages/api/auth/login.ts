@@ -37,6 +37,7 @@ apiRoute
   .post(dbCheck, async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     try {
       const { strategy } = req.body;
+      console.log(strategy);
       const user = await authenticate(strategy, req, res);
       // console.log(user);
       if (!(user as any).message) {

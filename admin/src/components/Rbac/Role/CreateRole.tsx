@@ -19,7 +19,9 @@ const CreateRole: FC = (() => {
           stepComponent: () => <div>{JSON.stringify(values[0])}</div>,
           stepId: 'name',
           isValidated: () => true,
-          handleChange: () => { console.log('handle change') },
+          handleChange: () => {
+            // console.log('handle change') 
+          },
           values: values[0]
         },
         {
@@ -27,7 +29,9 @@ const CreateRole: FC = (() => {
           stepComponent: () => <div>{JSON.stringify(values[1])}</div>,
           stepId: 'routes',
           isValidated: () => true,
-          handleChange: () => { console.log('handle change') },
+          handleChange: () => {
+            // console.log('handle change') 
+          },
           values: values[1]
         },
         {
@@ -35,7 +39,9 @@ const CreateRole: FC = (() => {
           stepComponent: () => <div>{JSON.stringify(values[2])}</div>,
           stepId: 'crud',
           isValidated: () => true,
-          handleChange: () => { console.log('handle change') },
+          handleChange: () => {
+            // console.log('handle change') 
+          },
           values: values[2]
         },
         ]

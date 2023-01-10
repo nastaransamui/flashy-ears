@@ -185,7 +185,7 @@ MyDocument.getInitialProps = async (ctx) => {
     ...initialProps,
     emotionStyleTags,
     adminThemeType: hasCookie('adminThemeType', ctx) ? getCookies(ctx).adminThemeType : 'dark',
-    adminThemeName: hasCookie('adminThemeName', ctx) ? getCookies(ctx).adminThemeName : 'cloud',
+    adminThemeName: hasCookie('adminThemeName', ctx) ? getCookies(ctx).adminThemeName : 'grayscale',
     i18nextLng: hasCookie('i18nextLng', ctx) ? getCookies(ctx).i18nextLng : 'en',
   };
 };

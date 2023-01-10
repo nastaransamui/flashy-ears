@@ -36,7 +36,7 @@ const checkRoles = {
       if (length !== 0) {
         resolve(length);
       } else {
-        var addRolesCommand = `mongoimport --uri mongodb+srv://dbUser:${DATABASE_PASSWORD}@admintypescript.0zjh9yz.mongodb.net/${
+        var addRolesCommand = `mongoimport --uri mongodb+srv://dbUser:${DATABASE_PASSWORD}@flashy-ears.saj8sxg.mongodb.net/${
           process.env.NODE_ENV == 'development' ? 'UAT' : 'LIVE'
         } --collection roles --type json --file ${rolesDb}`;
         var child = require('child_process').exec(addRolesCommand);

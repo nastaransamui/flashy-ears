@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "typeRoots": [
+      "../node_modules/@types",
+      "../@types"
+    ],
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": {
+      "@/src/*": ["src/*"],
+      "@/pages/*": ["pages/*"],
+      "@/styles/*": ["styles/*"],
+      "@/public/*": ["public/*"],
+      "@/lib/*": ["lib/*"],
+      "@/theme/*": ["theme/*"],
+      "@/interfaces/*": ["src/components/Shared/interfaces/*"],
+      "@/helpers/*": ["helpers/*"],
+      "@/models/*": ["models/*"],
+      "@/hookes/*": ["src/components/Hooks/*"],
+      "@/shared/*": ["src/components/Shared/*"],
+      "@/root/*": ["/*"]
+    },
+    "jsxImportSource": "@emotion/react",
+    "incremental": true
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "prebuildDbCheck.js"],
+  "exclude": ["node_modules"]
+}

@@ -161,7 +161,7 @@ const authStyles = makeStyles<{}>()((theme) => {
         zIndex: 10,
       },
       '& img': {
-        width: 64,
+        width: 174,
       },
       '& p, span': {
         display: 'block',

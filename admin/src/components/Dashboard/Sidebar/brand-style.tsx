@@ -36,9 +36,9 @@ const brandStyle = makeStyles<{}>()((theme) => {
       width: `30px`,
       display: "inline-block",
       maxHeight: `30px`,
-      marginLeft: `22px`,
+      marginLeft: `12px`,
       cursor: 'pointer',
-      marginRight: `18px`,
+      marginRight: `22px`,
       marginTop: `7px`,
       color: 'inherit'
     },
@@ -48,7 +48,7 @@ const brandStyle = makeStyles<{}>()((theme) => {
       marginLeft: `26px`
     },
     img: {
-      width: 35,
+      width: 55,
       verticalAlign: 'middle',
       border: 0
     },

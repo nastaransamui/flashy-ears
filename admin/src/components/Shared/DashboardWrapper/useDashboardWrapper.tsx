@@ -22,7 +22,7 @@ const useDashboardWrapper = () => {
   const { i18n, t } = useTranslation();
   const [adminTheme, setAdminTheme] = useState({
     ...appTheme(
-      hasCookie('adminThemeName') ? getCookies().adminThemeName as string : 'cloud' as string,
+      hasCookie('adminThemeName') ? getCookies().adminThemeName as string : 'grayscale' as string,
       hasCookie('adminThemeType') ? getCookies().adminThemeType as PaletteMode : 'dark' as PaletteMode,
       i18n.language.startsWith('fa') ? 'rtl' : 'ltr'
     ),

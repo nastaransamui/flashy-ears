@@ -27,7 +27,7 @@ export async function setPageCookies(ctx: NextPageContext, store: any) {
     })),
     ...(await store.dispatch({
       type: 'ADMIN_THEMENAME',
-      payload: getCookies(ctx).adminThemeName || 'cloud',
+      payload: getCookies(ctx).adminThemeName || 'grayscale',
     })),
   };
 }

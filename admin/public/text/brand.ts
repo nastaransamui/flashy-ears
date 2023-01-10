@@ -15,15 +15,15 @@ interface Brand {
   contactUs_fa: string;
   url_en: string;
   url_fa: string;
-  img_en: string;
-  img_fa: string;
+  img_white: string;
+  img_black: string;
   notifMsg_en: string;
   notifMsg_fa: string;
 }
 
 const brand: Brand = (module.exports = {
-  name_en: 'Name',
-  name_fa: 'نام',
+  name_en: 'Flashy Ears',
+  name_fa: 'گوشواره های پر زرق و برق',
   desc_en: 'Description',
   desc_fa: 'شرح',
   prefix_en: 'perfix',
@@ -38,8 +38,8 @@ const brand: Brand = (module.exports = {
   contactUs_fa: 'تماس با ما',
   url_en: 'url',
   url_fa: 'آدرس اینترنتی',
-  img_en: '/images/logo.png',
-  img_fa: '/images/logo.png',
+  img_white: '/images/logo_white.png',
+  img_black: '/images/logo_black.png',
   notifMsg_en: 'Notif Message.',
   notifMsg_fa: 'پیام نوتیف.',
 });
