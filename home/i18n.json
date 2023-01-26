@@ -1,0 +1,8 @@
+{
+  "locales": ["en", "th"],
+  "defaultLocale": "en",
+  "logBuild": false,
+  "pages": {
+    "*": ["common", "404"]
+  }
+}

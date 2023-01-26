@@ -1,7 +1,12 @@
 /** @type {import('next').NextConfig} */
 const { NEXT_PUBLIC_ADMIN_URL } = process.env;
+const nextTranslate = require('next-translate');
+const path = require('path');
 const nextConfig = {
   reactStrictMode: true,
+  webpack: function (config, options) {
+    return config;
+  },
   async rewrites() {
     return [
       {
@@ -20,4 +25,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+module.exports = nextTranslate(nextConfig);
