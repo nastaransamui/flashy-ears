@@ -4,12 +4,14 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography'
-import { FC } from 'react';
+import { FC, createRef, useEffect } from 'react';
 import useShallowTranslation from '../Hooks/useShallowTranslation';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import useWrapper from '@/shared/AppWrapper/useAppWrapper';
 
+import dynamic from "next/dynamic";
+const SideBar = dynamic(() => import("@/shared/SideBar"), { ssr: false });
 
 interface Props {
   t: any;
@@ -23,53 +25,47 @@ const ErrorPage: FC<Props> = (props: any) => {
   const router = useRouter();
   const hasQuery = router.asPath.includes('?');
   const { classes } = useStyles({ theme: homeTheme });
+  const navRef = createRef<any>();
+  const menuRef = createRef<any>();
+
+  useEffect(() => {
+    if (navRef.current !== null && menuRef.current !== null) {
+      navRef.current.style.display = 'block'
+      menuRef.current.style.display = 'flex'
+    }
+  }, [navRef])
   return (
-    <div className={classes.errorWrap}>
-      <div className="lang-menu " >
-        <div className={`selected-lang  ${lang}`}>
-          {t(lang)}
-        </div>
-        <ul>
-          <li>
-            <Link
-              href={{
-                pathname: hasQuery ? router.route : router.asPath,
-                query: router.query,
-              }}
-              replace locale={lang == 'en' ? 'th' : 'en'} scroll={false} shallow={true} legacyBehavior>
-              <a role="button" className={lang == 'en' ? 'th' : 'en'}>{lang == 'en' ? t('th') : t('en')}</a>
-            </Link>
-          </li>
-        </ul>
-      </div>
-      <Container maxWidth='md'>
-        <Grid container spacing={0}>
-          <Grid item md={4} xs={12}>
-            <div className={classes.flex}>
-              <div className={classes.deco}>
-                <Typography variant='h3'>{errorCode}</Typography>
+    <SideBar navRef={navRef} menuRef={menuRef}>
+      <div className={classes.errorWrap}>
+        <Container maxWidth='md'>
+          <Grid container spacing={0}>
+            <Grid item md={4} xs={12}>
+              <div className={classes.flex}>
+                <div className={classes.deco}>
+                  <Typography variant='h3'>{errorCode}</Typography>
+                </div>
               </div>
-            </div>
+            </Grid>
+            <Grid item md={8} xs={12}>
+              <div className={classes.text}>
+                <Typography variant='h4'>{t('title')}</Typography>
+                <Typography>{t('404_subtitle')}</Typography>
+                <Button
+                  variant='outlined'
+                  size='large'
+                  color='primary'
+                  onClick={() => {
+                    router.push('/', '/', { locale: lang, shallow: true, scroll: false });
+                  }}
+                  className={classes.button}>
+                  {t('back')}
+                </Button>
+              </div>
+            </Grid>
           </Grid>
-          <Grid item md={8} xs={12}>
-            <div className={classes.text}>
-              <Typography variant='h4'>{t('title')}</Typography>
-              <Typography>{t('404_subtitle')}</Typography>
-              <Button
-                variant='outlined'
-                size='large'
-                color='primary'
-                onClick={() => {
-                  router.push('/', '/', { locale: lang, shallow: true, scroll: false });
-                }}
-                className={classes.button}>
-                {t('back')}
-              </Button>
-            </div>
-          </Grid>
-        </Grid>
-      </Container>
-    </div>
+        </Container>
+      </div>
+    </SideBar>
   );
 };
 

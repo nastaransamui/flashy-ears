@@ -3,9 +3,9 @@ const errorDeco = '/images/svg/error-deco.svg';
 const useStyles = makeStyles<{ theme: any }>()((_theme, { theme }) => {
   return {
     errorWrap: {
-      backgroundColor: theme.palette.background.default,
-      minHeight: '100vh',
-      width: '100%',
+      // backgroundColor: theme.palette.background.default,
+      // minHeight: '100vh',
+      // width: '100%',
       display: 'flex',
       alignItems: 'center',
       paddingTop: theme.spacing(17),
@@ -50,8 +50,8 @@ const useStyles = makeStyles<{ theme: any }>()((_theme, { theme }) => {
     button: {
       marginTop: theme.spacing(4) + '!important',
       width: 205,
-      borderColor: theme.palette.secondary.main,
-      color: theme.palette.secondary.main,
+      borderColor: theme.palette.primary.main,
+      color: theme.palette.primary.main,
     },
   };
 });

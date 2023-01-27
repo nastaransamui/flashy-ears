@@ -9,29 +9,18 @@ import Button from '@mui/material/Button';
 
 import useShallowTranslation from '@/hookes/useShallowTranslation'
 import { useRouter } from 'next/router';
+import About from '@/src/components/pages/About';
 
 
 
-export default function Home() {
+export default function AboutPage() {
   const { t, lang } = useShallowTranslation('common');
   const router = useRouter();
+
   return (
     <>
       <HeadComponent title={t('title')} />
-      <span>
-        about page
-
-        <Button
-          variant='outlined'
-          size='large'
-          color='primary'
-          onClick={() => {
-            router.push('/', '/', { locale: lang, shallow: true, scroll: false });
-          }}>
-          home
-        </Button>
-      </span>
-
+      <About />
     </>
   )
 }

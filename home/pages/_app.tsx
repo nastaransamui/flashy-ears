@@ -1,6 +1,8 @@
 // import '@/styles/scroll.css'
+import '@/styles/globals.css'
 import Head from 'next/head';
 import '@/styles/top-loading-bar.css';
+import '@/styles/font-awesome.min.css'
 import { useEffect, ReactNode } from 'react';
 //Redux
 import { wrapper } from '@/src/redux/store';

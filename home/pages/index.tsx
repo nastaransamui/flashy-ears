@@ -34,6 +34,7 @@ export async function setPageCookies(ctx: NextPageContext, store: any) {
   //   getCookies(ctx).adminAccessToken !== undefined
   //     ? unHashProfile(getCookies(ctx)?.adminAccessToken as string)
   //     : {};
+
   return {
     ...(await store.dispatch({
       type: 'ADMIN_ACCESS_TOKEN',

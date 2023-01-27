@@ -17,6 +17,7 @@ const useWrapper = () => {
   );
 
   const dispatch = useDispatch();
+
   const [homeTheme, setHomeTheme] = useState({
     ...appTheme(
       hasCookie('homeThemeName') ? getCookies().homeThemeName as string : 'oceanBlue' as string,
