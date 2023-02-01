@@ -1,6 +1,9 @@
 import { makeStyles } from 'tss-react/mui';
 
-const ImageStyle = makeStyles<{}>()((theme, params, classes) => {
+const ImageStyle = makeStyles<{}>({
+  name: 'ImageStyle',
+  uniqId: 'uniqueImageStyle',
+})((theme, params, classes) => {
   return {
     slideshow: {
       width: '100%',
@@ -40,11 +43,11 @@ const ImageStyle = makeStyles<{}>()((theme, params, classes) => {
       backgroundPosition: '50% 50%',
     },
     slide__scroll: {
-      // position: 'relative',
-      // top: -150,
-      // fontSize: '50px !important',
-      // cursor: 'pointer',
-      // background: 'red',
+      position: 'relative',
+      top: -150,
+      fontSize: '50px !important',
+      cursor: 'pointer',
+      background: 'red',
     },
     slide__title: {
       position: 'relative',

@@ -6,8 +6,8 @@ import appTheme from '@/theme/appTheme';
 import { getCookies, hasCookie } from 'cookies-next';
 import Script from 'next/script';
 interface Props {
-  adminThemeName?: any;
-  adminThemeType?: any;
+  homeThemeName?: any;
+  homeThemeType?: any;
   i18nextLng?: any;
 }
 
@@ -16,8 +16,8 @@ class MyDocument extends Document<Props> {
 
   render() {
     const theme = appTheme(
-      this.props.adminThemeName,
-      this.props.adminThemeType,
+      this.props.homeThemeName,
+      this.props.homeThemeType,
       'ltr'
     )
     return (
@@ -187,8 +187,8 @@ MyDocument.getInitialProps = async (ctx) => {
   return {
     ...initialProps,
     emotionStyleTags,
-    adminThemeType: hasCookie('adminThemeType', ctx) ? getCookies(ctx).adminThemeType : 'dark',
-    adminThemeName: hasCookie('adminThemeName', ctx) ? getCookies(ctx).adminThemeName : 'cloud',
+    homeThemeType: hasCookie('homeThemeType', ctx) ? getCookies(ctx).homeThemeType : 'dark',
+    homeThemeName: hasCookie('homeThemeName', ctx) ? getCookies(ctx).homeThemeName : 'cloud',
     i18nextLng: hasCookie('i18nextLng', ctx) ? getCookies(ctx).i18nextLng : 'en',
   };
 };

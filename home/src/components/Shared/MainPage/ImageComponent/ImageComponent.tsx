@@ -54,9 +54,9 @@ const ImageComponet: FC = (() => {
     const handleScroll = (event: any) => {
       let scrollMagic = document.querySelector<HTMLElement>(".scrollmagic-pin-spacer")
 
-      if (scrollMagic !== null && process.env.NODE_ENV == 'development') {
-        scrollMagic.style.paddingBottom = '0';
-      }
+      // if (scrollMagic !== null && process.env.NODE_ENV == 'development') {
+      //   scrollMagic.style.paddingBottom = '0';
+      // }
       var st = window.pageYOffset || document.documentElement.scrollTop;
       if (st > lastScrollTop) {
         setDir('next')

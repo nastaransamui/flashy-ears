@@ -3,7 +3,7 @@ const { NEXT_PUBLIC_ADMIN_URL } = process.env;
 const nextTranslate = require('next-translate');
 const path = require('path');
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   webpack: function (config, options) {
     return config;
   },

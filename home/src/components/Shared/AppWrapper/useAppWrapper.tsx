@@ -17,11 +17,9 @@ const useWrapper = () => {
   );
 
   const dispatch = useDispatch();
-
   const [homeTheme, setHomeTheme] = useState({
-    ...appTheme(
-      hasCookie('homeThemeName') ? getCookies().homeThemeName as string : 'oceanBlue' as string,
-      hasCookie('homeThemeType') ? getCookies().homeThemeType as PaletteMode : 'dark' as PaletteMode,
+    ...appTheme(homeThemeName as string,
+      homeThemeType as PaletteMode,
       'ltr'
     ),
   });
@@ -68,6 +66,7 @@ const useWrapper = () => {
     jss,
     homeFormSubmit,
     homeLoadingBar,
+    homeThemeType
   }
 }
 

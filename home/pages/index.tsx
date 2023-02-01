@@ -4,7 +4,7 @@
 import HeadComponent from '@/src/components/head'
 import { wrapper, } from '@/src/redux/store';
 import { GetServerSideProps, NextPageContext } from 'next';
-import { hasCookie, getCookies } from 'cookies-next';
+import { hasCookie, getCookies, setCookie } from 'cookies-next';
 
 
 import useShallowTranslation from '@/hookes/useShallowTranslation'
@@ -72,6 +72,9 @@ export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps
         })),
       }
     } else {
+      setCookie('homeThemeType', 'dark', ctx);
+      setCookie('homeThemeName', 'oceanBlue', ctx);
+      setCookie('i18nextLng', 'en', ctx);
       props = {
         ...(store.dispatch({
           type: 'SLIDES',

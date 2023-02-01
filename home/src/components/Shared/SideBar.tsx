@@ -1,4 +1,4 @@
-import { FC, Fragment } from "react";
+import { FC, Fragment, createRef, useEffect } from "react";
 import Link from 'next/link'
 import SiebarStyle from "./sidebar-style";
 import MenuIcon from '@mui/icons-material/Menu';
@@ -7,16 +7,15 @@ import useShallowTranslation from '../Hooks/useShallowTranslation';
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "@/src/redux/store"
 import { setCookie } from "cookies-next";
-
+import useTranslation from 'next-translate/useTranslation'
 
 export interface SideBarProps {
-  navRef: any;
-  menuRef: any;
+
   children: JSX.Element;
 }
 
 const SideBar: FC<SideBarProps> = ((props) => {
-  const { navRef, children, menuRef } = props;
+  const { children, } = props;
   const { lang, t } = useShallowTranslation('common')
   const { classes, cx, theme } = SiebarStyle({ lang: lang })
   const router = useRouter();
@@ -24,13 +23,59 @@ const SideBar: FC<SideBarProps> = ((props) => {
   const dispatch = useDispatch()
   const { homeThemeType } = useSelector<State, State>((state) => state);
 
+  const navRef = createRef<any>();
+  const menuRef = createRef<any>();
+
+  useEffect(() => {
+    if (router.asPath !== '/') {
+      if (navRef.current !== null) {
+        navRef.current.style.display = 'block'
+        navRef.current.style.top = `calc(100vh - ${window.scrollY - 20000}px)`
+        navRef.current.style.top = 0
+
+      }
+      if (menuRef.current !== null) {
+        menuRef.current.style.display = 'flex'
+
+      }
+    } else {
+      const handleScroll = (event: any) => {
+        if (navRef.current !== null) {
+          if (window.scrollY > 20000) {
+            navRef.current.style.display = 'block'
+            navRef.current.style.top = `calc(100vh - ${window.scrollY - 20000}px)`
+            if (window.scrollY > 20000 + window.innerHeight) {
+              navRef.current.style.top = 0
+            }
+          } else {
+            navRef.current.style.display = 'none'
+          }
+        }
+        if (menuRef.current !== null) {
+          if (window.scrollY > 20400) {
+            menuRef.current.style.display = 'flex'
+          } else {
+            menuRef.current.style.display = 'none'
+
+          }
+
+        }
+      }
+      window.addEventListener('scroll', handleScroll, { passive: false });
+      return () => {
+        window.removeEventListener('scroll', handleScroll);
+      }
+    }
+
+  }, [navRef])
+
 
   return (
     <Fragment>
       <nav className={classes.nav} ref={navRef}>
         <ul className={classes.ul}>
-          <li><Link className={cx(classes.a, router.asPath == '/' && classes.currentLink)} scroll={false} href="/">Home</Link></li>
-          <li><Link className={cx(classes.a, router.asPath == '/about' && classes.currentLink)} href="/about">About</Link></li>
+          <li><Link className={cx(classes.a, router.asPath == '/' ? classes.currentLink : classes.a)} scroll={false} href="/">{t('home')}</Link></li>
+          <li><Link className={cx(classes.a, router.asPath == '/about' ? classes.currentLink : classes.a)} href="/about">{t('about')}</Link></li>
           {/* <li><a className={classes.a} href="http://www.amazon.com">Amazon</a></li>
           <li><a className={classes.a} href="http://www.zappos.com">Zappos</a></li>
           <li><a className={classes.a} href="http://www.threadless.com">Threadless</a></li> */}
@@ -41,7 +86,9 @@ const SideBar: FC<SideBarProps> = ((props) => {
         className={classes.article}
         id="main">
 
-        <div className={classes.all} ref={menuRef}>
+        <div
+          className={classes.all}
+          ref={menuRef}>
           <div className={classes.lefter} onClick={() => {
             dispatch({
               type: 'HOME_THEMETYPE',
@@ -49,18 +96,28 @@ const SideBar: FC<SideBarProps> = ((props) => {
             })
             setCookie('homeThemeType', homeThemeType == 'dark' ? 'light' : 'dark');
           }}>
-            <div className={classes.text} >{theme.palette.mode}</div>
+            <div
+              className={classes.text}
+            >{theme.palette.mode == 'dark' ? t('light') : t('dark')}</div>
           </div>
           <div className={classes.left} onClick={() => {
+            console.log(lang)
             router.push(router.asPath, router.asPath, { locale: lang == 'en' ? 'th' : 'en', shallow: true, scroll: false });
+            setCookie('i18nextLng', lang == 'en' ? 'th' : 'en', {});
           }}>
-            <div className={classes.text} >Language</div>
+            <div
+              className={classes.text}
+            >{lang == "en" ? t("th") : t('en')}</div>
           </div>
           <div className={classes.center} onClick={() => {
-            console.log('FD')
+            console.log('center sidebar line 101')
           }}>
-            <div className={classes.explainer}><MenuIcon className={classes.menuIcon} /></div>
-            <div className={classes.text} >Cart</div>
+            <div
+              className={classes.explainer}
+            ><MenuIcon className={classes.menuIcon} /></div>
+            <div
+              className={classes.text}
+            >{t('cart')}</div>
           </div>
           {/* <div className={classes.right} onClick={() => {
             console.log('BD')

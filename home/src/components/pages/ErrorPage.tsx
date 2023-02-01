@@ -10,8 +10,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import useWrapper from '@/shared/AppWrapper/useAppWrapper';
 
-import dynamic from "next/dynamic";
-const SideBar = dynamic(() => import("@/shared/SideBar"), { ssr: false });
+// import dynamic from "next/dynamic";
+// const SideBar = dynamic(() => import("@/shared/SideBar"), { ssr: false });
+import SideBar from '@/shared/SideBar'
 
 interface Props {
   t: any;
@@ -35,7 +36,7 @@ const ErrorPage: FC<Props> = (props: any) => {
     }
   }, [navRef])
   return (
-    <SideBar navRef={navRef} menuRef={menuRef}>
+    <SideBar >
       <div className={classes.errorWrap}>
         <Container maxWidth='md'>
           <Grid container spacing={0}>

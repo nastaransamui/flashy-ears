@@ -1,9 +1,11 @@
 // import '@/styles/scroll.css'
+// import '@/styles/base.css'
 import '@/styles/globals.css'
 import Head from 'next/head';
 import '@/styles/top-loading-bar.css';
 import '@/styles/font-awesome.min.css'
 import { useEffect, ReactNode } from 'react';
+
 //Redux
 import { wrapper } from '@/src/redux/store';
 import { Provider } from 'react-redux';
@@ -25,13 +27,13 @@ export default function MyApp({ Component, ...rest }: NextProps) {
   const { store, props } = wrapper.useWrappedStore(rest);
   const { router, emotionCache = clientSideEmotionCache, pageProps } = props;
 
-  useEffect(() => {
-    // Remove preloader or show javascript disabled warning
-    const preloader = document.getElementById('preloader');
-    if (preloader !== null || undefined) {
-      preloader?.remove();
-    }
-  }, [])
+  // useEffect(() => {
+  //   // Remove preloader or show javascript disabled warning
+  //   const preloader = document.getElementById('preloader');
+  //   if (preloader !== null || undefined) {
+  //     preloader?.remove();
+  //   }
+  // }, [])
 
   useEffect(() => {
     // Load Jquery

@@ -11,14 +11,14 @@ const About: FC = (() => {
   const menuRef = createRef<any>();
   const router = useRouter();
 
-  useEffect(() => {
-    if (navRef.current !== null && menuRef.current !== null) {
-      navRef.current.style.display = 'block'
-      menuRef.current.style.display = 'flex'
-    }
-  }, [navRef])
+  // useEffect(() => {
+  //   if (navRef.current !== null && menuRef.current !== null) {
+  //     navRef.current.style.display = 'block'
+  //     menuRef.current.style.display = 'flex'
+  //   }
+  // }, [navRef])
   return (
-    <SideBar navRef={navRef} menuRef={menuRef}>
+    <SideBar >
       <span style={{ display: 'flex', height: '200vh' }}>
         {t('aboutPage')}
       </span>

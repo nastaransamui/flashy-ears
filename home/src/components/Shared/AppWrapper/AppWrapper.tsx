@@ -21,7 +21,10 @@ const AppWrapper = ({ children }: ChildrenProps) => {
   const { homeTheme,
     jss,
     homeFormSubmit,
-    homeLoadingBar, } = useWrapper();
+    homeLoadingBar,
+    homeThemeType
+  } = useWrapper();
+
   return (
     <Fragment >
       <ThemeProvider theme={homeTheme}>
@@ -39,7 +42,7 @@ const AppWrapper = ({ children }: ChildrenProps) => {
           <LoadingBar
             height={5}
             shadow
-            color={homeTheme.palette.secondary.main}
+            color={homeThemeType == 'dark' ? homeTheme.palette.secondary.main : homeTheme.palette.primary.main}
             progress={homeLoadingBar}
             className='top-loading-bar'
             data-testid="loadingBar"
