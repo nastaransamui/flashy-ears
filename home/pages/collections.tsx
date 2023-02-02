@@ -10,6 +10,7 @@ import Button from '@mui/material/Button';
 import useShallowTranslation from '@/hookes/useShallowTranslation'
 import { useRouter } from 'next/router';
 import About from '@/src/components/pages/About';
+import Collections from '@/src/components/pages/Collections';
 
 
 
@@ -20,7 +21,7 @@ export default function AboutPage() {
   return (
     <>
       <HeadComponent title={t('title')} />
-      <About />
+      <Collections />
     </>
   )
 }

@@ -51,13 +51,23 @@ const CollectionStyle = makeStyles<{}>({
       height: '100%',
       paddingTop: '10em',
       position: 'relative',
-      cursor: 'pointer',
+      // cursor: 'pointer',
       WebkitTapHighlightColor: 'rgba(0,0,0,0)',
       '&:hover': {
         color: theme.palette.primary.main,
       },
+      [`&:hover .${classes.product__img_back}`]: {
+        transform: 'scale(1.1)',
+      },
+      [`&:hover .${classes.product__img}`]: {
+        transform: 'scale(1.1)',
+      },
       [`&:hover .${classes.product__subtitle}`]: {
-        color: theme.palette.primary.main,
+        color:
+          theme.palette.mode == 'dark'
+            ? theme.palette.secondary.main
+            : theme.palette.primary.main,
+        fontSize: '0.96em',
       },
       [theme.breakpoints.down(640)]: {
         fontSize: '0.75em',
@@ -67,22 +77,152 @@ const CollectionStyle = makeStyles<{}>({
       height: '20em',
       background: theme.palette.background.paper,
       position: 'relative',
+      transition: 'all 0.3s',
+      cursor: 'zoom-in',
       [theme.breakpoints.down(640)]: {
         height: '10em',
       },
     },
-    product__img: {
+    product__img_back: {
+      opacity: 1,
+      transform: '',
+      transitionDelay: '1.3s',
       maxHeight: '25em',
       margin: '0 auto',
       display: 'block',
       position: 'absolute',
+      transition: 'all 1.3s',
       top: 0,
-      left: '50%',
+      left: '25%',
       pointerEvents: 'none',
-      transform: 'translate3d(-50%,0,0)',
       [theme.breakpoints.down(640)]: {
-        maxHeight: '19em',
+        maxHeight: '11em',
+        top: 100,
+        left: '10%',
       },
+    },
+    product__img_back_turn: {
+      opacity: 0,
+      transform: 'rotateY(90deg)',
+      transitionDelay: '0.3s',
+      maxHeight: '25em',
+      margin: '0 auto',
+      display: 'block',
+      position: 'absolute',
+      transition: 'all 1.3s',
+      top: 0,
+      left: '25%',
+      pointerEvents: 'none',
+      [theme.breakpoints.down(640)]: {
+        maxHeight: '11em',
+        top: 100,
+        left: '10%',
+      },
+    },
+
+    product__img: {
+      opacity: 0,
+      transform: 'rotateY(90deg)',
+      transitionDelay: '0.3s',
+      maxHeight: '25em',
+      margin: '0 auto',
+      display: 'block',
+      position: 'absolute',
+      transition: 'all 1.3s',
+      top: 0,
+      left: '25%',
+      pointerEvents: 'none',
+      [theme.breakpoints.down(640)]: {
+        maxHeight: '11em',
+        top: 100,
+        left: '10%',
+      },
+    },
+    product__img_turn: {
+      opacity: 1,
+      transform: '',
+      transitionDelay: '1.3s',
+      maxHeight: '25em',
+      margin: '0 auto',
+      display: 'block',
+      position: 'absolute',
+      transition: 'all 1.3s',
+      top: 0,
+      left: '25%',
+      pointerEvents: 'none',
+      [theme.breakpoints.down(640)]: {
+        maxHeight: '11em',
+        top: 100,
+        left: '10%',
+      },
+    },
+    badge: {
+      transition: 'all 0.34s',
+      WebkitTransition: 'all 0.34s',
+      MozTransition: 'all 0.34s',
+      border: `2px solid ${theme.palette.text.color}`,
+      borderRadius: '50%',
+      cursor: 'pointer',
+      display: 'inline-block',
+      height: 23,
+      marginRight: 5,
+      position: 'relative',
+      width: 23,
+      '&:hover': {
+        borderColor:
+          theme.palette.mode == 'dark'
+            ? theme.palette.secondary.main
+            : theme.palette.primary.main,
+      },
+      [theme.breakpoints.down(640)]: {
+        border: `0.5px solid ${theme.palette.text.color}`,
+        width: 10,
+        height: 10,
+      },
+    },
+    badgeColors: {
+      position: 'relative',
+      top: 8,
+      textAlign: 'center',
+    },
+    badge_black: {
+      backgroundColor: '#323231',
+    },
+    badge_blue: {
+      backgroundColor: '#012a7f',
+    },
+    badge_green: {
+      backgroundColor: '#02d302',
+    },
+    badge_magneta: {
+      backgroundColor: '#db2321',
+    },
+    badge_orange: {
+      backgroundColor: '#e24206',
+    },
+    badge_pink: {
+      backgroundColor: '#ea2251',
+    },
+    badge_red: {
+      backgroundColor: '#fe1c00',
+    },
+    badge_violet: {
+      backgroundColor: '#880239',
+    },
+    badge_white: {
+      backgroundColor: '#dad4d3',
+    },
+    badge_yellow: {
+      backgroundColor: '#dde200',
+    },
+    badge_yellowOrange: {
+      backgroundColor: '#fb7801',
+    },
+    activeBadge: {
+      borderColor:
+        theme.palette.mode == 'dark'
+          ? theme.palette.secondary.main
+          : theme.palette.primary.main,
     },
     product__title: {
       position: 'relative',
@@ -91,6 +231,7 @@ const CollectionStyle = makeStyles<{}>({
       color: theme.palette.text.color,
       fontFamily: 'Roboto',
       fontWeight: 700,
+      textTransform: 'capitalize',
       [theme.breakpoints.down(640)]: {
         fontSize: '1.25em',
       },
@@ -99,6 +240,7 @@ const CollectionStyle = makeStyles<{}>({
       position: 'relative',
       margin: 0,
       textTransform: 'uppercase',
+      transition: 'all 0.3s',
       color: theme.palette.text.disabled,
       fontSize: '0.85em',
       letterSpacing: '0.115em',
@@ -213,15 +355,17 @@ const CollectionStyle = makeStyles<{}>({
           : theme.palette.primary.main,
       fontFamily: 'Roboto',
       fontWeight: 700,
+      textTransform: 'capitalize',
       [theme.breakpoints.down(640)]: {
         fontSize: '2em',
       },
     },
     details__deco: {
       width: '7em',
-      height: 20,
-      backgroundPosition: '50% 97%',
-      backgroundSize: '150%',
+      height: 50,
+      // backgroundPosition: '50% 50%',
+      // backgroundSize: '200%',
+      // backgroundColor: 'yellowGreen',
       [theme.breakpoints.down(640)]: {
         height: 7,
         width: '4em',

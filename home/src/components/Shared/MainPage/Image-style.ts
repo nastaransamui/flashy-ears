@@ -44,10 +44,11 @@ const ImageStyle = makeStyles<{}>({
     },
     slide__scroll: {
       position: 'relative',
-      top: -150,
+      // top: -150,
       fontSize: '50px !important',
       cursor: 'pointer',
-      background: 'red',
+      color: theme.palette.text.color,
+      zIndex: 200,
     },
     slide__title: {
       position: 'relative',

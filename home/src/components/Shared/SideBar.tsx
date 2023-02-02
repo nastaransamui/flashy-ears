@@ -72,13 +72,11 @@ const SideBar: FC<SideBarProps> = ((props) => {
 
   return (
     <Fragment>
-      <nav className={classes.nav} ref={navRef}>
+      <nav className={`${classes.nav} animate__animated animate__backInUp`} ref={navRef}>
         <ul className={classes.ul}>
           <li><Link className={cx(classes.a, router.asPath == '/' ? classes.currentLink : classes.a)} scroll={false} href="/">{t('home')}</Link></li>
           <li><Link className={cx(classes.a, router.asPath == '/about' ? classes.currentLink : classes.a)} href="/about">{t('about')}</Link></li>
-          {/* <li><a className={classes.a} href="http://www.amazon.com">Amazon</a></li>
-          <li><a className={classes.a} href="http://www.zappos.com">Zappos</a></li>
-          <li><a className={classes.a} href="http://www.threadless.com">Threadless</a></li> */}
+          <li><Link className={cx(classes.a, router.asPath == '/collections' ? classes.currentLink : classes.a)} href="/collections">{t('collections')}</Link></li>
         </ul>
       </nav>
 
@@ -87,8 +85,9 @@ const SideBar: FC<SideBarProps> = ((props) => {
         id="main">
 
         <div
-          className={classes.all}
-          ref={menuRef}>
+          className={`${classes.all} animate__animated animate__backInLeft`}
+          ref={menuRef}
+          id="menuRef">
           <div className={classes.lefter} onClick={() => {
             dispatch({
               type: 'HOME_THEMETYPE',
@@ -101,7 +100,6 @@ const SideBar: FC<SideBarProps> = ((props) => {
             >{theme.palette.mode == 'dark' ? t('light') : t('dark')}</div>
           </div>
           <div className={classes.left} onClick={() => {
-            console.log(lang)
             router.push(router.asPath, router.asPath, { locale: lang == 'en' ? 'th' : 'en', shallow: true, scroll: false });
             setCookie('i18nextLng', lang == 'en' ? 'th' : 'en', {});
           }}>

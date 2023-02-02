@@ -56,7 +56,7 @@ const ErrorPage: FC<Props> = (props: any) => {
                   size='large'
                   color='primary'
                   onClick={() => {
-                    router.push('/', '/', { locale: lang, shallow: true, scroll: false });
+                    router.push('/', '/', { locale: lang, shallow: true });
                   }}
                   className={classes.button}>
                   {t('back')}

@@ -15,7 +15,11 @@ const SiebarStyle = makeStyles<{ lang: string }>({
     transformStyle: 'preserve-3d',
     borderRadius: 10,
     border: `1px solid ${theme.palette.secondary.main}`,
-    boxShadow: `0 0 20px 5px rgba(100, 100, 255, .4)`,
+    boxShadow: `0 0 20px 5px ${
+      theme.palette.mode == 'dark'
+        ? 'rgba(255, 255, 255, .4)'
+        : 'rgba(100, 100, 255, .4)'
+    }`,
     opacity: 0,
     transition: 'all 0.3s ease',
     transitionDelay: '1s',
@@ -32,7 +36,7 @@ const SiebarStyle = makeStyles<{ lang: string }>({
   } as CSSProperties;
   return {
     article: {
-      position: 'relative',
+      position: 'fixed',
       width: '100%',
       minHeight: '100vh',
       left: 0,
@@ -181,7 +185,7 @@ const SiebarStyle = makeStyles<{ lang: string }>({
       display: 'none',
       position: 'fixed',
       top: 30,
-      right: 10,
+      right: 30,
       perspective: '10px',
       zIndex: 2,
       transform: 'perspective(300px) rotateX(20deg)',

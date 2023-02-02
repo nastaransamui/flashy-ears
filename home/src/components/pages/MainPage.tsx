@@ -1,9 +1,6 @@
 
 import { FC, Fragment } from "react";
-import dynamic from "next/dynamic";
-// const ImageComponet = dynamic(() => import("@/shared/MainPage/ImageComponent/ImageComponent"), { ssr: false });
-import ImageComponet from "@/shared/MainPage/ImageComponent/ImageComponent";
-import PageComponent from "@/shared/MainPage/PageComponent/PageComponent";
+import MainPageImagesComponent from "@/src/components/Shared/MainPage/MainPageImagesComponent";
 
 
 
@@ -12,8 +9,7 @@ const MainPage: FC = (() => {
 
   return (
     <Fragment>
-      <ImageComponet />
-      <PageComponent />
+      <MainPageImagesComponent />
     </Fragment>
   )
 })

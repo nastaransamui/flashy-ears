@@ -10,12 +10,13 @@ import gsap from "gsap";
 import { TweenMax, TimelineMax } from "gsap"; // Also works with TweenLite and TimelineLite
 import { ScrollMagicPluginGsap } from "scrollmagic-plugin-gsap";
 import { useTheme } from "@mui/material";
+import Link from "next/link";
 
 
 
 var lastScrollTop = 0;
 
-const ImageComponet: FC = (() => {
+const MainPageImagesComponent: FC = (() => {
   const [current, setCurrent] = useState<number>(0)
   const [dir, setDir] = useState('next')
   const { slides } = useSelector<State, State>((state) => state)
@@ -64,7 +65,6 @@ const ImageComponet: FC = (() => {
         setDir('prev')
       }
       lastScrollTop = st <= 0 ? 0 : st; // For Mobile or negative scrolling
-      // console.log(window.scrollY)
       if (window.scrollY > 200 && window.scrollY < 400 && elRefs[current]?.['current']) {
 
         // gsap.to(elRefs[current]?.['current'], {
@@ -72,16 +72,16 @@ const ImageComponet: FC = (() => {
         // });
       }
 
-      if (window.scrollY > 0 && window.scrollY < 5000) {
+      if (window.scrollY > 0 && window.scrollY < 3000) {
         setCurrent(0)
       }
-      if (window.scrollY > 5000 && window.scrollY < 10000) {
+      if (window.scrollY > 3000 && window.scrollY < 6000) {
         setCurrent(1)
       }
-      if (window.scrollY > 10000 && window.scrollY < 15000) {
+      if (window.scrollY > 6000 && window.scrollY < 9000) {
         setCurrent(2)
       }
-      if (window.scrollY > 15000 && window.scrollY < 18000) {
+      if (window.scrollY > 9000 && window.scrollY < 12000) {
         setCurrent(3)
       }
 
@@ -303,7 +303,12 @@ const ImageComponet: FC = (() => {
             color: theme.palette.mode == 'dark' ? '#fff' : '#000',
             stagger: 0.2
           }));
-
+        new ScrollMagic.Scene({
+          duration: '100%',
+          offset: (current * 3000) + 100
+        })
+          .setTween(titleAnimation)
+          .addTo(controller);
         var descri = gsap.timeline()
           .add(gsap.to(desRefs[current]?.['current']['children'], {
             top: -10,
@@ -321,41 +326,44 @@ const ImageComponet: FC = (() => {
             stagger: 0.2
           }));
 
-        var butsd = gsap.timeline()
-          .add(gsap.to(buttonRefs[current]?.['current'], {
-            right: 0,
-            x: 1,
-            scale: 1,
-            color: theme.palette.primary.main,
-            stagger: 0.1
-          }))
+
         new ScrollMagic.Scene({
-          duration: 1000,
-          offset: (current * 5000) + 100
-        })
-          .setTween(titleAnimation)
-          .addTo(controller);
-        new ScrollMagic.Scene({
-          duration: 1000,
-          offset: (current * 5000) + 1000
+          duration: '100%',
+          offset: (current * 3000) + 1000
         })
           .setTween(descri)
           .addTo(controller);
 
-        new ScrollMagic.Scene({
-          duration: '100%',
-          offset: (current * 5000) + 2000
-        })
-          .setTween(butsd)
-          .addTo(controller);
+        if (buttonRefs[current]?.['current'] !== null) {
+          var butsd = gsap.timeline()
+            .add(gsap.to(buttonRefs[current]?.['current'], {
+              right: 0,
+              x: 1,
+              scale: 1,
+              color: theme.palette.primary.main,
+              stagger: 0.1
+            }))
+          new ScrollMagic.Scene({
+            duration: '100%',
+            offset: (current * 3000) + 2000
+          })
+            .setTween(butsd)
+            .addTo(controller);
+        }
+
+
+
+
       }
     };
     load();
   }, [elRefs[current]?.['current'], desRefs[current]?.['current'], buttonRefs[current]?.['current'], current])
 
   useEffect(() => {
-    if (buttonRefs[current - 1] !== undefined) {
-      buttonRefs[current - 1]['current'].removeAttribute('style')
+    if (buttonRefs[current]?.['current'] !== null) {
+      if (buttonRefs[current - 1] !== undefined) {
+        buttonRefs[current - 1]['current'].removeAttribute('style')
+      }
     }
     if (elRefs[current - 1] !== undefined) {
       elRefs[current - 1]['current'].removeAttribute('style');
@@ -374,11 +382,11 @@ const ImageComponet: FC = (() => {
   }, [buttonRefs, elRefs, desRefs, current])
 
   return (
-    <main id="slidesComponent">
+    <main id="top">
       <Controller>
         <Scene
           triggerHook="onLeave"
-          duration={20000}
+          duration={slides.length * 3000}
           pin
         >
           <div className={classes.slideshow} id='slideshow'>
@@ -398,9 +406,34 @@ const ImageComponet: FC = (() => {
                       </div>
                       <h2 className={classes.slide__title} ref={elRefs[i]}>{addSpan(slide[`title_${lang}` as keyof typeof slide])}</h2>
                       <p className={classes.slide__desc} ref={desRefs[i]}>{addSpan(slide[`desc_${lang}` as keyof typeof slide])}</p>
-                      <ScrollIntoView selector="#main" alignToTop className={classes.linkParent}>
+                      {/* <Link href={'/collections'} className={classes.linkParent}>
                         <span className={classes.slide__link} ref={buttonRefs[i]}>{slide[`linkTitle_${lang}` as keyof typeof slide]}</span>
-                      </ScrollIntoView>
+                      </Link> */}
+                      {
+                        current + 1 == slides.length ?
+                          <>
+                            <Link href={'/collections'} className={classes.linkParent}>
+                              <span className={classes.slide__link} ref={buttonRefs[i]}>{slide[`linkTitle_${lang}` as keyof typeof slide]}</span>
+                            </Link>
+                            <ScrollIntoView selector="#top" alignToTop smooth className={classes.linkParent}>
+                              <span style={{ cursor: 'pointer' }}>Back to top</span>
+                            </ScrollIntoView>
+                          </>
+                          :
+                          // <span className={classes.slide__link} ref={buttonRefs[i]}>{i.toString()} {slides.length}{(current + 1 == slides.length).toString()}</span>
+                          <a className="" onClick={(e) => {
+                            e.preventDefault();
+                            window.scroll({
+                              top: current == (slides.length - 2) ? slides.length * 3000 : ((current + 1) * 3000) + 10,
+                              left: 0,
+                              behavior: 'smooth'
+                            });
+                            setCurrent(current + 1)
+                          }}>
+                            <i className={`fa fa-angle-double-down ${classes.slide__scroll} home-arrow-down`} aria-hidden="true"></i>
+                          </a>
+                      }
+
                     </div>
                   )
                 })
@@ -413,4 +446,4 @@ const ImageComponet: FC = (() => {
   )
 })
 
-export default ImageComponet;
+export default MainPageImagesComponent;

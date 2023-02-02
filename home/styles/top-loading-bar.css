@@ -90,7 +90,6 @@ body .top-loading-bar {
   animation: home-arrow-down 2s infinite;
   -webkit-animation-play-state: running;
   animation-play-state: running;
-  color: white;
 }
 
 .home-arrow-down:hover {

@@ -273,17 +273,26 @@ const appTheme = (color: string, mode: PaletteMode, dir: string) => {
       MuiTooltip: {
         styleOverrides: {
           tooltip: {
-            backgroundColor: mode === 'dark' ? '#424242' : '#f5f5f5', //theme.palette.background.default,
+            backgroundColor: mode === 'dark' ? '#424242' : 'gray', //theme.palette.background.default,
             fontWeight: 600,
             fontSize: 12,
             whiteSpace: 'pre-line',
             borderRadius: 4,
             color: mode === 'dark' ? '#fff' : '#000000', //theme.palette.text.color,
-            border: `solid 0.5px ${palette[color].palette.secondary.main}`,
+            border: `solid 0.5px ${
+              mode == 'dark'
+                ? palette[color].palette.secondary.main
+                : palette[color].palette.primary.main
+            }`,
           },
           arrow: {
             '&:before': {
-              border: `0.5px solid ${palette[color].palette.secondary.main}`, //${theme.palette.secondary.main}
+              border: `0.5px solid ${
+                mode == 'dark'
+                  ? palette[color].palette.secondary.main
+                  : palette[color].palette.primary.main
+              }`, //${theme.palette.secondary.main}
+              backgroundColor: mode === 'dark' ? '#424242' : 'gray',
             },
             color: mode === 'dark' ? '#424242' : '#f5f5f5', //theme.palette.background.default,
           },
