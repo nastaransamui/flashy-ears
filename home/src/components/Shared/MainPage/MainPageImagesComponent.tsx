@@ -11,7 +11,8 @@ import { TweenMax, TimelineMax } from "gsap"; // Also works with TweenLite and T
 import { ScrollMagicPluginGsap } from "scrollmagic-plugin-gsap";
 import { useTheme } from "@mui/material";
 import Link from "next/link";
-
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import Fab from '@mui/material/Fab';
 
 
 var lastScrollTop = 0;
@@ -284,9 +285,9 @@ const MainPageImagesComponent: FC = (() => {
 
         ScrollMagicPluginGsap(ScrollMagic, TweenMax, TimelineMax);
         controller = new ScrollMagic.Controller({
-          globalSceneOptions: {
-            triggerHook: 1,
-          }
+          // globalSceneOptions: {
+          //   triggerHook: 1,
+          // }
         });
         var titleAnimation = gsap.timeline()
           .add(gsap.to(elRefs[current]?.['current']['children'], {
@@ -305,10 +306,11 @@ const MainPageImagesComponent: FC = (() => {
           }));
         new ScrollMagic.Scene({
           duration: '100%',
-          offset: (current * 3000) + 100
+          triggerHook: (current * 3000) + 100
         })
           .setTween(titleAnimation)
           .addTo(controller);
+
         var descri = gsap.timeline()
           .add(gsap.to(desRefs[current]?.['current']['children'], {
             top: -10,
@@ -329,7 +331,7 @@ const MainPageImagesComponent: FC = (() => {
 
         new ScrollMagic.Scene({
           duration: '100%',
-          offset: (current * 3000) + 1000
+          triggerHook: (current * 3000) + 1000
         })
           .setTween(descri)
           .addTo(controller);
@@ -415,9 +417,14 @@ const MainPageImagesComponent: FC = (() => {
                             <Link href={'/collections'} className={classes.linkParent}>
                               <span className={classes.slide__link} ref={buttonRefs[i]}>{slide[`linkTitle_${lang}` as keyof typeof slide]}</span>
                             </Link>
-                            <ScrollIntoView selector="#top" alignToTop smooth className={classes.linkParent}>
-                              <span style={{ cursor: 'pointer' }}>Back to top</span>
-                            </ScrollIntoView>
+                            {
+                              slides.length > 1 && <ScrollIntoView selector="#top" alignToTop smooth className={classes.linkParent}>
+                                {/* <span style={{ cursor: 'pointer' }}>Back to top</span> */}
+                                <Fab color="primary" aria-label="add">
+                                  <ArrowUpwardIcon />
+                                </Fab>
+                              </ScrollIntoView>
+                            }
                           </>
                           :
                           // <span className={classes.slide__link} ref={buttonRefs[i]}>{i.toString()} {slides.length}{(current + 1 == slides.length).toString()}</span>

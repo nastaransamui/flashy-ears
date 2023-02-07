@@ -25,8 +25,21 @@ const CollectionStyle = makeStyles<{}>({
       display: 'block',
       // zIndex: 1,
     },
+    rotationButton: {
+      color:
+        theme.palette.mode == 'dark'
+          ? theme.palette.secondary.main
+          : theme.palette.primary.main,
+      zIndex: 3,
+      position: 'relative',
+      top: 0,
+      marginBottom: '-11em',
+      [theme.breakpoints.down(640)]: {
+        marginBottom: '-9em',
+      },
+    },
     grid: {
-      margin: '10em auto 7em',
+      margin: '5em auto 7em',
       position: 'relative',
       padding: '0 1em',
       width: '100%',
@@ -35,6 +48,7 @@ const CollectionStyle = makeStyles<{}>({
       gridTemplateColumns: `repeat(2, 1fr)`,
       [theme.breakpoints.down(640)]: {
         padding: '0 1vw',
+        margin: '2em auto 7em',
       },
     },
     grid__item: {
@@ -42,6 +56,9 @@ const CollectionStyle = makeStyles<{}>({
       margin: '0 0 12vh',
       [`&:nth-of-type(odd) .${classes.product}`]: {
         marginTop: '-8em',
+      },
+      [`&:nth-of-type(odd) .${classes.rotationButton}`]: {
+        marginBottom: '-1em',
       },
       [theme.breakpoints.down(640)]: {
         padding: '0 2vw',
@@ -188,6 +205,9 @@ const CollectionStyle = makeStyles<{}>({
     badge_black: {
       backgroundColor: '#323231',
     },
+    badge_blackC: {
+      backgroundColor: '#323231',
+    },
     badge_blue: {
       backgroundColor: '#012a7f',
     },
@@ -209,10 +229,25 @@ const CollectionStyle = makeStyles<{}>({
     badge_violet: {
       backgroundColor: '#880239',
     },
+    badge_violetB: {
+      backgroundColor: '#880239',
+    },
+    badge_violetW: {
+      backgroundColor: '#880239',
+    },
+    badge_violetC: {
+      backgroundColor: '#880239',
+    },
     badge_white: {
       backgroundColor: '#dad4d3',
     },
+    badge_whiteC: {
+      backgroundColor: '#dad4d3',
+    },
     badge_yellow: {
+      backgroundColor: '#dde200',
+    },
+    badge_yellowC: {
       backgroundColor: '#dde200',
     },
     badge_yellowOrange: {
@@ -282,7 +317,8 @@ const CollectionStyle = makeStyles<{}>({
       },
     },
     mediaItem_img: {
-      maxWidth: '100%',
+      width: 280,
+      height: 210,
       opacity: 0.8,
       transition: 'opacity 0.3s',
     },

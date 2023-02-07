@@ -95,6 +95,7 @@ const ImageStyle = makeStyles<{}>({
     linkParent: {
       zIndex: 22222,
       cursor: 'pointer',
+      marginTop: 100,
     },
   };
 });

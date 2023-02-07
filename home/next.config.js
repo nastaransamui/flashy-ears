@@ -4,6 +4,12 @@ const nextTranslate = require('next-translate');
 const path = require('path');
 const nextConfig = {
   reactStrictMode: false,
+  sassOptions: {
+    includePaths: [
+      path.join(__dirname, 'styles'),
+      path.join(__dirname, 'node_modules'),
+    ],
+  },
   webpack: function (config, options) {
     return config;
   },

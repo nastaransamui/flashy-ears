@@ -215,10 +215,11 @@ const SiebarStyle = makeStyles<{ lang: string }>({
       opacity: 0,
       transition: 'all .3s ease',
       bottom: 0,
-      left: 5,
+      left: 0,
       position: 'absolute',
       willChange: 'transform',
       color: theme.palette.text.color,
+      minWidth: 'max-content',
       textShadow: `0 0 5px rgba(100, 100, 255, .6)`,
     },
     left: {

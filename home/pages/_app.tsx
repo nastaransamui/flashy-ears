@@ -1,6 +1,7 @@
 // import '@/styles/scroll.css'
 // import '@/styles/base.css'
 import '@/styles/globals.css'
+import '@/styles/social-media.scss'
 import Head from 'next/head';
 import 'animate.css'
 import '@/styles/top-loading-bar.css';
