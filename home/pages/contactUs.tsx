@@ -3,22 +3,24 @@
 import HeadComponent from '@/src/components/head'
 import { wrapper, } from '@/src/redux/store';
 import { GetServerSideProps, NextPageContext } from 'next';
-import { getCookies, setCookie } from 'cookies-next';
+import { hasCookie, getCookies, setCookie } from 'cookies-next';
+
+import Button from '@mui/material/Button';
 
 import useShallowTranslation from '@/hookes/useShallowTranslation'
 import { useRouter } from 'next/router';
-import About from '@/src/components/pages/About';
+import ContactUs from '@/src/components/pages/ContactUs';
 
 
 
-export default function AboutPage() {
+export default function ContactUsPage() {
   const { t, lang } = useShallowTranslation('common');
   const router = useRouter();
 
   return (
     <>
       <HeadComponent title={t('title')} />
-      <About />
+      <ContactUs />
     </>
   )
 }

@@ -8,6 +8,7 @@ import Tooltip from '@mui/material/Tooltip'
 import ThreeSixtyIcon from '@mui/icons-material/ThreeSixty';
 import IconButton from '@mui/material/IconButton'
 import Link from "next/link";
+import SocialMedia from "../SocialMedia/SocialMedia";
 class Item {
   DOM: any;
   info: { img: any; title: any; subtitle: any; description: any; price: any; };
@@ -1435,7 +1436,7 @@ const CollectionComponent: FC = (() => {
             <img className={classes.mediaItem_img} src="/img/half1.png" />
             <h3 className={classes.mediaItem_title}>{t('squareCollection')}</h3>
           </Link>
-
+          <SocialMedia />
         </section>
       </main>
       <Script src="/js/imagesloaded.pkgd.min.js" />

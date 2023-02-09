@@ -43,5 +43,19 @@
   "relatedImage": "If you enjoyed this product you might also check below images:",
   "diamondCollection": "Diamond Collection",
   "triangleCollection": "Triangle Collection",
-  "squareCollection": "Square Collection"
+  "squareCollection": "Square Collection",
+  "contactUs": "Contact Us",
+  "contact_title2": "Say Hello to Us",
+  "contact_subtitle": "Do you have any questions? Are you ready to reduce cost and create new revenue? Or you simply want to say hi? Drop us a message.",
+  "form_require": "This field is required",
+  "form_email_require": "Email is not valid",
+  "form_name": "What is your name?",
+  "form_email": "What is your email?",
+  "form_phone": "What is your phone number?",
+  "form_subject": "What is your subject?",
+  "form_message": "Write your message here",
+  "form_terms": "I have read and accept the Terms of",
+  "form_privacy": "Service & Privacy Policy *",
+  "form_send": "Send Message",
+  "messageSucces": "This message sent successfully!"
 }

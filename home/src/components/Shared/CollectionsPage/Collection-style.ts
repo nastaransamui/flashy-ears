@@ -289,12 +289,12 @@ const CollectionStyle = makeStyles<{}>({
       position: 'absolute',
     },
     contentRelated: {
-      padding: '8em 5vw',
+      padding: '3px 5vw',
       fontWeight: 'bold',
       textAlign: 'center',
       background: theme.palette.background.paper,
       color: theme.palette.text.color,
-      marginTop: '10px !important',
+      marginTop: '3px !important',
       '* >a': {
         color: theme.palette.primary.main,
       },

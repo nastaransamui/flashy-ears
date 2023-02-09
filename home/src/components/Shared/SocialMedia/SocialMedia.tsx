@@ -16,7 +16,7 @@ const SocialMedia = (() => {
           setMenuOpen((prev) => !prev)
         }} />
         <label className={` menu-open-button ${classes.menuItem}`} htmlFor="menu-open">
-          {menuOpen ? <CloseIcon sx={{ fontSize: '2em', marginTop: '19px' }} /> : <ShareIcon sx={{ fontSize: '2em', marginTop: '19px' }} />}
+          {menuOpen ? <CloseIcon color={theme.palette.mode == 'dark' ? "primary" : 'secondary'} /> : <ShareIcon color={theme.palette.mode == 'dark' ? "primary" : 'secondary'} />}
         </label>
 
         <a href="https://twitter.com/FlashyEarsT" target='_blank' rel='noreferrer noopener' className={`menu-item ${classes.menuItem}`} > <i className="fa fa-twitter"></i> </a>
