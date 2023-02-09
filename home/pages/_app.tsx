@@ -1,7 +1,12 @@
 // import '@/styles/scroll.css'
-// import '@/styles/base.css'
+import '@/styles/base.css'
+import '@/styles/particles.css'
 import '@/styles/globals.css'
 import '@/styles/social-media.scss'
+// import '@/styles/progress/normalize.css'
+// import '@/styles/progress/demo.css'
+import '@/styles/progress/component.css'
+import '@/styles/progress/custom-bars.css'
 import Head from 'next/head';
 import 'animate.css'
 import '@/styles/top-loading-bar.css';

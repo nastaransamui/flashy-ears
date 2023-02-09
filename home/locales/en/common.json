@@ -57,5 +57,6 @@
   "form_terms": "I have read and accept the Terms of",
   "form_privacy": "Service & Privacy Policy *",
   "form_send": "Send Message",
-  "messageSucces": "This message sent successfully!"
+  "messageSucces": "This message sent successfully!",
+  "gallery": "Gallery"
 }

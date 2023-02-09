@@ -1,5 +1,5 @@
 
-import { Fragment, } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 //Theme
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -17,6 +17,8 @@ import { StylesProvider } from '@mui/styles';
 import useWrapper from './useAppWrapper';
 
 const AppWrapper = ({ children }: ChildrenProps) => {
+  const [percent, setPercent] = useState<number>(50)
+  const [showLoading, setShowLoading] = useState<boolean>(true)
 
   const { homeTheme,
     jss,
@@ -24,6 +26,19 @@ const AppWrapper = ({ children }: ChildrenProps) => {
     homeLoadingBar,
     homeThemeType
   } = useWrapper();
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (percent < 100) {
+        setPercent(() => percent + 1)
+      } else {
+        setShowLoading(false)
+      }
+    }, 15);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [percent, showLoading]);
 
   return (
     <Fragment >
@@ -47,7 +62,27 @@ const AppWrapper = ({ children }: ChildrenProps) => {
             className='top-loading-bar'
             data-testid="loadingBar"
           />
-          {children}
+          <>
+            {
+              showLoading ?
+                <div className="flexy-column" >
+                  <div className="progress-factor flexy-item" >
+                    <div className="progress-bar" style={{ position: 'absolute', top: '50%', right: 3 }}>
+                      <div className="bar has-rotation has-colors dark dots-pattern" role="progressbar" aria-valuenow={percent} aria-valuemin={0} aria-valuemax={100}>
+                        <div className="tooltip"></div>
+                        <div className="bar-face face-position roof percentage"></div>
+                        <div className="bar-face face-position back percentage"></div>
+                        <div className="bar-face face-position floor percentage volume-lights"></div>
+                        <div className="bar-face face-position left"></div>
+                        <div className="bar-face face-position right"></div>
+                        <div className="bar-face face-position front percentage volume-lights shine"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                : <>{children}</>
+            }
+          </>
         </StylesProvider>
       </ThemeProvider>
     </Fragment>

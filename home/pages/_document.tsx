@@ -25,11 +25,6 @@ class MyDocument extends Document<Props> {
         <Head>
           {/* PWA primary color */}
           <meta name="theme-color" content={theme.palette.primary.main} />
-
-          <link
-            href='https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css'
-            rel='stylesheet'
-          />
           {/* <link
             href='https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css'
             rel='stylesheet'
@@ -101,7 +96,7 @@ class MyDocument extends Document<Props> {
           <script src="//cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.7/plugins/animation.gsap.js"></script> */}
         </Head>
         <body>
-          <div
+          {/* <div
             id='preloader'
             style={{
               position: 'fixed',
@@ -127,7 +122,7 @@ class MyDocument extends Document<Props> {
               src='/images/loading.gif'
               alt='loading'
             />
-          </div>
+          </div> */}
           <Main />
           <NextScript />
         </body>

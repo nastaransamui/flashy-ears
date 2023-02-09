@@ -54,9 +54,10 @@ const useWrapper = () => {
   useEffect(() => {
     // Remove preloader or show javascript disabled warning
     const preloader = document.getElementById('preloader');
-    if (preloader !== null || undefined) {
-      preloader?.remove();
-    }
+
+    // if (preloader !== null || undefined) {
+    //   preloader?.remove();
+    // }
   }, [])
 
   const jss = create({ plugins: [...jssPreset().plugins, rtl()] });

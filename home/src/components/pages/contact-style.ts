@@ -245,6 +245,7 @@ const contactStyles = makeStyles<{}>({
         fill: theme.palette.secondary.main,
       },
     },
+    particlesButton: {},
   };
 });
 

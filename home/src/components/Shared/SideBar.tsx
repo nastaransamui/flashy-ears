@@ -77,6 +77,7 @@ const SideBar: FC<SideBarProps> = ((props) => {
           <li><Link className={cx(classes.a, router.asPath == '/' ? classes.currentLink : classes.a)} scroll={false} href="/">{t('home')}</Link></li>
           <li><Link className={cx(classes.a, router.asPath == '/about' ? classes.currentLink : classes.a)} href="/about">{t('about')}</Link></li>
           <li><Link className={cx(classes.a, router.asPath == '/collections' ? classes.currentLink : classes.a)} href="/collections">{t('collections')}</Link></li>
+          <li><Link className={cx(classes.a, router.asPath == '/gallery' ? classes.currentLink : classes.a)} href="/gallery">{t('gallery')}</Link></li>
           <li><Link className={cx(classes.a, router.asPath == '/contactUs' ? classes.currentLink : classes.a)} href="/contactUs">{t('contactUs')}</Link></li>
         </ul>
       </nav>
