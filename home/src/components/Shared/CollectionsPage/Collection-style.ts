@@ -384,7 +384,7 @@ const CollectionStyle = makeStyles<{}>({
     },
     details__title: {
       margin: '-1.5em 0 0.1em',
-      fontSize: '4.5em',
+      fontSize: '3.5em',
       color:
         theme.palette.mode == 'dark'
           ? theme.palette.secondary.main
@@ -452,7 +452,10 @@ const CollectionStyle = makeStyles<{}>({
       padding: '0.75em 2em',
       fontWeight: 'bold',
       '&:hover': {
-        background: theme.palette.primary.main,
+        background:
+          theme.palette.mode == 'dark'
+            ? theme.palette.secondary.dark
+            : theme.palette.primary.dark,
       },
     },
     details__close: {
@@ -497,6 +500,12 @@ const CollectionStyle = makeStyles<{}>({
     },
     details__open: {
       pointerEvents: 'auto',
+      '& > .particles': {
+        opacity: 1,
+        '& > .particles-wrapper': {
+          // overflow: 'inherit',
+        },
+      },
     },
     icon: {
       display: 'block',

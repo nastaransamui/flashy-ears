@@ -1,0 +1,30 @@
+import axios from 'axios';
+
+export const getProductItems = async () => {
+  const url =
+    process.env.NODE_ENV == 'development'
+      ? `${process.env.NEXT_PUBLIC_HOME_URL}/api/productItems`
+      : `${process.env.NEXT_PUBLIC_API_URL_PRODUCTION}/api/productItems`;
+
+  let productItems;
+  try {
+    productItems = await axios
+      .get(url, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then((res) => {
+        return res?.data?.productItems;
+      })
+      .catch((error) => {
+        console.log(error);
+        return [];
+      });
+
+    return productItems;
+  } catch (error) {
+    console.log((error as Error).message);
+    return [];
+  }
+};

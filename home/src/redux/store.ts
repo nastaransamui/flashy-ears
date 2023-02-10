@@ -16,6 +16,7 @@ const initialState = {
   homeLoadingBar: 0,
   homeFormSubmit: false,
   slides: [],
+  productItems: [],
 };
 
 export interface SlidesType {
@@ -28,6 +29,54 @@ export interface SlidesType {
   linkTitle_th: string;
   link: string;
 }
+export interface ProductItemsImagesFrontType {
+  black: string;
+  blue: string;
+  green: string;
+  magneta: string;
+  orange: string;
+  pink: string;
+  red: string;
+  violet: string;
+  white: string;
+  yellow: string;
+  yellowOrange: string;
+}
+export interface ProductItemsImagesBackType {
+  black: string;
+  blue: string;
+  green: string;
+  magneta: string;
+  orange: string;
+  pink: string;
+  red: string;
+  violet: string;
+  white: string;
+  yellow: string;
+  yellowOrange: string;
+}
+export interface ProductItemsImagesType {
+  front: ProductItemsImagesFrontType;
+  back: ProductItemsImagesBackType;
+}
+export interface ProductItemsColorsType {
+  label: string;
+  name: string;
+  _id: string;
+}
+export interface ProductItemsType {
+  images: ProductItemsImagesType[];
+  product_name: string;
+  product_label_en: string;
+  product_label_th: string;
+  product_subtitle_en: string;
+  product_subtitle_th: string;
+  product__description_en: string;
+  product__description_th: string;
+  _id: string;
+  product__price: string;
+  colors: ProductItemsColorsType[];
+}
 export interface State {
   adminAccessToken: any;
   homeThemeName: string | null;
@@ -35,6 +84,7 @@ export interface State {
   homeLoadingBar: number;
   homeFormSubmit: boolean;
   slides: SlidesType[];
+  productItems: ProductItemsType[];
 }
 
 const reducer = (state: State = initialState, action: AnyAction) => {
@@ -57,6 +107,8 @@ const reducer = (state: State = initialState, action: AnyAction) => {
       return { ...state, homeFormSubmit: action.payload };
     case 'SLIDES':
       return { ...state, slides: action.payload };
+    case 'PRODUCT_ITEMS':
+      return { ...state, productItems: action.payload };
     default:
       return state;
   }

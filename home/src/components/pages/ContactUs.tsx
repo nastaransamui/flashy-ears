@@ -50,7 +50,6 @@ const ContactUs: FC = (() => {
   const handleSubmit = async (e: any) => {
     var Particles = (await import('../../../public/js/particles')).default;
     var bttn = e.target?.querySelector('button')!
-
     const particles = new Particles(bttn, {});
 
 
@@ -257,9 +256,6 @@ const ContactUs: FC = (() => {
               </Paper>
             </Container>
             <Script src="/js/particles.js" ></Script>
-            <Script>
-
-            </Script>
           </div>
         </>
       </SideBar>

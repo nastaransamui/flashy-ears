@@ -1,7 +1,7 @@
 // import '@/styles/scroll.css'
 import '@/styles/base.css'
 import '@/styles/particles.css'
-import '@/styles/globals.css'
+// import '@/styles/globals.css'
 import '@/styles/social-media.scss'
 // import '@/styles/progress/normalize.css'
 // import '@/styles/progress/demo.css'

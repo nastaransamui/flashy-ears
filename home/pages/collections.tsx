@@ -11,6 +11,7 @@ import useShallowTranslation from '@/hookes/useShallowTranslation'
 import { useRouter } from 'next/router';
 import About from '@/src/components/pages/About';
 import Collections from '@/src/components/pages/Collections';
+import { getProductItems } from 'apiCalls/getProductItems';
 
 
 
@@ -58,10 +59,16 @@ export async function setPageCookies(ctx: NextPageContext, store: any) {
 export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(
   (store) => async (ctx) => {
     let props = {}
+    const productItems = await getProductItems();
     if (!isObjectEmpty(getCookies(ctx))) {
 
       props = {
         ...(await setPageCookies(ctx as any, store as any)),
+        ...(await setPageCookies(ctx as any, store as any)),
+        ...(store.dispatch({
+          type: 'PRODUCT_ITEMS',
+          payload: productItems,
+        })),
       }
     } else {
       setCookie('homeThemeType', 'dark', ctx);
