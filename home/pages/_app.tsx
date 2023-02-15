@@ -12,7 +12,7 @@ import 'animate.css'
 import '@/styles/top-loading-bar.css';
 import '@/styles/font-awesome.min.css'
 import { useEffect, ReactNode } from 'react';
-
+import "@/styles/react-image-lightbox.css";
 //Redux
 import { wrapper } from '@/src/redux/store';
 import { Provider } from 'react-redux';

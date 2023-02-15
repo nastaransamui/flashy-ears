@@ -17,7 +17,15 @@ const initialState = {
   homeFormSubmit: false,
   slides: [],
   productItems: [],
+  dbImages: [],
 };
+
+export interface DBImagesType {
+  src: string;
+  model: string;
+  caption_en: string;
+  caption_th: string;
+}
 
 export interface SlidesType {
   img: string;
@@ -85,6 +93,7 @@ export interface State {
   homeFormSubmit: boolean;
   slides: SlidesType[];
   productItems: ProductItemsType[];
+  dbImages: DBImagesType[];
 }
 
 const reducer = (state: State = initialState, action: AnyAction) => {
@@ -109,6 +118,8 @@ const reducer = (state: State = initialState, action: AnyAction) => {
       return { ...state, slides: action.payload };
     case 'PRODUCT_ITEMS':
       return { ...state, productItems: action.payload };
+    case 'DB_IMAGES':
+      return { ...state, dbImages: action.payload };
     default:
       return state;
   }

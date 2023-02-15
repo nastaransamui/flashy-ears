@@ -319,16 +319,30 @@ const CollectionStyle = makeStyles<{}>({
     mediaItem_img: {
       width: 280,
       height: 210,
-      opacity: 0.8,
+      opacity: theme.palette.mode == 'dark' ? 0.8 : 0.9,
       transition: 'opacity 0.3s',
+      [theme.breakpoints.down(640)]: {
+        width: 180,
+        height: 110,
+      },
+      [theme.breakpoints.down(330)]: {
+        width: 150,
+        height: 110,
+      },
     },
     mediaItem_title: {
       fontSize: '1em',
       margin: 0,
       padding: '0.5em',
-      color: theme.palette.secondary.main,
+      color:
+        theme.palette.mode == 'dark'
+          ? theme.palette.secondary.main
+          : theme.palette.primary.main,
       '&:hover': {
-        color: theme.palette.primary.main,
+        color:
+          theme.palette.mode == 'dark'
+            ? theme.palette.primary.main
+            : theme.palette.secondary.dark,
       },
     },
     // open image

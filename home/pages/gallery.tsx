@@ -3,11 +3,12 @@
 import HeadComponent from '@/src/components/head'
 import { wrapper, } from '@/src/redux/store';
 import { GetServerSideProps, NextPageContext } from 'next';
-import { getCookies, setCookie } from 'cookies-next';
+import { getCookies, getCookie, setCookie } from 'cookies-next';
 
 import useShallowTranslation from '@/hookes/useShallowTranslation'
 import { useRouter } from 'next/router';
 import Gallery from '@/src/components/pages/Gallery';
+import { getGalleryImages } from 'apiCalls/getGalleryImages';
 
 
 
@@ -55,15 +56,23 @@ export async function setPageCookies(ctx: NextPageContext, store: any) {
 export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(
   (store) => async (ctx) => {
     let props = {}
+
+    const galleryImages = await getGalleryImages(getCookie('galleryImageModel', ctx) as string);
+
     if (!isObjectEmpty(getCookies(ctx))) {
 
       props = {
         ...(await setPageCookies(ctx as any, store as any)),
+        ...(store.dispatch({
+          type: 'DB_IMAGES',
+          payload: galleryImages,
+        })),
       }
     } else {
       setCookie('homeThemeType', 'dark', ctx);
       setCookie('homeThemeName', 'oceanBlue', ctx);
       setCookie('i18nextLng', 'en', ctx);
+      setCookie('galleryImageModel', 'bell', ctx);
       props = {
         ...(store.dispatch({
           type: 'HOME_LOADINGBAR',

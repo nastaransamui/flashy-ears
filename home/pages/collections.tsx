@@ -64,7 +64,6 @@ export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps
 
       props = {
         ...(await setPageCookies(ctx as any, store as any)),
-        ...(await setPageCookies(ctx as any, store as any)),
         ...(store.dispatch({
           type: 'PRODUCT_ITEMS',
           payload: productItems,

@@ -25,6 +25,7 @@ class MyDocument extends Document<Props> {
         <Head>
           {/* PWA primary color */}
           <meta name="theme-color" content={theme.palette.primary.main} />
+          {/* <link rel="stylesheet" href="https://use.typekit.net/gyf5muf.css" /> */}
           {/* <link
             href='https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css'
             rel='stylesheet'

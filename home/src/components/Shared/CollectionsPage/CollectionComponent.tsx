@@ -12,6 +12,7 @@ import SocialMedia from "../SocialMedia/SocialMedia";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { State } from "@/src/redux/store";
+import { setCookie } from "cookies-next";
 export function isObjectEmpty(obj: object) {
   return Object.keys(obj).length === 0;
 }
@@ -523,17 +524,64 @@ const CollectionComponent: FC = (() => {
           <p className={classes.p} dangerouslySetInnerHTML={{ __html: t('lazada') }}></p>
           <p>{t('relatedImage')}</p>
           <Link locale={lang} className={classes.mediaItem} href="/gallery">
-            <img className={classes.mediaItem_img} src="/img/all_dark.jpg" />
-
+            <img className={classes.mediaItem_img} src="/img/bell/pink.png" onClick={() => {
+              setCookie('galleryImageModel', 'bell', {});
+            }} />
+            <h3 className={classes.mediaItem_title}>{t('bellCollection')}</h3>
+          </Link>
+          <Link locale={lang} className={classes.mediaItem} href="/gallery">
+            <img className={classes.mediaItem_img} src="/img/crookedTriangle/pink.png" onClick={() => {
+              setCookie('galleryImageModel', 'crookedTriangle', {});
+            }} />
+            <h3 className={classes.mediaItem_title}>{t('crookedTriangleCollection')}</h3>
+          </Link>
+          <Link locale={lang} className={classes.mediaItem} href="/gallery">
+            <img className={classes.mediaItem_img} src="/img/diamond/blue.png" onClick={() => {
+              setCookie('galleryImageModel', 'diamond', {});
+            }} />
             <h3 className={classes.mediaItem_title}>{t('diamondCollection')}</h3>
           </Link>
           <Link locale={lang} className={classes.mediaItem} href="/gallery">
-            <img className={classes.mediaItem_img} src="/img/all2.jpeg" />
-            <h3 className={classes.mediaItem_title}>{t('triangleCollection')}</h3>
+            <img className={classes.mediaItem_img} src="/img/longTriangle/violet.png" onClick={() => {
+              setCookie('galleryImageModel', 'longTriangle', {});
+            }} />
+            <h3 className={classes.mediaItem_title}>{t('longTriangleCollection')}</h3>
           </Link>
           <Link locale={lang} className={classes.mediaItem} href="/gallery">
-            <img className={classes.mediaItem_img} src="/img/half1.png" />
+            <img className={classes.mediaItem_img} src="/img/octagon/magneta.png" onClick={() => {
+              setCookie('galleryImageModel', 'octagon', {});
+            }} />
+            <h3 className={classes.mediaItem_title}>{t('octagonCollection')}</h3>
+          </Link>
+          <Link locale={lang} className={classes.mediaItem} href="/gallery">
+            <img className={classes.mediaItem_img} src="/img/oval/yellow.png" onClick={() => {
+              setCookie('galleryImageModel', 'oval', {});
+            }} />
+            <h3 className={classes.mediaItem_title}>{t('ovalCollection')}</h3>
+          </Link>
+          <Link locale={lang} className={classes.mediaItem} href="/gallery">
+            <img className={classes.mediaItem_img} src="/img/socks/green.png" onClick={() => {
+              setCookie('galleryImageModel', 'socks', {});
+            }} />
+            <h3 className={classes.mediaItem_title}>{t('socksCollection')}</h3>
+          </Link>
+          <Link locale={lang} className={classes.mediaItem} href="/gallery">
+            <img className={classes.mediaItem_img} src="/img/square/white.png" onClick={() => {
+              setCookie('galleryImageModel', 'square', {});
+            }} />
             <h3 className={classes.mediaItem_title}>{t('squareCollection')}</h3>
+          </Link>
+          <Link locale={lang} className={classes.mediaItem} href="/gallery">
+            <img className={classes.mediaItem_img} src="/img/squareWithHole/red.png" onClick={() => {
+              setCookie('galleryImageModel', 'squareWithHole', {});
+            }} />
+            <h3 className={classes.mediaItem_title}>{t('squareWithHoleCollection')}</h3>
+          </Link>
+          <Link locale={lang} className={classes.mediaItem} href="/gallery">
+            <img className={classes.mediaItem_img} src="/img/triangle/orange.png" onClick={() => {
+              setCookie('galleryImageModel', 'triangle', {});
+            }} />
+            <h3 className={classes.mediaItem_title}>{t('triangleCollection')}</h3>
           </Link>
           <SocialMedia />
         </section>

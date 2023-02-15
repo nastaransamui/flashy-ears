@@ -286,7 +286,7 @@ const About: FC = (() => {
   return (
     <SideBar >
       <>
-        <Script src="/js/about/modernizr.custom.js" strategy="beforeInteractive" />
+        <Script src="/js/about/modernizr.custom.js" strategy="lazyOnload" />
         <div className={classes.container} id="container">
           <div id="theGrid"
             className={classes.main}

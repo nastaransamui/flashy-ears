@@ -9,7 +9,15 @@ npm run dev
 # or
 yarn dev
 ```
-
+● Handmade teakwood earring triangle shape(Ultraviolet light reaction) .
+● Hand wrapped with string.
+● SIZE: (39 MM X 39 MM X 5 MM ) .
+● It's 10 models in 11 colors (black blue, green, magenta, orange, pink, red, violet, white, yellow, yellow Orange).
+● Except for White and Black color the rest glow in Ultra Violet lights.
+● For white color string ropes are reactive to Ultraviolet light.
+● Please notice that the item and rope color displayed in the pictures may be slightly different from the real object, due to different display devices.
+● Please allow 1-3mm error due to manual measurement.
+● Appreciate your understanding in advance.
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
