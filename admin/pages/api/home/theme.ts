@@ -31,7 +31,6 @@ apiRoute.get(
   async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     try {
       var theme = await Theme.find({});
-      console.log(theme);
       if (theme.length == 0) {
         Theme.insertMany([
           {

@@ -63,6 +63,14 @@ export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps
 
       props = {
         ...(await setPageCookies(ctx as any, store as any)),
+        ...(await store.dispatch({
+          type: 'HOME_THEMENAME',
+          payload: homeTheme?.['name'],
+        })),
+        ...(store.dispatch({
+          type: 'HOME_LOADINGBAR',
+          payload: 100,
+        })),
       }
     } else {
       setCookie('homeThemeType', 'dark', ctx);

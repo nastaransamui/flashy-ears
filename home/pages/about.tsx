@@ -33,6 +33,7 @@ export async function setPageCookies(ctx: NextPageContext, store: any) {
   //     ? unHashProfile(getCookies(ctx)?.adminAccessToken as string)
   //     : {};
 
+  const homeTheme = await getHomeTheme();
   return {
     ...(await store.dispatch({
       type: 'ADMIN_ACCESS_TOKEN',
@@ -44,7 +45,7 @@ export async function setPageCookies(ctx: NextPageContext, store: any) {
     })),
     ...(await store.dispatch({
       type: 'HOME_THEMENAME',
-      payload: getCookies(ctx).homeThemeName || 'oceanBlue',
+      payload: homeTheme?.['name'] || 'oceanBlue',
     })),
     ...(await store.dispatch({
       type: 'HOME_LOADINGBAR',

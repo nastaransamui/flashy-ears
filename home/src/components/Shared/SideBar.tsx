@@ -110,7 +110,6 @@ const SideBar: FC<SideBarProps> = ((props) => {
             >{lang == "en" ? t("th") : t('en')}</div>
           </div>
           <div className={classes.center} onClick={() => {
-            console.log('center sidebar line 101')
           }}>
             <div
               className={classes.explainer}
