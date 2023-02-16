@@ -9,6 +9,7 @@ import useShallowTranslation from '@/hookes/useShallowTranslation'
 import { useRouter } from 'next/router';
 import Gallery from '@/src/components/pages/Gallery';
 import { getGalleryImages } from 'apiCalls/getGalleryImages';
+import { getHomeTheme } from 'apiCalls/getHomeTheme';
 
 
 
@@ -58,7 +59,7 @@ export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps
     let props = {}
 
     const galleryImages = await getGalleryImages(getCookie('galleryImageModel', ctx) as string);
-
+    const homeTheme = await getHomeTheme();
     if (!isObjectEmpty(getCookies(ctx))) {
 
       props = {
@@ -67,16 +68,28 @@ export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps
           type: 'DB_IMAGES',
           payload: galleryImages,
         })),
+        ...(store.dispatch({
+          type: 'HOME_LOADINGBAR',
+          payload: 100,
+        })),
+        ...(await store.dispatch({
+          type: 'HOME_THEMENAME',
+          payload: homeTheme?.['name'],
+        })),
       }
     } else {
       setCookie('homeThemeType', 'dark', ctx);
-      setCookie('homeThemeName', 'oceanBlue', ctx);
+      // setCookie('homeThemeName', homeTheme?.['name'], ctx);
       setCookie('i18nextLng', 'en', ctx);
       setCookie('galleryImageModel', 'bell', ctx);
       props = {
         ...(store.dispatch({
           type: 'HOME_LOADINGBAR',
           payload: 100,
+        })),
+        ...(await store.dispatch({
+          type: 'HOME_THEMENAME',
+          payload: homeTheme?.['name'],
         })),
       }
     }

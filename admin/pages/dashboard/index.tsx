@@ -11,6 +11,7 @@ import dynamic from 'next/dynamic';
 import { getFirstRow } from 'apiCalls/getFirstRow';
 
 import useRoutesUpdate from '@/src/components/Hooks/useRoutesUpdate';
+import { getHomeTheme } from 'apiCalls/getHomeTheme';
 const DynamicDashboard = dynamic(() => import('@/src/pages/dashboard/Dashboard'), {
   ssr: false,
 })
@@ -35,11 +36,16 @@ export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps
     let props = {}
     if (!isObjectEmpty(getCookies(ctx))) {
       const firstRow = await getFirstRow(getCookies(ctx).adminAccessToken!);
+      const homeTheme = await getHomeTheme();
       props = {
         ...(await setPageCookies(ctx as any, store as any)),
         ...(store.dispatch({
           type: 'FIRST_ROW',
           payload: firstRow,
+        })),
+        ...(store.dispatch({
+          type: 'HOME_THEMENAME',
+          payload: homeTheme?.['name'],
         })),
       }
     }

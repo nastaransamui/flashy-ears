@@ -5,6 +5,7 @@ import createEmotionCache from '@/src/createEmotionCache';
 import appTheme from '@/theme/appTheme';
 import { getCookies, hasCookie } from 'cookies-next';
 import Script from 'next/script';
+import { getHomeTheme } from 'apiCalls/getHomeTheme';
 interface Props {
   homeThemeName?: any;
   homeThemeType?: any;
@@ -13,13 +14,13 @@ interface Props {
 
 
 class MyDocument extends Document<Props> {
-
   render() {
     const theme = appTheme(
       this.props.homeThemeName,
       this.props.homeThemeType,
       'ltr'
     )
+
     return (
       <Html >
         <Head>
@@ -97,33 +98,6 @@ class MyDocument extends Document<Props> {
           <script src="//cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.7/plugins/animation.gsap.js"></script> */}
         </Head>
         <body>
-          {/* <div
-            id='preloader'
-            style={{
-              position: 'fixed',
-              zIndex: 10000,
-              background: `${theme.palette.primary.light}`,
-              marginTop: -200,
-              width: '100%',
-              height: '200%',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <noscript>
-              <p>Please enabled javascript to continue</p>
-            </noscript>
-            <img
-              style={{
-                opacity: 0.5,
-                position: 'fixed',
-                top: 'calc(50% - 50px)',
-                left: 'calc(50% - 50px)',
-              }}
-              src='/images/loading.gif'
-              alt='loading'
-            />
-          </div> */}
           <Main />
           <NextScript />
         </body>
@@ -185,11 +159,13 @@ MyDocument.getInitialProps = async (ctx) => {
     />
   ));
 
+  const homeTheme = await getHomeTheme();
+
   return {
     ...initialProps,
     emotionStyleTags,
     homeThemeType: hasCookie('homeThemeType', ctx) ? getCookies(ctx).homeThemeType : 'dark',
-    homeThemeName: hasCookie('homeThemeName', ctx) ? getCookies(ctx).homeThemeName : 'cloud',
+    homeThemeName: homeTheme?.['name'],
     i18nextLng: hasCookie('i18nextLng', ctx) ? getCookies(ctx).i18nextLng : 'en',
   };
 };

@@ -9,6 +9,7 @@ import { isObjectEmpty, setPageCookies } from '@/helpers/functions';
 import dynamic from 'next/dynamic';
 import useRoutesUpdate from '@/src/components/Hooks/useRoutesUpdate';
 import { getFirstRow } from 'apiCalls/getFirstRow';
+import { getHomeTheme } from 'apiCalls/getHomeTheme';
 const DynamicDashboard = dynamic(() => import('@/src/pages/dashboard/Dashboard'), {
   ssr: false,
 })
@@ -29,6 +30,7 @@ const Doshboard: NextPage = (props) => {
 export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(
   (store) => async (ctx) => {
     const firstRow = await getFirstRow(getCookies(ctx).adminAccessToken!);
+    const homeTheme = await getHomeTheme();
     let props = {}
 
     props = {
@@ -36,6 +38,10 @@ export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps
       ...(store.dispatch({
         type: 'FIRST_ROW',
         payload: firstRow,
+      })),
+      ...(store.dispatch({
+        type: 'HOME_THEMENAME',
+        payload: homeTheme?.['name'],
       })),
     }
     if (!hasCookie('adminAccessToken', ctx)) {

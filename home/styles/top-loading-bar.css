@@ -17,7 +17,7 @@ body .top-loading-bar {
   font-size: 28px;
   color: #ffffff;
 }
-
+/* 
 @-webkit-keyframes home-arrow-down {
   from {
     transform: translate3d(0, 0px, 0);
@@ -95,4 +95,4 @@ body .top-loading-bar {
 .home-arrow-down:hover {
   -webkit-animation-play-state: paused;
   animation-play-state: paused;
-}
+} */

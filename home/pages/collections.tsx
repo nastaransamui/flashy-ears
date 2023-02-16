@@ -12,6 +12,7 @@ import { useRouter } from 'next/router';
 import About from '@/src/components/pages/About';
 import Collections from '@/src/components/pages/Collections';
 import { getProductItems } from 'apiCalls/getProductItems';
+import { getHomeTheme } from 'apiCalls/getHomeTheme';
 
 
 
@@ -60,6 +61,7 @@ export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps
   (store) => async (ctx) => {
     let props = {}
     const productItems = await getProductItems();
+    const homeTheme = await getHomeTheme()
     if (!isObjectEmpty(getCookies(ctx))) {
 
       props = {
@@ -68,15 +70,32 @@ export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps
           type: 'PRODUCT_ITEMS',
           payload: productItems,
         })),
-      }
-    } else {
-      setCookie('homeThemeType', 'dark', ctx);
-      setCookie('homeThemeName', 'oceanBlue', ctx);
-      setCookie('i18nextLng', 'en', ctx);
-      props = {
         ...(store.dispatch({
           type: 'HOME_LOADINGBAR',
           payload: 100,
+        })),
+        ...(await store.dispatch({
+          type: 'HOME_THEMENAME',
+          payload: homeTheme?.['name'],
+        })),
+      }
+    } else {
+      setCookie('homeThemeType', 'dark', ctx);
+      // setCookie('homeThemeName', homeTheme?.['name'], ctx);
+      setCookie('i18nextLng', 'en', ctx);
+      setCookie('galleryImageModel', 'bell', ctx);
+      props = {
+        ...(store.dispatch({
+          type: 'PRODUCT_ITEMS',
+          payload: productItems,
+        })),
+        ...(store.dispatch({
+          type: 'HOME_LOADINGBAR',
+          payload: 100,
+        })),
+        ...(await store.dispatch({
+          type: 'HOME_THEMENAME',
+          payload: homeTheme?.['name'],
         })),
       }
     }

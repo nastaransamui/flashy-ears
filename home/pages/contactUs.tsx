@@ -10,6 +10,7 @@ import Button from '@mui/material/Button';
 import useShallowTranslation from '@/hookes/useShallowTranslation'
 import { useRouter } from 'next/router';
 import ContactUs from '@/src/components/pages/ContactUs';
+import { getHomeTheme } from 'apiCalls/getHomeTheme';
 
 
 
@@ -57,6 +58,7 @@ export async function setPageCookies(ctx: NextPageContext, store: any) {
 export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(
   (store) => async (ctx) => {
     let props = {}
+    const homeTheme = await getHomeTheme()
     if (!isObjectEmpty(getCookies(ctx))) {
 
       props = {
@@ -64,12 +66,17 @@ export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps
       }
     } else {
       setCookie('homeThemeType', 'dark', ctx);
-      setCookie('homeThemeName', 'oceanBlue', ctx);
+      // setCookie('homeThemeName', homeTheme?.['name'], ctx);
       setCookie('i18nextLng', 'en', ctx);
+      setCookie('galleryImageModel', 'bell', ctx);
       props = {
         ...(store.dispatch({
           type: 'HOME_LOADINGBAR',
           payload: 100,
+        })),
+        ...(await store.dispatch({
+          type: 'HOME_THEMENAME',
+          payload: homeTheme?.['name'],
         })),
       }
     }

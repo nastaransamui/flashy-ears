@@ -48,6 +48,7 @@ export interface MainCardTypes {
 export interface State {
   adminAccessToken: any;
   adminThemeName: string | null;
+  homeThemeName: string;
   adminThemeType: PaletteMode | null;
   adminLoadingBar: number;
   adminFormSubmit: boolean;
@@ -69,6 +70,7 @@ export interface State {
 const initialState = {
   adminAccessToken: null,
   adminThemeName: typeof window !== 'undefined' ? getCookies().adminThemeName as string : 'grayscale',
+  homeThemeName: 'oceanBlue',
   adminThemeType: typeof window !== 'undefined' ? getCookies().adminThemeType as PaletteMode : 'dark',
   adminLoadingBar: 0,
   adminFormSubmit: false,
@@ -103,6 +105,8 @@ const reducer = (state: State = initialState, action: AnyAction) => {
       return { ...state, adminAccessToken: action.payload };
     case 'ADMIN_THEMENAME':
       return { ...state, adminThemeName: action.payload };
+    case 'HOME_THEMENAME':
+      return { ...state, homeThemeName: action.payload };
     case 'ADMIN_THEMETYPE':
       return { ...state, adminThemeType: action.payload };
     case 'ADMIN_LOADINGBAR':

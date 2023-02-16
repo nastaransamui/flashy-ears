@@ -57,6 +57,11 @@ const productItems = [
     product__price: '$8',
     colors: [
       {
+        label: 'violet',
+        name: 'violet',
+        _id: '',
+      },
+      {
         label: 'black',
         name: 'black',
         _id: '',
@@ -89,11 +94,6 @@ const productItems = [
       {
         label: 'red',
         name: 'red',
-        _id: '',
-      },
-      {
-        label: 'violet',
-        name: 'violet',
         _id: '',
       },
       {
@@ -157,13 +157,13 @@ const productItems = [
     product__price: '$10',
     colors: [
       {
-        label: 'black',
-        name: 'black',
+        label: 'blue',
+        name: 'blue',
         _id: '',
       },
       {
-        label: 'blue',
-        name: 'blue',
+        label: 'black',
+        name: 'black',
         _id: '',
       },
       {
@@ -462,11 +462,6 @@ const productItems = [
         _id: '',
       },
       {
-        label: 'blue',
-        name: 'blue',
-        _id: '',
-      },
-      {
         label: 'green',
         name: 'green',
         _id: '',
@@ -479,6 +474,11 @@ const productItems = [
       {
         label: 'orange',
         name: 'orange',
+        _id: '',
+      },
+      {
+        label: 'blue',
+        name: 'blue',
         _id: '',
       },
       {

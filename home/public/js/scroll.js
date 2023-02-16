@@ -79,7 +79,6 @@ tl1.add(s1a3).add(s1a1, '-=1600').add(s1a2, '-=1300');
 
 // Get section height
 let oneHeight = document.getElementById('one').clientHeight;
-console.log('oneHeight: ' + oneHeight);
 
 //------------------
 //SCENE 1
@@ -135,7 +134,6 @@ tl2.add(s2a1).add(s2a2);
 
 // Get section height
 let twoHeight = document.getElementById('two').clientHeight;
-console.log('twoHeight: ' + twoHeight);
 
 //------------------
 //SCENE 2

@@ -3,12 +3,34 @@ import { createWrapper, HYDRATE } from 'next-redux-wrapper';
 import { configureStore } from '@reduxjs/toolkit';
 import { PaletteMode } from '@mui/material';
 import { hasCookie, getCookies } from 'cookies-next';
-const initialState = {
-  adminAccessToken: null,
+import { getHomeTheme } from 'apiCalls/getHomeTheme';
+//@ts-ignore
+const homeTheme = await getHomeTheme();
+/**
+ * import { getHomeTheme } from 'apiCalls/getHomeTheme';
+/**
   homeThemeName:
     typeof window !== 'undefined'
-      ? (getCookies().homeThemeName as string)
-      : 'oceanBlue',
+      ? hasCookie('homeThemeName')
+        ? (getCookies().homeThemeName as string)
+        : //@ts-ignore
+          await palletDb
+      : //@ts-ignore
+        await palletDb,
+          homeThemeName:
+    typeof window !== 'undefined'
+      ? hasCookie('homeThemeName')
+        ? (getCookies().homeThemeName as string)
+        : //@ts-ignore
+          await palletDb
+      : //@ts-ignore
+        await palletDb,
+ 
+ */
+
+const initialState = {
+  adminAccessToken: null,
+  homeThemeName: homeTheme?.['name'],
   homeThemeType:
     typeof window !== 'undefined'
       ? (getCookies().homeThemeType as PaletteMode)

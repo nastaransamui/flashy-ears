@@ -7,9 +7,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { State } from "@/src/redux/store";
 import { setCookie } from 'cookies-next';
 import { DrawerStateType } from "@/shared/interfaces/react.interface";
+import axios from "axios";
+
+import { toast } from 'react-toastify';
+import { ToastMessage } from '@/shared/CustomToaster/CustomToaster';
+let updateHomeTheme = '/admin/api/home/themeUpdate'
 
 const useThemeUser = (state: DrawerStateType) => {
-  const { adminThemeName, propsMiniActive } = useSelector<State, State>((state) => state);
+  const { adminThemeName, propsMiniActive, homeThemeName, adminAccessToken } = useSelector<State, State>((state) => state);
   let drawerOpen = !propsMiniActive && propsMiniActive ? false : !propsMiniActive && !state.stateMiniActive ? true : state.stateMiniActive && !propsMiniActive ? false : true
   const { classes, theme, cx } = themeUserStyle({ drawerOpen })
   const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
@@ -40,7 +45,40 @@ const useThemeUser = (state: DrawerStateType) => {
   };
 
   const changeHomePageTheme = (pallet: string) => {
-    console.log('implement websoket')
+    console.log(pallet)
+    axios.post(updateHomeTheme, { themeName: pallet },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          token: `Brearer ${adminAccessToken}`,
+        }
+      }
+    ).then((resp) => {
+      const { success, data, error } = resp.data;
+      if (success) {
+        dispatch({ type: 'HOME_THEMENAME', payload: pallet });
+      } else {
+        toast(<ToastMessage >{error}</ToastMessage>, {
+          onClose: () => {
+            dispatch({ type: 'ADMIN_FORM_SUBMIT', payload: false })
+            toast.dismiss()
+          },
+          toastId: `theme_toastId`
+        })
+      }
+    }).catch(function (error) {
+      toast(<ToastMessage >{error?.response?.data?.Error || error.message}</ToastMessage>, {
+        onClose: () => {
+          dispatch({ type: 'ADMIN_FORM_SUBMIT', payload: false })
+          dispatch({
+            type: "RERUN_SINGLE_GET",
+            payload: false,
+          })
+          toast.dismiss()
+        },
+        toastId: `theme_toastId`
+      })
+    });
   };
 
   return {
@@ -54,6 +92,7 @@ const useThemeUser = (state: DrawerStateType) => {
     handleToggleOpen,
     handleChangeTab,
     adminThemeName,
+    homeThemeName,
     changeAdminTheme,
     changeHomePageTheme
   }

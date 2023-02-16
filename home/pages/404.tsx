@@ -2,21 +2,31 @@ import HeadComponent from "@/src/components/head";
 import { Fragment } from "react";
 
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { NextPage } from "next";
 import useShallowTranslation from "@/src/components/Hooks/useShallowTranslation";
 import ErrorPage from '@/src/components/pages/ErrorPage'
 import { useDispatch } from 'react-redux';
 import { getCookies, } from 'cookies-next';
+import { getHomeTheme } from 'apiCalls/getHomeTheme';
 
 const Custom404: NextPage = (props: any) => {
   const { t, } = useShallowTranslation('404');
   const errorCode = props.router.route.substring(1);
+  const [themeName, setThemeName] = useState<any>(null)
   const dispatch = useDispatch();
+  useEffect(() => {
+    async function fetchMyAPI() {
+      const homeTheme = await getHomeTheme();
+      setThemeName(homeTheme?.['name'])
+    }
+
+    fetchMyAPI()
+  }, [])
 
   useEffect(() => {
     let isMount = true;
-    if (isMount) {
+    if (themeName !== null) {
       dispatch(
         {
           type: 'ADMIN_ACCESS_TOKEN',
@@ -29,13 +39,13 @@ const Custom404: NextPage = (props: any) => {
       });
       dispatch({
         type: 'HOME_THEMENAME',
-        payload: getCookies().homeThemeName || 'oceanBlue',
+        payload: themeName,
       });
     }
     return () => {
       isMount = false;
     };
-  }, []);
+  }, [themeName]);
   return (
     <Fragment>
       <HeadComponent title={t('title')} />

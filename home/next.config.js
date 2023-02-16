@@ -11,6 +11,7 @@ const nextConfig = {
     ],
   },
   webpack: function (config, options) {
+    config.experiments = { ...config.experiments, topLevelAwait: true };
     return config;
   },
   async rewrites() {

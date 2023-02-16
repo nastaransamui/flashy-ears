@@ -14,6 +14,7 @@ import jwt from 'jsonwebtoken';
 import { unHashProfile } from '@/helpers/unhasshing';
 import { isObjectEmpty, setPageCookies } from '@/helpers/functions';
 import { getFirstRow } from 'apiCalls/getFirstRow';
+import { getHomeTheme } from 'apiCalls/getHomeTheme';
 const DynamicLogin = dynamic(() => import('@/src/pages/login/LoginPage'), {
   ssr: false,
 })
@@ -35,11 +36,16 @@ export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps
     let props = {}
     if (!isObjectEmpty(getCookies(ctx))) {
       const firstRow = await getFirstRow(getCookies(ctx).adminAccessToken!);
+      const homeTheme = await getHomeTheme();
       props = {
         ...(await setPageCookies(ctx as any, store as any)),
         ...(store.dispatch({
           type: 'FIRST_ROW',
           payload: firstRow,
+        })),
+        ...(store.dispatch({
+          type: 'HOME_THEMENAME',
+          payload: homeTheme?.['name'],
         })),
       }
     }

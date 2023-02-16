@@ -217,8 +217,6 @@ const CollectionComponent: FC = (() => {
     var productImg = animeRef[Number(details.getAttribute('key'))]['current']['children'][1];
 
     if (!isZoomed) {
-      // console.log("kdkd")
-      // if (isAnimating) return false;
       var body = document.getElementsByTagName('body');
       body[0].style.overflowY = 'auto'
       var menuRef = document.getElementById('menuRef')!;

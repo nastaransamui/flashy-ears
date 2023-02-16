@@ -33,6 +33,7 @@ const useWrapper = () => {
     //Update direction
     // document.dir = i18n.language === 'fa' ? 'rtl' : 'ltr';
     //Update theme
+
     if (homeThemeName !== undefined && homeThemeType !== undefined) {
       setHomeTheme({
         ...appTheme(
@@ -53,7 +54,7 @@ const useWrapper = () => {
 
   useEffect(() => {
     // Remove preloader or show javascript disabled warning
-    const preloader = document.getElementById('preloader');
+    // const preloader = document.getElementById('preloader');
 
     // if (preloader !== null || undefined) {
     //   preloader?.remove();

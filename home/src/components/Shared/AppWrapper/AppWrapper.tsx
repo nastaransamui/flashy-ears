@@ -17,7 +17,7 @@ import { StylesProvider } from '@mui/styles';
 import useWrapper from './useAppWrapper';
 
 const AppWrapper = ({ children }: ChildrenProps) => {
-  const [percent, setPercent] = useState<number>(50)
+  const [percent, setPercent] = useState<number>(80)
   const [showLoading, setShowLoading] = useState<boolean>(true)
 
   const { homeTheme,
@@ -26,6 +26,8 @@ const AppWrapper = ({ children }: ChildrenProps) => {
     homeLoadingBar,
     homeThemeType
   } = useWrapper();
+
+  const [loadingBarColor, setLoadingBarColor] = useState<string>(homeThemeType == 'dark' ? homeTheme.palette.secondary.main : homeTheme.palette.primary.main)
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -39,6 +41,9 @@ const AppWrapper = ({ children }: ChildrenProps) => {
       clearInterval(interval);
     };
   }, [percent, showLoading]);
+  useEffect(() => {
+    setLoadingBarColor(() => homeThemeType == 'dark' ? homeTheme.palette.secondary.main : homeTheme.palette.primary.main)
+  }, [homeThemeType])
 
   return (
     <Fragment >
@@ -48,7 +53,6 @@ const AppWrapper = ({ children }: ChildrenProps) => {
           <Backdrop
             sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
             open={homeFormSubmit}
-          // onClick={() => { console.log('somehing') }}
           >
             <CircleToBlockLoading color={homeTheme.palette.primary.main} />
           </Backdrop>
@@ -57,7 +61,7 @@ const AppWrapper = ({ children }: ChildrenProps) => {
           <LoadingBar
             height={5}
             shadow
-            color={homeThemeType == 'dark' ? homeTheme.palette.secondary.main : homeTheme.palette.primary.main}
+            color={loadingBarColor}
             progress={homeLoadingBar}
             className='top-loading-bar'
             data-testid="loadingBar"

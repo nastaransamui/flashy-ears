@@ -64,6 +64,7 @@ const ThemeUser: FC<ThemeUserTypes> = (props: ThemeUserTypes) => {
     handleToggleOpen,
     handleChangeTab,
     adminThemeName,
+    homeThemeName,
     changeAdminTheme,
     changeHomePageTheme
   } = useThemeUser(state)
@@ -152,7 +153,7 @@ const ThemeUser: FC<ThemeUserTypes> = (props: ThemeUserTypes) => {
           <TabPanel value={tab} index={1}>
             <div className={classes.themeColor}>
               <Paper className={classes.paper}>
-                <Typography variant='h6'>{t('combination')}</Typography>
+                <Typography variant='h6'>{t('combination')} for Home</Typography>
                 <Grid container className={classes.swatchWrapper}>
                   {Object.keys(themeList).map((clr, index) => {
                     return (
@@ -160,7 +161,7 @@ const ThemeUser: FC<ThemeUserTypes> = (props: ThemeUserTypes) => {
                         <Tooltip title={t(`${clr}`)} placement='top' arrow>
                           <Button
                             className={classes.swatch + ' ' + cx({
-                              [classes.active]: adminThemeName === clr
+                              [classes.active]: homeThemeName === clr
                             })}
                             onClick={() => changeHomePageTheme(clr)}>
                             <span
