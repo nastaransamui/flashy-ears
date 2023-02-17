@@ -30,6 +30,8 @@ const ErrorPage: FC<Props> = (props: any) => {
   const menuRef = createRef<any>();
 
   useEffect(() => {
+    document.getElementById('main')!.style.padding = `8% 0px`;
+    document.getElementById('main')!.style.left = `15px`
     if (navRef.current !== null && menuRef.current !== null) {
       navRef.current.style.display = 'block'
       menuRef.current.style.display = 'flex'

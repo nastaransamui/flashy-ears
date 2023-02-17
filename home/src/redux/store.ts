@@ -121,12 +121,13 @@ export interface State {
 const reducer = (state: State = initialState, action: AnyAction) => {
   switch (action.type) {
     case HYDRATE:
-      // Attention! This will overwrite client state! Real apps should use proper reconciliation.
+      //   // Attention! This will overwrite client state! Real apps should use proper reconciliation.
       return { ...state, ...action.payload };
-    case 'SERVER_ACTION':
-    case 'CLIENT_ACTION':
+    // return { ...state };
+    // // case 'SERVER_ACTION':
+    // // case 'CLIENT_ACTION':
     case 'ADMIN_ACCESS_TOKEN':
-      // console.log("action")
+      //   // console.log("action")
       return { ...state, adminAccessToken: action.payload };
     case 'HOME_THEMENAME':
       return { ...state, homeThemeName: action.payload };

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const url = `${process.env.NEXT_PUBLIC_ADMIN_URL}/admin/api/home/theme`;
+const url = `${process.env.NEXT_PUBLIC_ADMIN_VERCEL}/api/home/theme`;
 
 export const getHomeTheme = async () => {
   let homeTheme;
