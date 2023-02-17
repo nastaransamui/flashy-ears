@@ -1,10 +1,9 @@
 import axios from 'axios';
 
-const url = `${process.env.NEXT_PUBLIC_HOME_VERCEL}api/theme`;
+const url = `${process.env.NEXT_PUBLIC_ADMIN_VERCEL}/api/home/theme`;
 
 export const getHomeTheme = async () => {
   let homeTheme;
-  console.time();
   try {
     homeTheme = await axios
       .get(url, {
@@ -13,7 +12,6 @@ export const getHomeTheme = async () => {
         },
       })
       .then((res) => {
-        console.timeEnd();
         return res?.data?.data;
       })
       .catch((error) => {
