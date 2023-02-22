@@ -151,6 +151,7 @@ var dashRoutes: RoutesType[] = (module.exports = [
           },
         ],
       },
+      // /myFirstDatabase
       // {
       //   collapse: true,
       //   name_en: 'Photo slider',
