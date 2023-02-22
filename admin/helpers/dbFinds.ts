@@ -14,6 +14,11 @@ import Videos, {
   dispalyFields as videosDisplayField,
   muiDataObj as videosMuiDataObj,
 } from '@/models/Videos';
+import Collections, {
+  ICollection,
+  dispalyFields as collectionsDisplayField,
+  muiDataObj as collectionsMuiDataObj,
+} from '@/models/Collections';
 import Photos, {
   IPhoto,
   dispalyFields as photosDisplayField,
@@ -92,6 +97,7 @@ type FindFunctionsType = {
   findUsersById?: Function;
   findRolesById?: Function;
   findVideosById?: Function;
+  findCollectionsById?: Function;
   findPhotosById?: Function;
   findFeaturesById?: Function;
   findCountriesById?: Function;
@@ -234,6 +240,14 @@ findFunctions.findRolesById = async function findUsersById(
 findFunctions.findVideosById = async function findVideosById(_id: string) {
   let video = await Videos.aggregate([{ $match: { _id: ObjectId(_id) } }]);
   return video[0];
+};
+findFunctions.findCollectionsById = async function findCollectionsById(
+  _id: string
+) {
+  let collection = await Collections.aggregate([
+    { $match: { _id: ObjectId(_id) } },
+  ]);
+  return collection[0];
 };
 
 findFunctions.findPhotosById = async function findPhotosById(_id: string) {
@@ -1152,6 +1166,11 @@ export async function findVideoById(_id: string) {
   return video;
 }
 
+export async function findCollectionById(_id: string) {
+  let collection = await Collections.findById(_id);
+  return collection;
+}
+
 export async function findPhotoById(_id: string) {
   let photo = await Photos.findById(_id);
   return photo;
@@ -1307,6 +1326,47 @@ export async function findAllVideosWithPagginate(
       $addFields: {
         dispalyFields: videosDisplayField,
         muiData: videosMuiDataObj,
+      },
+    },
+    {
+      $facet: {
+        paginatedResults: [
+          { $skip: perPage * (pageNumber - 1) },
+          { $limit: perPage },
+        ],
+        totalCount: [
+          {
+            $count: 'count',
+          },
+        ],
+      },
+    },
+  ]);
+
+  const result = {
+    data: dataValue[0].paginatedResults,
+    totalCount:
+      dataValue[0].totalCount[0] == undefined
+        ? 0
+        : dataValue[0].totalCount[0].count,
+  };
+  return result;
+}
+export async function findAllCollectionsWithPagginate(
+  collection: Model<ICollection>,
+  perPage: number,
+  pageNumber: number,
+  sortByField: string,
+  sortDirection: 1 | -1
+) {
+  const dataValue = await collection.aggregate([
+    {
+      $sort: { [sortByField]: sortDirection },
+    },
+    {
+      $addFields: {
+        dispalyFields: collectionsDisplayField,
+        muiData: collectionsMuiDataObj,
       },
     },
     {
@@ -1961,6 +2021,28 @@ findMuliMapFunctions.findVideosById = async function findVideosById(
       }) => rest
     );
     return filterVideo[0];
+  }
+};
+findMuliMapFunctions.findCollectionsById = async function findCollectionsById(
+  _id: string,
+  lookupsFilter: any,
+  hz: any,
+  multiMap: any
+) {
+  const collections = await multiMap.get(`allCollections`);
+  for (const collection of collections) {
+    let currentCollection = collection.filter((a: any) => a._id == _id);
+    let filterCollection = currentCollection.map(
+      ({
+        dispalyFields,
+        muiData,
+        ...rest
+      }: {
+        dispalyFields: string[];
+        muiData: string[];
+      }) => rest
+    );
+    return filterCollection[0];
   }
 };
 
@@ -2839,6 +2921,38 @@ export async function findAllVideos(
       $addFields: {
         dispalyFields: videosDisplayField,
         muiData: videosMuiDataObj,
+      },
+    },
+  ]);
+  const result = {
+    data: paginate(dataValue, perPage, pageNumber),
+    totalCount: dataValue.length,
+  };
+  await multiMap.put(
+    `all${modelName}` as unknown as MultiMapKey,
+    dataValue as unknown as MultiMapValue
+  );
+  return result;
+}
+
+export async function findAllCollections(
+  modelName: string,
+  sortByField: string,
+  perPage: number,
+  pageNumber: number,
+  sortDirection: 1 | -1,
+  multiMap: MultiMap<MultiMapKey, MultiMapValue>
+) {
+  var collection = mongoose.model(modelName);
+
+  const dataValue = await collection.aggregate([
+    {
+      $sort: { [sortByField]: sortDirection },
+    },
+    {
+      $addFields: {
+        dispalyFields: collectionsDisplayField,
+        muiData: collectionsMuiDataObj,
       },
     },
   ]);

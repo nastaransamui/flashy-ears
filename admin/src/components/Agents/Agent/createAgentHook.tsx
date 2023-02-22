@@ -1,7 +1,7 @@
 import { State } from '@/src/redux/store';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-
+import { useForm } from "react-hook-form";
 const createAgentHook = () => {
   const { profile } = useSelector<State, State>(state => state)
   const [values, setValues] = useState([
@@ -48,19 +48,14 @@ const createAgentHook = () => {
       accountManager: '',
     }
   ]);
-  const handleAgentdataChange = () => { }
-
-  const handleContactDataChange = () => { }
-
-  const handleFinancialDataChange = () => { }
-  const handleAcountManagerDataChange = () => { }
-
+  const { handleSubmit, watch, control, register, formState: { errors }, resetField, setError, clearErrors, trigger } = useForm<any>();
+  const formTrigger = async () => { }
+  const onSubmit = (data: any) => console.log(data)
   return {
     values,
-    handleAgentdataChange,
-    handleContactDataChange,
-    handleFinancialDataChange,
-    handleAcountManagerDataChange
+    handleSubmit,
+    formTrigger,
+    onSubmit,
   }
 }
 

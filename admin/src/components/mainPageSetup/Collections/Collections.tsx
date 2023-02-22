@@ -3,11 +3,11 @@ import DataShow from '@/src/components/Shared/DataShow/DataShow';
 import { FC } from 'react';
 import PageContainer from '@/shared/PageContainer';
 
-export interface VideosPropsType {
+export interface CollectionsPropsType {
 
 }
 
-const Videos: FC<VideosPropsType> = (props: VideosPropsType) => {
+const Collections: FC<CollectionsPropsType> = (props: CollectionsPropsType) => {
 
   return (
     <PageContainer>
@@ -16,6 +16,6 @@ const Videos: FC<VideosPropsType> = (props: VideosPropsType) => {
   )
 }
 
-Videos.propTypes = {}
+Collections.propTypes = {}
 
-export default Videos;
+export default Collections;

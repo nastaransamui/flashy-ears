@@ -9,10 +9,12 @@ import { useTranslation } from "react-i18next";
 import StepsWizards from "@/shared/StepsWizard/StepsWizard";
 
 const CreateUser: FC = (() => {
-  const { values,
-    handleAgentdataChange,
-    handleContactDataChange,
-    handleFinancialDataChange, handleAcountManagerDataChange, } = createAgentHook();
+  const {
+    values,
+    handleSubmit,
+    formTrigger,
+    onSubmit,
+  } = createAgentHook();
   const { t } = useTranslation('Agencies')
 
   return (
@@ -25,9 +27,7 @@ const CreateUser: FC = (() => {
               stepComponent: () => <div>{JSON.stringify(values[0])}</div>,
               stepId: 'createAgent',
               isValidated: () => true,
-              handleChange: () => {
-                handleAgentdataChange()
-              },
+              handleChange: () => { },
               values: values[0]
             },
             {
@@ -35,9 +35,7 @@ const CreateUser: FC = (() => {
               stepComponent: () => <div>{JSON.stringify(values[1])}</div>,
               stepId: 'contactData',
               isValidated: () => true,
-              handleChange: () => {
-                handleContactDataChange()
-              },
+              handleChange: () => { },
               values: values[1]
             },
             {
@@ -45,9 +43,7 @@ const CreateUser: FC = (() => {
               stepComponent: () => <div>{JSON.stringify(values[2])}</div>,
               stepId: 'financialData',
               isValidated: () => true,
-              handleChange: () => {
-                handleFinancialDataChange()
-              },
+              handleChange: () => { },
               values: values[2]
             },
             {
@@ -55,15 +51,17 @@ const CreateUser: FC = (() => {
               stepComponent: () => <div>{JSON.stringify(values[3])}</div>,
               stepId: 'acountManagerData',
               isValidated: () => true,
-              handleChange: () => {
-                handleAcountManagerDataChange()
-              },
+              handleChange: () => { },
               values: values[3]
             },
           ]
         }
         title={t('createAgent')}
-        subtitle="" />
+        subtitle=""
+        formId='agency-form'
+        formTrigger={formTrigger}
+        onSubmit={onSubmit}
+        handleSubmit={handleSubmit} />
     </Fragment>
   )
 })

@@ -1,0 +1,14 @@
+{
+  "title_en": "English Title",
+  "title_th": "Thai Title",
+  "desc_en": "English Description",
+  "desc_th": "Thai Description",
+  "linkTitle_en": "English button text",
+  "linkTitle_th": "Thai button text",
+  "img_dark": "Upload banner for dark Theme <br/>(Best size Width:1920px- Height: 1200px)",
+  "img_light": "Upload banner for light Theme <br/>(Best size Width:1920px- Height: 1200px)",
+  "createCollectionTitle": "Create Collection",
+  "createCollectionSubTitle": "Image and text show in main page entrance",
+  "titles": "Titles",
+  "media": "Images"
+}

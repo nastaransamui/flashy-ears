@@ -9,7 +9,12 @@ import { useTranslation } from "react-i18next";
 import StepsWizards from "@/shared/StepsWizard/StepsWizard";
 
 const CreateUser: FC = (() => {
-  const { values } = createUserHook();
+  const {
+    values,
+    handleSubmit,
+    formTrigger,
+    onSubmit
+  } = createUserHook();
   const { t } = useTranslation('Users')
 
   return (
@@ -43,7 +48,11 @@ const CreateUser: FC = (() => {
           ]
         }
         title={t('createUserProfile')}
-        subtitle="" />
+        subtitle=""
+        formId='user-form'
+        formTrigger={formTrigger}
+        onSubmit={onSubmit}
+        handleSubmit={handleSubmit} />
     </Fragment>
   )
 })

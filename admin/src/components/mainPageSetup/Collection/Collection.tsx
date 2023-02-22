@@ -3,24 +3,24 @@ import { useLocation } from "react-router-dom";
 
 //Components
 import BackButton from '@/shared/BackButton';
-import EditVideo from './EditVideo';
-import CreateVideo from "./CreateVideo";
+import EditCollection from './EditCollection';
+import CreateCollection from "./CreateCollection";
 interface VideoTypes { }
 
-const Video: FC<VideoTypes> = ((props: VideoTypes) => {
+const Collection: FC<VideoTypes> = ((props: VideoTypes) => {
 
   const { search } = useLocation()
   // state !== null && delete state.muiData
   return (
     <div style={{ marginTop: 100, wordBreak: 'break-word' }}>
-      <BackButton pushUrl='/main-page-setup/videos' />
+      <BackButton pushUrl='/main-page-setup/collections' />
       <br />
       {
-        search == '' ? <CreateVideo /> : <EditVideo />
+        search == '' ? <CreateCollection /> : <EditCollection />
       }
 
     </div>
   )
 })
 
-export default Video;
+export default Collection;

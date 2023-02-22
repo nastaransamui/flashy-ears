@@ -4,6 +4,7 @@ import useRoutesUpdate from '@/hookes/useRoutesUpdate';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { State } from '@/src/redux/store';
+import { useForm } from "react-hook-form";
 
 const editRoleHook = (singleData: any) => {
   const updateRoutes = useRoutesUpdate();
@@ -78,11 +79,15 @@ const editRoleHook = (singleData: any) => {
       })
     }
   }
+  const { handleSubmit, watch, control, register, formState: { errors }, resetField, setError, clearErrors, trigger } = useForm<any>();
+  const formTrigger = async () => { }
+  const onSubmit = (data: any) => console.log(data)
 
   return {
     values,
-    handleRoutesChange,
-    handleCrudChange,
+    handleSubmit,
+    formTrigger,
+    onSubmit,
     handleUsersChange
   }
 }

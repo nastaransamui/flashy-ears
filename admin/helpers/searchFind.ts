@@ -7,10 +7,10 @@ import Roles, {
   dispalyFields as rolesDisplayField,
   muiDataObj as rolesMuiDataObj,
 } from '@/models/Roles';
-import Videos, {
-  dispalyFields as videosDisplayField,
-  muiDataObj as videosMuiDataObj,
-} from '@/models/Videos';
+import Collections, {
+  dispalyFields as collectionsDisplayField,
+  muiDataObj as collectionsMuiDataObj,
+} from '@/models/Collections';
 import Photos, {
   dispalyFields as photosDisplayField,
   muiDataObj as photosMuiDataObj,
@@ -131,21 +131,24 @@ export async function searchRoles(searchRegex: RegExp, fieldValue: string) {
   return result;
 }
 
-export async function searchVideos(searchRegex: RegExp, fieldValue: string) {
-  const valuesList = await Videos.aggregate([
+export async function searchCollections(
+  searchRegex: RegExp,
+  fieldValue: string
+) {
+  const valuesList = await Collections.aggregate([
     { $match: { [fieldValue]: searchRegex } },
     { $sort: { title_en: 1 } },
     {
       $addFields: {
-        dispalyFields: videosDisplayField,
-        muiData: videosMuiDataObj,
+        dispalyFields: collectionsDisplayField,
+        muiData: collectionsMuiDataObj,
         autoCompleteImg: {
           $cond: {
             if: {
-              $eq: [{ $ifNull: ['$videoPoster', ''] }, ''],
+              $eq: [{ $ifNull: ['$img', ''] }, ''],
             },
             then: '/admin/images/faces/movie.jpg',
-            else: '$videoPoster',
+            else: '$img',
           },
         },
         autoCompleteIcon: '',

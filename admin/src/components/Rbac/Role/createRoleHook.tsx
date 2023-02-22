@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Home from '@mui/icons-material/Home';
 import useRoutesUpdate from '@/hookes/useRoutesUpdate';
-
+import { useForm } from "react-hook-form";
 const createRoleHook = () => {
   const updateRoutes = useRoutesUpdate();
   const [values, setValues] = useState([
@@ -20,8 +20,15 @@ const createRoleHook = () => {
     }
   ]);
 
+  const { handleSubmit, watch, control, register, formState: { errors }, resetField, setError, clearErrors, trigger } = useForm<any>();
+  const formTrigger = async () => { }
+  const onSubmit = (data: any) => console.log(data)
+
   return {
-    values
+    values,
+    handleSubmit,
+    formTrigger,
+    onSubmit
   }
 }
 

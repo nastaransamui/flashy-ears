@@ -4,3 +4,5 @@ declare module 'autosuggest-highlight/parse';
 declare module 'autosuggest-highlight/match';
 declare module 'lodash/throttle';
 declare module 'react-jvectormap';
+declare module 'multiparty';
+declare module 'formidable';

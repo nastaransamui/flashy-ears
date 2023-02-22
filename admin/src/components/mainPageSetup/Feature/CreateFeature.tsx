@@ -11,20 +11,21 @@ const CreateFeature: FC = (() => {
   const { values } = createFeatureHook();
   const { t } = useTranslation('Features')
   return (
-    <StepsWizards
-      steps={
-        [{
-          stepName: t('titles'),
-          stepComponent: () => <div>{JSON.stringify(values[0])}</div>,
-          stepId: 'titles',
-          isValidated: () => true,
-          handleChange: () => { console.log(`handle ${t('titles')} change`) },
-          values: values[0]
-        },
-        ]
-      }
-      title={t('createPhotoTitle')}
-      subtitle={t('createPhotoSubTitle')} />
+    <></>
+    // <StepsWizards
+    //   steps={
+    //     [{
+    //       stepName: t('titles'),
+    //       stepComponent: () => <div>{JSON.stringify(values[0])}</div>,
+    //       stepId: 'titles',
+    //       isValidated: () => true,
+    //       handleChange: () => { console.log(`handle ${t('titles')} change`) },
+    //       values: values[0]
+    //     },
+    //     ]
+    //   }
+    //   title={t('createPhotoTitle')}
+    //   subtitle={t('createPhotoSubTitle')} />
   )
 })
 

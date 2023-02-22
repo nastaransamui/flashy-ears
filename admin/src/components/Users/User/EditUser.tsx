@@ -17,7 +17,10 @@ const EditUser: FC = (() => {
   const { _id, singleData } = useSingleData('edit');
   const { values,
     handleRolesdataChange,
-    handleAgentsDataChange } = editUserHook(singleData)
+    handleAgentsDataChange,
+    handleSubmit,
+    formTrigger,
+    onSubmit } = editUserHook(singleData)
 
   const { t } = useTranslation('Users')
 
@@ -30,7 +33,7 @@ const EditUser: FC = (() => {
             stepComponent: () => <div>{JSON.stringify(values[0])}</div>,
             stepId: 'CreateUser',
             isValidated: () => true,
-            handleChange: () => { console.log(`${t('userdata')} handleChange call`) },
+            handleChange: () => { },
             values: values[0]
           },
           {
@@ -39,7 +42,6 @@ const EditUser: FC = (() => {
             stepId: 'RolesData',
             isValidated: () => true,
             handleChange: () => {
-              console.log(`${t('rolesdata')} handleChange call`)
               handleRolesdataChange()
             },
             values: values[1]
@@ -56,7 +58,6 @@ const EditUser: FC = (() => {
             stepId: 'AgentsData',
             isValidated: () => true,
             handleChange: () => {
-              console.log(`${t('agentsData')} handleChange call`)
               handleAgentsDataChange()
             },
             values: values[1]
@@ -64,7 +65,11 @@ const EditUser: FC = (() => {
           ]
         }
         title={t('editUserProfile')}
-        subtitle="" />
+        subtitle=""
+        formId='agency-form'
+        formTrigger={formTrigger}
+        onSubmit={onSubmit}
+        handleSubmit={handleSubmit} />
     </Fragment>
   )
 });

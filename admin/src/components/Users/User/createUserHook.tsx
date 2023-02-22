@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useForm } from "react-hook-form";
 
 const createUserHook = () => {
   const [values, setValues] = useState([
@@ -29,9 +30,14 @@ const createUserHook = () => {
     //   agents_id: [],
     // }
   ]);
-
+  const { handleSubmit, watch, control, register, formState: { errors }, resetField, setError, clearErrors, trigger } = useForm<any>();
+  const formTrigger = async () => { }
+  const onSubmit = (data: any) => console.log(data)
   return {
-    values
+    values,
+    handleSubmit,
+    formTrigger,
+    onSubmit
   }
 }
 

@@ -99,6 +99,13 @@ const CardHeader: FC<CardHeaderType> = ((props: CardHeaderType) => {
                 <CardAvatar avatarType="img" path={fieldsObject?.[thumbnail] || replaceImage} imageClass='image' />
               </Badge>
             )
+          case `img_light|img_dark` as any:
+            const replaceImageCollection = fieldsObject?.[thumbnail.split("|")[theme.palette.mode == 'dark' ? 1 : 0]]
+            return (
+              <Badge color={fieldsObject.isActive || fieldsObject.isAdmin ? (profile._id == fieldsObject._id ? 'secondary' : "primary") : "error"}  >
+                <CardAvatar avatarType="img" path={fieldsObject?.[thumbnail] || replaceImageCollection} imageClass='image' />
+              </Badge>
+            )
           case 'iso2' as any:
             return (
               <Badge color={fieldsObject.isActive ? "primary" : "error"}  >

@@ -17,7 +17,7 @@ const EditPhoto: FC = (() => {
   const { t } = useTranslation('Photos')
   return (
     <Fragment>
-      <StepsWizards
+      {/* <StepsWizards
         steps={
           [{
             stepName: t('titles'),
@@ -30,7 +30,7 @@ const EditPhoto: FC = (() => {
           ]
         }
         title={t('createPhotoTitle')}
-        subtitle={t('createPhotoSubTitle')} />
+        subtitle={t('createPhotoSubTitle')} /> */}
     </Fragment>
   )
 })

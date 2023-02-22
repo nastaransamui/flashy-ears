@@ -15,11 +15,12 @@ import Loading from "@/shared/Loading";
 const EditAgent: FC = (() => {
 
   const { _id, singleData } = useSingleData('edit');
-  const { values,
-    handleAgentdataChange,
-    handleContactDataChange,
-    handleFinancialDataChange,
-    handleAcountManagerDataChange,
+  const {
+    values,
+    handleSubmit,
+    formTrigger,
+    onSubmit,
+    handleAcountManagerDataChange
   } = editAgentHook(singleData)
 
   const { t } = useTranslation('Agencies')
@@ -34,9 +35,7 @@ const EditAgent: FC = (() => {
               stepComponent: () => <div>{JSON.stringify(values[0])}</div>,
               stepId: 'createAgent',
               isValidated: () => true,
-              handleChange: () => {
-                handleAgentdataChange()
-              },
+              handleChange: () => { },
               values: values[0]
             },
             {
@@ -44,9 +43,7 @@ const EditAgent: FC = (() => {
               stepComponent: () => <div>{JSON.stringify(values[1])}</div>,
               stepId: 'contactData',
               isValidated: () => true,
-              handleChange: () => {
-                handleContactDataChange()
-              },
+              handleChange: () => { },
               values: values[1]
             },
             {
@@ -54,9 +51,7 @@ const EditAgent: FC = (() => {
               stepComponent: () => <div>{JSON.stringify(values[2])}</div>,
               stepId: 'financialData',
               isValidated: () => true,
-              handleChange: () => {
-                handleFinancialDataChange()
-              },
+              handleChange: () => { },
               values: values[2]
             },
             {
@@ -79,7 +74,11 @@ const EditAgent: FC = (() => {
           ]
         }
         title={t('createAgent')}
-        subtitle="" />
+        subtitle=""
+        formId='agency-form'
+        formTrigger={formTrigger}
+        onSubmit={onSubmit}
+        handleSubmit={handleSubmit} />
     </Fragment>
   )
 });

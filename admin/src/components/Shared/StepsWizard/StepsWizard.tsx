@@ -29,8 +29,12 @@ export interface StepsWizardsPropTypes {
   steps: StepsType[] | any;
   title: string;
   subtitle: string;
+  formId: string;
+  onSubmit: any;
+  handleSubmit: any;
+  formTrigger: any;
 }
-
+import { useForm } from "react-hook-form";
 const StepsWizards: FC<StepsWizardsPropTypes> = ((props: StepsWizardsPropTypes) => {
   const { classes, theme } = stepsWizardStyles({});
   const { propsMiniActive } = useSelector<State, State>((state) => state);
@@ -50,7 +54,7 @@ const StepsWizards: FC<StepsWizardsPropTypes> = ((props: StepsWizardsPropTypes) 
   const { i18n, t } = useTranslation();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const rtlActive = i18n.language == 'fa';
-  const { steps, title, subtitle } = props;
+  const { steps, title, subtitle, formId, onSubmit, handleSubmit, formTrigger } = props;
   const [width, setWidth] = useState('');
   const [currentStep, setCurrentStep] = useState(0);
   const [movingTabStyle, setMovingTabStyle] = useState({
@@ -168,6 +172,7 @@ const StepsWizards: FC<StepsWizardsPropTypes> = ((props: StepsWizardsPropTypes) 
 
   const nextButtonClick = () => {
     var validationState = steps[currentStep]?.isValidated();
+
     if (validationState) {
       setPreviousButton(currentStep >= 0 ? true : false);
       setNextButton(currentStep + 2 == steps.length ? false : true)
@@ -177,7 +182,7 @@ const StepsWizards: FC<StepsWizardsPropTypes> = ((props: StepsWizardsPropTypes) 
         setAnimateCss({ [currentStep + 1]: `animate__animated ${rtlActive ? 'animate__backInRight' : 'animate__backInLeft'}` })
         setCurrentStep(currentStep + 1);
       }, 300);
-      steps[currentStep + 1].handleChange();
+      steps[currentStep].handleChange();
       refreshAnimation(currentStep + 1);
     }
   }
@@ -198,114 +203,125 @@ const StepsWizards: FC<StepsWizardsPropTypes> = ((props: StepsWizardsPropTypes) 
   }
   const finishButtonClick = () => { }
 
-
-
   return (
     <div ref={wizard}>
       <SingleDataCtx.Provider value={singleDataContext}>
-        <div className={classes.card} >
-          <div className={classes.wizardHeader} style={{ padding: `25px 0 ${subtitle !== '' ? 35 : 5}px`, }}>
-            <h3 className={classes.title}>{title}</h3>
-            <h5 className={classes.subtitle}>{subtitle}</h5>
-          </div>
-          <div className={classes.wizardNavigation}>
-            <ul className={classes.nav}>
+        <form onSubmit={handleSubmit(onSubmit)} noValidate id={formId}>
+          <div className={classes.card} >
+            <div className={classes.wizardHeader} style={{ padding: `25px 0 ${subtitle !== '' ? 35 : 5}px`, }}>
+              <h3 className={classes.title}>{title}</h3>
+              <h5 className={classes.subtitle}>{subtitle}</h5>
+            </div>
+            <div className={classes.wizardNavigation}>
+              <ul className={classes.nav}>
+                {steps.map((prop: StepsType, key: number) => {
+                  return (
+                    <li
+                      className={classes.steps}
+                      key={key}
+                      style={{ width: width }}>
+                      <a
+                        href='#'
+                        className={classes.stepsAnchor}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          formTrigger();
+                          navigationStepChange(key);
+                        }}>
+                        {prop.stepName}
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+              <div className={classes.movingTab} style={movingTabStyle}>
+                {steps[currentStep].stepName}
+              </div>
+            </div>
+
+            <div
+              className={cx({
+                [classes.content]: true,
+                [classes.bgLocation]:
+                  steps[currentStep]?.stepName == 'locationData',
+                // []:
+              })}>
               {steps.map((prop: StepsType, key: number) => {
-                return (
-                  <li
-                    className={classes.steps}
-                    key={key}
-                    style={{ width: width }}>
-                    <a
-                      href='#'
-                      className={classes.stepsAnchor}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        navigationStepChange(key);
-                      }}>
-                      {prop.stepName}
-                    </a>
-                  </li>
-                );
+                if (steps[currentStep].stepName == prop.stepName) {
+                  const stepContentClasses = cx({
+                    [classes.stepContentActive]: currentStep === key,
+                    [classes.stepContent]: currentStep !== key,
+                  });
+                  return (
+                    <div
+                      className={
+                        stepContentClasses + ` ${animateCss[key]} `
+                      }
+                      key={key}>
+                      {prop.stepComponent()}
+                    </div>
+                  );
+                }
               })}
-            </ul>
-            <div className={classes.movingTab} style={movingTabStyle}>
-              {steps[currentStep].stepName}
             </div>
-          </div>
 
-          <div
-            className={cx({
-              [classes.content]: true,
-              [classes.bgLocation]:
-                steps[currentStep]?.stepName == 'locationData',
-              // []:
-            })}>
-            {steps.map((prop: StepsType, key: number) => {
-              if (steps[currentStep].stepName == prop.stepName) {
-                const stepContentClasses = cx({
-                  [classes.stepContentActive]: currentStep === key,
-                  [classes.stepContent]: currentStep !== key,
-                });
-                return (
-                  <div
-                    className={
-                      stepContentClasses + ` ${animateCss[key]} `
-                    }
-                    key={key}>
-                    {prop.stepComponent()}
-                  </div>
-                );
-              }
-            })}
+            <div
+              className={cx({
+                [classes.footer]: true,
+                [classes.footerBgLocation]:
+                  steps[currentStep]?.stepName == 'locationData',
+              })}>
+              <div className={classes.left}>
+                {previousButton ? (
+                  <Button
+                    style={{ marginBottom: 10 }}
+                    variant='contained'
+                    size='large'
+                    className={classes.previousButton}
+                    onClick={() => previousButtonClick()}>
+                    {t('previous', { ns: 'common' })}
+                  </Button>
+                ) : null}
+              </div>
+              <div className={classes.right}>
+                {nextButton ? (
+                  <Button
+                    style={{ marginBottom: 10 }}
+                    variant='contained'
+                    size='large'
+                    color='secondary'
+                    className={classes.nextButton}
+                    type="submit"
+                    onClick={() => nextButtonClick()}
+                  >
+                    {t('next', { ns: 'common' })}
+                  </Button>
+                ) : null}
+                {finishButton ? (
+                  <Button
+                    style={{ marginBottom: 10 }}
+                    variant='contained'
+                    type="submit"
+                    size='large'
+                    color='secondary'
+                    className={classes.finishButton}
+                    onClick={() => finishButtonClick()}>
+                    {t('finish', { ns: 'common' })}
+                  </Button>
+                ) : null}
+              </div>
+              <div className={classes.clearfix} />
+            </div>
           </div>
+        </form>
+        {/* <form onSubmit={handleSubmit(onSubmit)}>
+          <input defaultValue="test" {...register("example")} />
 
-          <div
-            className={cx({
-              [classes.footer]: true,
-              [classes.footerBgLocation]:
-                steps[currentStep]?.stepName == 'locationData',
-            })}>
-            <div className={classes.left}>
-              {previousButton ? (
-                <Button
-                  style={{ marginBottom: 10 }}
-                  variant='contained'
-                  size='large'
-                  className={classes.previousButton}
-                  onClick={() => previousButtonClick()}>
-                  {t('previous', { ns: 'common' })}
-                </Button>
-              ) : null}
-            </div>
-            <div className={classes.right}>
-              {nextButton ? (
-                <Button
-                  style={{ marginBottom: 10 }}
-                  variant='contained'
-                  size='large'
-                  color='secondary'
-                  className={classes.nextButton}
-                  // type="submit"
-                  onClick={() => nextButtonClick()}>
-                  {t('next', { ns: 'common' })}
-                </Button>
-              ) : null}
-              {finishButton ? (
-                <Button
-                  style={{ marginBottom: 10 }}
-                  variant='contained'
-                  size='large'
-                  color='secondary'
-                  className={classes.finishButton}
-                  onClick={() => finishButtonClick()}>
-                  {t('finish', { ns: 'common' })}
-                </Button>
-              ) : null}
-            </div>
-            <div className={classes.clearfix} />
-          </div>
-        </div>
+          <input {...register("exampleRequired", { required: true })} />
+          {errors.exampleRequired && <span>This field is required</span>}
+
+          <input type="submit" />
+        </form> */}
       </SingleDataCtx.Provider>
     </div>
   )

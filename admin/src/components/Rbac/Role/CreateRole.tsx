@@ -9,7 +9,10 @@ import StepsWizards from "@/shared/StepsWizard/StepsWizard";
 
 
 const CreateRole: FC = (() => {
-  const { values } = createRoleHook();
+  const { values,
+    handleSubmit,
+    formTrigger,
+    onSubmit } = createRoleHook();
   const { t } = useTranslation('Roles')
   return (
     <StepsWizards
@@ -47,7 +50,11 @@ const CreateRole: FC = (() => {
         ]
       }
       title={t('createRouteSubTitle')}
-      subtitle={t('createRouteSubTitle')} />
+      subtitle={t('createRouteSubTitle')}
+      formId='role-form'
+      formTrigger={formTrigger}
+      onSubmit={onSubmit}
+      handleSubmit={handleSubmit} />
   )
 })
 

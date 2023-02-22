@@ -26,7 +26,7 @@ const EditCity: FC = (() => {
   const { t, i18n } = useTranslation('Cities')
   return (
     <Fragment>
-      {singleData !== null &&
+      {/* {singleData !== null &&
         <StepsWizards
           steps={
             [
@@ -110,7 +110,7 @@ const EditCity: FC = (() => {
             ].filter(Boolean)
           }
           title={values[0]?.name || t('cityTitle') + values[0]?.country_name || t('country_name')}
-          subtitle={t('citySubtitle')} />}
+          subtitle={t('citySubtitle')} />} */}
     </Fragment>
   )
 })

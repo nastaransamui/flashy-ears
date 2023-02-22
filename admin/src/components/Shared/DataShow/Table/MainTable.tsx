@@ -90,6 +90,7 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
   const navigate = useNavigate()
   const m: any = []
   const perPage: number = useReadLocalStorage(`${modelName}_perPage`)!
+
   totalData.forEach((a, index) => {
     if (index == 0) {
       Object.entries(a).map(([key, value]) => {
@@ -218,6 +219,22 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
                                 <img
                                   alt=".."
                                   src={`/admin/flags/128x128/${params.row[media as unknown as keyof typeof params.row]}.png` || '/admin/images/faces/avatar1.jpg'}
+                                  style={{ width: 30, height: 30, borderRadius: '50%' }} /> : null}
+                              <span style={{
+                                marginLeft: theme.direction == 'ltr' ? 5 : 0,
+                                marginRight: theme.direction == 'ltr' ? 0 : 5,
+                              }}>{params.formattedValue.toString()}</span>
+                            </div>
+                          )
+                        case 'img_light|img_dark' as any:
+                          return (
+                            <div style={{ display: 'flex', width: '100%' }}>
+                              {media !== '' as any
+                                ?
+                                <img
+                                  alt=".."
+                                  //@ts-ignore
+                                  src={params.row[media?.split("|")[theme.palette.mode == 'dark' ? 1 : 0] as unknown as keyof typeof params.row] || '/admin/images/faces/avatar1.jpg'}
                                   style={{ width: 30, height: 30, borderRadius: '50%' }} /> : null}
                               <span style={{
                                 marginLeft: theme.direction == 'ltr' ? 5 : 0,

@@ -9,6 +9,7 @@ import users_fa from '../public/locales/fa/users.json';
 import roles_en from '../public/locales/en/roles.json';
 import roles_fa from '../public/locales/fa/roles.json';
 import video_en from '../public/locales/en/video.json';
+import collection_en from '../public/locales/en/collections.json';
 import video_fa from '../public/locales/fa/video.json';
 import photos_en from '../public/locales/en/photos.json';
 import photos_fa from '../public/locales/fa/photos.json';
@@ -43,6 +44,7 @@ export const resources = {
     Users: users_en,
     Roles: roles_en,
     Videos: video_en,
+    Collections: collection_en,
     Features: feature_en,
     Photos: photos_en,
     about: about_en,

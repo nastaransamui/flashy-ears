@@ -28,7 +28,7 @@ const EditCountry: FC = (() => {
 
   return (
     <Fragment>
-      {singleData !== null &&
+      {/* {singleData !== null &&
         <StepsWizards
           steps={
             [
@@ -144,7 +144,7 @@ const EditCountry: FC = (() => {
             ].filter(Boolean)
           }
           title={i18n.language == 'fa' ? values[0]?.translations['fa'] || t('countryTitle') : values[0]?.name || t('countryTitle')}
-          subtitle={values[0]?.emoji !== undefined ? values[0]?.emoji.repeat([5]) : t('countrySubtitle')} />}
+          subtitle={values[0]?.emoji !== undefined ? values[0]?.emoji.repeat([5]) : t('countrySubtitle')} />} */}
     </Fragment>
   )
 })

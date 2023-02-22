@@ -17,7 +17,7 @@ const EditFeature: FC = (() => {
   const { t } = useTranslation('Features')
   return (
     <Fragment>
-      <StepsWizards
+      {/* <StepsWizards
         steps={
           [{
             stepName: t('titles'),
@@ -30,7 +30,7 @@ const EditFeature: FC = (() => {
           ]
         }
         title={t('createFeatureTitle')}
-        subtitle={t('createFeatureSubTitle')} />
+        subtitle={t('createFeatureSubTitle')} /> */}
     </Fragment>
   )
 })

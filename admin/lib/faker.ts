@@ -104,15 +104,15 @@ var routes = [
     access: true,
   },
   {
-    state: 'videoMultiCollapse',
+    state: 'collectionMultiCollapse',
     access: true,
   },
   {
-    state: 'videosCollapse',
+    state: 'collectionsCollapse',
     access: true,
   },
   {
-    state: 'videoCollapse',
+    state: 'collectionCollapse',
     access: true,
   },
   {

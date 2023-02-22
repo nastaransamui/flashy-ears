@@ -63,21 +63,21 @@
       "create": true
     },
     {
-      "state": "videosCollapse",
+      "state": "collectionsCollapse",
       "access": true,
       "update": true,
       "delete": true,
       "create": true
     },
     {
-      "state": "videosList",
+      "state": "collectionsList",
       "access": true,
       "update": true,
       "delete": true,
       "create": true
     },
     {
-      "state": "videoSingle",
+      "state": "collectionSingle",
       "access": true,
       "update": true,
       "delete": true,

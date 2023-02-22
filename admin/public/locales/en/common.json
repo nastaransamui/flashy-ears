@@ -126,5 +126,7 @@
   "editSidebar": " (On Edit)",
   "previous": "previous",
   "next": "next",
-  "finish": "finish"
+  "finish": "finish",
+  "maxLength11": "This field can't have more than 11 characters.",
+  "maxLength37": "This field can't have more than 37 characters."
 }

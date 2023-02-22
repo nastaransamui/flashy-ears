@@ -24,7 +24,7 @@ const EditCurrency: FC = (() => {
   const { t, i18n } = useTranslation('Currencies')
   return (
     <Fragment>
-      {singleData !== null &&
+      {/* {singleData !== null &&
         <StepsWizards
           steps={
             [
@@ -73,7 +73,7 @@ const EditCurrency: FC = (() => {
             ].filter(Boolean)
           }
           title={values[0]?.name || t('currencyTitle') + values[0]?.currency_name || t('currency_name')}
-          subtitle={values[0]?.emoji !== undefined ? values[0]?.emoji.repeat([5]) : t('countrySubtitle')} />}
+          subtitle={values[0]?.emoji !== undefined ? values[0]?.emoji.repeat([5]) : t('countrySubtitle')} />} */}
     </Fragment>
   )
 })

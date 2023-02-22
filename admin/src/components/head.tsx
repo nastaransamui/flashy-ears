@@ -70,6 +70,12 @@ export default function HeadComponent({ title }: { title: string }) {
         rel='icon'
         type='image/png'
         sizes='192x192'
+        href='/admin/favicons/android-icon-144x144.png'
+      />
+      <link
+        rel='icon'
+        type='image/png'
+        sizes='192x192'
         href='/admin/favicons/android-icon-192x192.png'
       />
       <link

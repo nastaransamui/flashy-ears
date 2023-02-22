@@ -10,22 +10,22 @@ import Users from '@/src/components/Users/Users/Users';
 import User from '@/src/components/Users/User/User';
 import Roles from '@/src/components/Rbac/Roles/Roles';
 import Role from '@/src/components/Rbac/Role/Role';
-import Videos from '@/src/components/mainPageSetup/Videos/Videos';
-import Video from '@/src/components/mainPageSetup/Video/Video';
-import Photos from '@/src/components/mainPageSetup/Photos/Photos';
-import Photo from '@/src/components/mainPageSetup/Photo/Photo';
-import Features from '@/src/components/mainPageSetup/Features/Features';
-import Feature from '@/src/components/mainPageSetup/Feature/Feature';
-import Countries from '@/src/components/GeoLocations/Countries/Countries';
-import Country from '@/src/components/GeoLocations/Country/Country';
-import Provinces from '@/src/components/GeoLocations/Provinces/Provinces';
-import Province from '@/src/components/GeoLocations/Province/Province';
-import Cities from '@/src/components/GeoLocations/Cities/Cities';
-import City from '@/src/components/GeoLocations/City/City';
-import Currencies from '@/src/components/Exchange/Currencies/Currencies';
-import Currency from '@/src/components/Exchange/Currency/Currency';
-import Agencies from '@/src/components/Agents/Agencies/Agencies';
-import Agent from '@/src/components/Agents/Agent/Agent';
+import Collections from '@/src/components/mainPageSetup/Collections/Collections';
+import Collection from '@/src/components/mainPageSetup/Collection/Collection';
+// import Photos from '@/src/components/mainPageSetup/Photos/Photos';
+// import Photo from '@/src/components/mainPageSetup/Photo/Photo';
+// import Features from '@/src/components/mainPageSetup/Features/Features';
+// import Feature from '@/src/components/mainPageSetup/Feature/Feature';
+// import Countries from '@/src/components/GeoLocations/Countries/Countries';
+// import Country from '@/src/components/GeoLocations/Country/Country';
+// import Provinces from '@/src/components/GeoLocations/Provinces/Provinces';
+// import Province from '@/src/components/GeoLocations/Province/Province';
+// import Cities from '@/src/components/GeoLocations/Cities/Cities';
+// import City from '@/src/components/GeoLocations/City/City';
+// import Currencies from '@/src/components/Exchange/Currencies/Currencies';
+// import Currency from '@/src/components/Exchange/Currency/Currency';
+// import Agencies from '@/src/components/Agents/Agencies/Agencies';
+// import Agent from '@/src/components/Agents/Agent/Agent';
 import { RoutesViews } from '@/interfaces/react.interface';
 import { useSelector } from 'react-redux';
 import { State } from '@/src/redux/store';
@@ -44,22 +44,22 @@ const ReactRouter: FC<ProDashboardProps> = (props: ProDashboardProps) => {
       User,
       Roles,
       Role,
-      Videos,
-      Video,
-      Photos,
-      Photo,
-      Features,
-      Feature,
-      Countries,
-      Country,
-      Provinces,
-      Province,
-      Cities,
-      City,
-      Currencies,
-      Currency,
-      Agencies,
-      Agent
+      Collections,
+      Collection,
+      // Photos,
+      // Photo,
+      // Features,
+      // Feature,
+      // Countries,
+      // Country,
+      // Provinces,
+      // Province,
+      // Cities,
+      // City,
+      // Currencies,
+      // Currency,
+      // Agencies,
+      // Agent
     }
   }, [])
 

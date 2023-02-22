@@ -115,7 +115,7 @@ const CardContent: FC<CardContentTypes> = ((props: CardContentTypes) => {
         setCardHeight(350)
       }
       if (lg) {
-        // console.log(elRefs?.['current']?.[`offsetWidth`])
+
         setCardHeight(200)
       }
       if (xl) {
@@ -154,6 +154,20 @@ const CardContent: FC<CardContentTypes> = ((props: CardContentTypes) => {
                 height="194"
                 className={classes.image}
                 image={path || replaceImage}
+                alt=""
+              />
+            )
+
+          case `img_light|img_dark` as any:
+            const replaceImageTheme =
+              media == 'profileImage' ? '/admin/images/faces/avatar1.jpg' :
+                media == 'logoImage' ? '/admin/images/faces/avatar1.jpg' : media.split('|')[1]
+            return (
+              <CardMedia
+                component="img"
+                height="194"
+                className={classes.image}
+                image={path || replaceImageTheme}
                 alt=""
               />
             )

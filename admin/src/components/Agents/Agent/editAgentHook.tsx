@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { State } from '@/src/redux/store';
+import { useForm } from "react-hook-form";
 
 const editAgentHook = (singleData: any) => {
   const dispatch = useDispatch();
@@ -95,11 +96,7 @@ const editAgentHook = (singleData: any) => {
     }
   }, [singleData])
 
-  const handleAgentdataChange = () => { }
 
-  const handleContactDataChange = () => { }
-
-  const handleFinancialDataChange = () => { }
   const handleAcountManagerDataChange = () => {
     if (
       singleData?.userCreatedData == undefined ||
@@ -112,18 +109,15 @@ const editAgentHook = (singleData: any) => {
       })
     }
   }
-
-  // const handleAgentsDataChange = () => {
-  //   if (singleData?.agentsData == undefined) {
-
-  //   }
-  // }
+  const { handleSubmit, watch, control, register, formState: { errors }, resetField, setError, clearErrors, trigger } = useForm<any>();
+  const formTrigger = async () => { }
+  const onSubmit = (data: any) => console.log(data)
 
   return {
     values,
-    handleAgentdataChange,
-    handleContactDataChange,
-    handleFinancialDataChange,
+    handleSubmit,
+    formTrigger,
+    onSubmit,
     handleAcountManagerDataChange
   }
 }

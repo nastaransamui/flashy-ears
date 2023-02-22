@@ -16,7 +16,7 @@ import {
   searchPhotos,
   searchRoles,
   searchUsers,
-  searchVideos,
+  searchCollections,
 } from '@/helpers/searchFind';
 
 export function escapeRegExp(value: string) {
@@ -81,8 +81,11 @@ apiRoute.post(
             var result: Results = await searchRoles(searchRegex, fieldValue);
             res.status(200).json({ success: true, ...result });
             break;
-          case 'Videos':
-            var result: Results = await searchVideos(searchRegex, fieldValue);
+          case 'Collections':
+            var result: Results = await searchCollections(
+              searchRegex,
+              fieldValue
+            );
             res.status(200).json({ success: true, ...result });
             break;
           case 'Photos':

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { State } from '@/src/redux/store';
-
+import { useForm } from "react-hook-form";
 const editUserHook = (singleData: any) => {
   const dispatch = useDispatch();
   const { reRunSingleGet } = useSelector<State, State>(state => state)
@@ -70,7 +70,7 @@ const editUserHook = (singleData: any) => {
       ])
     }
   }, [singleData])
-  const handleUserdataChange = () => { }
+
 
   const handleRolesdataChange = () => {
     if (singleData?.roleData == undefined) {
@@ -90,10 +90,17 @@ const editUserHook = (singleData: any) => {
     }
   }
 
+  const { handleSubmit, watch, control, register, formState: { errors }, resetField, setError, clearErrors, trigger } = useForm<any>();
+  const formTrigger = async () => { }
+  const onSubmit = (data: any) => console.log(data)
+
   return {
     values,
     handleRolesdataChange,
-    handleAgentsDataChange
+    handleAgentsDataChange,
+    handleSubmit,
+    formTrigger,
+    onSubmit
   }
 }
 

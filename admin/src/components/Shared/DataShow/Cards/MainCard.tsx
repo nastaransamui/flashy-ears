@@ -16,12 +16,13 @@ import CardHeader from '@/shared/CardsCompoents/CardHeader'
 import CardContent from '@/shared/CardsCompoents/CardContent';
 import CardActions from '@/shared/CardsCompoents/CardActions';
 import CardCollapseArea from '@/shared/CardsCompoents/CardCollapseArea';
+import { useTheme } from '@mui/material';
 
 
 
 
 const MainCard: FC = (() => {
-
+  const theme = useTheme();
   const currentRouteState = useCurrentRouteState();
   const { modelName } = currentRouteState;
   const { totalData, deleteIds, statusIdsUpdate } = useSelector<State, State>(state => state)
@@ -78,9 +79,15 @@ const MainCard: FC = (() => {
                     Object.entries(a.muiData).map(([key, value], i) => {
                       let media = value?.['thumbnail' as keyof typeof value]
                       if (value.thumbnail !== '' && a.isYoutube == undefined) {
-                        return (
-                          <CardContent path={a[media]} media={media} elRefs={elRefs[index]} key={i} />
-                        )
+                        if (media !== 'img_light|img_dark') {
+                          return (
+                            <CardContent path={a[media]} media={media} elRefs={elRefs[index]} key={i} />
+                          )
+                        } else {
+                          return (
+                            <CardContent path={a[media.split("|")[theme.palette.mode == 'dark' ? 1 : 0]]} media={media} elRefs={elRefs[index]} key={i} />
+                          )
+                        }
                       } else {
                         if (value.thumbnail !== '' && a.isYoutube && value.thumbnail !== 'videoLink') {
                           return (

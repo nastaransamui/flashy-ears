@@ -8,6 +8,7 @@ import mongoose, { Model } from 'mongoose';
 import Roles, { IRole } from '@/models/Roles';
 import Users, { IUser } from '@/models/Users';
 import Videos, { IVideo } from '@/models/Videos';
+import Collections, { ICollection } from '@/models/Collections';
 import Photos, { IPhoto } from '@/models/Photos';
 import Features, { IFeature } from '@/models/Features';
 import Countries, { ICountry } from '@/models/Countries';
@@ -19,10 +20,12 @@ import {
   findAllUsersWithPagginate,
   findAllRolesWithPagginate,
   findAllVideosWithPagginate,
+  findAllCollectionsWithPagginate,
   findAllPhotosWithPagginate,
   findAllUsers,
   findAllRoles,
   findAllVideos,
+  findAllCollections,
   findAllPhotos,
   paginate,
   MultiMapKey,
@@ -276,9 +279,9 @@ apiRoute.post(
             );
             res.status(200).json({ success: true, ...result });
             break;
-          case 'Videos':
-            var result: Results = await findAllVideosWithPagginate(
-              collection as Model<IVideo>,
+          case 'Collections':
+            var result: Results = await findAllCollectionsWithPagginate(
+              collection as Model<ICollection>,
               perPage,
               pageNumber,
               sortByField,

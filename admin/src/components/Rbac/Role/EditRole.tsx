@@ -15,11 +15,12 @@ const EditRole: FC = (() => {
   const { _id, singleData } = useSingleData('edit');
   const {
     values,
-    handleRoutesChange,
-    handleCrudChange,
+    handleSubmit,
+    formTrigger,
+    onSubmit,
     handleUsersChange
   } = editRoleHook(singleData);
-  // console.log(singleData)
+
   const { t } = useTranslation('Roles')
   return (
     <Fragment>
@@ -30,9 +31,7 @@ const EditRole: FC = (() => {
             stepComponent: () => <div>{JSON.stringify(values[0])}</div>,
             stepId: 'name',
             isValidated: () => true,
-            handleChange: () => {
-              // console.log(`handle  ${t('name')} change`)
-            },
+            handleChange: () => { },
             values: values[0]
           },
           {
@@ -40,9 +39,7 @@ const EditRole: FC = (() => {
             stepComponent: () => <div>{JSON.stringify(values[1])}</div>,
             stepId: 'routes',
             isValidated: () => true,
-            handleChange: () => {
-              // console.log(`handle  ${t('routes')} change`)
-            },
+            handleChange: () => { },
             values: values[1]
           },
           {
@@ -50,9 +47,7 @@ const EditRole: FC = (() => {
             stepComponent: () => <div>{JSON.stringify(values[2])}</div>,
             stepId: 'crud',
             isValidated: () => true,
-            handleChange: () => {
-              // console.log(`handle  ${t('crud')} change`) 
-            },
+            handleChange: () => { },
             values: values[2]
           },
           singleData?.isActive && {
@@ -68,14 +63,17 @@ const EditRole: FC = (() => {
             isValidated: () => true,
             handleChange: () => {
               handleUsersChange();
-              // console.log(`handle  ${t('users')} change`)
             },
             values: values[3]
           },
           ].filter(Boolean)
         }
         title={values[0].roleName!}
-        subtitle={t('editRouteSubTitle')} />
+        subtitle={t('editRouteSubTitle')}
+        formId='agency-form'
+        formTrigger={formTrigger}
+        onSubmit={onSubmit}
+        handleSubmit={handleSubmit} />
     </Fragment>
   )
 });
