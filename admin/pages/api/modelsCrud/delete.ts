@@ -28,9 +28,11 @@ import {
   sort_by,
   findAllAgenciesWithPagginate,
   findAllAgencies,
+  findAllCollectionsWithPagginate,
 } from '@/helpers/dbFinds';
 
 import type { MultiMap } from 'hazelcast-client/lib/proxy/MultiMap';
+import { ICollection } from '@/models/Collections';
 
 const apiRoute = nextConnect<HazelcastType, NextApiResponse>({
   onError(error, req, res) {
@@ -132,88 +134,148 @@ apiRoute.delete(
           await hz.shutdown();
         }
       } else {
-        collection.deleteMany(
-          {
-            _id: { $in: arrayOfIds },
-          },
-          async (err: Error, respose: any) => {
-            if (err) {
-              console.log(err);
-              res
-                .status(400)
-                .json({ success: false, Error: (err as Error).message });
-            } else {
-              switch (modelName) {
-                case 'Users':
-                  var result: Results = await findAllUsersWithPagginate(
-                    collection as Model<IUser>,
-                    perPage,
-                    pageNumber,
-                    sortByField,
-                    sortDirection
-                  );
-                  res.status(200).json({ success: true, ...result });
-                  break;
-                case 'Roles':
-                  var result: Results = await findAllRolesWithPagginate(
-                    collection as Model<IRole>,
-                    perPage,
-                    pageNumber,
-                    sortByField,
-                    sortDirection
-                  );
-                  res.status(200).json({ success: true, ...result });
-                  break;
-                case 'Videos':
-                  var result: Results = await findAllVideosWithPagginate(
-                    collection as Model<IVideo>,
-                    perPage,
-                    pageNumber,
-                    sortByField,
-                    sortDirection
-                  );
-                  res.status(200).json({ success: true, ...result });
-                  break;
-                case 'Photos':
-                  var result: Results = await findAllPhotosWithPagginate(
-                    collection as Model<IPhoto>,
-                    perPage,
-                    pageNumber,
-                    sortByField,
-                    sortDirection
-                  );
-                  res.status(200).json({ success: true, ...result });
-                  break;
-                case 'Features':
-                  var result: Results = await findAllFeaturesWithPagginate(
-                    collection as Model<IFeature>,
-                    perPage,
-                    pageNumber,
-                    sortByField,
-                    sortDirection
-                  );
-                  res.status(200).json({ success: true, ...result });
-                  break;
-                case 'Agencies':
-                  var result: Results = await findAllAgenciesWithPagginate(
-                    collection as Model<IAgent>,
-                    perPage,
-                    pageNumber,
-                    sortByField,
-                    sortDirection,
-                    activeOnly
-                  );
-                  res.status(200).json({ success: true, ...result });
-                  break;
-                default:
+        switch (modelName) {
+          case 'Collections':
+            const cloudinary = require('cloudinary').v2;
+            cloudinary.config({
+              cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+              api_key: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY,
+              api_secret: process.env.NEXT_PUBLIC_CLOUDINARY_API_SECRET,
+            });
+            const records = await collection
+              .find()
+              .where('_id')
+              .in(arrayOfIds)
+              .exec();
+            var cloudinaryArray: string[] = [];
+            records.map((a) => {
+              cloudinaryArray.push(
+                `collections/${a.title_en}img_light`,
+                `collections/${a.title_en}img_dark`
+              );
+            });
+            cloudinary.api.delete_resources(
+              cloudinaryArray,
+              async (error: Error, resp: object) => {
+                if (error !== undefined) {
                   res
-                    .status(200)
-                    .json({ success: true, data: [], totalCount: 0 });
-                  break;
+                    .status(404)
+                    .json({ success: false, Error: (error as Error).message });
+                } else {
+                  collection.deleteMany(
+                    {
+                      _id: { $in: arrayOfIds },
+                    },
+                    async (err: Error, respose: any) => {
+                      if (err) {
+                        console.log(err);
+                        res.status(400).json({
+                          success: false,
+                          Error: (err as Error).message,
+                        });
+                      } else {
+                        var result: Results =
+                          await findAllCollectionsWithPagginate(
+                            collection as Model<ICollection>,
+                            perPage,
+                            pageNumber,
+                            sortByField,
+                            sortDirection
+                          );
+                        res.status(200).json({ success: true, ...result });
+                      }
+                    }
+                  );
+                }
               }
-            }
-          }
-        );
+            );
+            break;
+
+          default:
+            collection.deleteMany(
+              {
+                _id: { $in: arrayOfIds },
+              },
+              async (err: Error, respose: any) => {
+                if (err) {
+                  console.log(err);
+                  res
+                    .status(400)
+                    .json({ success: false, Error: (err as Error).message });
+                } else {
+                  switch (modelName) {
+                    case 'Users':
+                      var result: Results = await findAllUsersWithPagginate(
+                        collection as Model<IUser>,
+                        perPage,
+                        pageNumber,
+                        sortByField,
+                        sortDirection
+                      );
+                      res.status(200).json({ success: true, ...result });
+                      break;
+                    case 'Roles':
+                      var result: Results = await findAllRolesWithPagginate(
+                        collection as Model<IRole>,
+                        perPage,
+                        pageNumber,
+                        sortByField,
+                        sortDirection
+                      );
+                      res.status(200).json({ success: true, ...result });
+                      break;
+                    case 'Videos':
+                      var result: Results = await findAllVideosWithPagginate(
+                        collection as Model<IVideo>,
+                        perPage,
+                        pageNumber,
+                        sortByField,
+                        sortDirection
+                      );
+                      res.status(200).json({ success: true, ...result });
+                      break;
+                    case 'Photos':
+                      var result: Results = await findAllPhotosWithPagginate(
+                        collection as Model<IPhoto>,
+                        perPage,
+                        pageNumber,
+                        sortByField,
+                        sortDirection
+                      );
+                      res.status(200).json({ success: true, ...result });
+                      break;
+                    case 'Features':
+                      var result: Results = await findAllFeaturesWithPagginate(
+                        collection as Model<IFeature>,
+                        perPage,
+                        pageNumber,
+                        sortByField,
+                        sortDirection
+                      );
+                      res.status(200).json({ success: true, ...result });
+                      break;
+                    case 'Agencies':
+                      var result: Results = await findAllAgenciesWithPagginate(
+                        collection as Model<IAgent>,
+                        perPage,
+                        pageNumber,
+                        sortByField,
+                        sortDirection,
+                        activeOnly
+                      );
+                      res.status(200).json({ success: true, ...result });
+                      break;
+                    default:
+                      res
+                        .status(200)
+                        .json({ success: true, data: [], totalCount: 0 });
+                      break;
+                  }
+                }
+              }
+            );
+            break;
+        }
       }
       // res.status(200).json({ success: true, data: [] });
     } catch (error) {

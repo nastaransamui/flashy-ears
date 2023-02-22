@@ -3,7 +3,7 @@
 import HeadComponent from '@/src/components/head'
 import { wrapper, } from '@/src/redux/store';
 import { GetServerSideProps, NextPageContext } from 'next';
-import { getCookies, getCookie, setCookie } from 'cookies-next';
+import { hasCookie, getCookie, setCookie } from 'cookies-next';
 
 import useShallowTranslation from '@/hookes/useShallowTranslation'
 import { useRouter } from 'next/router';
@@ -30,10 +30,10 @@ export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps
     let props = {}
     const galleryImages = await getGalleryImages(getCookie('galleryImageModel', ctx) as string);
     const homeTheme = await getHomeTheme();
-    setCookie('homeThemeType', 'dark', ctx)
+    setCookie('homeThemeType', hasCookie('homeThemeType', ctx) ? getCookie('homeThemeType', ctx) : 'dark', ctx)
     setCookie('homeThemeName', homeTheme?.['name'], ctx)
-    setCookie('i18nextLng', 'en', ctx);
-    setCookie('galleryImageModel', 'bell', ctx);
+    setCookie('i18nextLng', hasCookie('i18nextLng', ctx) ? getCookie('i18nextLng', ctx) : 'en', ctx);
+    setCookie('galleryImageModel', hasCookie('galleryImageModel', ctx) ? getCookie('galleryImageModel', ctx) : 'bell', ctx);
     props = {
       ...(await store.dispatch({
         type: 'ADMIN_ACCESS_TOKEN',

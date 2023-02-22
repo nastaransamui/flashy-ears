@@ -272,7 +272,7 @@ const NavbarLinks: FC<NavbarLinksTypes> = (props: NavbarLinksTypes) => {
         )}
         <Hidden smUp implementation='css'>
           <span className={classes.linkText + " " + classes[sideBarbgColor + 'Background' as keyof typeof classes]}>
-            {i18n.language !== 'fa'
+            {theme.palette.mode == 'light'
               ? t('header')[`header_dark` as keyof typeof t]
               : t('header')[`header_light` as keyof typeof t]}
           </span>

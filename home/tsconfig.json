@@ -27,7 +27,7 @@
       "@/theme/*": ["theme/*"],
       "@/interfaces/*": ["src/components/Shared/interfaces/*"],
       "@/helpers/*": ["helpers/*"],
-      "@/models/*": ["models/*"],
+      "@/models/*": ["homeModels/*"],
       "@/hookes/*": ["src/components/Hooks/*"],
       "@/shared/*": ["src/components/Shared/*"],
       "@/root/*": ["/*"]

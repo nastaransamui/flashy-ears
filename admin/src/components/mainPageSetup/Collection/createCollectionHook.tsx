@@ -56,7 +56,6 @@ const createCollectionHook = () => {
   const navigate = useNavigate();
   const onSubmit = (data: any) => {
     const formData = new FormData();
-    console.log(data)
     if (validate) {
       formData.append("title_en", data.title_en);
       formData.append("title_th", data.title_th);

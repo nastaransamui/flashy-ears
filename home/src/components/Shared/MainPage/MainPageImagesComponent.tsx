@@ -397,7 +397,7 @@ const MainPageImagesComponent: FC = (() => {
                 slides.map((slide, i) => {
                   return (
                     <div className={classes.slide + " " + `${current == i ? classes.current : ' '}`} id={`slide_${i}`} key={i}>
-                      <div className={classes.slide__img} style={{ backgroundImage: `url(${slide.img}_${theme.palette.mode}.jpg)` }}></div>
+                      <div className={classes.slide__img} style={{ backgroundImage: `url(${slide[`img_${theme.palette.mode}` as keyof typeof slide]})` }}></div>
                       {/* <a className="">
                         <i className={`fa fa-angle-double-down ${classes.slide__scroll}`} aria-hidden="true"></i>
                       </a> */}

@@ -34,10 +34,10 @@ export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps
     let props = {}
     const homeSlides = await getHomeSlides();
     const homeTheme = await getHomeTheme();
-    setCookie('homeThemeType', 'dark', ctx)
+    setCookie('homeThemeType', hasCookie('homeThemeType', ctx) ? getCookie('homeThemeType', ctx) : 'dark', ctx)
     setCookie('homeThemeName', homeTheme?.['name'], ctx)
-    setCookie('i18nextLng', 'en', ctx);
-    setCookie('galleryImageModel', 'bell', ctx);
+    setCookie('i18nextLng', hasCookie('i18nextLng', ctx) ? getCookie('i18nextLng', ctx) : 'en', ctx);
+    setCookie('galleryImageModel', hasCookie('galleryImageModel', ctx) ? getCookie('galleryImageModel', ctx) : 'bell', ctx);
     props = {
       ...(await store.dispatch({
         type: 'ADMIN_ACCESS_TOKEN',
