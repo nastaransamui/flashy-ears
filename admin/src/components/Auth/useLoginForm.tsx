@@ -50,6 +50,7 @@ const useLoginForm = () => {
           try {
             await db.open();
             await db.routesDb.bulkAdd(accessRole)
+            console.log(accessRole)
             dispatch({ type: 'ACCESS_ROLE', payload: accessRole })
             if (profile.err) {
               toast(<ToastMessage >{t(`${profile.err}`)}</ToastMessage>, {
