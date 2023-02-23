@@ -17,6 +17,7 @@ import CardContent from '@/shared/CardsCompoents/CardContent';
 import CardActions from '@/shared/CardsCompoents/CardActions';
 import CardCollapseArea from '@/shared/CardsCompoents/CardCollapseArea';
 import { useTheme } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 
 
@@ -29,6 +30,8 @@ const MainCard: FC = (() => {
   const gridView: GridSize = useReadLocalStorage(`${modelName}_gridView`)!
   const perPage: number = useReadLocalStorage(`${modelName}_perPage`)!
   const cardView: boolean = useReadLocalStorage(`${modelName}_cardView`)!
+
+  const { i18n } = useTranslation();
 
   const [elRefs, setElRefs] = useState([]);
   useEffect(() => {
@@ -79,13 +82,17 @@ const MainCard: FC = (() => {
                     Object.entries(a.muiData).map(([key, value], i) => {
                       let media = value?.['thumbnail' as keyof typeof value]
                       if (value.thumbnail !== '' && a.isYoutube == undefined) {
-                        if (media !== 'img_light|img_dark') {
+                        if (media == 'img_light|img_dark') {
                           return (
-                            <CardContent path={a[media]} media={media} elRefs={elRefs[index]} key={i} />
+                            <CardContent path={a[media.split("|")[theme.palette.mode == 'dark' ? 1 : 0]]} media={media} elRefs={elRefs[index]} key={i} />
+                          )
+                        } else if (media == 'color') {
+                          return (
+                            <CardContent path={a[`name_${i18n.language}`]} media={media} elRefs={elRefs[index]} key={i} colorCode={totalData[index]?.colorCode} />
                           )
                         } else {
                           return (
-                            <CardContent path={a[media.split("|")[theme.palette.mode == 'dark' ? 1 : 0]]} media={media} elRefs={elRefs[index]} key={i} />
+                            <CardContent path={a[media]} media={media} elRefs={elRefs[index]} key={i} />
                           )
                         }
                       } else {

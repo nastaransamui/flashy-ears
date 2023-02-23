@@ -106,6 +106,12 @@ const CardHeader: FC<CardHeaderType> = ((props: CardHeaderType) => {
                 <CardAvatar avatarType="img" path={fieldsObject?.[thumbnail] || replaceImageCollection} imageClass='image' />
               </Badge>
             )
+          case `color` as any:
+            return (
+              <Badge color={fieldsObject.isActive || fieldsObject.isAdmin ? (profile._id == fieldsObject._id ? 'secondary' : "primary") : "error"}  >
+                <Avatar sx={{ bgcolor: fieldsObject?.colorCode }}>{fieldsObject[`label_${i18n.language}`].toString().charAt(0)}</Avatar>
+              </Badge>
+            )
           case 'iso2' as any:
             return (
               <Badge color={fieldsObject.isActive ? "primary" : "error"}  >

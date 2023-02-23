@@ -1,0 +1,12 @@
+{
+  "label_en": "English Label",
+  "label_th": "Thai Label",
+  "name_en": "English Name",
+  "name_th": "Thai Name",
+  "colorCode": "Hex color code",
+  "createdAt": "Created date",
+  "updatedAt": "Last update",
+  "createColor": "Define your color",
+  "selectColor": "Click to get color code",
+  "colorData": "Color information"
+}

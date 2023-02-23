@@ -9,6 +9,7 @@ import SouthAmerica from '@mui/icons-material/SouthAmerica';
 import Badge from '@mui/icons-material/Badge';
 import AccountTree from '@mui/icons-material/AccountTree';
 import HotelIcon from '@mui/icons-material/Hotel';
+import OpacityIcon from '@mui/icons-material/Opacity';
 import { RoutesType } from '@/interfaces/react.interface';
 
 var dashRoutes: RoutesType[] = (module.exports = [
@@ -241,6 +242,44 @@ var dashRoutes: RoutesType[] = (module.exports = [
       //   componentName: undefined,
       //   modelName: undefined,
       // },
+    ],
+  },
+  {
+    path: '/dashboard',
+    collapse: true,
+    name_en: 'Color Variety',
+    name_fa: 'تنوع رنگ',
+    // @ts-ignore
+    icon: OpacityIcon.type?.render().props.children.props.d,
+    state: 'colorCollapse',
+    componentName: undefined,
+    modelName: undefined,
+    views: [
+      {
+        path: '/colors-data/colors',
+        name_en: 'Colors List',
+        name_fa: 'فهرست رنگ ها',
+        mini_en: 'CL',
+        mini_fa: 'ف ر',
+        state: 'colorsList',
+        componentName: 'Colors',
+        modelName: 'Colors',
+        predefineDb: false,
+        activeOnly: false,
+        editUrl: '/colors-data/colors/Color',
+      },
+      {
+        path: '/colors-data/colors/Color',
+        name_en: 'Add color',
+        name_fa: 'رنگ اضافه کنید',
+        mini_en: 'AC',
+        mini_fa: 'را',
+        state: 'colorSingle',
+        componentName: 'Color',
+        modelName: 'Colors',
+        predefineDb: false,
+        activeOnly: false,
+      },
     ],
   },
   // {

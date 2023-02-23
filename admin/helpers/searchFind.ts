@@ -10,7 +10,12 @@ import Roles, {
 import Collections, {
   dispalyFields as collectionsDisplayField,
   muiDataObj as collectionsMuiDataObj,
-} from '@/models/Collections';
+} from 'homeModels/Collections';
+
+import Colors, {
+  dispalyFields as colorsDisplayField,
+  muiDataObj as colorsMuiDataObj,
+} from 'homeModels/Colors';
 import Photos, {
   dispalyFields as photosDisplayField,
   muiDataObj as photosMuiDataObj,
@@ -145,10 +150,10 @@ export async function searchCollections(
         autoCompleteImg: {
           $cond: {
             if: {
-              $eq: [{ $ifNull: ['$img', ''] }, ''],
+              $eq: [{ $ifNull: ['$img_light', ''] }, ''],
             },
             then: '/admin/images/faces/movie.jpg',
-            else: '$img',
+            else: '$img_light',
           },
         },
         autoCompleteIcon: '',
@@ -159,6 +164,46 @@ export async function searchCollections(
             },
             then: '',
             else: '$title_en',
+          },
+        },
+        autoCompleteMainLabel: {
+          $concat: [{ $toString: { $getField: `${fieldValue}` } }],
+        },
+      },
+    },
+    { $limit: 50 },
+  ]);
+  const result = {
+    data: valuesList,
+  };
+  return result;
+}
+
+export async function searchColors(searchRegex: RegExp, fieldValue: string) {
+  const valuesList = await Colors.aggregate([
+    { $match: { [fieldValue]: searchRegex } },
+    { $sort: { title_en: 1 } },
+    {
+      $addFields: {
+        dispalyFields: colorsDisplayField,
+        muiData: colorsMuiDataObj,
+        autoCompleteImg: '',
+        autoCompleteIcon: {
+          $cond: {
+            if: {
+              $eq: [{ $ifNull: ['$icon', ''] }, ''],
+            },
+            then: 'M17.66 8 12 2.35 6.34 8C4.78 9.56 4 11.64 4 13.64s.78 4.11 2.34 5.67 3.61 2.35 5.66 2.35 4.1-.79 5.66-2.35S20 15.64 20 13.64 19.22 9.56 17.66 8zM6 14c.01-2 .62-3.27 1.76-4.4L12 5.27l4.24 4.38C17.38 10.77 17.99 12 18 14H6z',
+            else: '$icon',
+          },
+        },
+        autoCompleteSubLabel: {
+          $cond: {
+            if: {
+              $eq: [{ fieldValue: 'label_en' }, ''],
+            },
+            then: '',
+            else: '$label_en',
           },
         },
         autoCompleteMainLabel: {

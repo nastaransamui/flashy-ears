@@ -11,6 +11,8 @@ import Videos, { IVideo } from '@/models/Videos';
 import Photos, { IPhoto } from '@/models/Photos';
 import Features, { IFeature } from '@/models/Features';
 import Agencies, { IAgent } from '@/models/Agencies';
+import Collections, { ICollection } from 'homeModels/Collections';
+import Colors, { IColors } from 'homeModels/Colors';
 import {
   findAllUsersWithPagginate,
   findAllRolesWithPagginate,
@@ -29,10 +31,10 @@ import {
   findAllAgenciesWithPagginate,
   findAllAgencies,
   findAllCollectionsWithPagginate,
+  findAllColorsWithPagginate,
 } from '@/helpers/dbFinds';
 
 import type { MultiMap } from 'hazelcast-client/lib/proxy/MultiMap';
-import { ICollection } from '@/models/Collections';
 
 const apiRoute = nextConnect<HazelcastType, NextApiResponse>({
   onError(error, req, res) {
@@ -217,6 +219,16 @@ apiRoute.delete(
                     case 'Roles':
                       var result: Results = await findAllRolesWithPagginate(
                         collection as Model<IRole>,
+                        perPage,
+                        pageNumber,
+                        sortByField,
+                        sortDirection
+                      );
+                      res.status(200).json({ success: true, ...result });
+                      break;
+                    case 'Colors':
+                      var result: Results = await findAllColorsWithPagginate(
+                        collection as Model<IColors>,
                         perPage,
                         pageNumber,
                         sortByField,

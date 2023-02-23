@@ -2,7 +2,7 @@ import nextConnect from 'next-connect';
 import { NextApiResponse, NextApiRequest } from 'next';
 // import { HazelcastType } from '@/interfaces/next.interface';
 import { dbCheck } from 'middleware/dbCheck';
-import Collections, { ICollection } from 'models/Collections';
+import Collections, { ICollection } from 'homeModels/Collections';
 import { verifyToken } from 'middleware/verifyToken';
 import cors from 'cors';
 import multipartFormParser from 'middleware/multipart-form-parser';

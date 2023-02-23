@@ -12,6 +12,8 @@ import Roles from '@/src/components/Rbac/Roles/Roles';
 import Role from '@/src/components/Rbac/Role/Role';
 import Collections from '@/src/components/mainPageSetup/Collections/Collections';
 import Collection from '@/src/components/mainPageSetup/Collection/Collection';
+import Colors from '@/src/components/Colors/Colors/Colors';
+import Color from '@/src/components/Colors/Color/Color'
 // import Photos from '@/src/components/mainPageSetup/Photos/Photos';
 // import Photo from '@/src/components/mainPageSetup/Photo/Photo';
 // import Features from '@/src/components/mainPageSetup/Features/Features';
@@ -46,6 +48,8 @@ const ReactRouter: FC<ProDashboardProps> = (props: ProDashboardProps) => {
       Role,
       Collections,
       Collection,
+      Colors,
+      Color
       // Photos,
       // Photo,
       // Features,

@@ -8,7 +8,8 @@ import mongoose, { Model } from 'mongoose';
 import Roles, { IRole } from '@/models/Roles';
 import Users, { IUser } from '@/models/Users';
 import Videos, { IVideo } from '@/models/Videos';
-import Collections, { ICollection } from '@/models/Collections';
+import Collections, { ICollection } from 'homeModels/Collections';
+import Colors, { IColors } from 'homeModels/Colors';
 import Photos, { IPhoto } from '@/models/Photos';
 import Features, { IFeature } from '@/models/Features';
 import Countries, { ICountry } from '@/models/Countries';
@@ -21,6 +22,7 @@ import {
   findAllRolesWithPagginate,
   findAllVideosWithPagginate,
   findAllCollectionsWithPagginate,
+  findAllColorsWithPagginate,
   findAllPhotosWithPagginate,
   findAllUsers,
   findAllRoles,
@@ -282,6 +284,16 @@ apiRoute.post(
           case 'Collections':
             var result: Results = await findAllCollectionsWithPagginate(
               collection as Model<ICollection>,
+              perPage,
+              pageNumber,
+              sortByField,
+              sortDirection
+            );
+            res.status(200).json({ success: true, ...result });
+            break;
+          case 'Colors':
+            var result: Results = await findAllColorsWithPagginate(
+              collection as Model<IColors>,
               perPage,
               pageNumber,
               sortByField,

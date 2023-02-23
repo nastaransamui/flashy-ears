@@ -78,10 +78,11 @@ export interface CardContentTypes {
   media: string;
   path: string;
   isYoutube?: boolean;
+  colorCode?: string;
 }
 
 const CardContent: FC<CardContentTypes> = ((props: CardContentTypes) => {
-  const { elRefs, media, path, isYoutube } = props
+  const { elRefs, media, path, isYoutube, colorCode } = props
   const currentRouteState = useCurrentRouteState();
   const { modelName, predefineDb, activeOnly } = currentRouteState;
   const { totalData } = useSelector<State, State>((state) => state);
@@ -170,6 +171,14 @@ const CardContent: FC<CardContentTypes> = ((props: CardContentTypes) => {
                 image={path || replaceImageTheme}
                 alt=""
               />
+            )
+          case 'color':
+            return (
+              <CardMedia className={classes.icon}>
+                <Avatar sx={{ bgcolor: colorCode }} className={classes.IconAvatar}>
+                  {path.charAt(0).toUpperCase()}
+                </Avatar>
+              </CardMedia>
             )
           case 'iso2' as any:
             return (

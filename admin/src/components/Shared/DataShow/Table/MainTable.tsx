@@ -242,6 +242,20 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
                               }}>{params.formattedValue.toString()}</span>
                             </div>
                           )
+                        case 'color' as any:
+                          return (
+                            <div style={{ display: 'flex', width: '100%' }}>
+                              {media !== '' as any
+                                ?
+                                <Avatar sx={{ bgcolor: params.row.colorCode, width: 30, height: 30, }}>{params.formattedValue.toString().charAt(0)}</Avatar> : null}
+                              <span
+                                style={{
+                                  marginLeft: theme.direction == 'ltr' ? 5 : 0,
+                                  marginRight: theme.direction == 'ltr' ? 0 : 5,
+                                  marginTop: 5
+                                }}>{params.formattedValue.toString()}</span>
+                            </div>
+                          )
                         default:
                           return (
                             <div style={{ display: 'flex', width: '100%' }}>

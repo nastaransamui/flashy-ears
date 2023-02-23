@@ -27,6 +27,7 @@ export interface TotalDataType {
   _id: string;
   dispalyFields: string[];
   isActive?: boolean;
+  colorCode?: string;
   muiData: MuiDataType;
   createdAt: Date;
 }

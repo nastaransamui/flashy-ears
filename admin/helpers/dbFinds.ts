@@ -18,7 +18,12 @@ import Collections, {
   ICollection,
   dispalyFields as collectionsDisplayField,
   muiDataObj as collectionsMuiDataObj,
-} from '@/models/Collections';
+} from 'homeModels/Collections';
+import Colors, {
+  IColors,
+  dispalyFields as colorsDisplayField,
+  muiDataObj as colorsMuiDataObj,
+} from 'homeModels/Colors';
 import Photos, {
   IPhoto,
   dispalyFields as photosDisplayField,
@@ -57,6 +62,7 @@ import Agencies, {
 
 import { firstBy } from 'thenby';
 import type { MultiMap } from 'hazelcast-client/lib/proxy/MultiMap';
+
 var ObjectId = require('mongodb').ObjectID;
 export function paginate(array: object[], perPage: number, pageNumber: number) {
   // human-readable page numbers usually start with 1, so we reduce 1 in the first argument
@@ -98,6 +104,7 @@ type FindFunctionsType = {
   findRolesById?: Function;
   findVideosById?: Function;
   findCollectionsById?: Function;
+  findColorsById?: Function;
   findPhotosById?: Function;
   findFeaturesById?: Function;
   findCountriesById?: Function;
@@ -247,6 +254,11 @@ findFunctions.findCollectionsById = async function findCollectionsById(
   let collection = await Collections.aggregate([
     { $match: { _id: ObjectId(_id) } },
   ]);
+  return collection[0];
+};
+
+findFunctions.findColorsById = async function findColorsById(_id: string) {
+  let collection = await Colors.aggregate([{ $match: { _id: ObjectId(_id) } }]);
   return collection[0];
 };
 
@@ -1367,6 +1379,47 @@ export async function findAllCollectionsWithPagginate(
       $addFields: {
         dispalyFields: collectionsDisplayField,
         muiData: collectionsMuiDataObj,
+      },
+    },
+    {
+      $facet: {
+        paginatedResults: [
+          { $skip: perPage * (pageNumber - 1) },
+          { $limit: perPage },
+        ],
+        totalCount: [
+          {
+            $count: 'count',
+          },
+        ],
+      },
+    },
+  ]);
+
+  const result = {
+    data: dataValue[0].paginatedResults,
+    totalCount:
+      dataValue[0].totalCount[0] == undefined
+        ? 0
+        : dataValue[0].totalCount[0].count,
+  };
+  return result;
+}
+export async function findAllColorsWithPagginate(
+  collection: Model<IColors>,
+  perPage: number,
+  pageNumber: number,
+  sortByField: string,
+  sortDirection: 1 | -1
+) {
+  const dataValue = await collection.aggregate([
+    {
+      $sort: { [sortByField]: sortDirection },
+    },
+    {
+      $addFields: {
+        dispalyFields: colorsDisplayField,
+        muiData: colorsMuiDataObj,
       },
     },
     {

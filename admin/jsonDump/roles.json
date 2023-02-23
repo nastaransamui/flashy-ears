@@ -84,6 +84,27 @@
       "create": true
     },
     {
+      "state": "colorCollapse",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "colorsList",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "colorSingle",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
       "state": "photosCollapse",
       "access": true,
       "update": true,

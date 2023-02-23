@@ -344,7 +344,7 @@ const SearchAutoComplete: FC<SearchAutoCompleteProps> = (() => {
                   />
                   : <SvgIcon
                     key={option._id + option.autoCompleteIcon}
-                    style={{ color: theme.palette.secondary.main }}
+                    style={{ color: option.colorCode !== undefined ? option.colorCode : theme.palette.secondary.main }}
                     sx={{ mr: 2 }}>
                     <path d={option.autoCompleteIcon} />
                   </SvgIcon>} &nbsp;&nbsp;&nbsp;
