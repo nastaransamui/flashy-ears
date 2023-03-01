@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 //Components
 
 import StepsWizards from "@/shared/StepsWizard/StepsWizard";
-import ProductForm from "./ProductForm";
+import { ProductsFormFirst } from "./ProductForm";
 
 import Loading from "@/shared/Loading";
 
