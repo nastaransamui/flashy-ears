@@ -12,7 +12,7 @@ export interface IColors {
   colorCode: string;
 }
 
-const ColorSchema = new mongoose.Schema<IColors>(
+export const ColorSchema = new mongoose.Schema<IColors>(
   {
     label_en: { type: String, required: true },
     label_th: { type: String, required: true },

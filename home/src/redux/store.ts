@@ -6,29 +6,9 @@ import { hasCookie, getCookies } from 'cookies-next';
 import { getHomeTheme } from 'apiCalls/getHomeTheme';
 //@ts-ignore
 const homeTheme = await getHomeTheme();
-/**
- * import { getHomeTheme } from 'apiCalls/getHomeTheme';
-/**
-  homeThemeName:
-    typeof window !== 'undefined'
-      ? hasCookie('homeThemeName')
-        ? (getCookies().homeThemeName as string)
-        : //@ts-ignore
-          await palletDb
-      : //@ts-ignore
-        await palletDb,
-          homeThemeName:
-    typeof window !== 'undefined'
-      ? hasCookie('homeThemeName')
-        ? (getCookies().homeThemeName as string)
-        : //@ts-ignore
-          await palletDb
-      : //@ts-ignore
-        await palletDb,
- 
- */
 
 const initialState = {
+  homePageType: homeTheme?.['homePageType'],
   adminAccessToken: null,
   homeThemeName: homeTheme?.['name'],
   homeThemeType:
@@ -107,7 +87,9 @@ export interface ProductItemsType {
   product__price: string;
   colors: ProductItemsColorsType[];
 }
+
 export interface State {
+  homePageType: string;
   adminAccessToken: any;
   homeThemeName: string | null;
   homeThemeType: PaletteMode | null;
@@ -126,8 +108,9 @@ const reducer = (state: State = initialState, action: AnyAction) => {
     // return { ...state };
     // // case 'SERVER_ACTION':
     // // case 'CLIENT_ACTION':
+    case 'HOME_PAGE_TYPE':
+      return { ...state, homePageType: action.payload };
     case 'ADMIN_ACCESS_TOKEN':
-      //   // console.log("action")
       return { ...state, adminAccessToken: action.payload };
     case 'HOME_THEMENAME':
       return { ...state, homeThemeName: action.payload };

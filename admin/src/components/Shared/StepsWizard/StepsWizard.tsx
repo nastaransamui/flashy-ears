@@ -101,13 +101,14 @@ const StepsWizards: FC<StepsWizardsPropTypes> = ((props: StepsWizardsPropTypes) 
   };
 
   const navigationStepChange = (key: number) => {
-
     if (steps) {
       var validationState = steps[currentStep]?.isValidated();
       if (key > currentStep) {
         for (var i = currentStep; i < key; i++) {
-          // console.log([steps[i].stepId])
+          validationState = steps[i]?.isValidated()
         }
+      } else {
+        validationState = true
       }
       if (validationState) {
         setPreviousButton(key > 0 ? true : false);
@@ -172,7 +173,6 @@ const StepsWizards: FC<StepsWizardsPropTypes> = ((props: StepsWizardsPropTypes) 
 
   const nextButtonClick = () => {
     var validationState = steps[currentStep]?.isValidated();
-
     if (validationState) {
       setPreviousButton(currentStep >= 0 ? true : false);
       setNextButton(currentStep + 2 == steps.length ? false : true)
@@ -187,7 +187,7 @@ const StepsWizards: FC<StepsWizardsPropTypes> = ((props: StepsWizardsPropTypes) 
     }
   }
   const previousButtonClick = () => {
-    var validationState = steps[currentStep]?.isValidated();
+    var validationState = steps[currentStep - 1].isValidated();
     if (validationState) {
       setPreviousButton(currentStep - 1 == 0 ? false : true);
       setFinishButton(currentStep < steps.length ? false : true)

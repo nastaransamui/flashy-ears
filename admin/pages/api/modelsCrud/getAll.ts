@@ -10,6 +10,7 @@ import Users, { IUser } from '@/models/Users';
 import Videos, { IVideo } from '@/models/Videos';
 import Collections, { ICollection } from 'homeModels/Collections';
 import Colors, { IColors } from 'homeModels/Colors';
+import Products, { IProducts } from 'homeModels/Products';
 import Photos, { IPhoto } from '@/models/Photos';
 import Features, { IFeature } from '@/models/Features';
 import Countries, { ICountry } from '@/models/Countries';
@@ -23,6 +24,7 @@ import {
   findAllVideosWithPagginate,
   findAllCollectionsWithPagginate,
   findAllColorsWithPagginate,
+  findAllProductsWithPagginate,
   findAllPhotosWithPagginate,
   findAllUsers,
   findAllRoles,
@@ -294,6 +296,16 @@ apiRoute.post(
           case 'Colors':
             var result: Results = await findAllColorsWithPagginate(
               collection as Model<IColors>,
+              perPage,
+              pageNumber,
+              sortByField,
+              sortDirection
+            );
+            res.status(200).json({ success: true, ...result });
+            break;
+          case 'Products':
+            var result: Results = await findAllProductsWithPagginate(
+              collection as Model<IProducts>,
               perPage,
               pageNumber,
               sortByField,

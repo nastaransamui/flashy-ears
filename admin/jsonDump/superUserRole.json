@@ -104,6 +104,27 @@
       "create": true
     },
     {
+      "state": "productCollapse",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "productsList",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
+      "state": "productSingle",
+      "access": true,
+      "update": true,
+      "delete": true,
+      "create": true
+    },
+    {
       "state": "photosCollapse",
       "access": true,
       "update": true,

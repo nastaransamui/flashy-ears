@@ -6,5 +6,6 @@ declare global {
     $: any;
     Modernizr: any;
     classie: any;
+    sr: any;
   }
 }

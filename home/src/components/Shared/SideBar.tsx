@@ -21,7 +21,7 @@ const SideBar: FC<SideBarProps> = ((props) => {
   const router = useRouter();
   const hasQuery = router.asPath.includes('?');
   const dispatch = useDispatch()
-  const { homeThemeType } = useSelector<State, State>((state) => state);
+  const { homeThemeType, homePageType } = useSelector<State, State>((state) => state);
 
   const navRef = createRef<any>();
   const menuRef = createRef<any>();
@@ -39,31 +39,45 @@ const SideBar: FC<SideBarProps> = ((props) => {
 
       }
     } else {
-      const handleScroll = (event: any) => {
+      if (homePageType == 'landingPage') {
+        document.getElementById('main')!.style.padding = `0px 0px`;
         if (navRef.current !== null) {
-          if (window.scrollY > 20000) {
-            navRef.current.style.display = 'block'
-            navRef.current.style.top = `calc(100vh - ${window.scrollY - 20000}px)`
-            if (window.scrollY > 20000 + window.innerHeight) {
-              navRef.current.style.top = 0
-            }
-          } else {
-            navRef.current.style.display = 'none'
-          }
+          navRef.current.style.display = 'block'
+          navRef.current.style.top = `calc(100vh - ${window.scrollY - 20000}px)`
+          navRef.current.style.top = 0
+
         }
         if (menuRef.current !== null) {
-          if (window.scrollY > 20400) {
-            menuRef.current.style.display = 'flex'
-          } else {
-            menuRef.current.style.display = 'none'
-
-          }
+          menuRef.current.style.display = 'flex'
 
         }
-      }
-      window.addEventListener('scroll', handleScroll, { passive: false });
-      return () => {
-        window.removeEventListener('scroll', handleScroll);
+      } else {
+        const handleScroll = (event: any) => {
+          if (navRef.current !== null) {
+            if (window.scrollY > 20000) {
+              navRef.current.style.display = 'block'
+              navRef.current.style.top = `calc(100vh - ${window.scrollY - 20000}px)`
+              if (window.scrollY > 20000 + window.innerHeight) {
+                navRef.current.style.top = 0
+              }
+            } else {
+              navRef.current.style.display = 'none'
+            }
+          }
+          if (menuRef.current !== null) {
+            if (window.scrollY > 20400) {
+              menuRef.current.style.display = 'flex'
+            } else {
+              menuRef.current.style.display = 'none'
+
+            }
+
+          }
+        }
+        window.addEventListener('scroll', handleScroll, { passive: false });
+        return () => {
+          window.removeEventListener('scroll', handleScroll);
+        }
       }
     }
 

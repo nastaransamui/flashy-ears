@@ -1,0 +1,1069 @@
+import React from "react";
+interface PropTypes {
+  outlinestroke: string;
+  inlinestroke: string;
+  linestroke: string;
+  fill: string;
+  fillOpacity: number;
+}
+function Icon(props: PropTypes) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="50mm"
+      height="50mm"
+      version="1.1"
+      viewBox="0 0 50 50"
+    >
+      <defs>
+        <clipPath id="clipPath2841" clipPathUnits="userSpaceOnUse">
+          <path
+            fill="red"
+            fillOpacity="1"
+            fillRule="nonzero"
+            stroke="none"
+            strokeWidth="0.265"
+            d="M40.006 8.807v1.187h1.189V8.936l-.016.012-.025.022-.012.011-.01.013c-.018.022-.012.015-.03.042a1.97 1.97 0 01-.025.036c-.008.011-.018.02-.025.031l-.013.018-.035.052-.024.032-.007.008c-.002.003-.003.01-.006.008-.003 0 .003-.006.004-.009V9.21l-.286-.063a.233.233 0 01.038-.087c.015-.023.015-.02.03-.038L40.766 9l.013-.019.03-.044c.012-.019.028-.034.04-.052a.341.341 0 00.012-.016c.014-.023.01-.017.034-.05a.36.36 0 01.01-.013z"
+          ></path>
+        </clipPath>
+        <clipPath id="clipPath2965" clipPathUnits="userSpaceOnUse">
+          <path
+            fill="red"
+            fillOpacity="1"
+            fillRule="nonzero"
+            stroke="none"
+            strokeWidth="0.265"
+            d="M40.211 8.597l-.006.012.006-.012zm.465.052l.014.003a.088.088 0 01-.014-.003zM8.804 8.8v32.208H41.2V9.804h-.012l-.007.002h.002-.003-.001-.001l-.002.001h-.001-.001-.026a.115.115 0 01-.023-.008l.005-.014c-.006-.002-.013-.008-.019-.013l-.013-.014-.003-.006-.006-.012-.001-.004a.17.17 0 01-.053-.025l-.015-.008-.024-.015.005.002-.026-.017-.002-.001c-.018-.012-.019-.013-.013-.013h-.001l-.008-.005c-.024-.015-.018-.01-.047-.032l-.006-.005-.003-.003-.004-.001c-.01-.006-.02-.011-.03-.019a.225.225 0 01-.038-.037.37.37 0 01-.026-.017l-.015-.01-.027-.025-.001-.002a4.384 4.384 0 01-.028-.023.404.404 0 01-.081-.092l-.022-.041a.235.235 0 01-.003-.009l-.003-.008-.005-.008.002.001-.012-.02-.016-.007c-.021-.012-.024-.012-.046-.03-.014-.01-.016-.014-.024-.02l-.007-.006-.014-.013-.007-.006-.019-.012-.035-.032a.173.173 0 01-.012-.013v-.001h-.002l-.001-.002a.01.01 0 00-.002-.002l-.004-.004-.01-.009-.001-.001a.27.27 0 01-.037-.041l-.001-.001v-.001l-.002-.001-.002-.002a.138.138 0 01-.03-.043.176.176 0 01-.007-.012c-.014-.01-.03-.038-.039-.053l.012.014c.006.003.015.01.023.017l-.002-.017h-.001c-.016-.017-.035-.03-.05-.048l.014.026c.003.006-.01-.01-.012-.016a.136.136 0 01-.005-.013l.003.003-.005-.008.001.004-.004-.005a.058.058 0 01-.008-.016V8.93l-.004-.004a.13.13 0 01-.03-.07l-.004-.012c-.003.05-.008 0-.01-.042V8.8zm31.506.172l.007.007v-.002l-.007-.005zm.028.053v.009a.023.023 0 00.006.003v-.003l-.007-.009zm.452.067l.014.01h.003l-.015-.01h-.002zm-.308.024c-.02.029-.028.057-.007.084.02.028.044.017.069-.012l-.006-.006c-.02-.018-.017-.015-.04-.041a.142.142 0 01-.006-.009l-.01-.016zm.013.108l.016.014a.141.141 0 00.018.009.667.667 0 00-.034-.023zm.337.268a.304.304 0 00.005.034v-.007a.234.234 0 00-.004-.022l-.001-.005zm.085.052v.002l.007.002h.004c-.004 0-.007-.003-.01-.004zm.012.006h.001zm.002 0l.01.01.004.002-.014-.012zm-.048.046c0 .002.004.004.011.008l-.01-.008zm.047.017a.094.094 0 00.005.008l.011.004s0-.002-.002-.003a.189.189 0 01-.008-.006h-.001l-.005-.003zm.014.01l.006.003-.002-.002-.005-.005.001.003zm.002.002c.019.03.015.026.027.033.002 0 .004 0 .006-.002l-.028-.03h-.005zm.02.002c.003.003.004.004.015.005l-.015-.005zm.295.14h-.001z"
+          ></path>
+        </clipPath>
+      </defs>
+      <g >
+        <path
+          stroke={props.outlinestroke}
+          fill={props.fill}
+          fillOpacity={props.fillOpacity}
+          fillRule="evenodd"
+          strokeDasharray="none"
+          strokeLinecap="square"
+          strokeMiterlimit="4"
+          strokeOpacity="0.988"
+          strokeWidth="0.2"
+          d="M8.904 8.9H41.102000000000004V40.908H8.904z"
+          clipPath="url(#clipPath2965)"
+          display="inline"
+          paintOrder="markers fill stroke"
+        ></path>
+        <path
+          stroke={props.inlinestroke}
+          fill={props.fill}
+          fillOpacity={props.fillOpacity}
+          fillRule="evenodd"
+          strokeDasharray="none"
+          strokeLinecap="square"
+          strokeMiterlimit="4"
+          strokeOpacity="0.988"
+          strokeWidth="0.2"
+          d="M9.899 9.9H40.1V40.099000000000004H9.899z"
+          display="inline"
+          paintOrder="markers fill stroke"
+        ></path>
+        <path
+          stroke={props.linestroke}
+          fill="none"
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M24.999 9.9v30.2"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M9.9 25h30.2"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M24.999 25l1.5-15.1"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M28 9.9l-3.001 13.6"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M24.999 22.001l4.5-12.101"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M31.002 9.9l-6.003 10.599"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M24.999 19l7.5-9.1"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M34 9.9l-9.001 7.6"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M24.999 16L35.5 9.9"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M37 9.9l-12.001 4.6"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M24.999 13L38.5 9.9"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M40.1 9.9l-15.101 1.6"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M24.999 25L40.1 23.5"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M40.1 22.001L26.5 25"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M28 25l12.1-4.501"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M40.1 19l-10.6 6"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M31.002 25l9.098-7.5"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M40.1 16l-7.6 9"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M34 25l6.1-10.5"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M40.1 13l-4.599 12"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M37 25l3.1-13.5"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M40.1 9.9L38.501 25"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M24.999 25L23.5 9.9"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M22.002 9.9l2.997 13.6"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M24.999 22.001L20.499 9.9"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M19 9.9L25 20.499"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M24.999 19L17.5 9.9"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M16 9.9l8.999 7.6"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M24.999 16l-10.5-6.1"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M13 9.9L25 14.5"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M24.999 13l-13.5-3.1"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M9.9 9.9l15.099 1.6"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M24.999 25l-15.1-1.5"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M9.9 22.001L23.5 25"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M22.002 25L9.899 20.498"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M9.9 19l10.6 6"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M19 25l-9.1-7.5"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M9.9 16l7.6 9"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M16 25L9.9 14.5"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M9.9 13l4.6 12"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M13 25L9.9 11.5"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M9.9 9.9L11.5 25"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M24.999 25L40.1 26.5"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M40.1 28l-13.6-3"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M28 25l12.1 4.5"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M40.1 31l-10.6-6"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M31.002 25l9.098 7.5"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M40.1 34l-7.6-9"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M34 25l6.1 10.5"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M40.1 37l-4.599-12"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M37 25l3.1 13.5"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M40.1 40.1L38.501 25"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M24.999 25l1.5 15.1"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M24.999 26.5L28 40.1"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M29.5 40.1L24.998 28"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M24.999 29.5l6.003 10.6"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M32.5 40.1L24.998 31"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M24.999 32.5l9 7.6"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M35.501 40.1L25 34"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M24.999 35.5l12 4.6"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M38.501 40.1L25 37"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M24.999 38.5L40.1 40.1"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M24.999 25L23.5 40.1"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M22.002 40.1l2.997-13.6"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M24.999 28l-4.5 12.1"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M19 40.1L25 29.5"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M24.999 31L17.5 40.1"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M16 40.1l8.999-7.6"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M24.999 34l-10.5 6.1"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M13 40.1L25 35.5"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M24.999 37l-13.5 3.1"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M9.9 40.1l15.099-1.6"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M24.999 25l-15.1 1.5"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M9.9 28l13.6-3"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M22.002 25L9.899 29.5"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M9.9 31l10.6-6"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M19 25l-9.1 7.5"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M9.9 34l7.6-9"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M16 25L9.9 35.5"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M9.9 37l4.6-12"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M13 25L9.9 38.5"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeDasharray="none"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+          strokeOpacity="1"
+          strokeWidth="0.2"
+          d="M9.9 40.1L11.5 25"
+          display="inline"
+        ></path>
+        <path
+          fill="none"
+          stroke={props.linestroke}
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeOpacity="1"
+          strokeWidth="0.265"
+          d="M40.1 8.9l1.001 1"
+          clipPath="url(#clipPath2841)"
+        ></path>
+      </g>
+    </svg>
+  );
+}
+
+export default Icon;

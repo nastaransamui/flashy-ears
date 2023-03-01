@@ -14,6 +14,8 @@ import Collections from '@/src/components/mainPageSetup/Collections/Collections'
 import Collection from '@/src/components/mainPageSetup/Collection/Collection';
 import Colors from '@/src/components/Colors/Colors/Colors';
 import Color from '@/src/components/Colors/Color/Color'
+import Products from '@/src/components/Products/Products/Products';
+import Product from '@/src/components/Products/Product/Product'
 // import Photos from '@/src/components/mainPageSetup/Photos/Photos';
 // import Photo from '@/src/components/mainPageSetup/Photo/Photo';
 // import Features from '@/src/components/mainPageSetup/Features/Features';
@@ -49,7 +51,9 @@ const ReactRouter: FC<ProDashboardProps> = (props: ProDashboardProps) => {
       Collections,
       Collection,
       Colors,
-      Color
+      Color,
+      Products,
+      Product,
       // Photos,
       // Photo,
       // Features,

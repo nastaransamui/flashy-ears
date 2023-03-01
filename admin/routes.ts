@@ -10,6 +10,7 @@ import Badge from '@mui/icons-material/Badge';
 import AccountTree from '@mui/icons-material/AccountTree';
 import HotelIcon from '@mui/icons-material/Hotel';
 import OpacityIcon from '@mui/icons-material/Opacity';
+import InventoryIcon from '@mui/icons-material/Inventory';
 import { RoutesType } from '@/interfaces/react.interface';
 
 var dashRoutes: RoutesType[] = (module.exports = [
@@ -277,6 +278,44 @@ var dashRoutes: RoutesType[] = (module.exports = [
         state: 'colorSingle',
         componentName: 'Color',
         modelName: 'Colors',
+        predefineDb: false,
+        activeOnly: false,
+      },
+    ],
+  },
+  {
+    path: '/dashboard',
+    collapse: true,
+    name_en: 'Products',
+    name_fa: 'تنوع رنگ',
+    // @ts-ignore
+    icon: InventoryIcon.type?.render().props.children.props.d,
+    state: 'productCollapse',
+    componentName: undefined,
+    modelName: undefined,
+    views: [
+      {
+        path: '/products-data/products',
+        name_en: 'Products List',
+        name_fa: 'فهرست رنگ ها',
+        mini_en: 'PL',
+        mini_fa: 'ف ر',
+        state: 'productsList',
+        componentName: 'Products',
+        modelName: 'Products',
+        predefineDb: false,
+        activeOnly: false,
+        editUrl: '/products-data/products/Product',
+      },
+      {
+        path: '/products-data/products/Product',
+        name_en: 'Add product',
+        name_fa: 'رنگ اضافه کنید',
+        mini_en: 'AP',
+        mini_fa: 'را',
+        state: 'productSingle',
+        componentName: 'Product',
+        modelName: 'Products',
         predefineDb: false,
         activeOnly: false,
       },

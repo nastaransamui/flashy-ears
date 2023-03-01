@@ -11,7 +11,7 @@ import useShallowTranslation from '@/hookes/useShallowTranslation'
 import MainPage from '@/src/components/pages/MainPage';
 import { getHomeSlides } from 'apiCalls/getHomeSlides';
 import { getHomeTheme } from 'apiCalls/getHomeTheme';
-
+import { getProductItems } from 'apiCalls/getProductItems';
 
 
 
@@ -34,10 +34,13 @@ export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps
     let props = {}
     const homeSlides = await getHomeSlides();
     const homeTheme = await getHomeTheme();
+    const productItems = await getProductItems();
     setCookie('homeThemeType', hasCookie('homeThemeType', ctx) ? getCookie('homeThemeType', ctx) : 'dark', ctx)
+
     setCookie('homeThemeName', homeTheme?.['name'], ctx)
     setCookie('i18nextLng', hasCookie('i18nextLng', ctx) ? getCookie('i18nextLng', ctx) : 'en', ctx);
     setCookie('galleryImageModel', hasCookie('galleryImageModel', ctx) ? getCookie('galleryImageModel', ctx) : 'bell', ctx);
+
     props = {
       ...(await store.dispatch({
         type: 'ADMIN_ACCESS_TOKEN',
@@ -46,6 +49,14 @@ export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps
       ...(store.dispatch({
         type: 'SLIDES',
         payload: homeSlides,
+      })),
+      ...(store.dispatch({
+        type: 'HOME_PAGE_TYPE',
+        payload: homeTheme?.['homePageType'],
+      })),
+      ...(store.dispatch({
+        type: 'PRODUCT_ITEMS',
+        payload: productItems,
       })),
       ...(store.dispatch({
         type: 'HOME_LOADINGBAR',

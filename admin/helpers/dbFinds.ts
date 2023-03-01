@@ -24,6 +24,12 @@ import Colors, {
   dispalyFields as colorsDisplayField,
   muiDataObj as colorsMuiDataObj,
 } from 'homeModels/Colors';
+
+import Products, {
+  IProducts,
+  dispalyFields as productsDisplayField,
+  muiDataObj as productsMuiDataObj,
+} from 'homeModels/Products';
 import Photos, {
   IPhoto,
   dispalyFields as photosDisplayField,
@@ -1420,6 +1426,48 @@ export async function findAllColorsWithPagginate(
       $addFields: {
         dispalyFields: colorsDisplayField,
         muiData: colorsMuiDataObj,
+      },
+    },
+    {
+      $facet: {
+        paginatedResults: [
+          { $skip: perPage * (pageNumber - 1) },
+          { $limit: perPage },
+        ],
+        totalCount: [
+          {
+            $count: 'count',
+          },
+        ],
+      },
+    },
+  ]);
+
+  const result = {
+    data: dataValue[0].paginatedResults,
+    totalCount:
+      dataValue[0].totalCount[0] == undefined
+        ? 0
+        : dataValue[0].totalCount[0].count,
+  };
+  return result;
+}
+
+export async function findAllProductsWithPagginate(
+  collection: Model<IProducts>,
+  perPage: number,
+  pageNumber: number,
+  sortByField: string,
+  sortDirection: 1 | -1
+) {
+  const dataValue = await collection.aggregate([
+    {
+      $sort: { [sortByField]: sortDirection },
+    },
+    {
+      $addFields: {
+        dispalyFields: productsDisplayField,
+        muiData: productsMuiDataObj,
       },
     },
     {

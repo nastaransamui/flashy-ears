@@ -1,0 +1,8 @@
+{
+  "createdAt": "Created date",
+  "updatedAt": "Last update",
+  "createProduct": "Define your product",
+  "productData": "Product information",
+  "colorEmpty": "You need to add colors verity first",
+  "collectionsEmpty": "You need to add collection verity first"
+}
