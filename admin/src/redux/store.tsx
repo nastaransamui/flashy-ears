@@ -50,6 +50,7 @@ export interface State {
   adminAccessToken: any;
   adminThemeName: string | null;
   homeThemeName: string;
+  homePageType: string;
   adminThemeType: PaletteMode | null;
   adminLoadingBar: number;
   adminFormSubmit: boolean;
@@ -72,6 +73,7 @@ const initialState = {
   adminAccessToken: null,
   adminThemeName: typeof window !== 'undefined' ? getCookies().adminThemeName as string : 'grayscale',
   homeThemeName: 'oceanBlue',
+  homePageType: 'landingPage',
   adminThemeType: typeof window !== 'undefined' ? getCookies().adminThemeType as PaletteMode : 'dark',
   adminLoadingBar: 0,
   adminFormSubmit: false,
@@ -108,6 +110,8 @@ const reducer = (state: State = initialState, action: AnyAction) => {
       return { ...state, adminThemeName: action.payload };
     case 'HOME_THEMENAME':
       return { ...state, homeThemeName: action.payload };
+    case 'HOME_PAGE_TYPE':
+      return { ...state, homePageType: action.payload };
     case 'ADMIN_THEMETYPE':
       return { ...state, adminThemeType: action.payload };
     case 'ADMIN_LOADINGBAR':

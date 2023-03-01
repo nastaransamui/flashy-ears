@@ -25,9 +25,9 @@ import { useTranslation } from "react-i18next";
 import useThemeUser from './useThemeUser'
 import { DrawerStateType } from "@/shared/interfaces/react.interface";
 
-import { useSelector } from 'react-redux';
-import { State } from '@/src/redux/store';
-
+import Switch from '@mui/material/Switch';
+import palette from "@/theme/palette";
+import Loading from "@/shared/Loading";
 export interface ThemeUserTypes {
   rtlActive: boolean;
   state: DrawerStateType
@@ -66,8 +66,12 @@ const ThemeUser: FC<ThemeUserTypes> = (props: ThemeUserTypes) => {
     adminThemeName,
     homeThemeName,
     changeAdminTheme,
-    changeHomePageTheme
+    changeHomePageTheme,
+    homePageType,
+    changeHomePageType,
+    pageTypeLoading
   } = useThemeUser(state)
+
 
   return (
     <Fragment>
@@ -107,7 +111,7 @@ const ThemeUser: FC<ThemeUserTypes> = (props: ThemeUserTypes) => {
               />
               <Tab
                 iconPosition="end"
-                icon={isDesktop ? <PaletteIcon color="secondary" /> : ''}
+                icon={isDesktop ? <PaletteIcon sx={{ color: palette[homeThemeName]['palette']['primary']['main'] }} /> : ''}
                 label={t('homeTheme')}
                 classes={{ root: classes.wrapper }}
               />
@@ -186,6 +190,25 @@ const ThemeUser: FC<ThemeUserTypes> = (props: ThemeUserTypes) => {
                       </Grid>
                     );
                   })}
+                </Grid>
+                <Grid component="label" container alignItems="center" justifyContent='center' spacing={1}>{t('changeHomeLanding')}</Grid>
+                <Grid component="label" container alignItems="center" spacing={1}>
+                  {pageTypeLoading ? <Loading color={palette[homeThemeName]['palette']['primary']['main']} />
+                    :
+                    <>
+                      <Grid item>{t('landingPage')}</Grid>
+                      <Grid item>
+                        <Switch
+                          checked={homePageType == 'imageScroll' ? true : false}
+                          onChange={(e) => {
+                            changeHomePageType(e.target.value)
+
+                          }}
+                          value={homePageType == 'imageScroll' ? 'landingPage' : 'imageScroll'}
+                        />
+                      </Grid>
+                      <Grid item>{t('imageScroll')}</Grid>
+                    </>}
                 </Grid>
               </Paper>
             </div>

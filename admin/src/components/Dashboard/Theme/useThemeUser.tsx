@@ -11,15 +11,17 @@ import axios from "axios";
 
 import { toast } from 'react-toastify';
 import { ToastMessage } from '@/shared/CustomToaster/CustomToaster';
-let updateHomeTheme = '/admin/api/home/themeUpdate'
+let updateHomeTheme = '/admin/api/home/themeUpdate';
+let updateHomeLanding = '/admin/api/home/homeLandingUpdate'
 
 const useThemeUser = (state: DrawerStateType) => {
-  const { adminThemeName, propsMiniActive, homeThemeName, adminAccessToken } = useSelector<State, State>((state) => state);
+  const { adminThemeName, propsMiniActive, homeThemeName, adminAccessToken, homePageType } = useSelector<State, State>((state) => state);
   let drawerOpen = !propsMiniActive && propsMiniActive ? false : !propsMiniActive && !state.stateMiniActive ? true : state.stateMiniActive && !propsMiniActive ? false : true
   const { classes, theme, cx } = themeUserStyle({ drawerOpen })
   const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
   const [openDrawer, setOpenDrawer] = useState(false);
   const [tab, setTab] = useState(0);
+  const [pageTypeLoading, setPageTypeLoading] = useState<boolean>(false)
   const dispatch = useDispatch();
 
   const handleToggleOpenTheme = () => {
@@ -45,7 +47,6 @@ const useThemeUser = (state: DrawerStateType) => {
   };
 
   const changeHomePageTheme = (pallet: string) => {
-    console.log(pallet)
     axios.post(updateHomeTheme, { themeName: pallet },
       {
         headers: {
@@ -57,6 +58,48 @@ const useThemeUser = (state: DrawerStateType) => {
       const { success, data, error } = resp.data;
       if (success) {
         dispatch({ type: 'HOME_THEMENAME', payload: pallet });
+      } else {
+        toast(<ToastMessage >{error}</ToastMessage>, {
+          onClose: () => {
+            dispatch({ type: 'ADMIN_FORM_SUBMIT', payload: false })
+            toast.dismiss()
+          },
+          toastId: `theme_toastId`
+        })
+      }
+    }).catch(function (error) {
+      toast(<ToastMessage >{error?.response?.data?.Error || error.message}</ToastMessage>, {
+        onClose: () => {
+          dispatch({ type: 'ADMIN_FORM_SUBMIT', payload: false })
+          dispatch({
+            type: "RERUN_SINGLE_GET",
+            payload: false,
+          })
+          toast.dismiss()
+        },
+        toastId: `theme_toastId`
+      })
+    });
+  };
+
+  const changeHomePageType = (type: string) => {
+
+    setPageTypeLoading(() => true)
+    axios.post(updateHomeLanding, { homePageType: type },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          token: `Brearer ${adminAccessToken}`,
+        }
+      }
+    ).then((resp) => {
+      const { success, data, error } = resp.data;
+      if (success) {
+        dispatch({
+          type: 'HOME_PAGE_TYPE',
+          payload: type
+        })
+        setPageTypeLoading(() => false)
       } else {
         toast(<ToastMessage >{error}</ToastMessage>, {
           onClose: () => {
@@ -94,7 +137,10 @@ const useThemeUser = (state: DrawerStateType) => {
     adminThemeName,
     homeThemeName,
     changeAdminTheme,
-    changeHomePageTheme
+    changeHomePageTheme,
+    homePageType,
+    changeHomePageType,
+    pageTypeLoading
   }
 }
 

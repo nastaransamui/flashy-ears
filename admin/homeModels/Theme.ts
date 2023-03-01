@@ -7,6 +7,7 @@ export interface ITheme {
   _doc?: any;
   save?: any;
   name?: string;
+  homePageType?: string;
 }
 
 const ThemeSchema = new mongoose.Schema<ITheme>({
@@ -16,6 +17,13 @@ const ThemeSchema = new mongoose.Schema<ITheme>({
     unique: true,
     index: true,
     default: 'oceanBlue',
+  },
+  homePageType: {
+    type: String,
+    required: true,
+    unique: true,
+    index: true,
+    default: 'landingPage',
   },
 });
 

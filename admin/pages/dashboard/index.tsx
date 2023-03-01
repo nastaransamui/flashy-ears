@@ -12,6 +12,7 @@ import { getFirstRow } from 'apiCalls/getFirstRow';
 
 import useRoutesUpdate from '@/src/components/Hooks/useRoutesUpdate';
 import { getHomeTheme } from 'apiCalls/getHomeTheme';
+import { ITheme } from 'homeModels/Theme';
 const DynamicDashboard = dynamic(() => import('@/src/pages/dashboard/Dashboard'), {
   ssr: false,
 })
@@ -36,7 +37,7 @@ export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps
     let props = {}
     if (!isObjectEmpty(getCookies(ctx))) {
       const firstRow = await getFirstRow(getCookies(ctx).adminAccessToken!);
-      const homeTheme = await getHomeTheme();
+      const homeTheme: ITheme = await getHomeTheme();
       props = {
         ...(await setPageCookies(ctx as any, store as any)),
         ...(store.dispatch({
@@ -46,6 +47,10 @@ export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps
         ...(store.dispatch({
           type: 'HOME_THEMENAME',
           payload: homeTheme?.['name'],
+        })),
+        ...(store.dispatch({
+          type: 'HOME_PAGE_TYPE',
+          payload: homeTheme?.['homePageType'],
         })),
       }
     }
