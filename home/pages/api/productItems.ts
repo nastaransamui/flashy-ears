@@ -19,8 +19,6 @@ const apiRoute = nextConnect<NextApiRequest, NextApiResponse>({
 
 apiRoute.get(dbCheck, async (req: NextApiRequest, res: NextApiResponse) => {
   const { query } = req;
-  console.log(query);
-  console.log(_.isEmpty(query));
   if (_.isEmpty(query)) {
     const productItems = await Products.aggregate([
       {
@@ -47,8 +45,13 @@ apiRoute.get(dbCheck, async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(200).json({ success: true, productItems: productItems });
   } else {
     const collectionId = query._id;
+    const match =
+      collectionId == undefined
+        ? {}
+        : { collection_id: { $in: [ObjectId(collectionId)] } };
+    console.log(match);
     const productItems = await Products.aggregate([
-      { $match: { collection_id: { $in: [ObjectId(collectionId)] } } },
+      { $match: match },
       {
         $sort: { product_label_en: 1 },
       },
