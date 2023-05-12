@@ -19,6 +19,8 @@ const apiRoute = nextConnect<NextApiRequest, NextApiResponse>({
 
 apiRoute.get(dbCheck, async (req: NextApiRequest, res: NextApiResponse) => {
   const { query } = req;
+  console.log(query);
+  console.log(_.isEmpty(query));
   if (_.isEmpty(query)) {
     const productItems = await Products.aggregate([
       {
