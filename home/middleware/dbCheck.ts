@@ -10,6 +10,7 @@ export async function dbCheck(
 ) {
   const dbConnected = await dbConnect();
   const { success } = dbConnected;
+  console.log(success);
   if (!success) {
     return NextResponse.json({ success: false, Error: dbConnected.error });
   } else {
