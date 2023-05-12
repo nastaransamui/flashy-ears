@@ -34,7 +34,7 @@ export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps
     let props = {}
     const homeSlides = await getHomeSlides();
     const homeTheme = await getHomeTheme();
-    const productItems = await getProductItems();
+    const productItems = await getProductItems(ctx.query);
     setCookie('homeThemeType', hasCookie('homeThemeType', ctx) ? getCookie('homeThemeType', ctx) : 'dark', ctx)
 
     setCookie('homeThemeName', homeTheme?.['name'], ctx)

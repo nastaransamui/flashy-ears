@@ -35,7 +35,7 @@ export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps
     // const productItems = await getProductItems();
     const collectionItems = await getCollectionItems();
     const homeTheme = await getHomeTheme();
-    console.log(ctx.query)
+
     setCookie('homeThemeType', hasCookie('homeThemeType', ctx) ? getCookie('homeThemeType', ctx) : 'dark', ctx)
     setCookie('homeThemeName', homeTheme?.['name'], ctx)
     setCookie('i18nextLng', hasCookie('i18nextLng', ctx) ? getCookie('i18nextLng', ctx) : 'en', ctx);

@@ -5,7 +5,7 @@ export const getProductItems = async (query: any) => {
     process.env.NODE_ENV == 'development'
       ? `${process.env.NEXT_PUBLIC_HOME_URL}/api/productItems`
       : `${process.env.NEXT_PUBLIC_API_URL_PRODUCTION}/api/productItems`;
-  console.log(query);
+
   let productItems;
   try {
     productItems = await axios

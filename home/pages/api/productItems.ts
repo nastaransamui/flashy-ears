@@ -44,7 +44,6 @@ apiRoute.get(dbCheck, async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(200).json({ success: true, productItems: productItems });
   } else {
     const collectionId = query._id;
-    console.log(ObjectId(collectionId));
     const productItems = await Products.aggregate([
       { $match: { collection_id: { $in: [ObjectId(collectionId)] } } },
       {

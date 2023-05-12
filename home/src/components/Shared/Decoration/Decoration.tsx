@@ -14,7 +14,7 @@ const Decoration: FC = (() => {
       (value, index) => start + index * step
     );
 
-  console.log()
+
   return (
     <div className={classes.parallaxWrap} >
       <ParallaxProvider>
