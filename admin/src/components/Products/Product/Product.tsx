@@ -9,8 +9,8 @@ import useCurrentRouteState from '@/hookes/useCurrentRouteState';
 import BackButton from '@/shared/BackButton';
 import EditProduct from './EditProduct';
 import CreateProduct from "./CreateProduct";
-interface ColorTypes { }
-const Color: FC<ColorTypes> = ((props: ColorTypes) => {
+interface ProductTypes { }
+const Product: FC<ProductTypes> = ((props: ProductTypes) => {
   const currentRouteState = useCurrentRouteState();
   const { search } = useLocation()
 
@@ -26,4 +26,4 @@ const Color: FC<ColorTypes> = ((props: ColorTypes) => {
   )
 })
 
-export default Color;
+export default Product;

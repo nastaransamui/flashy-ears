@@ -172,6 +172,19 @@ const CardContent: FC<CardContentTypes> = ((props: CardContentTypes) => {
                 alt=""
               />
             )
+          case `gallery` as any:
+            const replaceImageProduct =
+              media == 'gallery' ? '/admin/images/faces/avatar1.jpg' : media
+
+            return (
+              <CardMedia
+                component="img"
+                height="194"
+                className={classes.image}
+                image={path?.[`src` as keyof typeof path] as string || replaceImageProduct}
+                alt=""
+              />
+            )
           case 'color':
             return (
               <CardMedia className={classes.icon}>

@@ -1,4 +1,17 @@
-import mongoose, { Types } from 'mongoose';
+import mongoose, { ObjectId, Types } from 'mongoose';
+
+export interface ImageCollectionType {
+  height: number;
+  width: number;
+  src: string;
+  isSelected: boolean;
+  tags: [
+    {
+      [key: string]: string;
+    }
+  ];
+  path: string;
+}
 export interface ICollection {
   _id: Types.ObjectId;
   createdAt: Date;
@@ -7,26 +20,26 @@ export interface ICollection {
   save?: any;
   title_en: string;
   title_th: string;
-  img_light: string;
-  img_dark: string;
+  img_light: ImageCollectionType;
+  img_dark: ImageCollectionType;
   desc_en: string;
   desc_th: string;
   linkTitle_en: string;
   linkTitle_th: string;
-  link: string;
+  products_id: Types.Array<Types.ObjectId>;
 }
 
 const CollectionSchema = new mongoose.Schema<ICollection>(
   {
-    title_en: { type: String, required: true },
+    title_en: { type: String, required: true, unique: true },
     title_th: { type: String, required: true },
-    img_light: { type: String, required: true },
-    img_dark: { type: String, required: true },
+    img_light: { type: Object, required: true },
+    img_dark: { type: Object, required: true },
     desc_en: { type: String, required: true },
     desc_th: { type: String, required: true },
     linkTitle_en: { type: String, required: true },
     linkTitle_th: { type: String, required: true },
-    link: { type: String, required: true },
+    products_id: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Products' }],
   },
   { timestamps: true }
 );
@@ -42,6 +55,7 @@ export const dispalyFields = [
   'updatedAt',
   'linkTitle_en',
   'linkTitle_th',
+  'totalProducts',
 ];
 const icon = {
   ...Object.fromEntries(
@@ -68,10 +82,13 @@ export const muiDataObj = {
     dispalyFields.map((key) => [
       key,
       {
-        type: 'string',
+        type: key == 'totalProducts' ? 'number' : 'string',
         thumbnail: key !== 'title_en' ? '' : 'img_light|img_dark',
         filterable: true,
-        searchable: key == 'createdAt' || key == 'updatedAt' ? false : true,
+        searchable:
+          key == 'createdAt' || key == 'updatedAt' || key == 'totalProducts'
+            ? false
+            : true,
         ...icon[key],
       },
     ])

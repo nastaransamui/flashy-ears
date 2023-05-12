@@ -23,12 +23,13 @@ import Avatar from '@mui/material/Avatar'
 import YouTube from 'react-youtube';
 import ToggleOff from '@mui/icons-material/ToggleOff'
 import ToggleOn from '@mui/icons-material/ToggleOn'
-
+import CircleIcon from '@mui/icons-material/Circle';
 export interface MainTableType { }
 
 import { makeStyles } from 'tss-react/mui';
 import { PhoneAgentType } from "@/models/Agencies";
 import { DataShowCtx } from "@/shared/DataShow/useDataShow";
+import { ColorsType } from "@/src/components/Products/Product/ProductForm";
 
 export function important<T>(value: T): T {
   return (value + ' !important') as any;
@@ -85,7 +86,7 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
   const currentRouteState = useCurrentRouteState();
   const { singleDeleteClicked, singleStatusClicked } = useContext(DataShowCtx)
   const { modelName, predefineDb, activeOnly } = currentRouteState
-  const { t } = useTranslation(modelName)
+  const { t, i18n } = useTranslation(modelName)
   const { classes, theme } = mainTableStyles({});
   const navigate = useNavigate()
   const m: any = []
@@ -112,16 +113,80 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
               switch (true) {
                 case Array.isArray(value):
                   if (params.row[key].length == 0) return <div key={(key + value.toString())}> {t(key)} : <Close style={{ position: 'absolute', color: theme.palette.error.main }} /></div>
-                  return (
-                    <div key={(key + value.toString())}>
-                      {
-                        key !== 'phones' ?
-                          params.row[key].length :
+                  switch (key) {
+                    case 'phones':
+                      return (
+                        <div key={(key + value.toString())}>
                           <PhoneTooltip value={params.row[key]} modelName={modelName!} />
+                        </div>
+                      )
+                    case 'colors':
+                      return (
+                        <div key={(key + value.toString())} >
+                          {params.row[key].sort((a: any, b: any) => a.label_en > b.label_en ? 1 : -1).map((color: ColorsType) => (
+                            <Tooltip
+                              TransitionComponent={Zoom}
+                              key={color._id} title={color[`label_en`]} arrow componentsProps={{
+                                tooltip: { sx: { border: `solid 0.5px ${color.colorCode}`, }, },
+                                arrow: {
+                                  sx: {
+                                    '&:before': {
+                                      border: `0.5px solid ${color.colorCode}`,
+                                    },
+                                  }
+                                },
+                              }} >
+                              <CircleIcon sx={{ color: color.colorCode, width: '20px' }} />
+                            </Tooltip>
+                          ))}
+                        </div>
+                      )
+                    case 'gallery':
+                      return (
+                        <div key={(key + value.toString())}>
+                          {`${params.row[key].length}  ${t('images')}`}
+                        </div>
+                      )
 
-                      }
-                    </div>
-                  )
+                    case "financials":
+
+                      let buyPrice: number =
+                        params.formattedValue.reduce((r: any, c: any) => r + c.buyPrice, 0) / params.formattedValue.length;
+                      let salePrice: number =
+                        params.formattedValue.reduce((r: any, c: any) => r + c.salePrice, 0) / params.formattedValue.length;
+                      let totalInventory: number =
+                        params.formattedValue.reduce((r: any, c: any) => r + c.totalInventory, 0) / params.formattedValue.length;
+                      const productsInCart = params.formattedValue
+                        .reduce((accumulator: any, object: any) => {
+                          return accumulator + object.totalInventoryInCart;
+                        }, 0)
+                      return (
+                        <span style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
+                          <span>
+                            {`${productsInCart} ${t('inCart')} - ${buyPrice} ${t('buyPrice')} `}</span>
+                          <span>
+                            {`${salePrice} ${t('salePrice')} -  ${totalInventory} ${t('totalInventory')}`}
+                          </span>
+                        </span>
+                      )
+                    case 'collectionData':
+
+                      return (
+                        <div key={(key + value.toString())} style={{ display: 'flex', width: '100%', }}>
+                          <img
+                            alt=".."
+                            src={`${params.row[key][0][`img_${theme.palette.mode}`][0]['src']}`}
+                            style={{ width: 30, height: 30, borderRadius: '50%', }} />
+                          <span style={{ paddingLeft: 10, paddingTop: 6 }}>{params.row[key][0][`title_${i18n.language}`]}</span>
+                        </div>
+                      )
+                    default:
+                      return (
+                        <div key={(key + value.toString())}>
+                          {params.row[key].length}
+                        </div>
+                      )
+                  }
 
                 case typeof value == 'boolean':
                   return (
@@ -140,6 +205,7 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
                   return (
                     <span>{new Date(params.formattedValue).toLocaleDateString("en-GB", options)}</span>
                   )
+
 
                 default:
                   switch (true) {
@@ -234,12 +300,45 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
                                 <img
                                   alt=".."
                                   //@ts-ignore
-                                  src={params.row[media?.split("|")[theme.palette.mode == 'dark' ? 1 : 0] as unknown as keyof typeof params.row] || '/admin/images/faces/avatar1.jpg'}
+                                  src={params.row[media?.split("|")[theme.palette.mode == 'dark' ? 1 : 0] as unknown as keyof typeof params.row][0]['src'] || '/admin/images/faces/avatar1.jpg'}
                                   style={{ width: 30, height: 30, borderRadius: '50%' }} /> : null}
                               <span style={{
                                 marginLeft: theme.direction == 'ltr' ? 5 : 0,
                                 marginRight: theme.direction == 'ltr' ? 0 : 5,
                               }}>{params.formattedValue.toString()}</span>
+                            </div>
+                          )
+                        case 'gallery' as any:
+                          let filterArrayBySelected = params.row['gallery'].filter((a: any) => a.isSelected)
+                          let pathFilterBySelected = filterArrayBySelected.length > 0 ? filterArrayBySelected?.[0]?.['src'] : params.row['gallery'][0]['src'] || '/admin/images/faces/avatar1.jpg'
+                          console.log()
+                          return (
+                            <div style={{ display: 'flex', width: '100%' }}>
+                              {media !== '' as any
+                                ?
+                                <img
+                                  alt=".."
+                                  //@ts-ignore
+                                  src={pathFilterBySelected}
+                                  style={{ width: 20, height: 20, borderRadius: '50%' }} /> : null}
+                              <span style={{
+                                marginLeft: theme.direction == 'ltr' ? 5 : 0,
+                                marginRight: theme.direction == 'ltr' ? 0 : 5,
+                              }}>{params.formattedValue}</span>
+                            </div>
+                          )
+                        case 'colors_id' as any:
+                          return (
+                            <div style={{ display: 'flex', width: '100%' }}>
+                              {media !== '' as any
+                                ?
+                                <Avatar sx={{ bgcolor: params.row.colorCode, width: 30, height: 30, }}>{params.formattedValue.toString().charAt(0)}</Avatar> : null}
+                              <span
+                                style={{
+                                  marginLeft: theme.direction == 'ltr' ? 5 : 0,
+                                  marginRight: theme.direction == 'ltr' ? 0 : 5,
+                                  marginTop: 5
+                                }}>{params.formattedValue.toString()}</span>
                             </div>
                           )
                         case 'color' as any:
@@ -383,6 +482,7 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
           transition: 'all 1s linear',
         }}>
         <DataGrid
+          rowHeight={90}
           className={classes.root}
           density='compact'
           showCellRightBorder

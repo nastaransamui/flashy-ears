@@ -76,8 +76,12 @@ const CollectionStyle = makeStyles<{}>({
       [`&:hover .${classes.product__img_back}`]: {
         transform: 'scale(1.1)',
       },
+      [`&:hover .${classes.product__img_turn}`]: {
+        transform: 'scale(1.1)',
+      },
       [`&:hover .${classes.product__img}`]: {
         transform: 'scale(1.1)',
+        display: 'none',
       },
       [`&:hover .${classes.product__subtitle}`]: {
         color:
@@ -258,6 +262,7 @@ const CollectionStyle = makeStyles<{}>({
         theme.palette.mode == 'dark'
           ? theme.palette.secondary.main
           : theme.palette.primary.main,
+      transform: `scale(1.3)`,
     },
     product__title: {
       position: 'relative',

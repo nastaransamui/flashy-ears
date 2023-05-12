@@ -28,6 +28,7 @@ import 'animate.css';
 import '../styles/nextjs-material-dashboard-pro.css';
 import 'video-react/dist/video-react.css'
 import '@react-jvectormap/lib/jquery-jvectormap.css'
+import "@/styles/react-image-lightbox.css";
 
 // Translation
 import i18next from 'i18next';
@@ -38,7 +39,8 @@ import detector from 'i18next-browser-languagedetector';
 
 import { hasCookie, getCookies } from 'cookies-next';
 import Script from 'next/script';
-
+import { Roboto_Condensed } from 'next/font/google'
+const roboto = Roboto_Condensed({ weight: ['300', '400', '700'], subsets: ['latin'] })
 var toBoolean = require('to-boolean');
 
 i18next
@@ -115,7 +117,7 @@ function MyApp({ Component, ...rest }: NextProps) {
       <Provider store={store}>
         <I18nextProvider i18n={i18next}>
           <CssBaseline />
-          <div suppressHydrationWarning={true}>
+          <div suppressHydrationWarning={true} className={roboto.className}>
             {getLayout(<Component {...pageProps} key={router.route} router={router} isVercel={isVercel} />)}
           </div>
         </I18nextProvider>

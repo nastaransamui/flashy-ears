@@ -25,6 +25,9 @@ import Grid3x3Icon from '@mui/icons-material/Grid3x3'
 import HomeIcon from "@mui/icons-material/Home";
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import InventoryIcon from '@mui/icons-material/Inventory';
+import ColorLensIcon from '@mui/icons-material/ColorLens';
+import ImageIcon from '@mui/icons-material/Image';
 
 const useIconMap = () => {
   const iconMap = useMemo(() => {
@@ -54,7 +57,10 @@ const useIconMap = () => {
       Grid3x3Icon,
       HomeIcon,
       AlternateEmailIcon,
-      AttachMoneyIcon
+      AttachMoneyIcon,
+      InventoryIcon,
+      ColorLensIcon,
+      ImageIcon
     }
   }, [])
 

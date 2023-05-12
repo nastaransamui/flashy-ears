@@ -110,6 +110,7 @@ type FindFunctionsType = {
   findRolesById?: Function;
   findVideosById?: Function;
   findCollectionsById?: Function;
+  findProductsById?: Function;
   findColorsById?: Function;
   findPhotosById?: Function;
   findFeaturesById?: Function;
@@ -259,12 +260,65 @@ findFunctions.findCollectionsById = async function findCollectionsById(
 ) {
   let collection = await Collections.aggregate([
     { $match: { _id: ObjectId(_id) } },
+    {
+      $lookup: {
+        from: 'products',
+        localField: 'products_id',
+        foreignField: '_id',
+        pipeline: [],
+        as: 'productData',
+      },
+    },
+    {
+      $addFields: {
+        totalProducts: { $size: '$products_id' },
+      },
+    },
+  ]);
+  return collection[0];
+};
+
+findFunctions.findProductsById = async function findProductsById(_id: string) {
+  let collection = await Products.aggregate([
+    { $match: { _id: ObjectId(_id) } },
+    {
+      $lookup: {
+        from: 'colors',
+        localField: 'colors_id',
+        foreignField: '_id',
+        as: 'colors',
+      },
+    },
+    {
+      $lookup: {
+        from: 'collections',
+        localField: 'collection_id',
+        foreignField: '_id',
+        as: 'collectionData',
+      },
+    },
   ]);
   return collection[0];
 };
 
 findFunctions.findColorsById = async function findColorsById(_id: string) {
-  let collection = await Colors.aggregate([{ $match: { _id: ObjectId(_id) } }]);
+  let collection = await Colors.aggregate([
+    { $match: { _id: ObjectId(_id) } },
+    {
+      $lookup: {
+        from: 'products',
+        localField: 'products_id',
+        foreignField: '_id',
+        pipeline: [],
+        as: 'productData',
+      },
+    },
+    {
+      $addFields: {
+        totalProducts: { $size: '$products_id' },
+      },
+    },
+  ]);
   return collection[0];
 };
 
@@ -1188,6 +1242,10 @@ export async function findCollectionById(_id: string) {
   let collection = await Collections.findById(_id);
   return collection;
 }
+export async function findProductById(_id: string) {
+  let collection = await Collections.findById(_id);
+  return collection;
+}
 
 export async function findPhotoById(_id: string) {
   let photo = await Photos.findById(_id);
@@ -1385,6 +1443,7 @@ export async function findAllCollectionsWithPagginate(
       $addFields: {
         dispalyFields: collectionsDisplayField,
         muiData: collectionsMuiDataObj,
+        totalProducts: { $size: '$products_id' },
       },
     },
     {
@@ -1426,6 +1485,7 @@ export async function findAllColorsWithPagginate(
       $addFields: {
         dispalyFields: colorsDisplayField,
         muiData: colorsMuiDataObj,
+        totalProducts: { $size: '$products_id' },
       },
     },
     {
@@ -1463,6 +1523,22 @@ export async function findAllProductsWithPagginate(
   const dataValue = await collection.aggregate([
     {
       $sort: { [sortByField]: sortDirection },
+    },
+    {
+      $lookup: {
+        from: 'colors',
+        localField: 'colors_id',
+        foreignField: '_id',
+        as: 'colors',
+      },
+    },
+    {
+      $lookup: {
+        from: 'collections',
+        localField: 'collection_id',
+        foreignField: '_id',
+        as: 'collectionData',
+      },
     },
     {
       $addFields: {
@@ -2232,7 +2308,7 @@ findMuliMapFunctions.findCountriesById = async function findCountriesById(
   const agentsExist = await multiMapAgents.containsKey(`allAgencies`);
   //Todo check hotel and supplier multipmap
   let finalCountry = {};
-  console.log({ provincesExist, citiesExist, usersExist, agentsExist });
+
   if (!provincesExist || !citiesExist || !usersExist || !agentsExist) {
     finalCountry = await findFunctions[
       `findCountriesById` as keyof typeof findFunctions
@@ -3054,9 +3130,11 @@ export async function findAllCollections(
       $addFields: {
         dispalyFields: collectionsDisplayField,
         muiData: collectionsMuiDataObj,
+        totalProducts: { $size: '$products_id' },
       },
     },
   ]);
+
   const result = {
     data: paginate(dataValue, perPage, pageNumber),
     totalCount: dataValue.length,

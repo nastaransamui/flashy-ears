@@ -14,21 +14,25 @@ let editColorUrl = '/admin/api/home/editColor'
 
 const editColorHook = (singleData: any) => {
   const dispatch = useDispatch();
-  const { adminAccessToken } = useSelector<State, State>(state => state)
+  const { adminAccessToken, reRunSingleGet } = useSelector<State, State>(state => state)
   const [colorSelected, setcolorSelected] = useState<string>('')
   const [showSelect, setShowSelect] = useState<boolean>(false)
   const { t, i18n } = useTranslation('Colors')
   const { theme, classes } = colorStyles({ colorSelected: colorSelected })
   const navigate = useNavigate();
+  const [validate, setValidate] = useState<boolean>(false)
   const [values, setValues] = useState([
     {
-      _id: '',
-      label_en: "",
-      label_th: '',
-      name_en: '',
-      name_th: '',
-      colorCode: ''
-    },
+      _id: singleData?._id,
+      label_en: singleData?.label_en,
+      label_th: singleData?.label_th,
+      name_en: singleData?.name_en,
+      name_th: singleData?.name_th,
+      colorCode: singleData?.colorCode,
+    }, {
+      totalProducts: singleData?.totalProducts,
+      productData: singleData?.productData,
+    }
   ]);
 
   useEffect(() => {
@@ -36,6 +40,19 @@ const editColorHook = (singleData: any) => {
       if (singleData == undefined) {
         navigate('/colors-data/colors')
       } else {
+        setValues([
+          {
+            _id: singleData?._id,
+            label_en: singleData?.label_en,
+            label_th: singleData?.label_th,
+            name_en: singleData?.name_en,
+            name_th: singleData?.name_th,
+            colorCode: singleData?.colorCode,
+          }, {
+            totalProducts: singleData?.totalProducts,
+            productData: singleData?.productData,
+          }
+        ])
         setValue('_id', singleData?._id)
         setValue('label_en', singleData?.label_en)
         setValue('label_th', singleData?.label_th)
@@ -43,6 +60,7 @@ const editColorHook = (singleData: any) => {
         setValue('name_th', singleData?.name_th)
         setcolorSelected(singleData?.colorCode)
         setValue('colorCode', singleData?.colorCode)
+        setValidate(() => true)
       }
     }
   }, [singleData])
@@ -54,7 +72,16 @@ const editColorHook = (singleData: any) => {
 
   const { handleSubmit, watch, setValue, register, formState: { errors }, resetField, setError, clearErrors, trigger }
     = useForm<any>({});
-  const formTrigger = async () => { }
+  const formTrigger = async () => {
+    const result = await trigger([
+      'label_en',
+      'label_th',
+      'name_en',
+      'name_th',
+      'colorCode'
+    ])
+  }
+
   const onSubmit = (data: any) => {
     dispatch({
       type: 'ADMIN_FORM_SUBMIT',
@@ -102,12 +129,37 @@ const editColorHook = (singleData: any) => {
       });
   }
 
+  const hanldeProductsData = () => {
+    if (singleData?.productData == undefined) {
+      dispatch({
+        type: "RERUN_SINGLE_GET",
+        payload: !reRunSingleGet,
+      })
+    }
+  }
+  useEffect(() => {
+    const subscription = watch((value, { name, type }) => {
+      if (Object.values(value).every((a) => a !== '')) {
+        setValidate(() => true)
+        clearErrors(name)
+      } else {
+        if (value[name as string] !== '') {
+          setValidate(() => true)
+          clearErrors(name)
+        }
+
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch]);
   return {
     values,
     handleSubmit,
     formTrigger,
     onSubmit,
     errors,
+    setError,
+    clearErrors,
     register,
     watch,
     colorSelected,
@@ -115,7 +167,9 @@ const editColorHook = (singleData: any) => {
     showSelect,
     setShowSelect,
     handleColorChange,
-    t
+    hanldeProductsData,
+    t,
+    validate
   }
 }
 

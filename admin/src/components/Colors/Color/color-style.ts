@@ -19,7 +19,7 @@ const colorStyles = makeStyles<{ colorSelected: string }>({
       alignContent: 'center',
     },
     colorP: {
-      color: 'black',
+      color: theme.palette.text.color,
       margin: 'auto',
     },
   };

@@ -19,6 +19,8 @@ const CreateColor: FC = (() => {
     onSubmit,
     errors,
     register,
+    setError,
+    clearErrors,
     watch,
     colorSelected,
     classes,
@@ -38,6 +40,8 @@ const CreateColor: FC = (() => {
               stepComponent: () => <ColorForm
                 errors={errors}
                 register={register}
+                setError={setError}
+                clearErrors={clearErrors}
                 watch={watch}
                 colorSelected={colorSelected}
                 classes={classes}

@@ -131,5 +131,7 @@
   "maxLength37": "This field can't have more than 37 characters.",
   "landingPage": "Slides Images",
   "imageScroll": "Scroll Images",
-  "changeHomeLanding": "Change Landing page of home"
+  "changeHomeLanding": "Change Landing page of home",
+  "selectAll": "Select All",
+  "diSelectAll": "Deselect all"
 }

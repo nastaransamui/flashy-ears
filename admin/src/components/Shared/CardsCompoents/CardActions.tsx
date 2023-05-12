@@ -91,12 +91,16 @@ const CardActions: FC<CardActionsType> = (({ fieldObject, index }) => {
             <ToggleOn style={{ color: isDisabled(fieldObject) ? theme.palette.action.disabled : theme.palette.success.main }} />
           </Tooltip>
         </IconButton> :
-        <IconButton aria-label="Delete" onClick={() => {
+        <IconButton aria-label="Delete" disabled={isDisabled(fieldObject)} onClick={() => {
           singleDeleteClicked(fieldObject._id)
         }}>
           <Tooltip title={t('Delete', { ns: 'common' })} placement='bottom'
             arrow>
-            <Delete style={{ color: isDisabled(fieldObject) ? theme.palette.action.disabled : theme.palette.error.main }} />
+            <Delete
+              style={{
+                color: isDisabled(fieldObject)
+                  ? theme.palette.action.disabled : theme.palette.error.main
+              }} />
           </Tooltip>
         </IconButton>
       }

@@ -33,7 +33,6 @@ apiRoute.get(async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   try {
     let allColors = await Colors.find({});
     let allCollections = await Collections.find({});
-    console.log(allColors);
     res.status(200).json({
       success: true,
       data: {

@@ -1,4 +1,4 @@
-import mongoose, { Types } from 'mongoose';
+import mongoose, { ObjectId, Types } from 'mongoose';
 export interface IColors {
   _id: Types.ObjectId;
   createdAt: Date;
@@ -10,6 +10,7 @@ export interface IColors {
   name_en: string;
   name_th: string;
   colorCode: string;
+  products_id: Types.Array<Types.ObjectId>;
 }
 
 export const ColorSchema = new mongoose.Schema<IColors>(
@@ -19,6 +20,7 @@ export const ColorSchema = new mongoose.Schema<IColors>(
     name_en: { type: String, required: true, unique: true },
     name_th: { type: String, required: true, unique: true },
     colorCode: { type: String, required: true },
+    products_id: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Products' }],
   },
   { timestamps: true }
 );
@@ -33,6 +35,7 @@ export const dispalyFields = [
   'colorCode',
   'createdAt',
   'updatedAt',
+  'totalProducts',
 ];
 const icon = {
   ...Object.fromEntries(
@@ -59,10 +62,13 @@ export const muiDataObj = {
     dispalyFields.map((key) => [
       key,
       {
-        type: 'string',
+        type: key == 'totalProducts' ? 'number' : 'string',
         thumbnail: key !== 'label_en' ? '' : 'color',
         filterable: true,
-        searchable: key == 'createdAt' || key == 'updatedAt' ? false : true,
+        searchable:
+          key == 'createdAt' || key == 'updatedAt' || key == 'totalProducts'
+            ? false
+            : true,
         ...icon[key],
       },
     ])

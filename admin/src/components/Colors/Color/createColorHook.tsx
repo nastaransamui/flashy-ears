@@ -51,7 +51,7 @@ const createColorHook = () => {
     clearErrors('colorCode')
   }
 
-  const { handleSubmit, watch, setValue, register, formState: { errors }, resetField, setError, clearErrors, trigger }
+  const { handleSubmit, watch, setValue, register, formState: { errors }, getValues, setError, clearErrors, trigger }
     = useForm<any>({});
 
   const formTrigger = async () => { }
@@ -107,6 +107,8 @@ const createColorHook = () => {
     onSubmit,
     errors,
     register,
+    setError,
+    clearErrors,
     watch,
     colorSelected,
     classes,

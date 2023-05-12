@@ -4,9 +4,8 @@ import '@/styles/particles.css'
 // import '@/styles/globals.css'
 import '@/styles/social-media.scss'
 import '@/styles/react-animated-slider/horizontal.css'
-// import '@/styles/landingPage/style.css'
-// import '@/styles/progress/normalize.css'
-// import '@/styles/progress/demo.css'
+import "@/styles/slick/slick.css";
+import "@/styles/slick/slick-theme.css";
 import '@/styles/progress/component.css'
 import '@/styles/progress/custom-bars.css'
 import Head from 'next/head';

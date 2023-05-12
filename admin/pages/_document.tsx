@@ -43,10 +43,19 @@ class MyDocument extends Document<Props> {
             type='text/css'
             media='screen'
           />
-          {/* <link
+          <link
             rel="stylesheet"
-            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300&display=swap"
           />
+          <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400&display=swap"
+          />
+          <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&display=swap"
+          />
+          {/*
           <link
             rel='stylesheet'
             href='//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css'

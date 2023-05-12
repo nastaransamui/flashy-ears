@@ -6,3 +6,7 @@ declare module 'react-material-ui-form-validator';
 declare module 'cors';
 declare module 'scrollreveal';
 declare module 'react-animated-slider';
+declare module 'lodash';
+declare module 'uuid';
+declare module 'react-slick';
+declare module 'react-scroll-parallax';

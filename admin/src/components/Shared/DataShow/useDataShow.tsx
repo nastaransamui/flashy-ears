@@ -117,12 +117,11 @@ const useDataShow = () => {
 
   const deleteResults = async (arrayOfIds: string[]) => {
     dispatch({ type: 'ADMIN_FORM_SUBMIT', payload: true });
-    axios.delete(deleteUrl, {
+    axios.post(deleteUrl, { ...body, arrayOfIds }, {
       headers: {
         'Content-Type': 'application/json',
         token: `Brearer ${adminAccessToken}`,
-      },
-      data: { ...body, arrayOfIds }
+      }
     })
       .then(async function (resp) {
         dispatch({ type: 'ADMIN_FORM_SUBMIT', payload: false });

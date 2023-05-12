@@ -18,9 +18,11 @@
   "home": "Home",
   "about": "About",
   "collections": "Collections",
+  "products": "Products",
   "getIntouch": "Get in touch",
   "rotate": "Rotate Image",
-  "titleCollection": "Wood Earrings handmade UV collections",
+  "titleCollection": "UV collections",
+  "titleProducts": "Products informations",
   "black": "black",
   "blackC": "black",
   "blue": "blue",
@@ -81,5 +83,6 @@
   "socks": "Socks shape model",
   "square": "Square shape model",
   "squareWithHole": "Square with hole shape model",
-  "triangle": "Triangle shape model"
+  "triangle": "Triangle shape model",
+  "numberOfProduct": "Products"
 }

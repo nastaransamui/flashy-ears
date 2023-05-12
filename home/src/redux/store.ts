@@ -4,6 +4,8 @@ import { configureStore } from '@reduxjs/toolkit';
 import { PaletteMode } from '@mui/material';
 import { hasCookie, getCookies } from 'cookies-next';
 import { getHomeTheme } from 'apiCalls/getHomeTheme';
+import { ImageCollectionType } from '@/models/Collections';
+import { Image as ImageGalleryType } from 'react-grid-gallery';
 //@ts-ignore
 const homeTheme = await getHomeTheme();
 
@@ -19,14 +21,17 @@ const initialState = {
   homeFormSubmit: false,
   slides: [],
   productItems: [],
+  collectionItems: [],
   dbImages: [],
 };
 
 export interface DBImagesType {
-  src: string;
-  model: string;
-  caption_en: string;
-  caption_th: string;
+  _id: string;
+  product_label_en: string;
+  product_label_th: string;
+  product_name_en: string;
+  collectionData: any;
+  gallery: ImageGalleryType[];
 }
 
 export interface SlidesType {
@@ -76,7 +81,7 @@ export interface ProductItemsColorsType {
 }
 export interface ProductItemsType {
   images: ProductItemsImagesType[];
-  product_name: string;
+  product_name_en: string;
   product_label_en: string;
   product_label_th: string;
   product_subtitle_en: string;
@@ -88,6 +93,19 @@ export interface ProductItemsType {
   colors: ProductItemsColorsType[];
 }
 
+export interface CollectionItemsType {
+  _id: string;
+  title_en: string;
+  title_th: string;
+  img_light: ImageCollectionType;
+  img_dark: ImageCollectionType;
+  desc_en: string;
+  desc_th: string;
+  linkTitle_en: string;
+  linkTitle_th: string;
+  products_id: string[];
+}
+
 export interface State {
   homePageType: string;
   adminAccessToken: any;
@@ -97,6 +115,7 @@ export interface State {
   homeFormSubmit: boolean;
   slides: SlidesType[];
   productItems: ProductItemsType[];
+  collectionItems: CollectionItemsType[];
   dbImages: DBImagesType[];
 }
 
@@ -124,6 +143,8 @@ const reducer = (state: State = initialState, action: AnyAction) => {
       return { ...state, slides: action.payload };
     case 'PRODUCT_ITEMS':
       return { ...state, productItems: action.payload };
+    case 'COLLECTION_ITEMS':
+      return { ...state, collectionItems: action.payload };
     case 'DB_IMAGES':
       return { ...state, dbImages: action.payload };
     default:

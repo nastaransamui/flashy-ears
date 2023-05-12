@@ -173,6 +173,8 @@ const StepsWizards: FC<StepsWizardsPropTypes> = ((props: StepsWizardsPropTypes) 
 
   const nextButtonClick = () => {
     var validationState = steps[currentStep]?.isValidated();
+
+    formTrigger()
     if (validationState) {
       setPreviousButton(currentStep >= 0 ? true : false);
       setNextButton(currentStep + 2 == steps.length ? false : true)
@@ -291,7 +293,7 @@ const StepsWizards: FC<StepsWizardsPropTypes> = ((props: StepsWizardsPropTypes) 
                     size='large'
                     color='secondary'
                     className={classes.nextButton}
-                    type="submit"
+                    // type="submit"
                     onClick={() => nextButtonClick()}
                   >
                     {t('next', { ns: 'common' })}

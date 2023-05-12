@@ -10,6 +10,8 @@ export interface ColorFormTypes {
   watch: any;
   errors: any;
   register: any;
+  setError: any;
+  clearErrors: any;
   colorSelected: string;
   showSelect: boolean;
   handleColorChange: Function;
@@ -20,6 +22,8 @@ export interface ColorFormTypes {
 const ColorForm: FC<ColorFormTypes> = ((props: ColorFormTypes) => {
   const {
     errors,
+    setError,
+    clearErrors,
     register,
     watch,
     colorSelected,
@@ -42,10 +46,8 @@ const ColorForm: FC<ColorFormTypes> = ((props: ColorFormTypes) => {
             label={t('label_en')}
             InputLabelProps={{ shrink: !!watch('label_en') }}
             error={errors.label_en == undefined ? false : true}
-            helperText={errors.label_en && t('required', { ns: 'common' })}
-            {...register("label_en", {
-              required: true,
-            })}
+            helperText={errors.label_en && errors['label_en'][`message`]}
+            {...register("label_en", { required: t('required', { ns: 'common' }) })}
           />
         </Grid>
         <Grid item xs={12} md={3} >
@@ -57,10 +59,8 @@ const ColorForm: FC<ColorFormTypes> = ((props: ColorFormTypes) => {
             label={t('label_th')}
             InputLabelProps={{ shrink: !!watch('label_th') }}
             error={errors.label_th == undefined ? false : true}
-            helperText={errors.label_th && t('required', { ns: 'common' })}
-            {...register("label_th", {
-              required: true,
-            })}
+            helperText={errors.label_th && errors['label_th'][`message`]}
+            {...register("label_th", { required: t('required', { ns: 'common' }) })}
           />
         </Grid>
         <Grid item xs={12} md={3} >
@@ -70,12 +70,27 @@ const ColorForm: FC<ColorFormTypes> = ((props: ColorFormTypes) => {
             required
             size='small'
             label={t('name_en')}
+            onKeyPress={(e) => {
+              var inputValue = e.which;
+              if (!(inputValue >= 97 && inputValue <= 122)) {
+                e.preventDefault();
+                setError(`name_en`, { type: 'custom', message: t('onlyAlphabet') });
+              } else {
+                clearErrors('name_en')
+              }
+            }}
+            onPaste={(e) => {
+              var pat = /^[a-z]+$/;
+              if (!pat.test(e.clipboardData.getData('Text'))) {
+                e.preventDefault();
+                setError(`name_en`, { type: 'numer', message: t('onlyAlphabet') });
+              }
+            }
+            }
             InputLabelProps={{ shrink: !!watch('name_en') }}
+            helperText={errors.name_en && errors['name_en'][`message`]}
+            {...register("name_en", { required: t('required', { ns: 'common' }) })}
             error={errors.name_en == undefined ? false : true}
-            helperText={errors.name_en && t('required', { ns: 'common' })}
-            {...register("name_en", {
-              required: true,
-            })}
           />
         </Grid>
         <Grid item xs={12} md={3} >
@@ -85,12 +100,20 @@ const ColorForm: FC<ColorFormTypes> = ((props: ColorFormTypes) => {
             required
             size='small'
             label={t('name_th')}
+            onKeyPress={(e) => {
+              var inputValue = e.which;
+              if (!(inputValue >= 97 && inputValue <= 122)) {
+                e.preventDefault();
+                setError(`name_th`, { type: 'custom', message: t('onlyAlphabet') });
+              } else {
+                clearErrors('name_th')
+              }
+            }}
             InputLabelProps={{ shrink: !!watch('name_th') }}
+            helperText={errors.name_th && errors['name_th'][`message`]}
+            {...register("name_th", { required: t('required', { ns: 'common' }) })}
             error={errors.name_th == undefined ? false : true}
-            helperText={errors.name_th && t('required', { ns: 'common' })}
-            {...register("name_th", {
-              required: true,
-            })}
+
           />
         </Grid>
         <Grid item xs={12} md={6} >

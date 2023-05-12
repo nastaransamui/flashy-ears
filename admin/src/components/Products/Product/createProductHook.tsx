@@ -9,84 +9,88 @@ import { useTranslation } from "react-i18next";
 import { toast } from 'react-toastify';
 import { ToastMessage } from '@/shared/CustomToaster/CustomToaster';
 import { useNavigate } from "react-router-dom";
+var toBoolean = require('to-boolean');
 
-
-// let createColorUrl = '/admin/api/home/createColor'
+let createProductUrl = '/admin/api/home/createProduct'
 
 const createProductHook = () => {
 
   const { t, i18n } = useTranslation('Products')
   const { theme, classes } = productStyles({})
-  const { adminAccessToken } = useSelector<State, State>(state => state)
-  const [validate, setValidate] = useState<boolean>(false)
-  const [secondValidate, setSecondValidate] = useState<boolean>(false)
-  const [thirdValidate, setThirdValidate] = useState<boolean>(false)
+  const { adminAccessToken, productFinancialFillAll } = useSelector<State, State>(state => state)
+  const [informationValidate, setInformationValidate] = useState<boolean>(false)
+  const [colorValidation, setColorValidation] = useState<boolean>(false)
+  const [financialValidation, setFinancialValidation] = useState<boolean>(false)
+  const [imagesValidation, setImagesValidation] = useState<boolean>(false)
+  const [galleryValidation, setGalleryValidation] = useState<boolean>(false)
   const [colorArray, setColorArray] = useState(null)
   const [collectionArray, setcollectionArray] = useState(null)
   const [values, setValues] = useState([
     {
-      product_name_en: '',
-      product_name_th: '',
       product_label_en: '',
       product_label_th: '',
+      product_name_en: '',
+      product_name_th: '',
       product_subtitle_en: '',
       product_subtitle_th: '',
-      product__description_en: '',
-      product__description_th: '',
+      product_description_en: '',
+      product_description_th: '',
     },
     {
-      colors: [],
-      collections: []
+      colors_id: [],
+      collection_id: []
+    },
+    {
+      financials: []
     },
     {
       images: [
         {
-          front: {},
-          back: {}
+          front: [],
+        },
+        {
+          back: [],
         }
       ]
-    }
+    },
+    {
+      gallery: []
+    },
   ]);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-
-  const { handleSubmit, watch, setValue, register, formState: { errors }, resetField, setError, clearErrors, trigger, control }
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      dispatch({
+        type: "PRODUCT_FINANCIAL_FILL_ALL",
+        payload: localStorage.getItem('productFinancialFillAll') == null ? null : toBoolean(localStorage.getItem('productFinancialFillAll'))
+      })
+    }
+  }, [])
+  const {
+    handleSubmit,
+    watch,
+    setValue,
+    register,
+    unregister,
+    formState: { errors },
+    resetField,
+    setError,
+    clearErrors,
+    trigger,
+    control,
+    getValues }
     = useForm<any>({});
+
   useEffect(() => {
     const subscription = watch((value, { name, type }) => {
-      if (name == 'colors' || name == 'collections') {
-        // console.log(value[name].length)
-        if (value[name].length == 0) {
-          setSecondValidate(() => false)
-          setError(name, t('required', { ns: 'common' }))
-        } else {
-          clearErrors(name)
-        }
-      }
-      if (value[`${name}`] !== '') {
-        clearErrors(name)
-      }
-      if (
-        Object.values(value).every((a) => a !== '')) {
-        setValidate(() => true)
-        if (
-          value['collections'] !== undefined &&
-          value['colors'] !== undefined &&
-          value['colors']?.length > 0 &&
-          value['collections']?.length > 0
-        ) {
-          // console.log('validate second')
-          setSecondValidate(() => true)
-        }
-      } else {
-        setValidate(() => false)
-      }
     });
     return () => subscription.unsubscribe();
   }, [watch]);
   const formTrigger = async () => {
+
     const result = await trigger([
       "product_name_en",
       "product_name_th",
@@ -94,13 +98,15 @@ const createProductHook = () => {
       "product_label_th",
       "product_subtitle_en",
       "product_subtitle_th",
-      "product__description_en",
-      "product__description_th",
-      'colors',
-      "collections"
+      "product_description_en",
+      "product_description_th",
+      'colors_id',
+      "collection_id",
+      "financials",
+      "images",
+      'gallery'
     ]);
   }
-
   const getAllColors = async () => {
     axios.get('/admin/api/home/productsColorsCollections')
       .then((resp) => {
@@ -108,50 +114,149 @@ const createProductHook = () => {
         if (success) {
           switch (true) {
             case data['collections'].length == 0:
-              setColorArray(data['colors'])
+              setColorArray(data['colors'].sort((a: any, b: any) => {
+                if (a['label_en'] < b['label_en']) return -1
+              }))
               setcollectionArray(t('collectionsEmpty'))
               break;
             case data['colors'].length == 0:
+
               setColorArray(t('colorEmpty'))
-              setcollectionArray(data['collections'])
+              setcollectionArray(data['collections'].sort((a: any, b: any) => {
+                if (a['title_en'] < b['title_en']) return -1
+              }))
               break;
 
             default:
-              setColorArray(data['colors'])
-              setcollectionArray(data['collections'])
+              setColorArray(data['colors'].sort((a: any, b: any) => {
+                if (a['label_en'] < b['label_en']) return -1
+              }))
+              setcollectionArray(data['collections'].sort((a: any, b: any) => {
+                if (a['title_en'] < b['title_en']) return -1
+              }))
               break;
           }
         }
       })
       .catch((err) => {
-        console.log(err)
         setColorArray(err.message)
         setcollectionArray(err.message)
-        // setColorArray(() => err.message)
       })
   }
-  const onSubmit = (data: any) => { console.log(data) }
+  const onSubmit = (data: any) => {
+    if (informationValidate && colorValidation && imagesValidation && galleryValidation) {
+      const formData = new FormData();
+
+      formData.append("product_description_en", data.product_description_en);
+      formData.append("product_description_th", data.product_description_th);
+      formData.append("product_label_en", data.product_label_en);
+      formData.append("product_label_th", data.product_label_th);
+      formData.append("product_name_en", data.product_name_en);
+      formData.append("product_name_th", data.product_name_th);
+      formData.append("product_subtitle_en", data.product_subtitle_en);
+      formData.append("product_subtitle_th", data.product_subtitle_th);
+      formData.append("collection_id", JSON.stringify(data.collection_id));
+      formData.append("colors_id", JSON.stringify(data.colors_id));
+      formData.append("financials", JSON.stringify(data.financials));
+      formData.append("images_information", JSON.stringify(values[3]));
+      formData.append("gallery_information", JSON.stringify(values[4]));
+      data.gallery.forEach((file: File) => {
+
+        formData.append("gallery", file);
+      });
+      data.images[0]['front'].forEach((image: any) => {
+        Object.entries(image).map((a: any) => {
+          formData.append(`images_front_${a[0]}`, a[1]);
+        })
+      })
+      data.images[1]['back'].forEach((image: any) => {
+        Object.entries(image).map((a: any) => {
+          formData.append(`images_back_${a[0]}`, a[1]);
+        })
+      })
+
+      dispatch({
+        type: 'ADMIN_FORM_SUBMIT',
+        payload: true
+      })
+      axios.post(createProductUrl, formData, {
+        headers: {
+          "Content-Type": 'multipart/form-data',
+          token: `Brearer ${adminAccessToken}`,
+        }
+      }).then((resp) => {
+        const { success, data, error } = resp.data;
+        dispatch({
+          type: 'ADMIN_FORM_SUBMIT',
+          payload: false
+        })
+        if (success) {
+          toast(<ToastMessage >{`Product ${data[`product_label_${i18n.language}`]} was created successfully`}</ToastMessage>, {
+            onClose: () => {
+              dispatch({ type: 'ADMIN_FORM_SUBMIT', payload: false })
+              dispatch({
+                type: "RERUN_SINGLE_GET",
+                payload: false,
+              })
+              toast.dismiss()
+              navigate('/products-data/products')
+            },
+            toastId: `createProduct_toastId`
+          })
+        }
+      })
+        .catch((error) => {
+          toast(<ToastMessage >{error?.response?.data?.Error || error.message}</ToastMessage>, {
+            onClose: () => {
+              if (error?.response?.statusText == 'Unauthorized') {
+                // location.reload()
+              }
+              dispatch({ type: 'ADMIN_FORM_SUBMIT', payload: false })
+              // dispatch({
+              //   type: "RERUN_SINGLE_GET",
+              //   payload: false,
+              // })
+              toast.dismiss()
+            },
+            toastId: `createProduct_toastId`
+          })
+        });
+
+    }
+  }
   return {
     theme,
     values,
     colorArray,
     collectionArray,
     setValues,
-    validate,
-    secondValidate,
-    thirdValidate,
+    setValue,
+    getValues,
+    setError,
+    clearErrors,
+    setFinancialValidation,
+    financialValidation,
+    setImagesValidation,
+    informationValidate,
+    setInformationValidate,
+    colorValidation,
+    setColorValidation,
+    imagesValidation,
+    galleryValidation,
+    setGalleryValidation,
     getAllColors,
     handleSubmit,
     formTrigger,
     onSubmit,
     errors,
     register,
+    unregister,
     watch,
     Controller,
     control,
     resetField,
     classes,
-    t
+    t,
   }
 }
 

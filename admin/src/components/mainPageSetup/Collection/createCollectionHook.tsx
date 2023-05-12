@@ -7,7 +7,7 @@ import axios from "axios";
 
 import { toast } from 'react-toastify';
 import { ToastMessage } from '@/shared/CustomToaster/CustomToaster';
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 
 let createCollection = '/admin/api/home/createCollection'
 
@@ -20,7 +20,6 @@ interface StatePropsTitle {
   title_th: string,
   linkTitle_en: string,
   linkTitle_th: string,
-  link: string,
 }
 
 interface StatePropsMedia {
@@ -36,13 +35,12 @@ const createCollectionHook = () => {
   const { adminAccessToken } = useSelector<State, State>(state => state)
   const [values, setValues] = useState<any>([
     {
-      desc_en: '',
-      desc_th: '',
       title_en: '',
       title_th: '',
+      desc_en: '',
+      desc_th: '',
       linkTitle_en: '',
       linkTitle_th: '',
-      link: '',
     },
     {
       img_dark: '',
@@ -50,21 +48,34 @@ const createCollectionHook = () => {
     }
   ]);
 
-  const { handleSubmit, watch, control, register, formState: { errors }, resetField, setError, clearErrors, trigger } = useForm<any>();
+  const {
+    handleSubmit,
+    watch, setValue,
+    register, unregister,
+    formState: { errors },
+    resetField,
+    setError,
+    clearErrors,
+    trigger,
+    control,
+    getValues, } = useForm<any>();
   const [validate, setValidate] = useState<boolean>(false)
+  const [imagevalidate, setImageValidate] = useState<boolean>(false)
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const onSubmit = (data: any) => {
     const formData = new FormData();
-    if (validate) {
+    if (validate && imagevalidate) {
       formData.append("title_en", data.title_en);
       formData.append("title_th", data.title_th);
       formData.append("linkTitle_en", data.linkTitle_en);
       formData.append("linkTitle_th", data.linkTitle_th);
       formData.append("desc_en", data.desc_en);
       formData.append("desc_th", data.desc_th);
-      formData.append("img_light", data.img_light[0]);
-      formData.append("img_dark", data.img_dark[0]);
+      formData.append("img_light", data.img_light);
+      formData.append("img_dark", data.img_dark);
+      formData.append("img_light_src", JSON.stringify(values[1]['img_light']));
+      formData.append("img_dark_src", JSON.stringify(values[1]['img_dark']));
       dispatch({
         type: 'ADMIN_FORM_SUBMIT',
         payload: true
@@ -116,18 +127,19 @@ const createCollectionHook = () => {
 
   useEffect(() => {
     const subscription = watch((value, { name, type }) => {
-      if (
-        Object.values(value).every((a) => a !== '') &&
-        value['title_en'].length <= 11 &&
-        value['title_th'].length <= 11 &&
-        value['linkTitle_en'].length <= 11 &&
-        value['linkTitle_th'].length <= 11 &&
-        value['desc_en'].length <= 37 &&
-        value['desc_th'].length <= 37
-      ) {
-        setValidate(() => true)
-      } else {
-        setValidate(() => false)
+      if (name !== 'img_light' && name !== 'img_dark') {
+        if (Object.values(value).every((a) => a !== '')) {
+          setValidate(() => true)
+          clearErrors(name)
+        } else {
+          if (value[name as string] !== '') {
+            clearErrors(name)
+          }
+          if (value[name as string] == '') {
+            setError(name as string, { type: 'required', message: t('required', { ns: 'common' }) })
+          }
+          setValidate(() => false)
+        }
       }
     });
     return () => subscription.unsubscribe();
@@ -146,6 +158,11 @@ const createCollectionHook = () => {
     t,
     watch,
     values,
+    setValue,
+    setValues,
+    control,
+    Controller,
+    getValues,
     clearErrors,
     setError,
     register,
@@ -154,7 +171,9 @@ const createCollectionHook = () => {
     resetField,
     onSubmit,
     formTrigger,
-    handleSubmit
+    handleSubmit,
+    imagevalidate,
+    setImageValidate
   }
 }
 

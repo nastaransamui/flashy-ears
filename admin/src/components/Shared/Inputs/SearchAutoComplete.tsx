@@ -138,6 +138,7 @@ const SearchAutoComplete: FC<SearchAutoCompleteProps> = (() => {
       options={options}
       loading={loadingOption}
       autoComplete
+      disabled={fieldValue == ''}
       includeInputInList
       filterSelectedOptions
       loadingText={t('loadingField', { ns: 'common' })}
@@ -198,7 +199,11 @@ const SearchAutoComplete: FC<SearchAutoCompleteProps> = (() => {
         switch (reason) {
           case 'input':
             setInputValue(newInputValue);
-            setLoadingOption(() => true)
+            if (newInputValue !== '') {
+              setLoadingOption(() => true)
+            } else {
+              setLoadingOption(() => false)
+            }
             break;
           case 'reset':
             if (
@@ -243,10 +248,12 @@ const SearchAutoComplete: FC<SearchAutoCompleteProps> = (() => {
                   ...params.InputProps,
                   endAdornment: (
                     <Fragment>
-                      {loadingOption && inputValue !== '' ? (
+                      {loadingOption ? (
                         <CircularProgress color='primary' size={20} />
                       ) :
-                        (firstSearch && totalData?.length !== allTotalDataCopy?.current?.length) && <IconButton
+                        (firstSearch && inputValue !== '') &&
+
+                        <IconButton
                           disableFocusRipple
                           disableRipple
                           disableTouchRipple
@@ -328,6 +335,7 @@ const SearchAutoComplete: FC<SearchAutoCompleteProps> = (() => {
       renderOption={(props, option) => {
         const matches = match(option?.autoCompleteMainLabel || '', inputValue, { insideWords: true, findAllOccurrences: true });
         const parts = parse(option?.autoCompleteMainLabel, matches);
+
         return (
           <li {...props} key={option._id}>
             <Grid container alignItems="center">

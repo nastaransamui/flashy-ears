@@ -394,52 +394,28 @@ const MainPageImagesComponent: FC = (() => {
           <div className={classes.slideshow} id='slideshow'>
             <div className={classes.slides} ref={slideTrackRef}>
               {
-                slides.map((slide, i) => {
+                slides.map((slide: any, i) => {
                   return (
                     <div className={classes.slide + " " + `${current == i ? classes.current : ' '}`} id={`slide_${i}`} key={i}>
-                      <div className={classes.slide__img} style={{ backgroundImage: `url(${slide[`img_${theme.palette.mode}` as keyof typeof slide]})` }}></div>
-                      {/* <a className="">
-                        <i className={`fa fa-angle-double-down ${classes.slide__scroll}`} aria-hidden="true"></i>
-                      </a> */}
+                      <div className={classes.slide__img} style={{ backgroundImage: `url('${slide[`img_${theme.palette.mode}` as keyof typeof slide][0]['src' as any]}')` }}></div>
                       <div className="hero-arrow page-scroll home-arrow-down">
-                        <a className="" >
+                        <a className="">
                           <i aria-hidden="true">{t('scrolldown')}</i>
                         </a>
                       </div>
                       <h2 className={classes.slide__title} ref={elRefs[i]}>{addSpan(slide[`title_${lang}` as keyof typeof slide])}</h2>
                       <p className={classes.slide__desc} ref={desRefs[i]}>{addSpan(slide[`desc_${lang}` as keyof typeof slide])}</p>
-                      {/* <Link href={'/collections'} className={classes.linkParent}>
+                      <Link href={{
+                        pathname: '/collections',
+                      }} className={classes.linkParent}>
                         <span className={classes.slide__link} ref={buttonRefs[i]}>{slide[`linkTitle_${lang}` as keyof typeof slide]}</span>
-                      </Link> */}
-                      {
-                        current + 1 == slides.length ?
-                          <>
-                            <Link href={'/collections'} className={classes.linkParent}>
-                              <span className={classes.slide__link} ref={buttonRefs[i]}>{slide[`linkTitle_${lang}` as keyof typeof slide]}</span>
-                            </Link>
-                            {
-                              slides.length > 1 && <ScrollIntoView selector="#top" alignToTop smooth className={classes.linkParent}>
-                                {/* <span style={{ cursor: 'pointer' }}>Back to top</span> */}
-                                <Fab color="primary" aria-label="add">
-                                  <ArrowUpwardIcon />
-                                </Fab>
-                              </ScrollIntoView>
-                            }
-                          </>
-                          :
-                          // <span className={classes.slide__link} ref={buttonRefs[i]}>{i.toString()} {slides.length}{(current + 1 == slides.length).toString()}</span>
-                          <a className="" onClick={(e) => {
-                            e.preventDefault();
-                            window.scroll({
-                              top: current == (slides.length - 2) ? slides.length * 3000 : ((current + 1) * 3000) + 10,
-                              left: 0,
-                              behavior: 'smooth'
-                            });
-                            setCurrent(current + 1)
-                          }}>
-                            <i className={`fa fa-angle-double-down ${classes.slide__scroll} home-arrow-down`} aria-hidden="true"></i>
-                          </a>
-                      }
+                      </Link>
+                      <ScrollIntoView style={{ visibility: slides.length - 1 == i ? 'visible' : 'hidden' }} selector="#top" alignToTop smooth className={classes.linkParent}>
+                        {/* <span style={{ cursor: 'pointer' }}>Back to top</span> */}
+                        <Fab color="primary" aria-label="add">
+                          <ArrowUpwardIcon />
+                        </Fab>
+                      </ScrollIntoView>
 
                     </div>
                   )

@@ -22,7 +22,7 @@ import { useTranslation } from 'react-i18next';
 
 //Components
 import { PhoneTooltip } from '@/shared/DataShow/Table/MainTable'
-
+import CircleIcon from '@mui/icons-material/Circle';
 
 import { State, MainCardTypes } from "@/src/redux/store";
 
@@ -90,9 +90,56 @@ const CardCollapseArea = forwardRef<Ref, CardCollapseAreaTypes>(({ elRefs, index
                     case Array.isArray(value):
                       if (value.length == 0) primaryValue = 'length 0'
                       primaryValue = key !== 'phones' ?
-                        value.length :
+                        key == 'gallery' ? `${value.length} ${t('images')}` :
+                          key == 'colors' ?
+                            <span style={{ display: 'flex' }}>
+                              {value.map((color: any) => (
+                                <Tooltip
+                                  TransitionComponent={Zoom}
+                                  key={color._id} title={color[`label_en`]} arrow componentsProps={{
+                                    tooltip: { sx: { border: `solid 0.5px ${color.colorCode}`, }, },
+                                    arrow: {
+                                      sx: {
+                                        '&:before': {
+                                          border: `0.5px solid ${color.colorCode}`,
+                                        },
+                                      }
+                                    },
+                                  }} >
+                                  <CircleIcon sx={{ color: color.colorCode }} />
+                                </Tooltip>))}
+                            </span> :
+                            key == 'financials' ?
+                              <span>
+                                <span style={{ display: 'flex' }}>
+                                  {`${value.reduce((accumulator: any, object: any) => {
+                                    return accumulator + object.totalInventoryInCart;
+                                  }, 0)} ${t('inCart')} - 
+                                 ${value.reduce((r: any, c: any) => r + c.buyPrice, 0) / value.length} ${t('buyPrice')} `}
+                                </span>
+                                <span>
+                                  {`${value.reduce((r: any, c: any) => r + c.salePrice, 0) / value.length} ${t('salePrice')} - 
+                             ${value.reduce((r: any, c: any) => r + c.totalInventory, 0) / value.length} ${t('totalInventory')}`}
+                                </span>
+                              </span> :
+                              key == 'collectionData' ?
+                                <span style={{ display: 'flex' }}>
+                                  {value.map((collection: any) => (
+                                    <div key={(key + value.toString())} style={{ display: 'flex', width: '100%', }}>
+                                      <img
+                                        alt=".."
+                                        src={`${collection[`img_${theme.palette.mode}`][0]['src']}`}
+                                        style={{ width: 30, height: 30, borderRadius: '50%', }} />
+                                      <span style={{ paddingLeft: 10, paddingTop: 6 }}>{collection[`title_${i18n.language}`]}</span>
+                                    </div>
+                                  ))}
+                                </span> :
+                                value.length :
                         <PhoneTooltip value={value} modelName={modelName!} />
                       break;
+                    case typeof value == 'object':
+
+                      break
                     default:
                       switch (true) {
                         case value == '':

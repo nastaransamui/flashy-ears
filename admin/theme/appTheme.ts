@@ -57,7 +57,7 @@ const appTheme = (color: string, mode: PaletteMode, dir: string) => {
     },
     direction: dir,
     typography: {
-      fontFamily: ['Open Sans', 'sans-serif'].join(','),
+      fontFamily: ['Roboto+Condensed', 'Roboto', 'sans-serif'].join(','),
       fontWeightRegular: 400,
       fontWeightMedium: 600,
       fontWeightBold: 700,

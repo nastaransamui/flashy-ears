@@ -100,10 +100,21 @@ const CardHeader: FC<CardHeaderType> = ((props: CardHeaderType) => {
               </Badge>
             )
           case `img_light|img_dark` as any:
-            const replaceImageCollection = fieldsObject?.[thumbnail.split("|")[theme.palette.mode == 'dark' ? 1 : 0]]
+            const replaceImageCollection = fieldsObject?.[thumbnail.split("|")[theme.palette.mode == 'dark' ? 1 : 0]][0]['src']
+
             return (
               <Badge color={fieldsObject.isActive || fieldsObject.isAdmin ? (profile._id == fieldsObject._id ? 'secondary' : "primary") : "error"}  >
                 <CardAvatar avatarType="img" path={fieldsObject?.[thumbnail] || replaceImageCollection} imageClass='image' />
+              </Badge>
+            )
+          case `gallery` as any:
+            const replaceImageProduct =
+              thumbnail == 'gallery' ? '/admin/images/faces/avatar1.jpg' : thumbnail
+            let filterArrayBySelected = fieldsObject[thumbnail].filter((a: any) => a.isSelected)
+            let pathFilterBySelected = filterArrayBySelected.length > 0 ? filterArrayBySelected?.[0]?.['src'] : fieldsObject[thumbnail]?.[0]?.['src']
+            return (
+              <Badge color={fieldsObject.isActive ? (profile._id == fieldsObject._id ? 'secondary' : "primary") : "error"}  >
+                <CardAvatar avatarType="img" path={pathFilterBySelected || replaceImageProduct} imageClass='image' />
               </Badge>
             )
           case `color` as any:

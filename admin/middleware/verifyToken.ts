@@ -18,7 +18,7 @@ export async function verifyToken(
           deleteCookie('adminAccessToken', { req, res });
           res.status(401).json({
             success: false,
-            error: 'Your Login is expired please relogin again!',
+            Error: 'Your Login is expired please relogin again!',
           });
         } else {
           next();

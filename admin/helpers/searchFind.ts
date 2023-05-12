@@ -153,7 +153,7 @@ export async function searchCollections(
               $eq: [{ $ifNull: ['$img_light', ''] }, ''],
             },
             then: '/admin/images/faces/movie.jpg',
-            else: '$img_light',
+            else: '$img_light.src',
           },
         },
         autoCompleteIcon: '',

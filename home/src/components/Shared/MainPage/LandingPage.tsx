@@ -23,6 +23,7 @@ import Octagon from '@/src/components/SVGs/Octagon';
 import Square from '@/src/components/SVGs/Square1';
 import SquareWithHole from '@/src/components/SVGs/SquareWithHole';
 import Triangle from '@/src/components/SVGs/Triangle';
+import Decoration from "@/shared/Decoration/Decoration";
 
 
 const LandingPage: FC = (() => {
@@ -143,13 +144,14 @@ const LandingPage: FC = (() => {
           <header className={classes.siteHeader}>
             <div className={classes.container}>
               <div className={classes.siteHeaderInner}>
-                <div >
-                  <h1 >
-                    <Link href="/">
+                <Link href="/">
+                  <div >
+                    <h1 >
                       <img className={classes.headerLogoImage} src={`/images/logo_${theme.palette.mode}.png`} alt="Logo" />
-                    </Link>
-                  </h1>
-                </div>
+
+                    </h1>
+                  </div>
+                </Link>
               </div>
             </div>
           </header>
@@ -167,7 +169,7 @@ const LandingPage: FC = (() => {
                         {slides.map((slide, index) =>
                           <div key={index} className={"slider-content " + classes.sliderImage}
                             style={{
-                              backgroundImage: `url('${slide[`img_${theme.palette.mode}` as keyof typeof slide]}')`,
+                              backgroundImage: `url('${slide[`img_${theme.palette.mode}` as keyof typeof slide][0]['src' as any]}')`,
                             }}>
                             <div className="inner"
                             >
@@ -222,7 +224,7 @@ const LandingPage: FC = (() => {
                 </div>
               </div>
             </section>
-
+            <Decoration />
             <section className={cx(classes.features, classes.section)}>
               <div className={classes.container}>
                 <div className={cx(classes.featuresInner, classes.sectionInner, classes.hasBottomDivider)}>
@@ -234,8 +236,8 @@ const LandingPage: FC = (() => {
                           circle: Circle,
                           diamond: Diamond,
                           bell: Bell,
-                          crookedTriangle: CrookedTriangle,
-                          longTriangle: LongTriangle,
+                          crookedtriangle: CrookedTriangle,
+                          longtriangle: LongTriangle,
                           socks: Socks,
                           octagon: Octagon,
                           square: Square,
@@ -243,8 +245,7 @@ const LandingPage: FC = (() => {
                           triangle: Triangle
                         };
                         const SpecificSvgShape =
-                          Components[product.product_name as keyof typeof Components] || Components.diamond;
-
+                          Components[product.product_name_en as keyof typeof Components] || Components.diamond;
                         return (
                           <div key={index} className={cx(classes.feature, classes.isRevealing)}>
                             <div className={classes.featureInner}>
@@ -310,7 +311,7 @@ const LandingPage: FC = (() => {
                                   triangle: Triangle
                                 };
                                 const SpecificSvgShape =
-                                  Components[product.product_name as keyof typeof Components] || Components.diamond;
+                                  Components[product.product_name_en as keyof typeof Components] || Components.diamond;
 
                                 return (
                                   <Fragment key={index} >
@@ -368,6 +369,7 @@ const LandingPage: FC = (() => {
                   <li><Link href="/about">{t('about')}</Link></li>
                   <li><Link href="/collections">{t('collections')}</Link></li>
                   <li><Link href="/gallery">{t('gallery')}</Link></li>
+                  <li><Link href="/products">{t('products')}</Link></li>
                   <li><Link href="/contactUs">{t('contactUs')}</Link></li>
                 </ul>
                 <ul className={classes.footerSocialLinks}>

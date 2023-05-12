@@ -44,7 +44,6 @@ const MainCard: FC = (() => {
       );
     }
   }, [perPage, gridView, totalData, cardView]);
-
   return (
     <MainCardsGrid>
       <CardDeleteBox>
@@ -84,15 +83,29 @@ const MainCard: FC = (() => {
                       if (value.thumbnail !== '' && a.isYoutube == undefined) {
                         if (media == 'img_light|img_dark') {
                           return (
-                            <CardContent path={a[media.split("|")[theme.palette.mode == 'dark' ? 1 : 0]]} media={media} elRefs={elRefs[index]} key={i} />
+                            <CardContent path={a[media.split("|")[theme.palette.mode == 'dark' ? 1 : 0]][0]['src']} media={media} elRefs={elRefs[index]} key={i} />
+                          )
+                        } else if (media == 'icon') {
+                          return (
+                            <CardContent path={a[`icon`]} media={media} elRefs={elRefs[index]} key={i} colorCode={totalData[index]?.colorCode} />
                           )
                         } else if (media == 'color') {
                           return (
                             <CardContent path={a[`name_${i18n.language}`]} media={media} elRefs={elRefs[index]} key={i} colorCode={totalData[index]?.colorCode} />
                           )
+                        } else if (media == 'gallery') {
+                          let filterArrayBySelected = a[media].filter((a: any) => a.isSelected)
+                          let pathFilterBySelected = filterArrayBySelected.length > 0 ? filterArrayBySelected[0] : a[media][0]
+                          return (
+                            <CardContent
+                              path={pathFilterBySelected}
+                              media={media}
+                              elRefs={elRefs[index]}
+                              key={i} colorCode={totalData[index]?.colorCode} />
+                          )
                         } else {
                           return (
-                            <CardContent path={a[media]} media={media} elRefs={elRefs[index]} key={i} />
+                            <CardContent path={a[media][0]} media={media} elRefs={elRefs[index]} key={i} />
                           )
                         }
                       } else {

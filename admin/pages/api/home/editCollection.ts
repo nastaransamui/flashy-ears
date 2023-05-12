@@ -7,7 +7,8 @@ import { verifyToken } from 'middleware/verifyToken';
 import cors from 'cors';
 import multipartFormParser from 'middleware/multipart-form-parser';
 import fs from 'fs';
-
+import { v4 as uuidv4 } from 'uuid';
+const fse = require('fs-extra');
 export function isObjectEmpty(obj: object) {
   return Object.keys(obj).length === 0;
 }
@@ -37,202 +38,150 @@ apiRoute.post(
   async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     const path = require('path');
     try {
-      const cloudinary = require('cloudinary').v2;
-      cloudinary.config({
-        cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-        api_key: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY,
-        api_secret: process.env.NEXT_PUBLIC_CLOUDINARY_API_SECRET,
-      });
+      req.body.img_light_src = JSON.parse(req.body.img_light_src);
+      req.body.img_dark_src = JSON.parse(req.body.img_dark_src);
       //@ts-ignore
       const files = req.files;
       const body = req.body;
-      if (isObjectEmpty(files)) {
-        //'image not delete'
-        var oldcollection = await Collections.findOne({ _id: body._id });
-        var oldTitle = oldcollection['title_en'];
-        if (oldTitle == body.title_en) {
-          //title_en not change
-          let doc = await Collections.findByIdAndUpdate(body._id, body, {
-            new: true,
-          });
-          res.status(200).json({
-            success: true,
-            data: doc,
-          });
-        } else {
-          //Title en change and update image
-          cloudinary.uploader.rename(
-            `collections/${oldTitle}img_light`,
-            `collections/${body['title_en']}img_light`,
-            (error: Error, result: any) => {
-              if (error !== undefined) {
-                res
-                  .status(404)
-                  .json({ success: false, Error: (error as Error).message });
-              } else {
-                body.img_light = result.url;
-                cloudinary.uploader.rename(
-                  `collections/${oldTitle}img_dark`,
-                  `collections/${body['title_en']}img_dark`,
-                  async (error: Error, result: any) => {
-                    if (error !== undefined) {
-                      res.status(404).json({
-                        success: false,
-                        Error: (error as Error).message,
-                      });
-                    } else {
-                      body.img_dark = result.url;
+      const {
+        desct_en,
+        desc_th,
+        linkTitle_en,
+        linkTitle_th,
+        title_en,
+        title_th,
+        img_light_src,
+        img_dark_src,
+        _id,
+      } = body;
+      let isFileUpload = !isObjectEmpty(files);
+      let oldCollection = await Collections.findById(_id);
+      let finalFolder = `${process.cwd()}/public/collections/${
+        oldCollection.title_en
+      }`;
+      var fileExtention;
+      var uniqueName;
+      var oldPath;
+      var newPath: string;
+      if (isFileUpload) {
+        // upload image
+        let filesArray = Object.entries(files);
+        for (const imgs of filesArray as any) {
+          console.log(imgs);
+          oldPath = imgs[1]['filepath'];
+          fileExtention = path.extname(imgs[1]['originalFilename']);
+          uniqueName = imgs[1]['originalFilename']; //uuidv4();
+          newPath = `${finalFolder}/${uniqueName}${fileExtention}`;
+          fse.move(oldPath, newPath, { overwrite: true });
+          if (imgs[0] == 'img_light') {
+            const seperatePath = newPath.split('/');
+            const removePublicPath = seperatePath.filter(
+              (a: string) => a !== 'public'
+            );
+            const seperatePathFromAdmin = removePublicPath.splice(
+              removePublicPath.indexOf('collections'),
+              removePublicPath.length - removePublicPath.indexOf('collections')
+            );
+            const path = seperatePathFromAdmin.join('/');
+            body.img_light = [
+              {
+                height: img_light_src[0]['height'],
+                width: img_light_src[0]['width'],
+                tags: img_light_src[0]['tags'],
+                path: newPath,
+                src: `${process.env.NEXT_PUBLIC_ADMIN_URL}/${path}`,
+              },
+            ];
+            fs.rmSync(oldCollection.img_light[0]['path'], {
+              recursive: true,
+              force: true,
+            });
+            delete body.img_light_src;
+          }
+          if (imgs[0] == 'img_dark') {
+            const seperatePath = newPath.split('/');
+            const removePublicPath = seperatePath.filter(
+              (a: string) => a !== 'public'
+            );
+            const seperatePathFromAdmin = removePublicPath.splice(
+              removePublicPath.indexOf('collections'),
+              removePublicPath.length - removePublicPath.indexOf('collections')
+            );
+            const path = seperatePathFromAdmin.join('/');
+            body.img_dark = [
+              {
+                height: img_dark_src[0]['height'],
+                width: img_dark_src[0]['width'],
+                tags: img_dark_src[0]['tags'],
+                path: newPath,
+                src: `${process.env.NEXT_PUBLIC_ADMIN_URL}/${path}`,
+              },
+            ];
+            fs.rmSync(oldCollection.img_dark[0]['path'], {
+              recursive: true,
+              force: true,
+            });
+            delete body.img_dark_src;
+          }
+        }
+      }
+      if (typeof body.img_dark == 'string') {
+        body.img_dark = img_dark_src;
+        delete body.img_dark_src;
+      }
+      if (typeof body.img_light == 'string') {
+        body.img_light = img_light_src;
+        delete body.img_light_src;
+      }
 
-                      let doc = await Collections.findByIdAndUpdate(
-                        body._id,
-                        body,
-                        {
-                          new: true,
-                        }
-                      );
-                      res.status(200).json({
-                        success: true,
-                        data: doc,
-                      });
-                    }
-                  }
-                );
-              }
+      delete body._id;
+      if (body.title_en !== oldCollection.title_en) {
+        try {
+          let newFinalFolder = `${process.cwd()}/public/collections/${title_en}`;
+          fs.renameSync(finalFolder, newFinalFolder);
+          const seperateDarkPath = body.img_dark[0]['path'].split('/');
+          const indexOfCollection = seperateDarkPath.findIndex(
+            (a: string) => a == 'collections'
+          );
+          seperateDarkPath[indexOfCollection + 1] = body.title_en;
+          body.img_dark[0]['path'] = seperateDarkPath.join('/');
+          const seperatelightPath = body.img_light[0]['path'].split('/');
+          seperatelightPath[indexOfCollection + 1] = body.title_en;
+          body.img_light[0]['path'] = seperatelightPath.join('/');
+
+          const seperateDarkSrc = body.img_dark[0]['src'].split('/');
+          const indexOfSrcCollection = seperateDarkSrc.findIndex(
+            (a: string) => a == 'collections'
+          );
+          seperateDarkSrc[indexOfSrcCollection + 1] = body.title_en;
+          body.img_dark[0]['src'] = seperateDarkSrc.join('/');
+
+          const seperatelightSrc = body.img_light[0]['src'].split('/');
+          seperatelightSrc[indexOfSrcCollection + 1] = body.title_en;
+          body.img_light[0]['src'] = seperatelightSrc.join('/');
+          let newCollection = await Collections.findByIdAndUpdate(
+            oldCollection._id,
+            req.body,
+            {
+              returnDocument: 'after',
             }
           );
+          res.status(200).json({ success: true, data: newCollection });
+        } catch (error) {
+          res
+            .status(401)
+            .json({ success: false, Error: (error as Error).message });
+          return;
         }
       } else {
-        switch (true) {
-          case files['img_dark'] == undefined:
-            //'image light delete');
-            var oldcollection = await Collections.findOne({ _id: body._id });
-            var oldTitle = oldcollection['title_en'];
-            cloudinary.api.delete_resources_by_prefix(
-              `collections/${oldTitle + 'img_light'}`,
-              function (error: Error, result: any) {
-                console.log(error);
-              }
-            );
-            var lightImageResp = cloudinary.uploader.upload(
-              files['img_light'].filepath,
-              {
-                folder: 'collections',
-                public_id: body['title_en'] + 'img_light',
-              }
-            );
-            lightImageResp.then(async (data: any) => {
-              body.img_light = data.url;
-              fs.unlink(files['img_light'].filepath, (error) => {
-                if (error !== null) {
-                  res
-                    .status(401)
-                    .json({ success: false, Error: (error as Error).message });
-                }
-              });
-              let doc = await Collections.findByIdAndUpdate(body._id, body, {
-                new: true,
-              });
-              res.status(200).json({
-                success: true,
-                data: doc,
-              });
-            });
-            break;
-          case files['img_light'] == undefined:
-            //'image dark delete');
-            var oldcollection = await Collections.findOne({ _id: body._id });
-            var oldTitle = oldcollection['title_en'];
-            cloudinary.api.delete_resources_by_prefix(
-              `collections/${oldTitle + 'img_dark'}`,
-              function (error: Error, result: any) {
-                console.log(error);
-              }
-            );
-            var darkImageResp = cloudinary.uploader.upload(
-              files['img_dark'].filepath,
-              {
-                folder: 'collections',
-                public_id: body['title_en'] + 'img_dark',
-              }
-            );
-            darkImageResp.then(async (data: any) => {
-              body.img_dark = data.url;
-              fs.unlink(files['img_dark'].filepath, (error) => {
-                if (error !== null) {
-                  res
-                    .status(401)
-                    .json({ success: false, Error: (error as Error).message });
-                }
-              });
-              let doc = await Collections.findByIdAndUpdate(body._id, body, {
-                new: true,
-              });
-              res.status(200).json({
-                success: true,
-                data: doc,
-              });
-            });
-            break;
-
-          default:
-            var oldcollection = await Collections.findOne({ _id: body._id });
-            var oldTitle = oldcollection['title_en'];
-            cloudinary.api.delete_resources_by_prefix(
-              `collections/${oldTitle + 'img_light'}`,
-              function (error: Error, result: any) {
-                console.log(error);
-              }
-            );
-            cloudinary.api.delete_resources_by_prefix(
-              `collections/${oldTitle + 'img_dark'}`,
-              function (error: Error, result: any) {
-                console.log(error);
-              }
-            );
-            var lightImageResp = cloudinary.uploader.upload(
-              files['img_light'].filepath,
-              {
-                folder: 'collections',
-                public_id: body['title_en'] + 'img_light',
-              }
-            );
-            lightImageResp.then(async (data: any) => {
-              body.img_light = data.url;
-              fs.unlink(files['img_light'].filepath, (error) => {
-                if (error !== null) {
-                  res
-                    .status(401)
-                    .json({ success: false, Error: (error as Error).message });
-                }
-              });
-              var darkImageResp = cloudinary.uploader.upload(
-                files['img_dark'].filepath,
-                {
-                  folder: 'collections',
-                  public_id: body['title_en'] + 'img_dark',
-                }
-              );
-              darkImageResp.then(async (data: any) => {
-                body.img_dark = data.url;
-                fs.unlink(files['img_dark'].filepath, (error) => {
-                  if (error !== null) {
-                    res.status(401).json({
-                      success: false,
-                      Error: (error as Error).message,
-                    });
-                  }
-                });
-                let doc = await Collections.findByIdAndUpdate(body._id, body, {
-                  new: true,
-                });
-                res.status(200).json({
-                  success: true,
-                  data: doc,
-                });
-              });
-            });
-            break;
-        }
+        let newCollection = await Collections.findByIdAndUpdate(
+          oldCollection._id,
+          req.body,
+          {
+            returnDocument: 'after',
+          }
+        );
+        res.status(200).json({ success: true, data: newCollection });
       }
     } catch (error) {
       res.status(401).json({ success: false, Error: (error as Error).message });

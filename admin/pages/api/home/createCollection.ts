@@ -5,7 +5,9 @@ import { dbCheck } from 'middleware/dbCheck';
 import Collections, { ICollection } from 'homeModels/Collections';
 import { verifyToken } from 'middleware/verifyToken';
 import cors from 'cors';
-import multiparty from 'multiparty';
+import { v4 as uuidv4 } from 'uuid';
+const fse = require('fs-extra');
+const path = require('path');
 import multipartFormParser from 'middleware/multipart-form-parser';
 import fs from 'fs';
 const apiRoute = nextConnect<NextApiRequest, NextApiResponse>({
@@ -33,86 +35,116 @@ apiRoute.post(
   dbCheck,
   async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     try {
-      const cloudinary = require('cloudinary').v2;
-
+      req.body.img_light_src = JSON.parse(req.body.img_light_src);
+      req.body.img_dark_src = JSON.parse(req.body.img_dark_src);
       //@ts-ignore
       const files = req.files;
       const body = req.body;
-      // Configuration
-      cloudinary.config({
-        cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-        api_key: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY,
-        api_secret: process.env.NEXT_PUBLIC_CLOUDINARY_API_SECRET,
-      });
-      const lightImageResp = cloudinary.uploader.upload(
-        files['img_light'].filepath,
-        {
-          folder: 'collections',
-          public_id: body['title_en'] + 'img_light',
-        }
-      );
+      const {
+        desct_en,
+        desc_th,
+        linkTitle_en,
+        linkTitle_th,
+        title_en,
+        title_th,
+        img_light_src,
+        img_dark_src,
+      } = body;
 
-      lightImageResp
-        .then((data: any) => {
-          body.img_light = data.url;
-          fs.unlink(files['img_light'].filepath, (error) => {
-            if (error !== null) {
-              res
-                .status(401)
-                .json({ success: false, Error: (error as Error).message });
-            }
-          });
-          const darkImageResp = cloudinary.uploader.upload(
-            files['img_dark'].filepath,
-            {
-              folder: 'collections',
-              public_id: body['title_en'] + 'img_dark',
-            }
+      let finalFolder = `${process.cwd()}/public/collections/${title_en}`;
+
+      var fileExtention;
+      var uniqueName;
+      var oldPath;
+      var newPath: string;
+      if (!fs.existsSync(finalFolder)) {
+        fs.mkdirSync(finalFolder, { recursive: true });
+      }
+      var fileExtention;
+      var uniqueName;
+      var oldPath;
+      var newPath: string;
+      if (!fs.existsSync(finalFolder)) {
+        fs.mkdirSync(finalFolder, { recursive: true });
+      }
+      // upload image
+      let filesArray = Object.entries(files);
+      for (const imgs of filesArray as any) {
+        oldPath = imgs[1]['filepath'];
+        fileExtention = path.extname(imgs[1]['originalFilename']);
+        uniqueName = uuidv4();
+        newPath = `${finalFolder}/${uniqueName}${fileExtention}`;
+        fse.move(oldPath, newPath, { overwrite: true });
+        if (imgs[0] == 'img_light') {
+          const seperatePath = newPath.split('/');
+          const removePublicPath = seperatePath.filter(
+            (a: string) => a !== 'public'
           );
-
-          darkImageResp.then((data: any) => {
-            body.img_dark = data.url;
-            body.link = '#';
-            fs.unlink(files['img_dark'].filepath, (error) => {
-              if (error !== null) {
-                res
-                  .status(401)
-                  .json({ success: false, Error: (error as Error).message });
-              }
-            });
-            const newCollection = new Collections(body);
-            newCollection.save((err: Error, result: any) => {
-              if (err) {
-                cloudinary.api.delete_resources_by_prefix(
-                  `collections/${body['title_en'] + 'img_light'}`,
-                  function (error: Error, result: any) {
-                    console.log(error);
-                  }
-                );
-                cloudinary.api.delete_resources_by_prefix(
-                  `collections/${body['title_en'] + 'img_dark'}`,
-                  function (error: Error, result: any) {
-                    console.log(error);
-                  }
-                );
-                res
-                  .status(401)
-                  .json({ success: false, Error: (err as Error).message });
-              } else {
-                res.status(200).json({
-                  success: true,
-                  data: result,
-                });
-              }
-            });
-          });
-        })
-        .catch((err: any) => {
-          console.log(err);
+          const seperatePathFromAdmin = removePublicPath.splice(
+            removePublicPath.indexOf('collections'),
+            removePublicPath.length - removePublicPath.indexOf('collections')
+          );
+          const path = seperatePathFromAdmin.join('/');
+          body.img_light = [
+            {
+              height: img_light_src[0]['height'],
+              width: img_light_src[0]['width'],
+              tags: img_light_src[0]['tags'],
+              path: newPath,
+              src: `${process.env.NEXT_PUBLIC_ADMIN_URL}/${path}`,
+            },
+          ];
+          delete body.img_light_src;
+        }
+        if (imgs[0] == 'img_dark') {
+          const seperatePath = newPath.split('/');
+          const removePublicPath = seperatePath.filter(
+            (a: string) => a !== 'public'
+          );
+          const seperatePathFromAdmin = removePublicPath.splice(
+            removePublicPath.indexOf('collections'),
+            removePublicPath.length - removePublicPath.indexOf('collections')
+          );
+          const path = seperatePathFromAdmin.join('/');
+          body.img_dark = [
+            {
+              height: img_dark_src[0]['height'],
+              width: img_dark_src[0]['width'],
+              tags: img_dark_src[0]['tags'],
+              path: newPath,
+              src: `${process.env.NEXT_PUBLIC_ADMIN_URL}/${path}`,
+            },
+          ];
+          delete body.img_dark_src;
+        }
+      }
+      const newCollection = new Collections(body);
+      newCollection.save((err: any, result: any) => {
+        if (err) {
+          if (err.code == 11000) {
+            if (!fs.existsSync(body.img_light[0]['path'])) {
+              fs.unlinkSync(body.img_light[0]['path']);
+            }
+            if (!fs.existsSync(body.img_dark[0]['path'])) {
+              fs.unlinkSync(body.img_dark[0]['path']);
+            }
+          } else {
+            fs.rmSync(finalFolder, { recursive: true, force: true });
+            res
+              .status(401)
+              .json({ success: false, Error: (err as Error).message });
+          }
           res
             .status(401)
             .json({ success: false, Error: (err as Error).message });
-        });
+          return;
+        } else {
+          res.status(200).json({
+            success: true,
+            data: result,
+          });
+        }
+      });
     } catch (error) {
       res.status(401).json({ success: false, Error: (error as Error).message });
     }

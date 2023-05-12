@@ -147,3 +147,11 @@ input:-webkit-autofill:active {
 .video-react-has-started .video-react-control-bar{
   border-radius: 0px 0px 25px 25px;
 }
+.ReactGridGallery_tile-icon-bar{
+  background: rgba(104, 98, 98, 0.3);;
+  opacity: 0.4;
+}
+
+.ReactGridGallery_tile-icon-bar div svg{
+  fill: #1fad18;
+}

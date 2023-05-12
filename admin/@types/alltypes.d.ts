@@ -7,3 +7,4 @@ declare module 'react-jvectormap';
 declare module 'multiparty';
 declare module 'formidable';
 declare module 'react-color';
+declare module 'uuid';

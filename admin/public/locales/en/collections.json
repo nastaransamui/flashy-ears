@@ -10,5 +10,7 @@
   "createCollectionTitle": "Create Collection",
   "createCollectionSubTitle": "Image and text show in main page entrance",
   "titles": "Titles",
-  "media": "Images"
+  "media": "Images",
+  "drop": "Drop image to save.",
+  "drag&drop": "Drag 'n' drop some images here, or click to select files;best browser for drop function is Firefox"
 }

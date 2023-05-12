@@ -4,27 +4,38 @@ import editCollectionHook from './editCollectionHook';
 
 
 //Components
-
+import LookUpsPagination from "@/shared/Lookups/LookUpsPagination";
+import Loading from "@/shared/Loading";
 import StepsWizards from "@/shared/StepsWizard/StepsWizard";
 
-import { CollectionFormFirst, CollectionFormSecond } from './CollectionForm'
+import { CollectionFormInformation, CollectionFormImages } from './CollectionForm'
 
 
 const editCollection: FC = (() => {
   const { _id, singleData } = useSingleData('edit');
   const {
-    values,
     t,
-    setError,
-    clearErrors,
     watch,
+    values,
+    setValue,
+    setValues,
+    control,
+    Controller,
+    getValues,
+    clearErrors,
+    setError,
     register,
     errors,
     validate,
     resetField,
     onSubmit,
+    formTrigger,
     handleSubmit,
-    formTrigger
+    imagevalidate,
+    setImageValidate,
+    productValidation,
+    setProductValidation,
+    hanldeProductsData
   } = editCollectionHook(singleData, _id);
 
 
@@ -35,13 +46,12 @@ const editCollection: FC = (() => {
           [{
             stepName: t('titles'),
             stepComponent: () =>
-              <CollectionFormFirst
-                setError={setError}
-                clearErrors={clearErrors}
+              <CollectionFormInformation
                 watch={watch}
                 values={values}
-                register={register}
-                errors={errors} />,
+                clearErrors={clearErrors}
+                setError={setError}
+                register={register} errors={errors} />,
             stepId: 'titles',
             isValidated: () => validate,
             handleChange: () => { },
@@ -49,24 +59,55 @@ const editCollection: FC = (() => {
           },
           {
             stepName: t('media'),
-            stepComponent: () => <CollectionFormSecond
+            stepComponent: () => <CollectionFormImages
               watch={watch}
               resetField={resetField}
               values={values}
-              register={register} errors={errors} />,
+              register={register} errors={errors}
+              setValue={setValue}
+              setValues={setValues}
+              control={control}
+              Controller={Controller}
+              getValues={getValues}
+              setImageValidate={setImageValidate}
+              clearErrors={clearErrors}
+              setError={setError} />,
             stepId: 'media',
-            isValidated: () => true,
+            isValidated: () => imagevalidate && validate,
             handleChange: () => { },
             values: values[1],
+          },
+          {
+            stepName: t('products'),
+            stepComponent: () =>
+              <div>
+                {singleData?.productData == undefined ? <Loading color="" /> :
+                  <>
+                    <LookUpsPagination
+                      stepIndex={2}
+                      stepId="products"
+                      total={values[2].totalProducts} />
+                    {JSON.stringify(values[2])}
+                  </>
+                }
+              </div>,
+            stepId: 'products',
+            isValidated: () => imagevalidate && validate && productValidation,
+            handleChange: () => {
+              hanldeProductsData()
+
+              setProductValidation(() => true)
+            },
+            values: values[2],
           },
           ]
         }
         title={t('createCollectionTitle')}
         subtitle={t('createCollectionSubTitle')}
         formId='collection-form'
+        formTrigger={formTrigger}
         onSubmit={onSubmit}
-        handleSubmit={handleSubmit}
-        formTrigger={formTrigger} />
+        handleSubmit={handleSubmit} />
     </Fragment>
   )
 })

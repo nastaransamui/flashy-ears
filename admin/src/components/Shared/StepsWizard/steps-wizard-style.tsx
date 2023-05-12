@@ -15,7 +15,7 @@ const stepsWizardStyles = makeStyles<{}>()((theme) => {
       borderRadius: '6px',
       color: theme.palette.text.color,
       transition: 'all 300ms linear',
-      minHeight: '410px',
+      minHeight: '76vh',
       [theme.breakpoints.only('xs')]: {
         right: 6
       }
@@ -106,7 +106,7 @@ const stepsWizardStyles = makeStyles<{}>()((theme) => {
     },
     content: {
       marginTop: '20px',
-      minHeight: '340px',
+      minHeight: '50vh',
       padding: '20px 15px',
     },
     bgLocation: {

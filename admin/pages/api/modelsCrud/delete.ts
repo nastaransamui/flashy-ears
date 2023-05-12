@@ -13,6 +13,7 @@ import Features, { IFeature } from '@/models/Features';
 import Agencies, { IAgent } from '@/models/Agencies';
 import Collections, { ICollection } from 'homeModels/Collections';
 import Colors, { IColors } from 'homeModels/Colors';
+const fs = require('fs-extra');
 import {
   findAllUsersWithPagginate,
   findAllRolesWithPagginate,
@@ -32,9 +33,11 @@ import {
   findAllAgencies,
   findAllCollectionsWithPagginate,
   findAllColorsWithPagginate,
+  findAllProductsWithPagginate,
 } from '@/helpers/dbFinds';
 
 import type { MultiMap } from 'hazelcast-client/lib/proxy/MultiMap';
+import { IProducts } from 'homeModels/Products';
 
 const apiRoute = nextConnect<HazelcastType, NextApiResponse>({
   onError(error, req, res) {
@@ -61,7 +64,7 @@ type Results = {
   totalCount: number;
 };
 
-apiRoute.delete(
+apiRoute.post(
   verifyToken,
   dbCheck,
   hazelCast,
@@ -149,50 +152,94 @@ apiRoute.delete(
               .where('_id')
               .in(arrayOfIds)
               .exec();
-            var cloudinaryArray: string[] = [];
-            records.map((a) => {
-              cloudinaryArray.push(
-                `collections/${a.title_en}img_light`,
-                `collections/${a.title_en}img_dark`
-              );
-            });
-            cloudinary.api.delete_resources(
-              cloudinaryArray,
-              async (error: Error, resp: object) => {
-                if (error !== undefined) {
-                  res
-                    .status(404)
-                    .json({ success: false, Error: (error as Error).message });
+            for (const record of records) {
+              let delFolder = `${process.cwd()}/public/collections/${
+                record.title_en
+              }`;
+              fs.rmSync(delFolder, { recursive: true, force: true });
+            }
+            collection.deleteMany(
+              {
+                _id: { $in: arrayOfIds },
+              },
+              async (err: Error, respose: any) => {
+                if (err) {
+                  console.log(err);
+                  res.status(400).json({
+                    success: false,
+                    Error: (err as Error).message,
+                  });
                 } else {
-                  collection.deleteMany(
-                    {
-                      _id: { $in: arrayOfIds },
-                    },
-                    async (err: Error, respose: any) => {
-                      if (err) {
-                        console.log(err);
-                        res.status(400).json({
-                          success: false,
-                          Error: (err as Error).message,
-                        });
-                      } else {
-                        var result: Results =
-                          await findAllCollectionsWithPagginate(
-                            collection as Model<ICollection>,
-                            perPage,
-                            pageNumber,
-                            sortByField,
-                            sortDirection
-                          );
-                        res.status(200).json({ success: true, ...result });
-                      }
-                    }
+                  var result: Results = await findAllCollectionsWithPagginate(
+                    collection as Model<ICollection>,
+                    perPage,
+                    pageNumber,
+                    sortByField,
+                    sortDirection
                   );
+                  res.status(200).json({ success: true, ...result });
                 }
               }
             );
             break;
 
+          case 'Products':
+            const products = await collection
+              .find()
+              .where('_id')
+              .in(arrayOfIds)
+              .exec();
+            for (const product of products as any) {
+              let finalFolder = `${process.cwd()}/public/products/${
+                product.product_name_en
+              }`;
+              fs.remove(finalFolder, async (er: Error, resu: any) => {
+                if (er !== null) {
+                  res.status(400).json({
+                    success: false,
+                    Error: (er as Error).message,
+                  });
+                }
+              });
+
+              await Colors.updateMany(
+                { _id: { $in: product.colors_id } },
+                { $pull: { products_id: product._id } },
+                { multi: true }
+              );
+              await Collections.updateOne(
+                {
+                  _id: {
+                    $in: product.collection_id,
+                  },
+                },
+                { $pull: { products_id: product._id } },
+                { multi: true }
+              );
+            }
+            collection.deleteMany(
+              {
+                _id: { $in: arrayOfIds },
+              },
+              async (err: Error, respose: any) => {
+                if (err) {
+                  res.status(400).json({
+                    success: false,
+                    Error: (err as Error).message,
+                  });
+                } else {
+                  var result: Results = await findAllProductsWithPagginate(
+                    collection as Model<IProducts>,
+                    perPage,
+                    pageNumber,
+                    sortByField,
+                    sortDirection
+                  );
+                  res.status(200).json({ success: true, ...result });
+                }
+              }
+            );
+            break;
           default:
             collection.deleteMany(
               {
@@ -292,7 +339,7 @@ apiRoute.delete(
       // res.status(200).json({ success: true, data: [] });
     } catch (error) {
       const hz = req.hazelCast;
-      res.status(401).json({ success: false, Error: (error as Error).message });
+      res.status(500).json({ success: false, Error: (error as Error).message });
       if (hz) {
         await hz.shutdown();
       }

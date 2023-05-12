@@ -8,5 +8,6 @@
   "updatedAt": "Last update",
   "createColor": "Define your color",
   "selectColor": "Click to get color code",
-  "colorData": "Color information"
+  "colorData": "Color information",
+  "onlyAlphabet": "This Field only accept lower case alphabet.(Use Label)"
 }

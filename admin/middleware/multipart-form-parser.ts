@@ -12,6 +12,8 @@ export default async function parseMultipartForm(
   if (contentType && contentType.indexOf('multipart/form-data') !== -1) {
     form.parse(req, (err: any, fields: any, files: any) => {
       if (!err) {
+        // console.log(fields);
+        // console.log(files);
         req.body = fields; // sets the body field in the request object
         //@ts-ignore
         req.files = files; // sets the files field in the request object

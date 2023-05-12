@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import { FC, useEffect } from 'react'
+import { FC, useEffect, useState } from 'react'
 import InputLabel from '@mui/material/InputLabel'
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import useCurrentRouteState from "@/src/components/Hooks/useCurrentRouteState";
 import { useDispatch, useSelector } from 'react-redux';
 import { State } from '@/src/redux/store';
+import FormHelperText from "@mui/material/FormHelperText";
 
 interface SearchSelectProps { }
 
@@ -20,6 +21,7 @@ const SearchSelect: FC<SearchSelectProps> = (() => {
   const { t, } = useTranslation(modelName)
   const { totalData, firstSearch, fieldValue } = useSelector<State, State>(state => state)
   const dispatch = useDispatch();
+  const [showError, setShowError] = useState(false)
 
   const selectClick = (firstField: string) => {
     dispatch({
@@ -37,8 +39,15 @@ const SearchSelect: FC<SearchSelectProps> = (() => {
     }
   }, [totalData])
 
-
-
+  useEffect(() => {
+    if (fieldValue == '') {
+      if (totalData.length > 0) {
+        setShowError(() => true)
+      }
+    } else {
+      setShowError(() => false)
+    }
+  }, [fieldValue, totalData])
 
   return (
     <FormControl size='small' className={classes.searchSelect}>
@@ -47,8 +56,11 @@ const SearchSelect: FC<SearchSelectProps> = (() => {
         className={classes.inputSelect}
         labelId="demo-simple-select-label"
         id="demo-simple-select"
+        disabled={totalData.length == 0}
         value={fieldValue}
-        label="Fiel"
+        label="Field"
+        required
+        error={showError}
         variant="outlined">
         {totalData.map((a, index) => {
           if (index == 0) {
@@ -65,6 +77,9 @@ const SearchSelect: FC<SearchSelectProps> = (() => {
           }
         })}
       </Select>
+      {showError && <FormHelperText error id="accountId-error">
+        {t('required', { ns: 'common' })}
+      </FormHelperText>}
     </FormControl>
   )
 })

@@ -1,6 +1,9 @@
 import nextConnect from 'next-connect';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getCookies } from 'cookies-next';
+import { dbCheck } from 'middleware/dbCheck';
+import Products from '@/models/Products';
+
 const apiRoute = nextConnect<NextApiRequest, NextApiResponse>({
   onError(error, req, res) {
     res
@@ -1258,14 +1261,56 @@ const galleryImages = [
     caption_th: 'สามเหลี่ยมสีส้มเหลือง  ',
   },
 ];
-apiRoute.get(async (req: NextApiRequest, res: NextApiResponse) => {
+apiRoute.get(dbCheck, async (req: NextApiRequest, res: NextApiResponse) => {
   const { model } = req.query;
+  const galleryInfo = await Products.aggregate([
+    {
+      $lookup: {
+        from: 'collections',
+        pipeline: [
+          {
+            $project: {
+              title_en: 1,
+              title_th: 1,
+            },
+          },
+        ],
+        as: 'collectionData',
+      },
+    },
+    {
+      $lookup: {
+        from: 'collections',
+        localField: 'collection_id',
+        foreignField: '_id',
+        pipeline: [
+          {
+            $project: {
+              title_en: 1,
+              _id: 0,
+            },
+          },
+        ],
+        as: 'collectionName',
+      },
+    },
+    {
+      $project: {
+        product_label_en: 1,
+        product_label_th: 1,
+        product_name_en: 1,
+        collectionData: 1,
+        gallery: 1,
+        collectionName: 1,
+      },
+    },
+    {
+      $unwind: '$collectionName',
+    },
+  ]);
   res.status(200).json({
     success: true,
-    galleryImages:
-      model == undefined
-        ? galleryImages
-        : galleryImages.filter((a) => a.model == model),
+    galleryImages: galleryInfo,
   });
 });
 

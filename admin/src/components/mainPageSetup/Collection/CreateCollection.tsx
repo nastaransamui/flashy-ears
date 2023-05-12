@@ -3,7 +3,7 @@ import { FC } from "react";
 //Hooks
 
 import createCollectionHook from "./createCollectionHook";
-import { CollectionFormFirst, CollectionFormSecond } from './CollectionForm'
+import { CollectionFormInformation, CollectionFormImages } from './CollectionForm'
 
 //Components
 import StepsWizards from "@/shared/StepsWizard/StepsWizard";
@@ -13,6 +13,11 @@ const CreateCollection: FC = (() => {
     t,
     watch,
     values,
+    setValue,
+    setValues,
+    control,
+    Controller,
+    getValues,
     clearErrors,
     setError,
     register,
@@ -21,7 +26,10 @@ const CreateCollection: FC = (() => {
     resetField,
     onSubmit,
     formTrigger,
-    handleSubmit } = createCollectionHook();
+    handleSubmit,
+    imagevalidate,
+    setImageValidate
+  } = createCollectionHook();
 
   return (
     <StepsWizards
@@ -29,7 +37,7 @@ const CreateCollection: FC = (() => {
         [{
           stepName: t('titles'),
           stepComponent: () =>
-            <CollectionFormFirst
+            <CollectionFormInformation
               watch={watch}
               values={values}
               clearErrors={clearErrors}
@@ -42,14 +50,22 @@ const CreateCollection: FC = (() => {
         },
         {
           stepName: t('media'),
-          stepComponent: () => <CollectionFormSecond
+          stepComponent: () => <CollectionFormImages
             watch={watch}
             resetField={resetField}
             values={values}
-            register={register} errors={errors} />,
+            register={register} errors={errors}
+            setValue={setValue}
+            setValues={setValues}
+            control={control}
+            Controller={Controller}
+            getValues={getValues}
+            setImageValidate={setImageValidate}
+            clearErrors={clearErrors}
+            setError={setError} />,
           stepId: 'media',
-          isValidated: () => true,
-          handleChange: () => { console.log(`handle ${t('titles')} change`) },
+          isValidated: () => imagevalidate && validate,
+          handleChange: () => { },
           values: values[1],
         },
         ]

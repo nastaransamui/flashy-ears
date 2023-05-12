@@ -60,7 +60,6 @@ const apiRoute = nextConnect<NextApiRequest, NextApiResponse>({
 
 apiRoute.get(dbCheck, async (req: NextApiRequest, res: NextApiResponse) => {
   const slides = await Collections.find();
-  console.log(slides);
   res.status(200).json({ success: true, slides: slides });
 });
 

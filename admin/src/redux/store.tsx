@@ -67,7 +67,10 @@ export interface State {
   expanded: { [key: string]: boolean }
   firstRow: { [key: string]: any },
   reRunSingleGet: boolean;
+  productFinancialFillAll: boolean | null
 }
+
+
 
 const initialState = {
   adminAccessToken: null,
@@ -91,8 +94,8 @@ const initialState = {
   expanded: {},
   firstRow: {},
   reRunSingleGet: false,
+  productFinancialFillAll: null
 }
-
 
 // create your reducer
 const reducer = (state: State = initialState, action: AnyAction) => {
@@ -144,6 +147,8 @@ const reducer = (state: State = initialState, action: AnyAction) => {
       return { ...state, firstRow: action.payload };
     case 'RERUN_SINGLE_GET':
       return { ...state, reRunSingleGet: action.payload };
+    case 'PRODUCT_FINANCIAL_FILL_ALL':
+      return { ...state, productFinancialFillAll: action.payload };
     default:
       return state;
   }
