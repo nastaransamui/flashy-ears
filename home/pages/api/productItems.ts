@@ -41,6 +41,7 @@ apiRoute.get(dbCheck, async (req: NextApiRequest, res: NextApiResponse) => {
         },
       },
     ]);
+
     res.status(200).json({ success: true, productItems: productItems });
   } else {
     const collectionId = query._id;
