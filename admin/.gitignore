@@ -8,7 +8,7 @@
 /jsonDump/countries.json
 /jsonDump/provinces.json
 /jsonDump/cities.json
-# /public/products
+/public/products
 
 # testing
 /coverage
