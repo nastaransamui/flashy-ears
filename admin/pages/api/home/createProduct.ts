@@ -184,8 +184,6 @@ apiRoute.post(
       delete body['images_information'];
       body['gallery'] = body['gallery_information']['gallery'];
       delete body['gallery_information'];
-      console.log(body['images']);
-      console.log(body['gallery']);
       const newProduct = new Products(body);
       newProduct.save(async (err: Error, result: any) => {
         if (err) {

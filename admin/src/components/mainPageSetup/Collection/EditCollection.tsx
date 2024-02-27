@@ -1,4 +1,4 @@
-import { FC, Fragment } from "react";
+import { FC, Fragment, useEffect } from "react";
 import useSingleData from '@/hookes/useSingleData'
 import editCollectionHook from './editCollectionHook';
 
@@ -8,7 +8,7 @@ import LookUpsPagination from "@/shared/Lookups/LookUpsPagination";
 import Loading from "@/shared/Loading";
 import StepsWizards from "@/shared/StepsWizard/StepsWizard";
 
-import { CollectionFormInformation, CollectionFormImages } from './CollectionForm'
+import { CollectionFormInformation, CollectionFormImages, CollectionFormProduct } from './CollectionForm'
 
 
 const editCollection: FC = (() => {
@@ -27,6 +27,7 @@ const editCollection: FC = (() => {
     register,
     errors,
     validate,
+    setValidate,
     resetField,
     onSubmit,
     formTrigger,
@@ -51,7 +52,9 @@ const editCollection: FC = (() => {
                 values={values}
                 clearErrors={clearErrors}
                 setError={setError}
-                register={register} errors={errors} />,
+                register={register} errors={errors}
+                setValidate={setValidate}
+                getValues={getValues} />,
             stepId: 'titles',
             isValidated: () => validate,
             handleChange: () => { },
@@ -74,7 +77,11 @@ const editCollection: FC = (() => {
               setError={setError} />,
             stepId: 'media',
             isValidated: () => imagevalidate && validate,
-            handleChange: () => { },
+            handleChange: () => {
+              hanldeProductsData()
+
+              setProductValidation(() => true)
+            },
             values: values[1],
           },
           {
@@ -84,10 +91,12 @@ const editCollection: FC = (() => {
                 {singleData?.productData == undefined ? <Loading color="" /> :
                   <>
                     <LookUpsPagination
-                      stepIndex={2}
-                      stepId="products"
+                      stepIndex={0}
+                      stepId="productData"
                       total={values[2].totalProducts} />
-                    {JSON.stringify(values[2])}
+                    <CollectionFormProduct
+                      total={values[2].totalProducts}
+                      productData={values[2]['productData']} />
                   </>
                 }
               </div>,
@@ -102,8 +111,8 @@ const editCollection: FC = (() => {
           },
           ]
         }
-        title={t('createCollectionTitle')}
-        subtitle={t('createCollectionSubTitle')}
+        title={getValues('label_en') || t('editCollectionTitle')}
+        subtitle={t('editCollectionSubTitle')}
         formId='collection-form'
         formTrigger={formTrigger}
         onSubmit={onSubmit}

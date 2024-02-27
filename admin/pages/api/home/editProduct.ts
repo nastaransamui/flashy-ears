@@ -189,11 +189,13 @@ apiRoute.post(
       Promise.resolve(deletePromise).then(async (value) => {
         let changeColorPromise = new Promise(
           async (colorChangeResolve, colorChangeReject) => {
+            console.log(product.colors_id);
             await Colors.updateMany(
               { _id: { $in: product.colors_id } },
               { $pull: { products_id: _id } },
               { multi: true }
             );
+            console.log(colors_id);
             await Colors.updateMany(
               { _id: { $in: colors_id } },
               { $push: { products_id: _id } },
@@ -352,6 +354,37 @@ apiRoute.post(
               delete body['deletedColor'];
               delete body['deletedImagesArray'];
               if (oldName == newName) {
+                body.gallery.forEach((elem: any, index: number) => {
+                  var seperatePath = elem['src'].split('/');
+                  const indexOfAdmin = seperatePath.findIndex(
+                    (a: string) => a == 'admin'
+                  );
+                  seperatePath = seperatePath.slice(indexOfAdmin);
+                  const newPathOfSrc = seperatePath.join('/');
+                  elem['src'] = `/${newPathOfSrc}`;
+                });
+                body['images'][0]['front'].forEach(
+                  (elem: any, index: number) => {
+                    var seperatePath = elem['src'].split('/');
+                    const indexOfAdmin = seperatePath.findIndex(
+                      (a: string) => a == 'admin'
+                    );
+                    seperatePath = seperatePath.slice(indexOfAdmin);
+                    const newPathOfSrc = seperatePath.join('/');
+                    elem['src'] = `/${newPathOfSrc}`;
+                  }
+                );
+                body['images'][1]['back'].forEach(
+                  (elem: any, index: number) => {
+                    var seperatePath = elem['src'].split('/');
+                    const indexOfAdmin = seperatePath.findIndex(
+                      (a: string) => a == 'admin'
+                    );
+                    seperatePath = seperatePath.slice(indexOfAdmin);
+                    const newPathOfSrc = seperatePath.join('/');
+                    elem['src'] = `/${newPathOfSrc}`;
+                  }
+                );
                 let newProduct = await Products.findByIdAndUpdate(_id, body, {
                   returnDocument: 'after',
                 });
@@ -359,31 +392,36 @@ apiRoute.post(
               } else {
                 let newFinalFolder = `${process.cwd()}/public/products/${newName}`;
                 fs.renameSync(finalFolder, newFinalFolder);
-                //Todo bug not update the folder
-                JSON.parse(JSON.stringify(body.gallery)).forEach(
-                  (elem: any, index: number) => {
-                    const seperatePath = elem['src'].split('/');
-                    const indexOfProducts = seperatePath.findIndex(
-                      (a: string) => a == 'products'
-                    );
-                    seperatePath[indexOfProducts + 1] = newName;
-                    const newPathOfSrc = seperatePath.join('/');
-                    elem['src'] = newPathOfSrc;
-                    elem['path'] = elem['path'].replace(
-                      finalFolder,
-                      newFinalFolder
-                    );
-                  }
-                );
+                body.gallery.forEach((elem: any, index: number) => {
+                  var seperatePath = elem['src'].split('/');
+                  const indexOfProducts = seperatePath.findIndex(
+                    (a: string) => a == oldName
+                  );
+                  seperatePath[indexOfProducts] = newName;
+                  const indexOfAdmin = seperatePath.findIndex(
+                    (a: string) => a == 'admin'
+                  );
+                  seperatePath = seperatePath.slice(indexOfAdmin);
+                  const newPathOfSrc = seperatePath.join('/');
+                  elem['src'] = `/${newPathOfSrc}`;
+                  elem['path'] = elem['path'].replace(
+                    finalFolder,
+                    newFinalFolder
+                  );
+                });
                 body['images'][0]['front'].forEach(
                   (elem: any, index: number) => {
-                    const seperatePath = elem['src'].split('/');
+                    var seperatePath = elem['src'].split('/');
                     const indexOfProducts = seperatePath.findIndex(
-                      (a: string) => a == 'products'
+                      (a: string) => a == oldName
                     );
-                    seperatePath[indexOfProducts + 1] = newName;
+                    seperatePath[indexOfProducts] = newName;
+                    const indexOfAdmin = seperatePath.findIndex(
+                      (a: string) => a == 'admin'
+                    );
+                    seperatePath = seperatePath.slice(indexOfAdmin);
                     const newPathOfSrc = seperatePath.join('/');
-                    elem['src'] = newPathOfSrc;
+                    elem['src'] = `/${newPathOfSrc}`;
                     elem['path'] = elem['path'].replace(
                       finalFolder,
                       newFinalFolder
@@ -392,21 +430,23 @@ apiRoute.post(
                 );
                 body['images'][1]['back'].forEach(
                   (elem: any, index: number) => {
-                    const seperatePath = elem['src'].split('/');
+                    var seperatePath = elem['src'].split('/');
                     const indexOfProducts = seperatePath.findIndex(
-                      (a: string) => a == 'products'
+                      (a: string) => a == oldName
                     );
-                    seperatePath[indexOfProducts + 1] = newName;
+                    seperatePath[indexOfProducts] = newName;
+                    const indexOfAdmin = seperatePath.findIndex(
+                      (a: string) => a == 'admin'
+                    );
+                    seperatePath = seperatePath.slice(indexOfAdmin);
                     const newPathOfSrc = seperatePath.join('/');
-                    elem['src'] = newPathOfSrc;
+                    elem['src'] = `/${newPathOfSrc}`;
                     elem['path'] = elem['path'].replace(
                       finalFolder,
                       newFinalFolder
                     );
                   }
                 );
-                JSON.stringify(body.gallery);
-                console.log(body.gallery);
                 let newProduct = await Products.findByIdAndUpdate(_id, body, {
                   returnDocument: 'after',
                 });

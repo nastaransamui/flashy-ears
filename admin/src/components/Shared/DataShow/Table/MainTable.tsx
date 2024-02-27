@@ -177,7 +177,7 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
                             alt=".."
                             src={`${params.row[key][0][`img_${theme.palette.mode}`][0]['src']}`}
                             style={{ width: 30, height: 30, borderRadius: '50%', }} />
-                          <span style={{ paddingLeft: 10, paddingTop: 6 }}>{params.row[key][0][`title_${i18n.language}`]}</span>
+                          <span style={{ paddingLeft: 10, paddingTop: 6 }}>{params.row[key][0][`label_${i18n.language}`]}</span>
                         </div>
                       )
                     default:

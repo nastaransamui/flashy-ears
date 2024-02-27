@@ -9,5 +9,6 @@
   "createColor": "Define your color",
   "selectColor": "Click to get color code",
   "colorData": "Color information",
+  "editColor": "Edit color information",
   "onlyAlphabet": "This Field only accept lower case alphabet.(Use Label)"
 }

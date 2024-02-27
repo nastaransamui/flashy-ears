@@ -102,6 +102,9 @@ export const ProductsFormInformation: FC<ProductsFormInformationTypes> = ((props
                   required
                   size='small'
                   label={t(val)}
+                  inputProps={{
+                    autoComplete: val == 'product_name_en' || val == 'product_name_th' ? "off" : 'on',
+                  }}
                   InputLabelProps={{ shrink: !!watch(val) }}
                   error={errors[val] == undefined ? false : true}
                   helperText={errors[val] && errors[val][`message`]}
@@ -420,7 +423,7 @@ export const ProductsFormColor: FC<ProductsFormColorTypes> = ((props: ProductsFo
                                 return (
                                   <Chip
                                     key={intersection[i]['_id']}
-                                    label={intersection[i][`title_${i18n.language}`]}
+                                    label={intersection[i][`label_${i18n.language}`]}
                                     sx={{ bgcolor: intersection[i].colorCode }}
                                   />
                                 )
@@ -439,7 +442,7 @@ export const ProductsFormColor: FC<ProductsFormColorTypes> = ((props: ProductsFo
                                   values[1]['collection_id'].length > 0 &&
                                   values[1]['collection_id'][0]['_id'] == colection._id}
                               >
-                                {colection[`title_${i18n.language}`]}
+                                {colection[`label_${i18n.language}`]}
                               </MenuItem>
                             )
                           })}

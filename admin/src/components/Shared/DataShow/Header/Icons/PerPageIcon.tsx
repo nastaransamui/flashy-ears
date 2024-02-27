@@ -40,7 +40,7 @@ const PerPageIcon: FC<PerPageIconType> = (props: PerPageIconType) => {
   const perPageArray = [6, 12, 24, 48, 96]
 
   const perPage: number = useReadLocalStorage(`${modelName}_perPage`)!
-  const pageNumber = useReadLocalStorage(`${modelName}_pageNumber`)!
+  const pageNumber: number = useReadLocalStorage(`${modelName}_pageNumber`)!
 
   const perPageFunc = (list: number) => {
     setPerPage(() => list)

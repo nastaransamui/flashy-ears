@@ -141,48 +141,91 @@ apiRoute.post(
       } else {
         switch (modelName) {
           case 'Collections':
-            const cloudinary = require('cloudinary').v2;
-            cloudinary.config({
-              cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-              api_key: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY,
-              api_secret: process.env.NEXT_PUBLIC_CLOUDINARY_API_SECRET,
-            });
             const records = await collection
               .find()
               .where('_id')
               .in(arrayOfIds)
               .exec();
             for (const record of records) {
-              let delFolder = `${process.cwd()}/public/collections/${
-                record.title_en
-              }`;
-              fs.rmSync(delFolder, { recursive: true, force: true });
-            }
-            collection.deleteMany(
-              {
-                _id: { $in: arrayOfIds },
-              },
-              async (err: Error, respose: any) => {
-                if (err) {
-                  console.log(err);
-                  res.status(400).json({
-                    success: false,
-                    Error: (err as Error).message,
-                  });
-                } else {
-                  var result: Results = await findAllCollectionsWithPagginate(
-                    collection as Model<ICollection>,
-                    perPage,
-                    pageNumber,
-                    sortByField,
-                    sortDirection
-                  );
-                  res.status(200).json({ success: true, ...result });
-                }
+              if (record.products_id.length > 0) {
+                res.status(400).json({
+                  success: false,
+                  Error: `collection ${record.label_en} has products`,
+                });
+                return;
+              } else {
+                let delFolder = `${process.cwd()}/public/collections/${
+                  record.name_en
+                }`;
+                fs.rmSync(delFolder, { recursive: true, force: true });
+                collection.deleteMany(
+                  {
+                    _id: { $in: arrayOfIds },
+                  },
+                  async (err: Error, respose: any) => {
+                    if (err) {
+                      console.log(err);
+                      res.status(400).json({
+                        success: false,
+                        Error: (err as Error).message,
+                      });
+                    } else {
+                      var result: Results =
+                        await findAllCollectionsWithPagginate(
+                          collection as Model<ICollection>,
+                          perPage,
+                          pageNumber,
+                          sortByField,
+                          sortDirection
+                        );
+                      res.status(200).json({ success: true, ...result });
+                    }
+                  }
+                );
               }
-            );
+            }
             break;
 
+          case 'Colors':
+            const results = await collection
+              .find()
+              .where('_id')
+              .in(arrayOfIds)
+              .exec();
+            for (const result of results) {
+              if (result.products_id.length > 0) {
+                res.status(400).json({
+                  success: false,
+                  Error: `color ${result.label_en} has products`,
+                });
+                return;
+              } else {
+                collection.deleteMany(
+                  {
+                    _id: { $in: arrayOfIds },
+                  },
+                  async (err: Error, respose: any) => {
+                    if (err) {
+                      console.log(err);
+                      res.status(400).json({
+                        success: false,
+                        Error: (err as Error).message,
+                      });
+                    } else {
+                      var result: Results = await findAllColorsWithPagginate(
+                        collection as Model<IColors>,
+                        perPage,
+                        pageNumber,
+                        sortByField,
+                        sortDirection
+                      );
+                      res.status(200).json({ success: true, ...result });
+                    }
+                  }
+                );
+              }
+            }
+            break;
           case 'Products':
             const products = await collection
               .find()

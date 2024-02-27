@@ -36,7 +36,6 @@ const Pagination: FC<PaginationType> = ((props: PaginationType) => {
     }
     return () => { }
   }, [pageNumber, perPage, totalCount])
-
   return (
     <Grid
       container

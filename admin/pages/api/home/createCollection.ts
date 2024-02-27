@@ -45,13 +45,15 @@ apiRoute.post(
         desc_th,
         linkTitle_en,
         linkTitle_th,
-        title_en,
-        title_th,
+        label_en,
+        label_th,
+        name_en,
+        name_th,
         img_light_src,
         img_dark_src,
       } = body;
 
-      let finalFolder = `${process.cwd()}/public/collections/${title_en}`;
+      let finalFolder = `${process.cwd()}/public/collections/${name_en}`;
 
       var fileExtention;
       var uniqueName;
@@ -85,13 +87,14 @@ apiRoute.post(
             removePublicPath.length - removePublicPath.indexOf('collections')
           );
           const path = seperatePathFromAdmin.join('/');
+
           body.img_light = [
             {
               height: img_light_src[0]['height'],
               width: img_light_src[0]['width'],
               tags: img_light_src[0]['tags'],
               path: newPath,
-              src: `${process.env.NEXT_PUBLIC_ADMIN_URL}/${path}`,
+              src: `/admin/${path}`,
             },
           ];
           delete body.img_light_src;
@@ -106,13 +109,14 @@ apiRoute.post(
             removePublicPath.length - removePublicPath.indexOf('collections')
           );
           const path = seperatePathFromAdmin.join('/');
+
           body.img_dark = [
             {
               height: img_dark_src[0]['height'],
               width: img_dark_src[0]['width'],
               tags: img_dark_src[0]['tags'],
               path: newPath,
-              src: `${process.env.NEXT_PUBLIC_ADMIN_URL}/${path}`,
+              src: `/admin/${path}`,
             },
           ];
           delete body.img_dark_src;
@@ -122,12 +126,8 @@ apiRoute.post(
       newCollection.save((err: any, result: any) => {
         if (err) {
           if (err.code == 11000) {
-            if (!fs.existsSync(body.img_light[0]['path'])) {
-              fs.unlinkSync(body.img_light[0]['path']);
-            }
-            if (!fs.existsSync(body.img_dark[0]['path'])) {
-              fs.unlinkSync(body.img_dark[0]['path']);
-            }
+            fs.unlinkSync(body.img_light[0]['path']);
+            fs.unlinkSync(body.img_dark[0]['path']);
           } else {
             fs.rmSync(finalFolder, { recursive: true, force: true });
             res

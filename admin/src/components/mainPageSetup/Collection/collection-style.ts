@@ -62,6 +62,41 @@ const collectionStyles = makeStyles<{}>({
         marginLeft: 'auto',
       },
     },
+    listItemHover: {
+      background: '',
+      '&:hover, &:focus': {
+        background: 'unset',
+
+        '& svg:last-of-type': {
+          left: theme.direction == 'rtl' ? 'auto' : -10,
+          opacity: 1,
+        },
+      },
+    },
+    listItemActive: {
+      background: theme.palette.action.hover,
+      '& #right': {
+        left: 10,
+        position: 'absolute',
+        opacity: 1,
+      },
+      '& #left': {
+        position: 'absolute',
+        right: 10,
+        opacity: 1,
+      },
+    },
+
+    listItemHoverSmallArrowLeft: {
+      position: 'absolute',
+      left: -10,
+      opacity: 0,
+    },
+    listItemHoverSmallArrowRight: {
+      position: 'absolute',
+      left: 10,
+      opacity: 0,
+    },
   };
 });
 export default collectionStyles;

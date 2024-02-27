@@ -18,8 +18,10 @@ export interface ICollection {
   updatedAt: Date;
   _doc?: any;
   save?: any;
-  title_en: string;
-  title_th: string;
+  label_en: string;
+  label_th: string;
+  name_en: string;
+  name_th: string;
   img_light: ImageCollectionType;
   img_dark: ImageCollectionType;
   desc_en: string;
@@ -31,8 +33,10 @@ export interface ICollection {
 
 const CollectionSchema = new mongoose.Schema<ICollection>(
   {
-    title_en: { type: String, required: true, unique: true },
-    title_th: { type: String, required: true },
+    label_en: { type: String, required: true },
+    label_th: { type: String, required: true },
+    name_en: { type: String, required: true, unique: true },
+    name_th: { type: String, required: true },
     img_light: { type: Object, required: true },
     img_dark: { type: Object, required: true },
     desc_en: { type: String, required: true },
@@ -47,8 +51,10 @@ const CollectionSchema = new mongoose.Schema<ICollection>(
 export default mongoose.models.Collections ||
   mongoose.model<ICollection>('Collections', CollectionSchema);
 export const dispalyFields = [
-  'title_en',
-  'title_th',
+  'label_en',
+  'label_th',
+  'name_en',
+  'name_th',
   'desc_en',
   'desc_th',
   'createdAt',
@@ -66,7 +72,7 @@ const icon = {
           icon:
             key == 'createdAt' || key == 'updatedAt'
               ? 'EventIcon'
-              : key == 'title_en' || key == 'title_th'
+              : key == 'label_en' || key == 'label_th'
               ? 'InfoIcon'
               : key == 'linkTitle_en' || key == 'linkTitle_th'
               ? 'FlagIcon'
@@ -83,7 +89,7 @@ export const muiDataObj = {
       key,
       {
         type: key == 'totalProducts' ? 'number' : 'string',
-        thumbnail: key !== 'title_en' ? '' : 'img_light|img_dark',
+        thumbnail: key !== 'label_en' ? '' : 'img_light|img_dark',
         filterable: true,
         searchable:
           key == 'createdAt' || key == 'updatedAt' || key == 'totalProducts'

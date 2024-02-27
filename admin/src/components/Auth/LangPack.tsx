@@ -39,7 +39,7 @@ const LangPack = () => {
                   handleLanguage(item.LangCode);
                 }}>
                 <img
-                  src={`/admin/images/langs/${item.Flag}`}
+                  src={`${process.env[`NEXT_PUBLIC_${process.env['NODE_ENV']}`]}/admin/images/langs/${item.Flag}`}
                   alt={item.Lang}
                   className={classes.flag}
                 />
@@ -54,7 +54,7 @@ const LangPack = () => {
       <FormControl size="small">
 
         <Select
-        aria-label='theme-select'
+          aria-label='theme-select'
           value={values.paletteName}>
           {Object.keys(palette).map(function (key, index) {
             return (
@@ -77,7 +77,7 @@ const LangPack = () => {
       </FormControl>
       <FormControl size='small'>
         <Select
-        aria-label='mode-select'
+          aria-label='mode-select'
           value={adminThemeType}
           onChange={(e) => {
           }}>

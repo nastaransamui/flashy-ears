@@ -18,8 +18,10 @@ const editCollectionHook = (singleData: any, _id: string | null) => {
   const [productValidation, setProductValidation] = useState(false)
   const [values, setValues] = useState([
     {
-      title_en: singleData?.title_en,
-      title_th: singleData?.title_th,
+      label_en: singleData?.label_en,
+      label_th: singleData?.label_th,
+      name_en: singleData?.name_en,
+      name_th: singleData?.name_th,
       desc_en: singleData?.desc_en,
       desc_th: singleData?.desc_th,
       linkTitle_en: singleData?.linkTitle_en,
@@ -38,27 +40,43 @@ const editCollectionHook = (singleData: any, _id: string | null) => {
       if (singleData == undefined) {
         navigate('/main-page-setup/collections')
       } else {
-        setValues([
-          {
-            title_en: singleData.title_en,
-            title_th: singleData.title_th,
-            desc_en: singleData.desc_en,
-            desc_th: singleData.desc_th,
-            linkTitle_en: singleData.linkTitle_en,
-            linkTitle_th: singleData.linkTitle_th,
-          }, {
-            img_dark: singleData.img_dark,
-            img_light: singleData.img_light,
-          }, {
-            totalProducts: singleData.totalProducts,
-            productData: singleData.productData,
-          }
-        ])
+        setValue("label_en", getValues('label_en') || singleData['label_en'])
+        setValue("label_th", getValues('label_th') || singleData['label_th'])
+        setValue("name_en", getValues('name_en') || singleData['name_en'])
+        setValue("name_th", getValues('name_th') || singleData['name_th'])
+        setValue("linkTitle_en", getValues('linkTitle_en') || singleData['linkTitle_en'])
+        setValue("linkTitle_th", getValues('linkTitle_th') || singleData['linkTitle_th'])
+        setValue("desc_en", getValues('desc_en') || singleData['desc_en'])
+        setValue("desc_th", getValues('desc_th') || singleData['desc_th'])
+        setValue("img_light", getValues('img_light') || singleData['img_light'])
+        setValue("img_dark", getValues('img_dark') || singleData['img_dark'])
+        setValues((prevState) => {
+          return [
+            {
+              label_en: prevState[0]['label_en'] || singleData.label_en,
+              label_th: prevState[0]['label_th'] || singleData.label_th,
+              name_en: prevState[0]['name_en'] || singleData.name_en,
+              name_th: prevState[0]['name_th'] || singleData.name_th,
+              desc_en: prevState[0]['desc_en'] || singleData.desc_en,
+              desc_th: prevState[0]['desc_th'] || singleData.desc_th,
+              linkTitle_en: prevState[0]['linkTitle_en'] || singleData.linkTitle_en,
+              linkTitle_th: prevState[0]['linkTitle_th'] || singleData.linkTitle_th,
+            }, {
+              img_dark: prevState[1]['img_dark'] || singleData.img_dark,
+              img_light: prevState[1]['img_light'] || singleData.img_light,
+            }, {
+              totalProducts: prevState[2]['totalProducts'] || singleData.totalProducts,
+              productData: prevState[2]['productData'] || singleData.productData,
+            }
+          ]
+        })
+
+        // }
         setValidate(() => true)
         setImageValidate(() => true)
       }
     }
-  }, [singleData])
+  }, [singleData, reRunSingleGet])
 
   const { t, i18n } = useTranslation('Collections')
   const { adminAccessToken } = useSelector<State, State>(state => state)
@@ -84,16 +102,19 @@ const editCollectionHook = (singleData: any, _id: string | null) => {
   }
 
   const onSubmit = (data: any) => {
+
     const formData = new FormData();
     if (validate && imagevalidate && productValidation) {
-      formData.append("title_en", data.title_en);
-      formData.append("title_th", data.title_th);
+      formData.append("label_en", data.label_en);
+      formData.append("label_th", data.label_th);
+      formData.append("name_en", data.name_en);
+      formData.append("name_th", data.name_th);
       formData.append("linkTitle_en", data.linkTitle_en);
       formData.append("linkTitle_th", data.linkTitle_th);
       formData.append("desc_en", data.desc_en);
       formData.append("desc_th", data.desc_th);
-      formData.append("img_light", data.img_light);
-      formData.append("img_dark", data.img_dark);
+      formData.append("img_light", data.img_light instanceof File ? data.img_light : JSON.stringify(values[1]['img_light']));
+      formData.append("img_dark", data.img_dark instanceof File ? data.img_dark : JSON.stringify(values[1]['img_dark']));
       formData.append("img_light_src", JSON.stringify(values[1]['img_light']));
       formData.append("img_dark_src", JSON.stringify(values[1]['img_dark']));
       formData.append("_id", _id!)
@@ -115,7 +136,7 @@ const editCollectionHook = (singleData: any, _id: string | null) => {
             payload: false
           })
           if (success) {
-            toast(<ToastMessage >{`Collection ${data[`title_${i18n.language}`]} was edited successfully`}</ToastMessage>, {
+            toast(<ToastMessage >{`Collection ${data[`label_${i18n.language}`]} was edited successfully`}</ToastMessage>, {
               onClose: () => {
                 dispatch({ type: 'ADMIN_FORM_SUBMIT', payload: false })
                 dispatch({
@@ -165,26 +186,18 @@ const editCollectionHook = (singleData: any, _id: string | null) => {
     });
     return () => subscription.unsubscribe();
   }, [watch]);
-  useEffect(() => {
-    setValue("title_en", values[0]['title_en'])
-    setValue("title_th", values[0]['title_th'])
-    setValue("linkTitle_en", values[0]['linkTitle_en'])
-    setValue("linkTitle_th", values[0]['linkTitle_th'])
-    setValue("desc_en", values[0]['desc_en'])
-    setValue("desc_th", values[0]['desc_th'])
-    setValue("img_light", values[1]['img_light'])
-    setValue("img_dark", values[1]['img_dark'])
-  }, [values])
+
   const formTrigger = async () => {
     const result = await trigger([
-      "title_en",
-      "title_th",
+      'label_en',
+      'label_th',
+      'name_en',
+      'name_th',
       "linkTitle_en",
       "linkTitle_th",
       "desc_en",
       "desc_th",
-      'img_light',
-      'img_dark']);
+    ]);
   }
 
 
@@ -203,6 +216,7 @@ const editCollectionHook = (singleData: any, _id: string | null) => {
     register,
     errors,
     validate,
+    setValidate,
     resetField,
     onSubmit,
     formTrigger,

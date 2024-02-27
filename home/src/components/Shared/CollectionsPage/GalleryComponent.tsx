@@ -33,7 +33,7 @@ const ImageComponent = (props: ThumbnailImageProps) => {
   const { imageProps } = props
   const { src, alt, key, style } = imageProps
   return (
-    <img src={src} alt={alt} key={key} style={style} />
+    <img src={`${process.env.NEXT_PUBLIC_ADMIN_URL}${src}`} alt={alt} key={key} style={style} />
 
   );
 };
@@ -101,16 +101,17 @@ const GalleryComponent: FC = (() => {
         return data.filter((a: DBImagesType) => a.product_name_en == galleryImageModel)[0]?.['gallery'] || []
       })
 
-      setFilterData((prevState: any) => {
-        if (prevState.filter((a: any) => a.title_en == 'Show all').length == 0) {
-          prevState.unshift({
-            _id: uuidv4(),
-            title_en: 'Show all',
-            title_th: 'แสดงทั้งหมด'
-          }, ...data?.[0]?.['collectionData'])
-        }
-        return prevState
-      })
+      // setFilterData((prevState: any) => {
+      //   console.log({prevState})
+      //   if (prevState.filter((a: any) => a.title_en == 'Show all').length == 0) {
+      //     prevState.unshift({
+      //       _id: uuidv4(),
+      //       title_en: 'Show all',
+      //       title_th: 'แสดงทั้งหมด'
+      //     }, ...data?.[0]?.['collectionData'])
+      //   }
+      //   return prevState
+      // })
     }
   }, [data, lang, galleryImageModel])
   const [index, setIndex] = useState(-1);
@@ -166,7 +167,7 @@ const GalleryComponent: FC = (() => {
                       }}>
                       <Paper className={cx(classes.imgThumb, setSize('short'))}>
                         <div className={classes.figure}>
-                          <div className={classes.img} style={{ backgroundImage: `url(${bgImage})` }} />
+                          <div className={classes.img} style={{ backgroundImage: `url(${process.env.NEXT_PUBLIC_ADMIN_URL}${bgImage})` }} />
                         </div>
                         <div className={cx(classes.detail, galleryImageModel == model['product_name_en'] && classes.selectHoverReplica)} >
                           <Typography variant="h6" >{model[`product_label_${lang}` as keyof typeof model]}</Typography>
@@ -225,13 +226,13 @@ const GalleryComponent: FC = (() => {
 
           {!!currentImage && (
             <Lightbox
-              mainSrc={currentImage.src}
+              mainSrc={`${process.env.NEXT_PUBLIC_ADMIN_URL}${currentImage.src}`}
               imageTitle={currentImage!.tags?.[0]?.['title']}
-              mainSrcThumbnail={currentImage.src}
-              nextSrc={nextImage.src}
-              nextSrcThumbnail={nextImage.src}
-              prevSrc={prevImage.src}
-              prevSrcThumbnail={prevImage.src}
+              mainSrcThumbnail={`${process.env.NEXT_PUBLIC_ADMIN_URL}${currentImage.src}`}
+              nextSrc={`${process.env.NEXT_PUBLIC_ADMIN_URL}${nextImage.src}`}
+              nextSrcThumbnail={`${process.env.NEXT_PUBLIC_ADMIN_URL}${nextImage.src}`}
+              prevSrc={`${process.env.NEXT_PUBLIC_ADMIN_URL}${prevImage.src}`}
+              prevSrcThumbnail={`${process.env.NEXT_PUBLIC_ADMIN_URL}${prevImage.src}`}
               onCloseRequest={handleClose}
               onMovePrevRequest={handleMovePrev}
               onMoveNextRequest={handleMoveNext}

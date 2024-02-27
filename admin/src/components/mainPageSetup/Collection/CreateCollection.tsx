@@ -23,6 +23,7 @@ const CreateCollection: FC = (() => {
     register,
     errors,
     validate,
+    setValidate,
     resetField,
     onSubmit,
     formTrigger,
@@ -42,7 +43,8 @@ const CreateCollection: FC = (() => {
               values={values}
               clearErrors={clearErrors}
               setError={setError}
-              register={register} errors={errors} />,
+              register={register} errors={errors}
+              setValidate={setValidate} />,
           stepId: 'titles',
           isValidated: () => validate,
           handleChange: () => { },

@@ -908,6 +908,7 @@ const LangingStyle = makeStyles<
     },
     title: {
       color: theme.palette.text.color,
+      fontSize: '2.75rem',
     },
     subtitle: {
       color: theme.palette.text.color,

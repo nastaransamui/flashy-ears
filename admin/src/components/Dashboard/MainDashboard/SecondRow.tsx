@@ -174,7 +174,7 @@ const SecondRow: FC = (() => {
       objecData[element['country_code' as keyof typeof element] as keyof typeof objecData] = element.firstNumber;
       result.push([
         <img
-          src={`/admin/flags/128x128/${element.flag}`}
+          src={`${process.env[`NEXT_PUBLIC_${process.env['NODE_ENV']}`]}/admin/flags/128x128/${element.flag}`}
           style={{ width: 30, height: 30 }}
           alt=''
           key={'flag'}

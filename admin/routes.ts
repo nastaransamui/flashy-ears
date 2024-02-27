@@ -138,6 +138,7 @@ var dashRoutes: RoutesType[] = (module.exports = [
             predefineDb: false,
             activeOnly: false,
             editUrl: '/main-page-setup/collections/Collection',
+            lookUps: ['productData'],
           },
           {
             path: '/main-page-setup/collections/collection',
@@ -268,6 +269,7 @@ var dashRoutes: RoutesType[] = (module.exports = [
         predefineDb: false,
         activeOnly: false,
         editUrl: '/colors-data/colors/Color',
+        lookUps: ['productData'],
       },
       {
         path: '/colors-data/colors/Color',

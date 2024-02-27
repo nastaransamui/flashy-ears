@@ -403,7 +403,7 @@ const MainPageImagesComponent: FC = (() => {
                           <i aria-hidden="true">{t('scrolldown')}</i>
                         </a>
                       </div>
-                      <h2 className={classes.slide__title} ref={elRefs[i]}>{addSpan(slide[`title_${lang}` as keyof typeof slide])}</h2>
+                      <h2 className={classes.slide__title} ref={elRefs[i]}>{addSpan(slide[`label_${lang}` as keyof typeof slide])}</h2>
                       <p className={classes.slide__desc} ref={desRefs[i]}>{addSpan(slide[`desc_${lang}` as keyof typeof slide])}</p>
                       <Link href={{
                         pathname: '/collections',

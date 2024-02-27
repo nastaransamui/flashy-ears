@@ -92,7 +92,7 @@ const CardCollapseArea = forwardRef<Ref, CardCollapseAreaTypes>(({ elRefs, index
                       primaryValue = key !== 'phones' ?
                         key == 'gallery' ? `${value.length} ${t('images')}` :
                           key == 'colors' ?
-                            <span style={{ display: 'flex' }}>
+                            <span style={{ display: 'flex', flexWrap: 'wrap' }}>
                               {value.map((color: any) => (
                                 <Tooltip
                                   TransitionComponent={Zoom}
@@ -130,7 +130,7 @@ const CardCollapseArea = forwardRef<Ref, CardCollapseAreaTypes>(({ elRefs, index
                                         alt=".."
                                         src={`${collection[`img_${theme.palette.mode}`][0]['src']}`}
                                         style={{ width: 30, height: 30, borderRadius: '50%', }} />
-                                      <span style={{ paddingLeft: 10, paddingTop: 6 }}>{collection[`title_${i18n.language}`]}</span>
+                                      <span style={{ paddingLeft: 10, paddingTop: 6 }}>{collection[`label_${i18n.language}`]}</span>
                                     </div>
                                   ))}
                                 </span> :

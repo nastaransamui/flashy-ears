@@ -12,6 +12,7 @@ import StepsWizards from "@/shared/StepsWizard/StepsWizard";
 import ColorForm from "./ColorForm";
 
 import Loading from "@/shared/Loading";
+import { CollectionFormProduct } from "../../mainPageSetup/Collection/CollectionForm";
 
 const EditColor: FC = (() => {
 
@@ -21,6 +22,7 @@ const EditColor: FC = (() => {
     handleSubmit,
     formTrigger,
     onSubmit,
+    getValues,
     errors,
     setError,
     clearErrors,
@@ -33,6 +35,7 @@ const EditColor: FC = (() => {
     handleColorChange,
     hanldeProductsData,
     t,
+    i18n,
     validate
   } = editColorHook(singleData)
 
@@ -68,10 +71,12 @@ const EditColor: FC = (() => {
                   {singleData?.productData == undefined ? <Loading color="" /> :
                     <>
                       <LookUpsPagination
-                        stepIndex={1}
-                        stepId="products"
+                        stepIndex={0}
+                        stepId="productData"
                         total={values[1].totalProducts} />
-                      {JSON.stringify(values[1])}
+                      <CollectionFormProduct
+                        total={values[1]['totalProducts']}
+                        productData={values[1]['productData']} />
                     </>
                   }
                 </div>,
@@ -86,8 +91,8 @@ const EditColor: FC = (() => {
             },
           ]
         }
-        title={t('editColor')}
-        subtitle=""
+        title={getValues(`label_${i18n.language}`) || t('editColor')}
+        subtitle={t('editColor')}
         formId='color-form'
         formTrigger={formTrigger}
         onSubmit={onSubmit}

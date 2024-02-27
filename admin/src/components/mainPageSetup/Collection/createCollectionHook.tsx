@@ -16,8 +16,10 @@ let createCollection = '/admin/api/home/createCollection'
 interface StatePropsTitle {
   desc_en: string;
   desc_th: string;
-  title_en: string;
-  title_th: string,
+  label_en: string;
+  label_th: string;
+  name_en: string;
+  name_th: string;
   linkTitle_en: string,
   linkTitle_th: string,
 }
@@ -35,16 +37,44 @@ const createCollectionHook = () => {
   const { adminAccessToken } = useSelector<State, State>(state => state)
   const [values, setValues] = useState<any>([
     {
-      title_en: '',
-      title_th: '',
+      label_en: '',
+      label_th: '',
+      name_en: '',
+      name_th: '',
       desc_en: '',
       desc_th: '',
       linkTitle_en: '',
       linkTitle_th: '',
     },
     {
-      img_dark: '',
-      img_light: '',
+      img_dark: [
+        {
+          height: 0,
+          width: 0,
+          isSelected: false,
+          tags: [
+            {
+              value: '', title: ''
+            }
+          ],
+          path: '',
+          src: ''
+        }
+      ],
+      img_light: [
+        {
+          height: 0,
+          width: 0,
+          isSelected: false,
+          tags: [
+            {
+              value: '', title: ''
+            }
+          ],
+          path: '',
+          src: ''
+        }
+      ],
     }
   ]);
 
@@ -66,8 +96,10 @@ const createCollectionHook = () => {
   const onSubmit = (data: any) => {
     const formData = new FormData();
     if (validate && imagevalidate) {
-      formData.append("title_en", data.title_en);
-      formData.append("title_th", data.title_th);
+      formData.append("label_en", data.label_en);
+      formData.append("label_th", data.label_th);
+      formData.append("name_en", data.name_en);
+      formData.append("name_th", data.name_th);
       formData.append("linkTitle_en", data.linkTitle_en);
       formData.append("linkTitle_th", data.linkTitle_th);
       formData.append("desc_en", data.desc_en);
@@ -94,7 +126,7 @@ const createCollectionHook = () => {
             payload: false
           })
           if (success) {
-            toast(<ToastMessage >{`Collection ${data[`title_${i18n.language}`]} was created successfully`}</ToastMessage>, {
+            toast(<ToastMessage >{`Collection ${data[`label_${i18n.language}`]} was created successfully`}</ToastMessage>, {
               onClose: () => {
                 dispatch({ type: 'ADMIN_FORM_SUBMIT', payload: false })
                 dispatch({
@@ -147,8 +179,10 @@ const createCollectionHook = () => {
 
   const formTrigger = async () => {
     const result = await trigger([
-      "title_en",
-      "title_th",
+      'label_en',
+      'label_th',
+      'name_en',
+      'name_th',
       "linkTitle_en",
       "linkTitle_th",
       "desc_en",
@@ -168,6 +202,7 @@ const createCollectionHook = () => {
     register,
     errors,
     validate,
+    setValidate,
     resetField,
     onSubmit,
     formTrigger,

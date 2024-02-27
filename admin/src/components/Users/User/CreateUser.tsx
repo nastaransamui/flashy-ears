@@ -7,15 +7,32 @@ import { useTranslation } from "react-i18next";
 
 //Components
 import StepsWizards from "@/shared/StepsWizard/StepsWizard";
+import { UserFormInformation } from "./UserForm";
 
 const CreateUser: FC = (() => {
   const {
+    theme,
     values,
+    setValues,
+    setValue,
+    getValues,
+    setError,
+    clearErrors,
+    informationValidate,
+    setInformationValidate,
     handleSubmit,
     formTrigger,
-    onSubmit
+    onSubmit,
+    errors,
+    register,
+    unregister,
+    watch,
+    Controller,
+    control,
+    resetField,
+    classes,
+    t,
   } = createUserHook();
-  const { t } = useTranslation('Users')
 
   return (
     <Fragment>
@@ -23,9 +40,22 @@ const CreateUser: FC = (() => {
         steps={
           [{
             stepName: t('userdata'),
-            stepComponent: () => <div>{JSON.stringify(values[0])}</div>,
-            stepId: 'CreateUser',
-            isValidated: () => true,
+            stepComponent: () => <UserFormInformation
+              theme={theme}
+              classes={classes}
+              values={values}
+              watch={watch}
+              errors={errors}
+              register={register}
+              setError={setError}
+              getValues={getValues}
+              setValue={setValue}
+              clearErrors={clearErrors}
+              setValues={setValues}
+              control={control}
+              setInformationValidate={setInformationValidate} />,
+            stepId: 'createUser',
+            isValidated: () => informationValidate,
             handleChange: () => { console.log('handle change') },
             values: values[0]
           },

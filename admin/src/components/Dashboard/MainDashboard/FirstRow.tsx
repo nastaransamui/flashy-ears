@@ -17,7 +17,7 @@ import { getFirstRow } from 'apiCalls/getFirstRow';
 var _ = require('lodash');
 
 
-const cardStyles = makeStyles<{}>()((theme) => {
+const cardStyles: any = makeStyles<{}>()((theme) => {
   return {
     card: {
       border: '0',

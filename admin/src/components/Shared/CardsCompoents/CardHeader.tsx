@@ -101,7 +101,6 @@ const CardHeader: FC<CardHeaderType> = ((props: CardHeaderType) => {
             )
           case `img_light|img_dark` as any:
             const replaceImageCollection = fieldsObject?.[thumbnail.split("|")[theme.palette.mode == 'dark' ? 1 : 0]][0]['src']
-
             return (
               <Badge color={fieldsObject.isActive || fieldsObject.isAdmin ? (profile._id == fieldsObject._id ? 'secondary' : "primary") : "error"}  >
                 <CardAvatar avatarType="img" path={fieldsObject?.[thumbnail] || replaceImageCollection} imageClass='image' />

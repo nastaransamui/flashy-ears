@@ -55,7 +55,6 @@ const EditProduct: FC = (() => {
     t,
   } = editProductHook(singleData)
 
-
   return (
     <Fragment>
       <StepsWizards

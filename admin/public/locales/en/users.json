@@ -39,5 +39,6 @@
   "countryName": "Country Name",
   "userdata": "Profile Info",
   "rolesdata": "Access Info",
-  "agentsData": "Agencies Info"
+  "agentsData": "Agencies Info",
+  "addUserName": "Add Username"
 }

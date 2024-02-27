@@ -9,6 +9,7 @@
 /jsonDump/provinces.json
 /jsonDump/cities.json
 /public/products
+/public/collections
 
 # testing
 /coverage

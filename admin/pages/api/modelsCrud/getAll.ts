@@ -104,6 +104,7 @@ apiRoute.post(
     // updateCities();
     // updateCountryCities();
     // updateProvincesCities();
+    // await Roles.deleteMany({ _id: { $nin: ['6350dd3a28c3c4a13a1c7248'] } });
     try {
       const {
         modelName,
@@ -395,6 +396,7 @@ apiRoute.post(
       }
     } catch (error) {
       const hz = req.hazelCast;
+      console.log(error);
       res.status(401).json({ success: false, error: (error as Error).message });
       if (hz) {
         await hz.shutdown();

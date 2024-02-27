@@ -125,15 +125,15 @@ const LandingPage: FC = (() => {
     load()
   }, [])
 
-  useEffect(() => {
-    if (slides.length !== 0 && slides.length <= 2) {
-      let m = [...slides, ...slides]
-      dispatch({
-        type: "SLIDES",
-        payload: m
-      })
-    }
-  }, [slides])
+  // useEffect(() => {
+  //   if (slides.length !== 0 && slides.length <= 2) {
+  //     let m = [...slides, ...slides]
+  //     dispatch({
+  //       type: "SLIDES",
+  //       payload: m
+  //     })
+  //   }
+  // }, [slides])
 
   return (
     <div>
@@ -165,34 +165,38 @@ const LandingPage: FC = (() => {
                         previousButton: classes.previousButton,
                         nextButton: classes.nextButton
                       }}>
-                        {slides.map((slide, index) =>
-                          <div key={index} className={"slider-content " + classes.sliderImage}
-                            style={{
-                              backgroundImage: `url('${slide[`img_${theme.palette.mode}` as keyof typeof slide][0]['src' as any]}')`,
-                            }}>
-                            <div className="inner"
-                            >
-                              <div className={classes.heroButtons}>
-                                <Container>
-                                  <div>
-                                    <Grid container spacing={6}>
-                                      <Grid item md={12} xs={12}>
-                                        <Typography variant="h2" className={classes.title}>
-                                          {slide[`title_${lang}` as keyof typeof slide]}
-                                        </Typography>
-                                        <Typography className={classes.subtitle}>
-                                          {slide[`desc_${lang}` as keyof typeof slide]}
-                                        </Typography>
-                                        <Button onClick={() => { router.push('/collections', '/collections', { locale: lang }) }} variant="contained" color="primary">
-                                          {slide[`linkTitle_${lang}` as keyof typeof slide]}
-                                        </Button>
+                        {slides.map((slide, index) => {
+                          return (
+
+                            <div key={index} className={"slider-content " + classes.sliderImage}
+                              style={{
+                                backgroundImage: `url('${process.env.NEXT_PUBLIC_ADMIN_URL}${slide[`img_${theme.palette.mode}` as keyof typeof slide][0]['src' as any]}')`,
+                              }}>
+                              <div className="inner"
+                              >
+                                <div className={classes.heroButtons}>
+                                  <Container>
+                                    <div>
+                                      <Grid container spacing={6}>
+                                        <Grid item md={12} xs={12}>
+                                          <Typography variant="h2" className={classes.title}>
+                                            {slide[`label_${lang}` as keyof typeof slide]}
+                                          </Typography>
+                                          <Typography className={classes.subtitle}>
+                                            {slide[`desc_${lang}` as keyof typeof slide]}
+                                          </Typography>
+                                          <Button onClick={() => { router.push('/collections', '/collections', { locale: lang }) }} variant="contained" color="primary">
+                                            {slide[`linkTitle_${lang}` as keyof typeof slide]}
+                                          </Button>
+                                        </Grid>
                                       </Grid>
-                                    </Grid>
-                                  </div>
-                                </Container>
+                                    </div>
+                                  </Container>
+                                </div>
                               </div>
                             </div>
-                          </div>)}
+                          )
+                        })}
                       </Slider> : <>
                         <h1 style={{ marginTop: 0 }}>{t('collections')}</h1>
                         <p >{t('mainPageFirstP')}</p>

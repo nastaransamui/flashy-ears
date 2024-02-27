@@ -133,5 +133,14 @@
   "imageScroll": "Scroll Images",
   "changeHomeLanding": "Change Landing page of home",
   "selectAll": "Select All",
-  "diSelectAll": "Deselect all"
+  "diSelectAll": "Deselect all",
+  "product_label_en": "Product English",
+  "product_label_th": "Product Thai",
+  "colors_id": "Colors",
+  "images": "Main Image",
+  "gallery": "Main Gallery",
+  "createdAt": "Create At",
+  "updatedAt": "Last Update",
+  "colors": "Colors",
+  "clickToImage": "Click to see bigger image."
 }

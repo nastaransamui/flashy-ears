@@ -70,7 +70,16 @@ const editColorHook = (singleData: any) => {
     clearErrors('colorCode')
   }
 
-  const { handleSubmit, watch, setValue, register, formState: { errors }, resetField, setError, clearErrors, trigger }
+  const {
+    handleSubmit,
+    watch,
+    setValue,
+    register,
+    getValues,
+    formState: { errors },
+    resetField,
+    setError,
+    clearErrors, trigger }
     = useForm<any>({});
   const formTrigger = async () => {
     const result = await trigger([
@@ -159,6 +168,7 @@ const editColorHook = (singleData: any) => {
     onSubmit,
     errors,
     setError,
+    getValues,
     clearErrors,
     register,
     watch,
@@ -169,6 +179,7 @@ const editColorHook = (singleData: any) => {
     handleColorChange,
     hanldeProductsData,
     t,
+    i18n,
     validate
   }
 }

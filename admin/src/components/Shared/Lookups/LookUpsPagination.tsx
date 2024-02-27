@@ -27,11 +27,12 @@ const LookUpsPagination: FC<LookUpsPaginationPropsType> = ((
   const dispatch = useDispatch();
   const { setLookupsFilter } = useContext(SingleDataCtx);
   const currentRouteState = useCurrentRouteState();
+
   const { modelName, lookUps, predefineDb } = currentRouteState;
   const lookupsFilter: any = useReadLocalStorage(`${modelName}_Lookup`)!
   const [count, setCount] = useState(0)
-  const [pageNumber, setPageNumber] = useState(lookupsFilter?.[stepIndex][`${modelName}_${stepId}_pageNumber`]);
-  const [perPage, setPerPage] = useState(lookupsFilter?.[stepIndex][`${modelName}_${stepId}_perPage`])
+  const [pageNumber, setPageNumber] = useState(lookupsFilter?.[stepIndex]?.[`${modelName}_${stepId}_pageNumber`]);
+  const [perPage, setPerPage] = useState(lookupsFilter?.[stepIndex]?.[`${modelName}_${stepId}_perPage`])
 
   useEffect(() => {
     if (lookUps !== undefined && lookupsFilter == null) {
@@ -46,8 +47,9 @@ const LookUpsPagination: FC<LookUpsPaginationPropsType> = ((
       })
       setLookupsFilter(() => arrayOfLookup)
     }
+
     setCount(() => total == 0 ? total :
-      Math.ceil(total / lookupsFilter?.[stepIndex][`${modelName}_${stepId}_perPage`] || 10))
+      Math.ceil(total / lookupsFilter?.[stepIndex]?.[`${modelName}_${stepId}_perPage`] || 10))
     setPageNumber(() => pageNumber == null ? 1 : pageNumber)
     setPerPage(() => perPage == null ? 10 : perPage)
     if (total > 0) {
@@ -58,7 +60,7 @@ const LookUpsPagination: FC<LookUpsPaginationPropsType> = ((
     return () => {
 
     }
-  }, [pageNumber, perPage, total])
+  }, [pageNumber, perPage, total, lookupsFilter])
 
   return (
     <Fragment>
@@ -79,7 +81,11 @@ const LookUpsPagination: FC<LookUpsPaginationPropsType> = ((
         <Grid item>
           <MuiPagination
             count={count}
-            page={pageNumber == null ? 1 : pageNumber as number}
+            page={
+              lookupsFilter?.[stepIndex]?.[`${modelName}_${stepId}_pageNumber`]
+                == null ? 1
+                :
+                lookupsFilter?.[stepIndex]?.[`${modelName}_${stepId}_pageNumber`] as number}
             showLastButton
             showFirstButton
             boundaryCount={2}

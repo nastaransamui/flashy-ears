@@ -142,7 +142,7 @@ export async function searchCollections(
 ) {
   const valuesList = await Collections.aggregate([
     { $match: { [fieldValue]: searchRegex } },
-    { $sort: { title_en: 1 } },
+    { $sort: { label_en: 1 } },
     {
       $addFields: {
         dispalyFields: collectionsDisplayField,
@@ -160,10 +160,10 @@ export async function searchCollections(
         autoCompleteSubLabel: {
           $cond: {
             if: {
-              $eq: [{ fieldValue: 'title_en' }, ''],
+              $eq: [{ fieldValue: 'label_en' }, ''],
             },
             then: '',
-            else: '$title_en',
+            else: '$label_en',
           },
         },
         autoCompleteMainLabel: {

@@ -68,6 +68,10 @@ import Agencies, {
 
 import { firstBy } from 'thenby';
 import type { MultiMap } from 'hazelcast-client/lib/proxy/MultiMap';
+var toBoolean = require('to-boolean');
+
+//Add nginx link to images for production serve image
+let addLinkToImage = !toBoolean(process.env.NEXT_PUBLIC_SERVERLESS);
 
 var ObjectId = require('mongodb').ObjectID;
 export function paginate(array: object[], perPage: number, pageNumber: number) {
@@ -256,16 +260,115 @@ findFunctions.findVideosById = async function findVideosById(_id: string) {
   return video[0];
 };
 findFunctions.findCollectionsById = async function findCollectionsById(
-  _id: string
+  _id: string,
+  lookupsFilter: any
 ) {
+  const indexOfProductData = lookupsFilter.findIndex((a: any) =>
+    Object.keys(a).some((e) => /productData/g.test(e))
+  );
+  let m =
+    lookupsFilter[indexOfProductData][`Collections_productData_perPage`] *
+    lookupsFilter[indexOfProductData][`Collections_productData_pageNumber`];
   let collection = await Collections.aggregate([
     { $match: { _id: ObjectId(_id) } },
+    {
+      $unwind: {
+        path: '$img_light',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $set: {
+        'img_light.src': {
+          $cond: {
+            if: {
+              $eq: [{ $ifNull: ['$img_light.src', ''] }, ''],
+            },
+            then: '/admin/images/faces/avatar1.jpg',
+            else: {
+              $concat: [
+                addLinkToImage
+                  ? process.env[`NEXT_PUBLIC_${process.env.NODE_ENV}`]
+                  : '',
+                '$img_light.src',
+              ],
+            },
+          },
+        },
+      },
+    },
+    {
+      $unwind: {
+        path: '$img_dark',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $set: {
+        'img_dark.src': {
+          $cond: {
+            if: {
+              $eq: [{ $ifNull: ['$img_dark.src', ''] }, ''],
+            },
+            then: '/admin/images/faces/avatar1.jpg',
+            else: {
+              $concat: [
+                addLinkToImage
+                  ? process.env[`NEXT_PUBLIC_${process.env.NODE_ENV}`]
+                  : '',
+                '$img_dark.src',
+              ],
+            },
+          },
+        },
+      },
+    },
+    {
+      $group: {
+        _id: '$_id',
+        label_en: { $first: '$label_en' },
+        label_th: { $first: '$label_th' },
+        name_en: { $first: '$name_en' },
+        name_th: { $first: '$name_th' },
+        img_light: { $push: '$img_light' },
+        img_dark: { $push: '$img_dark' },
+        desc_en: { $first: '$desc_en' },
+        desc_th: { $first: '$desc_th' },
+        linkTitle_en: { $first: '$linkTitle_en' },
+        linkTitle_th: { $first: '$linkTitle_th' },
+        products_id: { $first: '$products_id' },
+      },
+    },
     {
       $lookup: {
         from: 'products',
         localField: 'products_id',
         foreignField: '_id',
-        pipeline: [],
+        pipeline: [
+          {
+            $sort: {
+              [lookupsFilter[indexOfProductData][
+                `Collections_productData_sortByField`
+              ]]:
+                lookupsFilter[indexOfProductData][
+                  `Collections_productData_sortDirection`
+                ],
+            },
+          },
+          {
+            $skip:
+              m -
+              lookupsFilter[indexOfProductData][
+                `Collections_productData_perPage`
+              ],
+          },
+          {
+            $limit:
+              lookupsFilter[indexOfProductData][
+                `Collections_productData_perPage`
+              ],
+          },
+        ],
         as: 'productData',
       },
     },
@@ -282,6 +385,126 @@ findFunctions.findProductsById = async function findProductsById(_id: string) {
   let collection = await Products.aggregate([
     { $match: { _id: ObjectId(_id) } },
     {
+      $unwind: {
+        path: '$gallery',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $set: {
+        'gallery.src': {
+          $concat: [
+            addLinkToImage
+              ? process.env[`NEXT_PUBLIC_${process.env.NODE_ENV}`]
+              : '',
+            '$gallery.src',
+          ],
+        },
+      },
+    },
+    {
+      $unwind: {
+        path: '$images.front',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $unwind: {
+        path: '$images.back',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $group: {
+        _id: '$_id',
+        product_label_en: { $first: '$product_label_en' },
+        product_label_th: { $first: '$product_label_th' },
+        product_name_en: { $first: '$product_name_en' },
+        product_name_th: { $first: '$product_name_th' },
+        product_subtitle_en: { $first: '$product_subtitle_en' },
+        product_subtitle_th: { $first: '$product_subtitle_th' },
+        product_description_en: { $first: '$product_description_en' },
+        product_description_th: { $first: '$product_description_th' },
+        gallery: { $push: '$gallery' },
+        front: { $first: '$images.front' },
+        back: { $first: '$images.back' },
+        colors_id: { $first: '$colors_id' },
+        collection_id: { $first: '$collection_id' },
+        financials: { $first: '$financials' },
+        createdAt: { $first: '$createdAt' },
+        updatedAt: { $first: '$updatedAt' },
+      },
+    },
+    {
+      $unwind: {
+        path: '$front',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $unwind: {
+        path: '$back',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $unwind: {
+        path: '$back',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $set: {
+        'back.src': {
+          $concat: [
+            addLinkToImage
+              ? process.env[`NEXT_PUBLIC_${process.env.NODE_ENV}`]
+              : '',
+            '$back.src',
+          ],
+        },
+      },
+    },
+    {
+      $group: {
+        _id: '$_id',
+        back: { $push: '$back' },
+        front: { $first: '$front' },
+        gallery: { $first: '$gallery' },
+        product_label_en: { $first: '$product_label_en' },
+        product_label_th: { $first: '$product_label_th' },
+        product_name_en: { $first: '$product_name_en' },
+        product_name_th: { $first: '$product_name_th' },
+        product_subtitle_en: { $first: '$product_subtitle_en' },
+        product_subtitle_th: { $first: '$product_subtitle_th' },
+        product_description_en: { $first: '$product_description_en' },
+        product_description_th: { $first: '$product_description_th' },
+        colors_id: { $first: '$colors_id' },
+        collection_id: { $first: '$collection_id' },
+        financials: { $first: '$financials' },
+        createdAt: { $first: '$createdAt' },
+        updatedAt: { $first: '$updatedAt' },
+      },
+    },
+    {
+      $unwind: {
+        path: '$front',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $set: {
+        'front.src': {
+          $concat: [
+            addLinkToImage
+              ? process.env[`NEXT_PUBLIC_${process.env.NODE_ENV}`]
+              : '',
+            '$front.src',
+          ],
+        },
+      },
+    },
+    {
       $lookup: {
         from: 'colors',
         localField: 'colors_id',
@@ -297,11 +520,50 @@ findFunctions.findProductsById = async function findProductsById(_id: string) {
         as: 'collectionData',
       },
     },
+    {
+      $group: {
+        _id: '$_id',
+        back: { $first: '$back' },
+        front: { $push: '$front' },
+        gallery: { $first: '$gallery' },
+        product_label_en: { $first: '$product_label_en' },
+        product_label_th: { $first: '$product_label_th' },
+        product_name_en: { $first: '$product_name_en' },
+        product_name_th: { $first: '$product_name_th' },
+        product_subtitle_en: { $first: '$product_subtitle_en' },
+        product_subtitle_th: { $first: '$product_subtitle_th' },
+        product_description_en: { $first: '$product_description_en' },
+        product_description_th: { $first: '$product_description_th' },
+        colors_id: { $first: '$colors_id' },
+        colors: { $first: '$colors' },
+        collection_id: { $first: '$collection_id' },
+        collectionData: { $first: '$collectionData' },
+        financials: { $first: '$financials' },
+        createdAt: { $first: '$createdAt' },
+        updatedAt: { $first: '$updatedAt' },
+      },
+    },
+    {
+      $addFields: {
+        images: [{ front: '$front' }, { back: '$back' }],
+      },
+    },
+    { $unset: ['back', 'front'] },
   ]);
   return collection[0];
 };
 
-findFunctions.findColorsById = async function findColorsById(_id: string) {
+findFunctions.findColorsById = async function findColorsById(
+  _id: string,
+  lookupsFilter: any
+) {
+  const indexOfProductData = lookupsFilter.findIndex((a: any) =>
+    Object.keys(a).some((e) => /productData/g.test(e))
+  );
+
+  let m =
+    lookupsFilter[indexOfProductData][`Colors_productData_perPage`] *
+    lookupsFilter[indexOfProductData][`Colors_productData_pageNumber`];
   let collection = await Colors.aggregate([
     { $match: { _id: ObjectId(_id) } },
     {
@@ -309,7 +571,27 @@ findFunctions.findColorsById = async function findColorsById(_id: string) {
         from: 'products',
         localField: 'products_id',
         foreignField: '_id',
-        pipeline: [],
+        pipeline: [
+          {
+            $sort: {
+              [lookupsFilter[indexOfProductData][
+                `Colors_productData_sortByField`
+              ]]:
+                lookupsFilter[indexOfProductData][
+                  `Colors_productData_sortDirection`
+                ],
+            },
+          },
+          {
+            $skip:
+              m -
+              lookupsFilter[indexOfProductData][`Colors_productData_perPage`],
+          },
+          {
+            $limit:
+              lookupsFilter[indexOfProductData][`Colors_productData_perPage`],
+          },
+        ],
         as: 'productData',
       },
     },
@@ -1353,30 +1635,33 @@ export async function findAllRolesWithPagginate(
   sortByField: string,
   sortDirection: 1 | -1
 ) {
-  const dataValue = await collection.aggregate([
-    {
-      $sort: { [sortByField]: sortDirection },
-    },
-    {
-      $addFields: {
-        dispalyFields: rolesDisplayField,
-        muiData: rolesMuiDataObj,
+  const dataValue = await collection.aggregate(
+    [
+      {
+        $sort: { [sortByField]: sortDirection },
       },
-    },
-    {
-      $facet: {
-        paginatedResults: [
-          { $skip: perPage * (pageNumber - 1) },
-          { $limit: perPage },
-        ],
-        totalCount: [
-          {
-            $count: 'count',
-          },
-        ],
+      {
+        $addFields: {
+          dispalyFields: rolesDisplayField,
+          muiData: rolesMuiDataObj,
+        },
       },
-    },
-  ]);
+      {
+        $facet: {
+          paginatedResults: [
+            { $skip: perPage * (pageNumber - 1) },
+            { $limit: perPage },
+          ],
+          totalCount: [
+            {
+              $count: 'count',
+            },
+          ],
+        },
+      },
+    ],
+    { allowDiskUse: true }
+  );
   const result = {
     data: dataValue[0].paginatedResults,
     totalCount:
@@ -1436,6 +1721,74 @@ export async function findAllCollectionsWithPagginate(
   sortDirection: 1 | -1
 ) {
   const dataValue = await collection.aggregate([
+    {
+      $unwind: {
+        path: '$img_light',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $set: {
+        'img_light.src': {
+          $cond: {
+            if: {
+              $eq: [{ $ifNull: ['$img_light.src', ''] }, ''],
+            },
+            then: '/admin/images/faces/avatar1.jpg',
+            else: {
+              $concat: [
+                addLinkToImage
+                  ? process.env[`NEXT_PUBLIC_${process.env.NODE_ENV}`]
+                  : '',
+                '$img_light.src',
+              ],
+            },
+          },
+        },
+      },
+    },
+    {
+      $unwind: {
+        path: '$img_dark',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $set: {
+        'img_dark.src': {
+          $cond: {
+            if: {
+              $eq: [{ $ifNull: ['$img_dark.src', ''] }, ''],
+            },
+            then: '/admin/images/faces/avatar1.jpg',
+            else: {
+              $concat: [
+                addLinkToImage
+                  ? process.env[`NEXT_PUBLIC_${process.env.NODE_ENV}`]
+                  : '',
+                '$img_dark.src',
+              ],
+            },
+          },
+        },
+      },
+    },
+    {
+      $group: {
+        _id: '$_id',
+        label_en: { $first: '$label_en' },
+        label_th: { $first: '$label_th' },
+        name_en: { $first: '$name_en' },
+        name_th: { $first: '$name_th' },
+        img_light: { $push: '$img_light' },
+        img_dark: { $push: '$img_dark' },
+        desc_en: { $first: '$desc_en' },
+        desc_th: { $first: '$desc_th' },
+        linkTitle_en: { $first: '$linkTitle_en' },
+        linkTitle_th: { $first: '$linkTitle_th' },
+        products_id: { $first: '$products_id' },
+      },
+    },
     {
       $sort: { [sortByField]: sortDirection },
     },
@@ -1522,7 +1875,124 @@ export async function findAllProductsWithPagginate(
 ) {
   const dataValue = await collection.aggregate([
     {
-      $sort: { [sortByField]: sortDirection },
+      $unwind: {
+        path: '$gallery',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $set: {
+        'gallery.src': {
+          $concat: [
+            addLinkToImage
+              ? process.env[`NEXT_PUBLIC_${process.env.NODE_ENV}`]
+              : '',
+            '$gallery.src',
+          ],
+        },
+      },
+    },
+    {
+      $unwind: {
+        path: '$images.front',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $unwind: {
+        path: '$images.back',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $group: {
+        _id: '$_id',
+        product_label_en: { $first: '$product_label_en' },
+        product_label_th: { $first: '$product_label_th' },
+        product_name_en: { $first: '$product_name_en' },
+        product_name_th: { $first: '$product_name_th' },
+        product_subtitle_en: { $first: '$product_subtitle_en' },
+        product_subtitle_th: { $first: '$product_subtitle_th' },
+        product_description_en: { $first: '$product_description_en' },
+        product_description_th: { $first: '$product_description_th' },
+        gallery: { $push: '$gallery' },
+        front: { $first: '$images.front' },
+        back: { $first: '$images.back' },
+        colors_id: { $first: '$colors_id' },
+        collection_id: { $first: '$collection_id' },
+        financials: { $first: '$financials' },
+        createdAt: { $first: '$createdAt' },
+        updatedAt: { $first: '$updatedAt' },
+      },
+    },
+    {
+      $unwind: {
+        path: '$front',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $unwind: {
+        path: '$back',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $unwind: {
+        path: '$back',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $set: {
+        'back.src': {
+          $concat: [
+            addLinkToImage
+              ? process.env[`NEXT_PUBLIC_${process.env.NODE_ENV}`]
+              : '',
+            '$back.src',
+          ],
+        },
+      },
+    },
+    {
+      $group: {
+        _id: '$_id',
+        back: { $push: '$back' },
+        front: { $first: '$front' },
+        gallery: { $first: '$gallery' },
+        product_label_en: { $first: '$product_label_en' },
+        product_label_th: { $first: '$product_label_th' },
+        product_name_en: { $first: '$product_name_en' },
+        product_name_th: { $first: '$product_name_th' },
+        product_subtitle_en: { $first: '$product_subtitle_en' },
+        product_subtitle_th: { $first: '$product_subtitle_th' },
+        product_description_en: { $first: '$product_description_en' },
+        product_description_th: { $first: '$product_description_th' },
+        colors_id: { $first: '$colors_id' },
+        collection_id: { $first: '$collection_id' },
+        financials: { $first: '$financials' },
+        createdAt: { $first: '$createdAt' },
+        updatedAt: { $first: '$updatedAt' },
+      },
+    },
+    {
+      $unwind: {
+        path: '$front',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $set: {
+        'front.src': {
+          $concat: [
+            addLinkToImage
+              ? process.env[`NEXT_PUBLIC_${process.env.NODE_ENV}`]
+              : '',
+            '$front.src',
+          ],
+        },
+      },
     },
     {
       $lookup: {
@@ -1541,10 +2011,38 @@ export async function findAllProductsWithPagginate(
       },
     },
     {
+      $group: {
+        _id: '$_id',
+        back: { $first: '$back' },
+        front: { $push: '$front' },
+        gallery: { $first: '$gallery' },
+        product_label_en: { $first: '$product_label_en' },
+        product_label_th: { $first: '$product_label_th' },
+        product_name_en: { $first: '$product_name_en' },
+        product_name_th: { $first: '$product_name_th' },
+        product_subtitle_en: { $first: '$product_subtitle_en' },
+        product_subtitle_th: { $first: '$product_subtitle_th' },
+        product_description_en: { $first: '$product_description_en' },
+        product_description_th: { $first: '$product_description_th' },
+        colors_id: { $first: '$colors_id' },
+        colors: { $first: '$colors' },
+        collection_id: { $first: '$collection_id' },
+        collectionData: { $first: '$collectionData' },
+        financials: { $first: '$financials' },
+        createdAt: { $first: '$createdAt' },
+        updatedAt: { $first: '$updatedAt' },
+      },
+    },
+    {
       $addFields: {
         dispalyFields: productsDisplayField,
         muiData: productsMuiDataObj,
+        images: [{ front: '$front' }, { back: '$back' }],
       },
+    },
+    { $unset: ['back', 'front'] },
+    {
+      $sort: { [sortByField]: sortDirection },
     },
     {
       $facet: {
