@@ -5,7 +5,6 @@ const url = `${process.env.NEXT_PUBLIC_ADMIN_VERCEL}/api/home/theme`;
 export const getHomeTheme = async () => {
   let homeTheme;
   try {
-    console.log({ url });
     homeTheme = await axios
       .get(url, {
         headers: {

@@ -463,22 +463,22 @@ const ProductComponent: FC = (() => {
                       {
                         product.images.map((side: any, index: number) => {
                           if (side['front'] && side['back'] == undefined) {
-                            frontImageSrc = side['front'].filter((a: any) => a.color == selectedColor[i][product['product_label_en']])[0]['src']
+                            frontImageSrc = side['front'].filter((a: any) => a.color == selectedColor[i][product['product_label_en']])[0]['src'].replace('/admin', '')
                           }
                           if (side['back'] && side['front'] == undefined) {
-                            backImageSrc = side['back'].filter((a: any) => a.color == selectedColor[i][product['product_label_en']])[0]['src']
+                            backImageSrc = side['back'].filter((a: any) => a.color == selectedColor[i][product['product_label_en']])[0]['src'].replace('/admin', '')
                           }
                           return (
                             <Fragment key={index}>
                               {side['back'] !== undefined && <img className={
                                 cx(turn[i] ? classes.product__img_back : classes.product__img_back_turn)
                               }
-                                src={`${process.env.NEXT_PBULIC_FOLDER_PUBLIC_UAT}${backImageSrc}`}
+                                src={`${process.env.NEXT_PUBLIC_FOLDER_PUBLIC_UAT}${backImageSrc}`}
                                 alt='img' />}
                               {side['front'] !== undefined && <img className={
                                 cx(turn[i] ? classes.product__img : classes.product__img_turn)
                               }
-                                src={`${process.env.NEXT_PBULIC_FOLDER_PUBLIC_UAT}${frontImageSrc}`}
+                                src={`${process.env.NEXT_PUBLIC_FOLDER_PUBLIC_UAT}${frontImageSrc}`}
                                 alt='img' />}
                             </Fragment>
                           )
@@ -559,12 +559,12 @@ const ProductComponent: FC = (() => {
           {
             productItems.map((product: any, index) => {
               let selectedGallery = product.gallery.filter((a: any) => a.isSelected)
-              let imgSrc = selectedGallery?.[0]?.['src'] || product.gallery?.[0]?.['src']
+              let imgSrc = selectedGallery?.[0]?.['src'].replace('/admin', '') || product.gallery?.[0]?.['src'].replace('/admin', '')
               return (
                 <Link key={index} locale={lang} className={classes.mediaItem} href={{
                   pathname: "/gallery"
                 }}>
-                  <img className={classes.mediaItem_img} src={`${process.env.NEXT_PBULIC_FOLDER_PUBLIC_UAT}${imgSrc}`} onClick={() => {
+                  <img className={classes.mediaItem_img} src={`${process.env.NEXT_PUBLIC_FOLDER_PUBLIC_UAT}${imgSrc}`} onClick={() => {
                     setCookie('galleryImageModel', product['product_name_en'], {});
                   }} />
                 </Link>

@@ -33,7 +33,7 @@ const ImageComponent = (props: ThumbnailImageProps) => {
   const { imageProps } = props
   const { src, alt, key, style } = imageProps
   return (
-    <img src={`${process.env.NEXT_PBULIC_FOLDER_PUBLIC_UAT}${src}`} alt={alt} key={key} style={style} />
+    <img src={`${process.env.NEXT_PUBLIC_FOLDER_PUBLIC_UAT}${src.replace('/admin', '')}`} alt={alt} key={key} style={style} />
 
   );
 };
@@ -153,9 +153,9 @@ const GalleryComponent: FC = (() => {
                   const bgImageArr = model.gallery.filter((a: any) => a.isSelected)
                   let bgImage: string;
                   if (bgImageArr.length !== 0) {
-                    bgImage = bgImageArr[0]?.['src']
+                    bgImage = bgImageArr[0]?.['src'].replace('/admin', '')
                   } else {
-                    bgImage = model.gallery[0]?.['src']
+                    bgImage = model.gallery[0]?.['src'].replace('/admin', '')
                   }
                   return (
                     <div
@@ -167,7 +167,7 @@ const GalleryComponent: FC = (() => {
                       }}>
                       <Paper className={cx(classes.imgThumb, setSize('short'))}>
                         <div className={classes.figure}>
-                          <div className={classes.img} style={{ backgroundImage: `url(${process.env.NEXT_PBULIC_FOLDER_PUBLIC_UAT}${bgImage})` }} />
+                          <div className={classes.img} style={{ backgroundImage: `url(${process.env.NEXT_PUBLIC_FOLDER_PUBLIC_UAT}${bgImage})` }} />
                         </div>
                         <div className={cx(classes.detail, galleryImageModel == model['product_name_en'] && classes.selectHoverReplica)} >
                           <Typography variant="h6" >{model[`product_label_${lang}` as keyof typeof model]}</Typography>
@@ -190,9 +190,9 @@ const GalleryComponent: FC = (() => {
                   const bgImageArr = model.gallery.filter((a: any) => a.isSelected)
                   let bgImage: string;
                   if (bgImageArr.length !== 0) {
-                    bgImage = bgImageArr[0]?.['src']
+                    bgImage = bgImageArr[0]?.['src'].replace('/admin', '')
                   } else {
-                    bgImage = model.gallery[0]?.['src']
+                    bgImage = model.gallery[0]?.['src'].replace('/admin', '')
                   }
                   return (
                     <div className={classes.itemCarousel} key={model._id} onClick={() => {
@@ -226,13 +226,13 @@ const GalleryComponent: FC = (() => {
 
           {!!currentImage && (
             <Lightbox
-              mainSrc={`${process.env.NEXT_PBULIC_FOLDER_PUBLIC_UAT}${currentImage.src}`}
+              mainSrc={`${process.env.NEXT_PUBLIC_FOLDER_PUBLIC_UAT}${currentImage.src.replace('/admin', '')}`}
               imageTitle={currentImage!.tags?.[0]?.['title']}
-              mainSrcThumbnail={`${process.env.NEXT_PBULIC_FOLDER_PUBLIC_UAT}${currentImage.src}`}
-              nextSrc={`${process.env.NEXT_PBULIC_FOLDER_PUBLIC_UAT}${nextImage.src}`}
-              nextSrcThumbnail={`${process.env.NEXT_PBULIC_FOLDER_PUBLIC_UAT}${nextImage.src}`}
-              prevSrc={`${process.env.NEXT_PBULIC_FOLDER_PUBLIC_UAT}${prevImage.src}`}
-              prevSrcThumbnail={`${process.env.NEXT_PBULIC_FOLDER_PUBLIC_UAT}${prevImage.src}`}
+              mainSrcThumbnail={`${process.env.NEXT_PUBLIC_FOLDER_PUBLIC_UAT}${currentImage.src.replace('/admin', '')}`}
+              nextSrc={`${process.env.NEXT_PUBLIC_FOLDER_PUBLIC_UAT}${nextImage.src.replace('/admin', '')}`}
+              nextSrcThumbnail={`${process.env.NEXT_PUBLIC_FOLDER_PUBLIC_UAT}${nextImage.src.replace('/admin', '')}`}
+              prevSrc={`${process.env.NEXT_PUBLIC_FOLDER_PUBLIC_UAT}${prevImage.src.replace('/admin', '')}`}
+              prevSrcThumbnail={`${process.env.NEXT_PUBLIC_FOLDER_PUBLIC_UAT}${prevImage.src.replace('/admin', '')}`}
               onCloseRequest={handleClose}
               onMovePrevRequest={handleMovePrev}
               onMoveNextRequest={handleMoveNext}
