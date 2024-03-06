@@ -1287,7 +1287,7 @@ export const ProductsFormImages: FC<ProductsFormImagesTypes> = ((props: Products
                               <img
                                 width={front['width']}
                                 height={front['height']}
-                                src={front['src']}
+                                src={front['src'].replace('/admin', '')}
                                 className={classes.img} />
                             </Grid>
                         }
@@ -1396,7 +1396,7 @@ export const ProductsFormImages: FC<ProductsFormImagesTypes> = ((props: Products
                               <img
                                 width={back['width']}
                                 height={back['height']}
-                                src={back['src']}
+                                src={back['src'].replace('/admin', '')}
                                 className={classes.img} />
                             </Grid>
                         }
@@ -1490,11 +1490,11 @@ export const ProductsFormGallery: FC<ProductsFormGalleryTypes> = ((props: Produc
   useEffect(() => {
 
     setImages(() => {
-      console.log()
+      let m = values[4]['gallery'].map((a: any) => ({ ...a, src: a.src.replace('/admin', '') }))
       if (values[4]['gallery'].length !== 0 && !values[4]['gallery'].some((a: ImageGalleryType) => a.isSelected)) {
         values[4]['gallery'][0]['isSelected'] = true
       }
-      return values[4]['gallery']
+      return m
     })
   }, [])
   useEffect(() => {
@@ -1513,7 +1513,8 @@ export const ProductsFormGallery: FC<ProductsFormGalleryTypes> = ((props: Produc
         <>
           <Typography align="center" variant="inherit" dangerouslySetInnerHTML={{ __html: t('clickToDelete') }} />
           <Typography align="center" variant="inherit"> {getValues('gallery')?.length}{'  '}{t('images')}</Typography></>}
-      <Gallery images={images}
+      <Gallery
+        images={images}
         onClick={handleClick}
         onSelect={handleSelect}
       />

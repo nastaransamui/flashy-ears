@@ -170,12 +170,12 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
                         </span>
                       )
                     case 'collectionData':
-
+                      console.log()
                       return (
                         <div key={(key + value.toString())} style={{ display: 'flex', width: '100%', }}>
                           <img
                             alt=".."
-                            src={`${params.row[key][0][`img_${theme.palette.mode}`][0]['src']}`}
+                            src={`${process.env.NEXT_PUBLIC_development}${params.row[key][0][`img_${theme.palette.mode}`][0]['src']}`}
                             style={{ width: 30, height: 30, borderRadius: '50%', }} />
                           <span style={{ paddingLeft: 10, paddingTop: 6 }}>{params.row[key][0][`label_${i18n.language}`]}</span>
                         </div>
@@ -310,8 +310,8 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
                           )
                         case 'gallery' as any:
                           let filterArrayBySelected = params.row['gallery'].filter((a: any) => a.isSelected)
-                          let pathFilterBySelected = filterArrayBySelected.length > 0 ? filterArrayBySelected?.[0]?.['src'] : params.row['gallery'][0]['src'] || '/admin/images/faces/avatar1.jpg'
-                          console.log()
+                          let pathFilterBySelected = filterArrayBySelected.length > 0 ? filterArrayBySelected?.[0]?.['src'].replace('/admin', '') : params.row['gallery'][0]['src'].replace('/admin', '') || '/admin/images/faces/avatar1.jpg'
+
                           return (
                             <div style={{ display: 'flex', width: '100%' }}>
                               {media !== '' as any

@@ -110,7 +110,7 @@ const CardHeader: FC<CardHeaderType> = ((props: CardHeaderType) => {
             const replaceImageProduct =
               thumbnail == 'gallery' ? '/admin/images/faces/avatar1.jpg' : thumbnail
             let filterArrayBySelected = fieldsObject[thumbnail].filter((a: any) => a.isSelected)
-            let pathFilterBySelected = filterArrayBySelected.length > 0 ? filterArrayBySelected?.[0]?.['src'] : fieldsObject[thumbnail]?.[0]?.['src']
+            let pathFilterBySelected = filterArrayBySelected.length > 0 ? filterArrayBySelected?.[0]?.['src'].replace('/admin', '') : fieldsObject[thumbnail]?.[0]?.['src'].replace('/admin', '')
             return (
               <Badge color={fieldsObject.isActive ? (profile._id == fieldsObject._id ? 'secondary' : "primary") : "error"}  >
                 <CardAvatar avatarType="img" path={pathFilterBySelected || replaceImageProduct} imageClass='image' />

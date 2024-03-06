@@ -181,7 +181,8 @@ const CardContent: FC<CardContentTypes> = ((props: CardContentTypes) => {
                 component="img"
                 height="194"
                 className={classes.image}
-                image={path?.[`src` as keyof typeof path] as string || replaceImageProduct}
+                //@ts-ignore
+                image={path?.[`src` as keyof typeof path].replace('/admin', '') as string || replaceImageProduct}
                 alt=""
               />
             )
