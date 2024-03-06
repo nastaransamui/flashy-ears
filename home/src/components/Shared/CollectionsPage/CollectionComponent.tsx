@@ -57,7 +57,7 @@ const CollectionComponent: FC = (() => {
                     <div className={classes.figure}>
                       <div className={classes.img} style={{
                         //@ts-ignore
-                        backgroundImage: `url('${process.env.NEXT_PUBLIC_ADMIN_URL}${item[`img_${theme.palette.mode}`][0]['src']}')`
+                        backgroundImage: `url('${process.env.NEXT_PBULIC_FOLDER_PUBLIC_UAT}${item[`img_${theme.palette.mode}`][0]['src']}')`
                       }} />
                     </div>
                     <div className={cx(classes.detail)} >

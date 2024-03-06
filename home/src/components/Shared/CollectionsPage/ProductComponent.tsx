@@ -473,12 +473,12 @@ const ProductComponent: FC = (() => {
                               {side['back'] !== undefined && <img className={
                                 cx(turn[i] ? classes.product__img_back : classes.product__img_back_turn)
                               }
-                                src={`${process.env.NEXT_PUBLIC_ADMIN_URL}${backImageSrc}`}
+                                src={`${process.env.NEXT_PBULIC_FOLDER_PUBLIC_UAT}${backImageSrc}`}
                                 alt='img' />}
                               {side['front'] !== undefined && <img className={
                                 cx(turn[i] ? classes.product__img : classes.product__img_turn)
                               }
-                                src={`${process.env.NEXT_PUBLIC_ADMIN_URL}${frontImageSrc}`}
+                                src={`${process.env.NEXT_PBULIC_FOLDER_PUBLIC_UAT}${frontImageSrc}`}
                                 alt='img' />}
                             </Fragment>
                           )
@@ -564,7 +564,7 @@ const ProductComponent: FC = (() => {
                 <Link key={index} locale={lang} className={classes.mediaItem} href={{
                   pathname: "/gallery"
                 }}>
-                  <img className={classes.mediaItem_img} src={`${process.env.NEXT_PUBLIC_ADMIN_URL}${imgSrc}`} onClick={() => {
+                  <img className={classes.mediaItem_img} src={`${process.env.NEXT_PBULIC_FOLDER_PUBLIC_UAT}${imgSrc}`} onClick={() => {
                     setCookie('galleryImageModel', product['product_name_en'], {});
                   }} />
                 </Link>
