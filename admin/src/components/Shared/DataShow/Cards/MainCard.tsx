@@ -83,7 +83,7 @@ const MainCard: FC = (() => {
                       if (value.thumbnail !== '' && a.isYoutube == undefined) {
                         if (media == 'img_light|img_dark') {
                           return (
-                            <CardContent path={a[media.split("|")[theme.palette.mode == 'dark' ? 1 : 0]][0]['src']} media={media} elRefs={elRefs[index]} key={i} />
+                            <CardContent path={a[media.split("|")[theme.palette.mode == 'dark' ? 1 : 0]][0]['src'].replace('/admin', '')} media={media} elRefs={elRefs[index]} key={i} />
                           )
                         } else if (media == 'icon') {
                           return (

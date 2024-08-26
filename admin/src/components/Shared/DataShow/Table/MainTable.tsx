@@ -300,7 +300,7 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
                                 <img
                                   alt=".."
                                   //@ts-ignore
-                                  src={params.row[media?.split("|")[theme.palette.mode == 'dark' ? 1 : 0] as unknown as keyof typeof params.row][0]['src'] || '/admin/images/faces/avatar1.jpg'}
+                                  src={params.row[media?.split("|")[theme.palette.mode == 'dark' ? 1 : 0] as unknown as keyof typeof params.row][0]['src'].replace('/admin', '') || '/admin/images/faces/avatar1.jpg'}
                                   style={{ width: 30, height: 30, borderRadius: '50%' }} /> : null}
                               <span style={{
                                 marginLeft: theme.direction == 'ltr' ? 5 : 0,
