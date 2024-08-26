@@ -167,10 +167,9 @@ const LandingPage: FC = (() => {
                       }}>
                         {slides.map((slide, index) => {
                           return (
-
                             <div key={index} className={"slider-content " + classes.sliderImage}
                               style={{
-                                backgroundImage: `url('${process.env.NEXT_PUBLIC_FOLDER_PUBLIC_UAT}${slide[`img_${theme.palette.mode}` as keyof typeof slide][0]['src' as any]}')`,
+                                backgroundImage: `url('${process.env.NEXT_PUBLIC_FOLDER_PUBLIC_UAT}${slide[`img_${theme.palette.mode}` as keyof typeof slide][0]['src' as any].replace('/admin', '')}')`,
                               }}>
                               <div className="inner"
                               >
