@@ -38,14 +38,16 @@ const LangPack = () => {
                 onClick={() => {
                   handleLanguage(item.LangCode);
                 }}>
-                <img
-                  src={`${process.env[`NEXT_PUBLIC_${process.env['NODE_ENV']}`]}/admin/images/langs/${item.Flag}`}
-                  alt={item.Lang}
-                  className={classes.flag}
-                />
-                <span className={classes.menuItemText}>
-                  {item[`title_${values.lang}` as keyof typeof item]}
-                </span>
+                <div className={classes.menuItemContainer}>
+                  <img
+                    src={`${process.env[`NEXT_PUBLIC_${process.env['NODE_ENV']}`]}/images/langs/${item.Flag}`}
+                    alt={item.Lang}
+                    className={classes.flag}
+                  />
+                  <span className={classes.menuItemText}>
+                    {item[`title_${values.lang}` as keyof typeof item]}
+                  </span>
+                </div>
               </MenuItem>
             );
           })}
@@ -65,11 +67,13 @@ const LangPack = () => {
                   handleThemeName(key);
                 }}
                 style={{ background: palette[key].palette.primary.main }}>
-                <PaletteIcon
-                  style={{ color: palette[key].palette.secondary.light }}
-                />
-                &nbsp;
-                <span className={classes.menuItemText}>{t(`${key}`)}</span>
+                <div className={classes.menuItemContainer}>
+                  <PaletteIcon
+                    style={{ color: palette[key].palette.secondary.light }}
+                  />
+                  &nbsp;
+                  <span className={classes.menuItemText}>{t(`${key}`)}</span>
+                </div>
               </MenuItem>
             );
           })}
@@ -89,9 +93,11 @@ const LangPack = () => {
                 onClick={(e) => {
                   handleMode(item);
                 }}>
-                {item == 'light' ? <LightModeIcon /> : <DarkModeIcon />}
-                &nbsp;
-                <span className={classes.menuItemText}>{t(`${item}`)}</span>
+                <div className={classes.menuItemContainer}>
+                  {item == 'light' ? <LightModeIcon /> : <DarkModeIcon />}
+                  &nbsp;
+                  <span className={classes.menuItemText}>{t(`${item}`)}</span>
+                </div>
               </MenuItem>
             );
           })}

@@ -227,7 +227,7 @@ export const CollectionFormImages: FC<CollectionFormPropsType> = (props: Collect
                   <DeleteIcon sx={{ color: 'crimson' }} />
                 </IconButton>
                 <img
-                  src={values[1]['img_light'][0]['src']}
+                  src={values[1]['img_light'][0]['src'].replace('/admin', '')}
                   width={values[1]['img_light'][0]['width']}
                   className={classes.img} />
               </Grid>
@@ -286,7 +286,7 @@ export const CollectionFormImages: FC<CollectionFormPropsType> = (props: Collect
                   <DeleteIcon sx={{ color: 'crimson' }} />
                 </IconButton>
                 <img
-                  src={values[1]['img_dark'][0]['src']}
+                  src={values[1]['img_dark'][0]['src'].replace('/admin', '')}
                   width={values[1]['img_dark'][0]['width']}
                   className={classes.img} />
               </Grid>
