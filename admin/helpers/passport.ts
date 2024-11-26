@@ -1,9 +1,9 @@
-import passport from 'passport';
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { validatePassword } from './hashing';
-import passportLocal from 'passport-local';
+import passport from "passport";
+import type { NextApiRequest, NextApiResponse } from "next";
+import { validatePassword } from "./hashing";
+import passportLocal from "passport-local";
 const LocalStrategy = passportLocal.Strategy;
-import Users, { IUser } from '@/models/Users';
+import Users, { IUser } from "@/models/Users";
 
 export const authenticate = async (
   method: string,
@@ -11,18 +11,22 @@ export const authenticate = async (
   res: NextApiResponse
 ) =>
   new Promise((resolve, reject) => {
-    passport.authenticate(method, { session: false }, (error, user) => {
-      // console.log(user)
-      if (error) {
-        reject(error);
-      } else {
-        resolve(user);
+    passport.authenticate(
+      method,
+      { session: false },
+      (error: any, user: IUser) => {
+        // console.log(user)
+        if (error) {
+          reject(error);
+        } else {
+          resolve(user);
+        }
       }
-    })(req, res);
+    )(req, res);
   });
 
 export const localStrategy = new LocalStrategy(
-  { usernameField: 'email' },
+  { usernameField: "email" },
   (userName, password, done) => {
     Users.findOne(
       { userName: userName.toLowerCase() },

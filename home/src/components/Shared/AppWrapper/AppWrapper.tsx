@@ -49,6 +49,7 @@ const AppWrapper = ({ children }: ChildrenProps) => {
     <Fragment >
       <ThemeProvider theme={homeTheme}>
         <CssBaseline />
+        {/* @ts-ignore */}
         <StylesProvider jss={jss}>
           <Backdrop
             sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}

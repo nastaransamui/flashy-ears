@@ -12,7 +12,7 @@ import { getFirstRow } from 'apiCalls/getFirstRow';
 import { getHomeTheme } from 'apiCalls/getHomeTheme';
 import { ITheme } from 'homeModels/Theme';
 
-const DynamicDashboard = dynamic(() => import('@/src/pages/dashboard/Dashboard'), {
+const DynamicDashboard: any = dynamic(() => import('@/src/pages/dashboard/Dashboard'), {
   ssr: false,
 })
 

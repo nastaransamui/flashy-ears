@@ -225,6 +225,7 @@ const GalleryComponent: FC = (() => {
           />
 
           {!!currentImage && (
+            // @ts-ignore
             <Lightbox
               mainSrc={`${process.env.NEXT_PUBLIC_FOLDER_PUBLIC_UAT}${currentImage.src.replace('/admin', '')}`}
               imageTitle={currentImage!.tags?.[0]?.['title']}

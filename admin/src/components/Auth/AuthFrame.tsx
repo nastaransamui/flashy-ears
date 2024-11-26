@@ -2,14 +2,14 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import brand from '../../../public/text/brand';
 
-import Hidden from '@mui/material/Hidden';
+
 import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import { useTheme } from '@mui/material';
-
+import useMediaQuery from '@mui/material/useMediaQuery';
 import logo from '@/public/images/logo_white.png';
 import authStyles from './auth-style';
 
@@ -31,10 +31,12 @@ const AuthFrame: React.FC<Props> = ({ children, title, subtitle }) => {
   const { i18n } = useTranslation();
   const { classes: text } = useText({})
   const langName = `name_${i18n.language}` as ObjectKey;
-
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const isLargeScreen = useMediaQuery(theme.breakpoints.up('md'));
   return (
     <div className={classes.pageWrap}>
-      <Hidden smUp>
+      {isSmallScreen && (
         <div className={clsx(classes.logo, classes.logoHeader)}>
           <a href={process.env.NEXT_PUBLIC_HOME_URL}>
             <img src={logo.src} alt='logo' />
@@ -43,7 +45,7 @@ const AuthFrame: React.FC<Props> = ({ children, title, subtitle }) => {
             </Typography>
           </a>
         </div>
-      </Hidden>
+      )}
       <Container maxWidth='lg' className={classes.innerWrap}>
         <div className={classes.decoration}>
           <svg className={classes.leftDeco}>
@@ -69,7 +71,7 @@ const AuthFrame: React.FC<Props> = ({ children, title, subtitle }) => {
           <div className={classes.authFrame}>
             <Grid container spacing={0}>
               <Grid item md={5} xs={12} style={{ zIndex: 2 }}>
-                <Hidden smDown>
+                {isLargeScreen && (
                   <div className={classes.greeting}>
                     <div className={classes.logo}>
                       <img src={logo.src} alt='logo' />
@@ -87,7 +89,7 @@ const AuthFrame: React.FC<Props> = ({ children, title, subtitle }) => {
                       {subtitle}
                     </Typography>
                   </div>
-                </Hidden>
+                )}
               </Grid>
               <Grid item md={7} xs={12}>
                 <div className={classes.formWrap}>{children}</div>

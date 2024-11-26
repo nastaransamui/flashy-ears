@@ -11,7 +11,6 @@ import { CustomToaster } from '@/src/components/Shared/CustomToaster/CustomToast
 
 import CircleToBlockLoading from 'react-loadingg/lib/CircleToBlockLoading';
 import Backdrop from '@mui/material/Backdrop';
-
 import { StylesProvider } from '@mui/styles';
 
 import useWrapper from './useAppWrapper';
@@ -26,6 +25,7 @@ const AppWrapper = ({ children }: ChildrenProps) => {
     <Fragment >
       <ThemeProvider theme={adminTheme}>
         <CssBaseline />
+        {/* @ts-ignore */}
         <StylesProvider jss={jss}>
           <Backdrop
             sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}

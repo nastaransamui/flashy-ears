@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 import MoreVert from '@mui/icons-material/MoreVert'
 import ViewList from '@mui/icons-material/ViewList'
 import Menu from '@mui/icons-material/Menu'
-import Hidden from '@mui/material/Hidden'
+import useMediaQuery from '@mui/material/useMediaQuery';
 import IconButton from '@mui/material/IconButton'
 import Toolbar from '@mui/material/Toolbar'
 import brand from '@/public/text/brand'
@@ -27,9 +27,10 @@ const NavbarMain: FC<ProDashboardProps> = (props: ProDashboardProps) => {
   const location = useLocation();
   const { propsMiniActive, profile } = useSelector<State, State>(state => state)
   const { t, i18n } = useTranslation()
-  const { classes, cx } = navbarMainStyle({});
+  const { classes, cx, theme } = navbarMainStyle({});
   const mainPanel = createRef();
-
+  const isLargeScreen = useMediaQuery(theme.breakpoints.up('md'));
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
   let query = useQuery();
   const _id = query.get('_id');
   const mainPanelClasses =
@@ -89,7 +90,7 @@ const NavbarMain: FC<ProDashboardProps> = (props: ProDashboardProps) => {
     <div className={mainPanelClasses} ref={mainPanel as React.RefObject<HTMLDivElement>}>
       <AppBar className={classes.appBar} color="default">
         <Toolbar>
-          <Hidden smDown implementation='css'>
+          {isLargeScreen && (
             <div className={sidebarMinimize}>
               <div className={sidebarMinimize}>
                 {propsMiniActive ? (
@@ -103,20 +104,20 @@ const NavbarMain: FC<ProDashboardProps> = (props: ProDashboardProps) => {
                 )}
               </div>
             </div>
-          </Hidden>
+          )}
           <div className={classes.flex}>
             <Typography className={classes.title} sx={{ padding: 2 }}>
               {getActiveRoute(routes as RoutesType[])}
             </Typography>
           </div>
-          <Hidden smDown implementation='css'>
+          {isLargeScreen && (
             <NavbarLinks {...props} />
-          </Hidden>
-          <Hidden smUp implementation='css'>
+          )}
+          {isSmallScreen && (
             <IconButton onClick={handleDrawerToggle}>
               <Menu />
             </IconButton>
-          </Hidden>
+          )}
         </Toolbar>
       </AppBar>
     </div>

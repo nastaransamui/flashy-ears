@@ -6,7 +6,7 @@ import SideBar from "@/shared/SideBar";
 import Snackbar from '@mui/material/Snackbar';
 import useMediaQuery from "@mui/material/useMediaQuery";
 import MuiAlert, { AlertColor } from '@mui/material/Alert';
-import Hidden from '@mui/material/Hidden'
+// import Hidden from '@mui/material/Hidden'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import Paper from '@mui/material/Paper'
@@ -107,7 +107,7 @@ const ContactUs: FC = (() => {
   useEffect(() => {
     document.getElementById('main')!.style.padding = `0px 0px`;
   }, [])
-
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
   return (
     <Fragment>
       <SideBar >
@@ -129,7 +129,8 @@ const ContactUs: FC = (() => {
                 severity={alertType}
                 onClose={handleClose} >{alertText}</MuiAlert>
             </Snackbar>
-            <Hidden mdUp>
+
+            {isSmallScreen && (
               <div className={cx(classes.logo, classes.logoHeader)}>
                 <Link href="/" locale={lang}>
                   <img src={`/images/logo_${theme.palette.mode}.png`} alt='' />
@@ -138,7 +139,7 @@ const ContactUs: FC = (() => {
                   </Typography>
                 </Link>
               </div>
-            </Hidden>
+            )}
             <Container maxWidth='md' className={classes.innerWrap}>
               <Paper className={cx(classes.formBox, 'fragment-fadeUp')}>
                 <div className={classes.fullFromWrap}>

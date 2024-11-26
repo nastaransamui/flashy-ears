@@ -1,11 +1,11 @@
 import HeadComponent from "@/src/components/head";
-import { Fragment } from "react";
+import { ComponentType, Fragment } from "react";
 import { withTranslation, useTranslation } from "react-i18next";
 
 import dynamic from 'next/dynamic'
 import { NextPage } from "next";
 
-const DynamicError = dynamic(() => import('@/src/pages/ErrorPage'), {
+const DynamicError: any = dynamic(() => import('@/src/pages/ErrorPage'), {
   ssr: false,
 })
 

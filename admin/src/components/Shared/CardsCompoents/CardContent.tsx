@@ -209,6 +209,7 @@ const CardContent: FC<CardContentTypes> = ((props: CardContentTypes) => {
             return (
               <CardMedia className={classes.video}>
                 {isYoutube ?
+                  // @ts-ignore
                   <YouTube
                     videoId={path}
                     style={{

@@ -1,14 +1,14 @@
-import nextConnect from 'next-connect';
-import { NextApiResponse } from 'next';
-import { HazelcastType } from '@/interfaces/next.interface';
-import { verifyToken } from 'middleware/verifyToken';
-import { dbCheck } from 'middleware/dbCheck';
-import hazelCast from 'middleware/hazelCast';
-import mongoose, { Model } from 'mongoose';
-import Countries, { ICountry } from '@/models/Countries';
-import Provinces, { IProvince } from '@/models/Provinces';
-import Cities, { ICity } from '@/models/Cities';
-import Currencies, { ICurrency } from '@/models/Currencies';
+import nextConnect from "next-connect";
+import { NextApiResponse } from "next";
+import { HazelcastType } from "@/interfaces/next.interface";
+import { verifyToken } from "middleware/verifyToken";
+import { dbCheck } from "middleware/dbCheck";
+// import hazelCast from 'middleware/hazelCast';
+import mongoose, { Model } from "mongoose";
+import Countries, { ICountry } from "@/models/Countries";
+import Provinces, { IProvince } from "@/models/Provinces";
+import Cities, { ICity } from "@/models/Cities";
+import Currencies, { ICurrency } from "@/models/Currencies";
 import {
   paginate,
   MultiMapKey,
@@ -22,8 +22,8 @@ import {
   sort_by,
   findAllCurrenciesWithPagginate,
   findAllCurrencies,
-} from '@/helpers/dbFinds';
-import type { MultiMap } from 'hazelcast-client/lib/proxy/MultiMap';
+} from "@/helpers/dbFinds";
+import type { MultiMap } from "hazelcast-client/lib/proxy/MultiMap";
 const apiRoute = nextConnect<HazelcastType, NextApiResponse>({
   onError(error, req, res) {
     res
@@ -52,7 +52,7 @@ type Results = {
 apiRoute.post(
   verifyToken,
   dbCheck,
-  hazelCast,
+  // hazelCast,
   async (req: HazelcastType, res: NextApiResponse<Data>, next: () => void) => {
     try {
       const {
@@ -76,13 +76,13 @@ apiRoute.post(
         );
         //Check if province model name has data in HZ
         const provinceMultiMap: MultiMap<MultiMapKey, MultiMapValue> =
-          await hz.getMultiMap('Provinces');
+          await hz.getMultiMap("Provinces");
         const provinceDataIsExist = await provinceMultiMap.containsKey(
           `allProvinces` as keyof typeof provinceMultiMap.containsEntry
         );
         //Check if cities model name has data in HZ
         const citiesMultiMap: MultiMap<MultiMapKey, MultiMapValue> =
-          await hz.getMultiMap('Cities');
+          await hz.getMultiMap("Cities");
         const citiesDataIsExist = await citiesMultiMap.containsKey(
           `allCities` as keyof typeof citiesMultiMap.containsEntry
         );
@@ -98,7 +98,7 @@ apiRoute.post(
                 _id: { $in: arrayOfIds },
               },
               {
-                $set: { isActive: status == 'diactivate' ? false : true },
+                $set: { isActive: status == "diactivate" ? false : true },
               },
               async (err: Error, response: any) => {
                 if (err) {
@@ -108,14 +108,14 @@ apiRoute.post(
                   await hz.shutdown();
                 } else {
                   switch (modelName) {
-                    case 'Countries':
+                    case "Countries":
                       //find out the cities and States ids from changed values
                       const countriesStates_ids: string[] = [];
                       const countriesCities_ids: string[] = [];
                       //Update coutnries status
                       value.map((a: any) => {
                         if (arrayOfIds.includes(a._id)) {
-                          a.isActive = status == 'diactivate' ? false : true;
+                          a.isActive = status == "diactivate" ? false : true;
                           countriesStates_ids.push(a.states_id);
                           countriesCities_ids.push(a.cities_id);
                         }
@@ -132,7 +132,7 @@ apiRoute.post(
                         },
                         {
                           $set: {
-                            isActive: status == 'diactivate' ? false : true,
+                            isActive: status == "diactivate" ? false : true,
                           },
                         }
                       );
@@ -143,7 +143,7 @@ apiRoute.post(
                         },
                         {
                           $set: {
-                            isActive: status == 'diactivate' ? false : true,
+                            isActive: status == "diactivate" ? false : true,
                           },
                         }
                       );
@@ -152,8 +152,8 @@ apiRoute.post(
                         await provinceMultiMap.clear();
                       }
                       await findAllProvinces(
-                        'Provinces',
-                        'name',
+                        "Provinces",
+                        "name",
                         perPage,
                         pageNumber,
                         sortDirection,
@@ -164,8 +164,8 @@ apiRoute.post(
                         await citiesMultiMap.clear();
                       }
                       await findAllCities(
-                        'Cities',
-                        'name',
+                        "Cities",
+                        "name",
                         perPage,
                         pageNumber,
                         sortDirection,
@@ -190,11 +190,11 @@ apiRoute.post(
                       });
                       await hz.shutdown();
                       break;
-                    case 'Provinces':
+                    case "Provinces":
                       const provincesCities_ids: string[] = [];
                       value.map((a: any) => {
                         if (arrayOfIds.includes(a._id)) {
-                          a.isActive = status == 'diactivate' ? false : true;
+                          a.isActive = status == "diactivate" ? false : true;
                           provincesCities_ids.push(a.cities_id);
                         }
                       });
@@ -210,7 +210,7 @@ apiRoute.post(
                         },
                         {
                           $set: {
-                            isActive: status == 'diactivate' ? false : true,
+                            isActive: status == "diactivate" ? false : true,
                           },
                         }
                       );
@@ -219,8 +219,8 @@ apiRoute.post(
                         await citiesMultiMap.clear();
                       }
                       await findAllCities(
-                        'Cities',
-                        'name',
+                        "Cities",
+                        "name",
                         perPage,
                         pageNumber,
                         sortDirection,
@@ -245,10 +245,10 @@ apiRoute.post(
                       });
                       await hz.shutdown();
                       break;
-                    case 'Cities':
+                    case "Cities":
                       value.map((a: any) => {
                         if (arrayOfIds.includes(a._id)) {
-                          a.isActive = status == 'diactivate' ? false : true;
+                          a.isActive = status == "diactivate" ? false : true;
                         }
                       });
                       await multiMap.clear();
@@ -276,10 +276,10 @@ apiRoute.post(
                       await hz.shutdown();
                       break;
 
-                    case 'Currencies':
+                    case "Currencies":
                       value.map((a: any) => {
                         if (arrayOfIds.includes(a._id)) {
-                          a.isActive = status == 'diactivate' ? false : true;
+                          a.isActive = status == "diactivate" ? false : true;
                         }
                       });
                       await multiMap.clear();
@@ -310,7 +310,7 @@ apiRoute.post(
                     default:
                       res.status(500).json({
                         success: false,
-                        Error: 'Update Status HZ part',
+                        Error: "Update Status HZ part",
                       });
                       await hz.shutdown();
                       break;
@@ -320,14 +320,14 @@ apiRoute.post(
             );
           }
         } else {
-          res.status(400).json({ success: false, Error: 'data Hz not exist' });
+          res.status(400).json({ success: false, Error: "data Hz not exist" });
         }
       } else {
         collection.updateMany(
           {
             _id: { $in: arrayOfIds },
           },
-          { $set: { isActive: status == 'diactivate' ? false : true } },
+          { $set: { isActive: status == "diactivate" ? false : true } },
           async (err: Error, respose: any) => {
             if (err) {
               console.log(err);
@@ -336,7 +336,7 @@ apiRoute.post(
                 .json({ success: false, Error: (err as Error).message });
             } else {
               switch (modelName) {
-                case 'Countries':
+                case "Countries":
                   let objIds = arrayOfIds.map(function (el: string) {
                     return new mongoose.Types.ObjectId(el);
                   });
@@ -354,7 +354,7 @@ apiRoute.post(
                       _id: { $in: countriesStates_ids.flat(1) },
                     },
                     {
-                      $set: { isActive: status == 'diactivate' ? false : true },
+                      $set: { isActive: status == "diactivate" ? false : true },
                     }
                   );
                   await Cities.updateMany(
@@ -362,7 +362,7 @@ apiRoute.post(
                       _id: { $in: countriesCities_ids.flat(1).flat(1) },
                     },
                     {
-                      $set: { isActive: status == 'diactivate' ? false : true },
+                      $set: { isActive: status == "diactivate" ? false : true },
                     }
                   );
                   var result: Results = await findAllCountriesWithPagginate(
@@ -375,7 +375,7 @@ apiRoute.post(
                   );
                   res.status(200).json({ success: true, ...result });
                   break;
-                case 'Provinces':
+                case "Provinces":
                   let provinceObjIds = arrayOfIds.map(function (el: string) {
                     return new mongoose.Types.ObjectId(el);
                   });
@@ -390,7 +390,7 @@ apiRoute.post(
                       _id: { $in: ProvinceCities_ids.flat(1).flat(1) },
                     },
                     {
-                      $set: { isActive: status == 'diactivate' ? false : true },
+                      $set: { isActive: status == "diactivate" ? false : true },
                     }
                   );
                   var result: Results = await findAllProvincesWithPagginate(
@@ -403,7 +403,7 @@ apiRoute.post(
                   );
                   res.status(200).json({ success: true, ...result });
                   break;
-                case 'Cities':
+                case "Cities":
                   var result: Results = await findAllCitiesWithPagginate(
                     collection as Model<ICity>,
                     perPage,
@@ -414,7 +414,7 @@ apiRoute.post(
                   );
                   res.status(200).json({ success: true, ...result });
                   break;
-                case 'Currencies':
+                case "Currencies":
                   var result: Results = await findAllCurrenciesWithPagginate(
                     collection as Model<ICurrency>,
                     perPage,

@@ -40,6 +40,8 @@ import detector from 'i18next-browser-languagedetector';
 import { hasCookie, getCookies } from 'cookies-next';
 import Script from 'next/script';
 import { Roboto_Condensed } from 'next/font/google'
+import { AppProps } from 'next/app';
+import { NextComponentType } from 'next';
 const roboto = Roboto_Condensed({ weight: ['300', '400', '700'], subsets: ['latin'] })
 var toBoolean = require('to-boolean');
 
@@ -57,11 +59,13 @@ i18next
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
 
-
+type CustomAppProps = AppProps & {
+  Component: any & { getLayout?: (page: ReactNode) => ReactNode };
+};
 
 const isVercel = toBoolean(process.env.NEXT_PUBLIC_SERVERLESS);;
 
-function MyApp({ Component, ...rest }: NextProps) {
+function MyApp({ Component, ...rest }: CustomAppProps) {
   const { store, props } = wrapper.useWrappedStore(rest);
   const { router, emotionCache = clientSideEmotionCache, pageProps } = props;
   const { t, i18n, ready } = useTranslation('common');

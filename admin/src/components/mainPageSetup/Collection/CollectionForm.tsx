@@ -324,6 +324,7 @@ export const CollectionFormProduct: FC<CollectionFormProductType> = (props: Coll
   return (
     <Fragment>
       {images.length !== 0 && (
+        // @ts-ignore
         <Lightbox
           mainSrc={images[0].src}
           imageTitle={images[0]!.tags?.[0]?.['title']}

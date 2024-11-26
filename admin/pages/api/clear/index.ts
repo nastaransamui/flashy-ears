@@ -1,8 +1,8 @@
-import nextConnect from 'next-connect';
-import { NextApiResponse } from 'next';
-import { HazelcastType } from '@/interfaces/next.interface';
-import { verifyToken } from 'middleware/verifyToken';
-import hazelCast from 'middleware/hazelCast';
+import nextConnect from "next-connect";
+import { NextApiResponse } from "next";
+import { HazelcastType } from "@/interfaces/next.interface";
+// import { verifyToken } from 'middleware/verifyToken';
+// import hazelCast from 'middleware/hazelCast';
 
 const apiRoute = nextConnect<HazelcastType, NextApiResponse>({
   onError(error, req, res) {
@@ -19,35 +19,35 @@ const apiRoute = nextConnect<HazelcastType, NextApiResponse>({
 
 apiRoute.get(
   // verifyToken,
-  hazelCast,
+  // hazelCast,
   async (req: HazelcastType, res: NextApiResponse) => {
     const hz = req.hazelCast;
     if (hz) {
-      const multiMapUsers = await hz.getMultiMap('Users');
+      const multiMapUsers = await hz.getMultiMap("Users");
       await multiMapUsers.destroy();
-      const multiMapRoles = await hz.getMultiMap('Roles');
+      const multiMapRoles = await hz.getMultiMap("Roles");
       await multiMapRoles.destroy();
-      const multiMapVideos = await hz.getMultiMap('Videos');
+      const multiMapVideos = await hz.getMultiMap("Videos");
       await multiMapVideos.destroy();
-      const multiMapPhotos = await hz.getMultiMap('Photos');
+      const multiMapPhotos = await hz.getMultiMap("Photos");
       await multiMapPhotos.destroy();
-      const multiMapFeatures = await hz.getMultiMap('Features');
+      const multiMapFeatures = await hz.getMultiMap("Features");
       await multiMapFeatures.destroy();
-      const multiMapCountries = await hz.getMultiMap('Countries');
+      const multiMapCountries = await hz.getMultiMap("Countries");
       await multiMapCountries.destroy();
-      const multiMapProvinces = await hz.getMultiMap('Provinces');
+      const multiMapProvinces = await hz.getMultiMap("Provinces");
       await multiMapProvinces.destroy();
-      const multiMapCities = await hz.getMultiMap('Cities');
+      const multiMapCities = await hz.getMultiMap("Cities");
       await multiMapCities.destroy();
-      const multiMapCurrencies = await hz.getMultiMap('Currencies');
+      const multiMapCurrencies = await hz.getMultiMap("Currencies");
       await multiMapCurrencies.destroy();
-      const multiMapAgencies = await hz.getMultiMap('Agencies');
+      const multiMapAgencies = await hz.getMultiMap("Agencies");
       await multiMapAgencies.destroy();
-      console.log('clear catch');
-      res.status(200).redirect('/admin/dashboard');
+      console.log("clear catch");
+      res.status(200).redirect("/admin/dashboard");
       await hz.shutdown();
     } else {
-      res.status(200).redirect('/admin/dashboard');
+      res.status(200).redirect("/admin/dashboard");
     }
   }
 );

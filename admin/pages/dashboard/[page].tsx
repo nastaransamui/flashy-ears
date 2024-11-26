@@ -5,13 +5,13 @@ import { GetServerSideProps } from 'next'
 import { hasCookie, getCookies, } from 'cookies-next';
 import { useTranslation, withTranslation } from 'react-i18next';
 import HeadComponent from '@/src/components/head';
-import { isObjectEmpty, setPageCookies } from '@/helpers/functions';
+import { setPageCookies } from '@/helpers/functions';
 import dynamic from 'next/dynamic';
 import useRoutesUpdate from '@/src/components/Hooks/useRoutesUpdate';
 import { getFirstRow } from 'apiCalls/getFirstRow';
 import { getHomeTheme } from 'apiCalls/getHomeTheme';
 import { ITheme } from 'homeModels/Theme';
-const DynamicDashboard = dynamic(() => import('@/src/pages/dashboard/Dashboard'), {
+const DynamicDashboard: any = dynamic(() => import('@/src/pages/dashboard/Dashboard'), {
   ssr: false,
 })
 

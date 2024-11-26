@@ -16,7 +16,7 @@ import { isObjectEmpty, setPageCookies } from '@/helpers/functions';
 import { getFirstRow } from 'apiCalls/getFirstRow';
 import { getHomeTheme } from 'apiCalls/getHomeTheme';
 import { ITheme } from 'homeModels/Theme';
-const DynamicLogin = dynamic(() => import('@/src/pages/login/LoginPage'), {
+const DynamicLogin: any = dynamic(() => import('@/src/pages/login/LoginPage'), {
   ssr: false,
 })
 

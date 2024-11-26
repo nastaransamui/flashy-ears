@@ -385,7 +385,9 @@ const MainPageImagesComponent: FC = (() => {
 
   return (
     <main id="top">
+      {/* @ts-ignore */}
       <Controller>
+        {/* @ts-ignore */}
         <Scene
           triggerHook="onLeave"
           duration={slides.length * 3000}

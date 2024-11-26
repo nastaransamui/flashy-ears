@@ -1,7 +1,7 @@
 import React, { createRef, useState, FC, useEffect } from 'react'
 import mainSidebarStyle from './main-sidebar-style'
 import Drawer from '@mui/material/Drawer'
-import Hidden from '@mui/material/Hidden'
+import useMediaQuery from '@mui/material/useMediaQuery';
 import PropTypes from 'prop-types'
 
 import { ProDashboardProps, RoutesType } from '@/interfaces/react.interface'
@@ -19,7 +19,7 @@ import { useQuery } from "@/src/components/Dashboard/ReactRouter";
 
 
 const SidebarMain: FC<ProDashboardProps> = (props: ProDashboardProps) => {
-  const { classes, cx } = mainSidebarStyle({})
+  const { classes, cx, theme } = mainSidebarStyle({})
   const { rtlActive,
     sidebarOpen,
     handleDrawerToggle,
@@ -61,74 +61,72 @@ const SidebarMain: FC<ProDashboardProps> = (props: ProDashboardProps) => {
     st[collapse] = !state[collapse as keyof typeof state];
     setState((oldState: DrawerStateType) => ({ ...oldState, ...st }));
   };
-
+  const isLargeScreen = useMediaQuery(theme.breakpoints.up('sm'));
   return (
     <div ref={mainPanel as React.RefObject<HTMLDivElement>}>
-      <Hidden mdUp implementation='css'>
-        {/* Mobile Drawer */}
-        <Drawer
-          variant='temporary'
-          anchor='left'
-          open={sidebarOpen}
-          onClose={handleDrawerToggle}
-          classes={{
-            paper: classes.drawerPaper + ' ' + classes[sideBarbgColor + 'Background' as keyof typeof classes],
-          }}
-          ModalProps={{ keepMounted: true }}>
-          <BrandLogo {...props} stateMiniActive={state.stateMiniActive} />
-          <span className={sidebarWrapper + ' ' + classes[sideBarbgColor + 'Scroll' as keyof typeof classes]}>
-            <SidebarUser openCollapse={openCollapse} {...props} stateMiniActive={state.stateMiniActive} openAvatar={state.openAvatar!} />
-            <NavbarLinks {...props} />
-            <SidebarLinks
-              openCollapse={openCollapse}
-              routes={routes as RoutesType[]}
-              {...props}
-              state={state as DrawerStateType}
-              setState={setState}
+      {
+        isLargeScreen ? <>
+          <Drawer
+            data-testid="drawer"
+            onMouseOver={() => { setState((oldState: DrawerStateType) => ({ ...oldState, stateMiniActive: false })) }}
+            onMouseOut={() => { setState((oldState: DrawerStateType) => ({ ...oldState, stateMiniActive: true })) }}
+            anchor={rtlActive ? 'right' : 'left'}
+            variant="permanent"
+            open
+            classes={{
+              paper:
+                classes.drawerPaper + " " +
+                cx({ [classes.drawerPaperMini]: !propsMiniActive && state.stateMiniActive }) + ' ' +
+                classes[sideBarbgColor + 'Background' as keyof typeof classes],
+            }}
+            onClose={handleDrawerToggle}
+            ModalProps={{ keepMounted: true }}>
+            <BrandLogo {...props} stateMiniActive={state.stateMiniActive} />
+            <span className={sidebarWrapper + ' ' + classes[sideBarbgColor + 'Scroll' as keyof typeof classes]}>
+              <SidebarUser openCollapse={openCollapse} {...props} stateMiniActive={state.stateMiniActive} openAvatar={state.openAvatar!} />
+              <SidebarLinks
+                openCollapse={openCollapse}
+                routes={routes as RoutesType[]}
+                {...props}
+                state={state as DrawerStateType}
+                setState={setState} />
+            </span>
+            <div
+              className={classes.background}
+              style={{
+                backgroundImage: `url(/admin/images/sidebar/sidebar-${sideBarbgColor == 'black' ? '1' : '4'}.jpg)`,
+              }}
             />
-          </span>
-          <div
-            className={classes.background}
-            style={{
-              backgroundImage: `url(/admin/images/sidebar/sidebar-${sideBarbgColor == 'black' ? '1' : '4'}.jpg)`,
+          </Drawer></> : <><Drawer
+            variant='temporary'
+            anchor='left'
+            open={sidebarOpen}
+            onClose={handleDrawerToggle}
+            classes={{
+              paper: classes.drawerPaper + ' ' + classes[sideBarbgColor + 'Background' as keyof typeof classes],
             }}
-          />
-        </Drawer>
-      </Hidden>
-      <Hidden smDown implementation='css'>
-        <Drawer
-          data-testid="drawer"
-          onMouseOver={() => { setState((oldState: DrawerStateType) => ({ ...oldState, stateMiniActive: false })) }}
-          onMouseOut={() => { setState((oldState: DrawerStateType) => ({ ...oldState, stateMiniActive: true })) }}
-          anchor={rtlActive ? 'right' : 'left'}
-          variant="permanent"
-          open
-          classes={{
-            paper:
-              classes.drawerPaper + " " +
-              cx({ [classes.drawerPaperMini]: !propsMiniActive && state.stateMiniActive }) + ' ' +
-              classes[sideBarbgColor + 'Background' as keyof typeof classes],
-          }}
-          onClose={handleDrawerToggle}
-          ModalProps={{ keepMounted: true }}>
-          <BrandLogo {...props} stateMiniActive={state.stateMiniActive} />
-          <span className={sidebarWrapper + ' ' + classes[sideBarbgColor + 'Scroll' as keyof typeof classes]}>
-            <SidebarUser openCollapse={openCollapse} {...props} stateMiniActive={state.stateMiniActive} openAvatar={state.openAvatar!} />
-            <SidebarLinks
-              openCollapse={openCollapse}
-              routes={routes as RoutesType[]}
-              {...props}
-              state={state as DrawerStateType}
-              setState={setState} />
-          </span>
-          <div
-            className={classes.background}
-            style={{
-              backgroundImage: `url(/admin/images/sidebar/sidebar-${sideBarbgColor == 'black' ? '1' : '4'}.jpg)`,
-            }}
-          />
-        </Drawer>
-      </Hidden>
+            ModalProps={{ keepMounted: true }}>
+            <BrandLogo {...props} stateMiniActive={state.stateMiniActive} />
+            <span className={sidebarWrapper + ' ' + classes[sideBarbgColor + 'Scroll' as keyof typeof classes]}>
+              <SidebarUser openCollapse={openCollapse} {...props} stateMiniActive={state.stateMiniActive} openAvatar={state.openAvatar!} />
+              <NavbarLinks {...props} />
+              <SidebarLinks
+                openCollapse={openCollapse}
+                routes={routes as RoutesType[]}
+                {...props}
+                state={state as DrawerStateType}
+                setState={setState}
+              />
+            </span>
+            <div
+              className={classes.background}
+              style={{
+                backgroundImage: `url(/admin/images/sidebar/sidebar-${sideBarbgColor == 'black' ? '1' : '4'}.jpg)`,
+              }}
+            />
+          </Drawer></>
+      }
+
     </div>
 
   )

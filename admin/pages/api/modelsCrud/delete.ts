@@ -1,19 +1,19 @@
-import nextConnect from 'next-connect';
-import { NextApiResponse } from 'next';
-import { HazelcastType } from '@/interfaces/next.interface';
-import { verifyToken } from 'middleware/verifyToken';
-import { dbCheck } from 'middleware/dbCheck';
-import hazelCast from 'middleware/hazelCast';
-import mongoose, { Model } from 'mongoose';
-import Roles, { IRole } from '@/models/Roles';
-import Users, { IUser } from '@/models/Users';
-import Videos, { IVideo } from '@/models/Videos';
-import Photos, { IPhoto } from '@/models/Photos';
-import Features, { IFeature } from '@/models/Features';
-import Agencies, { IAgent } from '@/models/Agencies';
-import Collections, { ICollection } from 'homeModels/Collections';
-import Colors, { IColors } from 'homeModels/Colors';
-const fs = require('fs-extra');
+import nextConnect from "next-connect";
+import { NextApiResponse } from "next";
+import { HazelcastType } from "@/interfaces/next.interface";
+import { verifyToken } from "middleware/verifyToken";
+import { dbCheck } from "middleware/dbCheck";
+// import hazelCast from 'middleware/hazelCast';
+import mongoose, { Model } from "mongoose";
+import Roles, { IRole } from "@/models/Roles";
+import Users, { IUser } from "@/models/Users";
+import Videos, { IVideo } from "@/models/Videos";
+import Photos, { IPhoto } from "@/models/Photos";
+import Features, { IFeature } from "@/models/Features";
+import Agencies, { IAgent } from "@/models/Agencies";
+import Collections, { ICollection } from "homeModels/Collections";
+import Colors, { IColors } from "homeModels/Colors";
+const fs = require("fs-extra");
 import {
   findAllUsersWithPagginate,
   findAllRolesWithPagginate,
@@ -34,10 +34,10 @@ import {
   findAllCollectionsWithPagginate,
   findAllColorsWithPagginate,
   findAllProductsWithPagginate,
-} from '@/helpers/dbFinds';
+} from "@/helpers/dbFinds";
 
-import type { MultiMap } from 'hazelcast-client/lib/proxy/MultiMap';
-import { IProducts } from 'homeModels/Products';
+import type { MultiMap } from "hazelcast-client/lib/proxy/MultiMap";
+import { IProducts } from "homeModels/Products";
 
 const apiRoute = nextConnect<HazelcastType, NextApiResponse>({
   onError(error, req, res) {
@@ -67,7 +67,7 @@ type Results = {
 apiRoute.post(
   verifyToken,
   dbCheck,
-  hazelCast,
+  // hazelCast,
   async (req: HazelcastType, res: NextApiResponse<Data>, next: () => void) => {
     try {
       const {
@@ -135,15 +135,15 @@ apiRoute.post(
             );
           }
         } else {
-          res.status(400).json({ success: false, Error: 'data Hz not exist' });
+          res.status(400).json({ success: false, Error: "data Hz not exist" });
           await hz.shutdown();
         }
       } else {
         switch (modelName) {
-          case 'Collections':
+          case "Collections":
             const records = await collection
               .find()
-              .where('_id')
+              .where("_id")
               .in(arrayOfIds)
               .exec();
             for (const record of records) {
@@ -186,10 +186,10 @@ apiRoute.post(
             }
             break;
 
-          case 'Colors':
+          case "Colors":
             const results = await collection
               .find()
-              .where('_id')
+              .where("_id")
               .in(arrayOfIds)
               .exec();
             for (const result of results) {
@@ -226,10 +226,10 @@ apiRoute.post(
               }
             }
             break;
-          case 'Products':
+          case "Products":
             const products = await collection
               .find()
-              .where('_id')
+              .where("_id")
               .in(arrayOfIds)
               .exec();
             for (const product of products as any) {
@@ -296,7 +296,7 @@ apiRoute.post(
                     .json({ success: false, Error: (err as Error).message });
                 } else {
                   switch (modelName) {
-                    case 'Users':
+                    case "Users":
                       var result: Results = await findAllUsersWithPagginate(
                         collection as Model<IUser>,
                         perPage,
@@ -306,7 +306,7 @@ apiRoute.post(
                       );
                       res.status(200).json({ success: true, ...result });
                       break;
-                    case 'Roles':
+                    case "Roles":
                       var result: Results = await findAllRolesWithPagginate(
                         collection as Model<IRole>,
                         perPage,
@@ -316,7 +316,7 @@ apiRoute.post(
                       );
                       res.status(200).json({ success: true, ...result });
                       break;
-                    case 'Colors':
+                    case "Colors":
                       var result: Results = await findAllColorsWithPagginate(
                         collection as Model<IColors>,
                         perPage,
@@ -326,7 +326,7 @@ apiRoute.post(
                       );
                       res.status(200).json({ success: true, ...result });
                       break;
-                    case 'Videos':
+                    case "Videos":
                       var result: Results = await findAllVideosWithPagginate(
                         collection as Model<IVideo>,
                         perPage,
@@ -336,7 +336,7 @@ apiRoute.post(
                       );
                       res.status(200).json({ success: true, ...result });
                       break;
-                    case 'Photos':
+                    case "Photos":
                       var result: Results = await findAllPhotosWithPagginate(
                         collection as Model<IPhoto>,
                         perPage,
@@ -346,7 +346,7 @@ apiRoute.post(
                       );
                       res.status(200).json({ success: true, ...result });
                       break;
-                    case 'Features':
+                    case "Features":
                       var result: Results = await findAllFeaturesWithPagginate(
                         collection as Model<IFeature>,
                         perPage,
@@ -356,7 +356,7 @@ apiRoute.post(
                       );
                       res.status(200).json({ success: true, ...result });
                       break;
-                    case 'Agencies':
+                    case "Agencies":
                       var result: Results = await findAllAgenciesWithPagginate(
                         collection as Model<IAgent>,
                         perPage,

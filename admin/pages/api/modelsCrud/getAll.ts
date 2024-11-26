@@ -1,23 +1,23 @@
-import nextConnect from 'next-connect';
-import { NextApiResponse } from 'next';
-import { HazelcastType } from '@/interfaces/next.interface';
-import { verifyToken } from 'middleware/verifyToken';
-import { dbCheck } from 'middleware/dbCheck';
-import hazelCast from 'middleware/hazelCast';
-import mongoose, { Model } from 'mongoose';
-import Roles, { IRole } from '@/models/Roles';
-import Users, { IUser } from '@/models/Users';
-import Videos, { IVideo } from '@/models/Videos';
-import Collections, { ICollection } from 'homeModels/Collections';
-import Colors, { IColors } from 'homeModels/Colors';
-import Products, { IProducts } from 'homeModels/Products';
-import Photos, { IPhoto } from '@/models/Photos';
-import Features, { IFeature } from '@/models/Features';
-import Countries, { ICountry } from '@/models/Countries';
-import Provinces, { IProvince } from '@/models/Provinces';
-import Cities, { ICity } from '@/models/Cities';
-import Currencies, { ICurrency } from '@/models/Currencies';
-import Agencies, { IAgent } from '@/models/Agencies';
+import nextConnect from "next-connect";
+import { NextApiResponse } from "next";
+import { HazelcastType } from "@/interfaces/next.interface";
+import { verifyToken } from "middleware/verifyToken";
+import { dbCheck } from "middleware/dbCheck";
+// import hazelCast from 'middleware/hazelCast';
+import mongoose, { Model } from "mongoose";
+import Roles, { IRole } from "@/models/Roles";
+import Users, { IUser } from "@/models/Users";
+import Videos, { IVideo } from "@/models/Videos";
+import Collections, { ICollection } from "homeModels/Collections";
+import Colors, { IColors } from "homeModels/Colors";
+import Products, { IProducts } from "homeModels/Products";
+import Photos, { IPhoto } from "@/models/Photos";
+import Features, { IFeature } from "@/models/Features";
+import Countries, { ICountry } from "@/models/Countries";
+import Provinces, { IProvince } from "@/models/Provinces";
+import Cities, { ICity } from "@/models/Cities";
+import Currencies, { ICurrency } from "@/models/Currencies";
+import Agencies, { IAgent } from "@/models/Agencies";
 import {
   findAllUsersWithPagginate,
   findAllRolesWithPagginate,
@@ -47,8 +47,8 @@ import {
   findAllCurrencies,
   findAllAgenciesWithPagginate,
   findAllAgencies,
-} from '@/helpers/dbFinds';
-import type { MultiMap } from 'hazelcast-client/lib/proxy/MultiMap';
+} from "@/helpers/dbFinds";
+import type { MultiMap } from "hazelcast-client/lib/proxy/MultiMap";
 import {
   addFeaturesFaker,
   addPhotosFaker,
@@ -61,7 +61,7 @@ import {
   updateCountryCities,
   updateProvincesCities,
   addAgenciesFaker,
-} from '@/lib/faker';
+} from "@/lib/faker";
 
 const apiRoute = nextConnect<HazelcastType, NextApiResponse>({
   onError(error, req, res) {
@@ -91,7 +91,7 @@ type Results = {
 apiRoute.post(
   verifyToken,
   dbCheck,
-  hazelCast,
+  // hazelCast,
   async (req: HazelcastType, res: NextApiResponse<Data>, next: () => void) => {
     // addUsersFaker(2000);
     // addRolesFaker(2000);
@@ -140,7 +140,7 @@ apiRoute.post(
           }
         } else {
           switch (modelName) {
-            case 'Users':
+            case "Users":
               var result: Results = await findAllUsers(
                 modelName,
                 sortByField,
@@ -151,7 +151,7 @@ apiRoute.post(
               );
               res.status(200).json({ success: true, ...result });
               break;
-            case 'Roles':
+            case "Roles":
               var result: Results = await findAllRoles(
                 modelName,
                 sortByField,
@@ -162,7 +162,7 @@ apiRoute.post(
               );
               res.status(200).json({ success: true, ...result });
               break;
-            case 'Videos':
+            case "Videos":
               var result: Results = await findAllVideos(
                 modelName,
                 sortByField,
@@ -173,7 +173,7 @@ apiRoute.post(
               );
               res.status(200).json({ success: true, ...result });
               break;
-            case 'Photos':
+            case "Photos":
               var result: Results = await findAllPhotos(
                 modelName,
                 sortByField,
@@ -184,7 +184,7 @@ apiRoute.post(
               );
               res.status(200).json({ success: true, ...result });
               break;
-            case 'Features':
+            case "Features":
               var result: Results = await findAllFeatures(
                 modelName,
                 sortByField,
@@ -195,7 +195,7 @@ apiRoute.post(
               );
               res.status(200).json({ success: true, ...result });
               break;
-            case 'Countries':
+            case "Countries":
               var result: Results = await findAllCountries(
                 modelName,
                 sortByField,
@@ -207,7 +207,7 @@ apiRoute.post(
               );
               res.status(200).json({ success: true, ...result });
               break;
-            case 'Provinces':
+            case "Provinces":
               var result: Results = await findAllProvinces(
                 modelName,
                 sortByField,
@@ -218,7 +218,7 @@ apiRoute.post(
               );
               res.status(200).json({ success: true, ...result });
               break;
-            case 'Cities':
+            case "Cities":
               var result: Results = await findAllCities(
                 modelName,
                 sortByField,
@@ -229,7 +229,7 @@ apiRoute.post(
               );
               res.status(200).json({ success: true, ...result });
               break;
-            case 'Currencies':
+            case "Currencies":
               var result: Results = await findAllCurrencies(
                 modelName,
                 sortByField,
@@ -240,7 +240,7 @@ apiRoute.post(
               );
               res.status(200).json({ success: true, ...result });
               break;
-            case 'Agencies':
+            case "Agencies":
               var result: Results = await findAllAgencies(
                 modelName,
                 sortByField,
@@ -264,7 +264,7 @@ apiRoute.post(
         await hz.shutdown();
       } else {
         switch (modelName) {
-          case 'Users':
+          case "Users":
             var result: Results = await findAllUsersWithPagginate(
               collection as Model<IUser>,
               perPage,
@@ -274,7 +274,7 @@ apiRoute.post(
             );
             res.status(200).json({ success: true, ...result });
             break;
-          case 'Roles':
+          case "Roles":
             var result: Results = await findAllRolesWithPagginate(
               collection as Model<IRole>,
               perPage,
@@ -284,7 +284,7 @@ apiRoute.post(
             );
             res.status(200).json({ success: true, ...result });
             break;
-          case 'Collections':
+          case "Collections":
             var result: Results = await findAllCollectionsWithPagginate(
               collection as Model<ICollection>,
               perPage,
@@ -294,7 +294,7 @@ apiRoute.post(
             );
             res.status(200).json({ success: true, ...result });
             break;
-          case 'Colors':
+          case "Colors":
             var result: Results = await findAllColorsWithPagginate(
               collection as Model<IColors>,
               perPage,
@@ -304,7 +304,7 @@ apiRoute.post(
             );
             res.status(200).json({ success: true, ...result });
             break;
-          case 'Products':
+          case "Products":
             var result: Results = await findAllProductsWithPagginate(
               collection as Model<IProducts>,
               perPage,
@@ -314,7 +314,7 @@ apiRoute.post(
             );
             res.status(200).json({ success: true, ...result });
             break;
-          case 'Photos':
+          case "Photos":
             var result: Results = await findAllPhotosWithPagginate(
               collection as Model<IPhoto>,
               perPage,
@@ -324,7 +324,7 @@ apiRoute.post(
             );
             res.status(200).json({ success: true, ...result });
             break;
-          case 'Features':
+          case "Features":
             var result: Results = await findAllFeaturesWithPagginate(
               collection as Model<IFeature>,
               perPage,
@@ -334,7 +334,7 @@ apiRoute.post(
             );
             res.status(200).json({ success: true, ...result });
             break;
-          case 'Countries':
+          case "Countries":
             var result: Results = await findAllCountriesWithPagginate(
               collection as Model<ICountry>,
               perPage,
@@ -345,7 +345,7 @@ apiRoute.post(
             );
             res.status(200).json({ success: true, ...result });
             break;
-          case 'Provinces':
+          case "Provinces":
             var result: Results = await findAllProvincesWithPagginate(
               collection as Model<IProvince>,
               perPage,
@@ -356,7 +356,7 @@ apiRoute.post(
             );
             res.status(200).json({ success: true, ...result });
             break;
-          case 'Cities':
+          case "Cities":
             var result: Results = await findAllCitiesWithPagginate(
               collection as Model<ICity>,
               perPage,
@@ -367,7 +367,7 @@ apiRoute.post(
             );
             res.status(200).json({ success: true, ...result });
             break;
-          case 'Currencies':
+          case "Currencies":
             var result: Results = await findAllCurrenciesWithPagginate(
               collection as Model<ICurrency>,
               perPage,
@@ -378,7 +378,7 @@ apiRoute.post(
             );
             res.status(200).json({ success: true, ...result });
             break;
-          case 'Agencies':
+          case "Agencies":
             var result: Results = await findAllAgenciesWithPagginate(
               collection as Model<IAgent>,
               perPage,

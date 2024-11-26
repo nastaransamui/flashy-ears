@@ -47,11 +47,11 @@ export interface MainCardTypes {
   [key: string]: any
 }
 export interface State {
-  adminAccessToken: any;
+  adminAccessToken: string | null;
   adminThemeName: string | null;
-  homeThemeName: string;
+  homeThemeName: string | null;
   homePageType: string;
-  adminThemeType: PaletteMode | null;
+  adminThemeType: PaletteMode | string;
   adminLoadingBar: number;
   adminFormSubmit: boolean;
   profile: Profile;
@@ -74,10 +74,10 @@ export interface State {
 
 const initialState = {
   adminAccessToken: null,
-  adminThemeName: typeof window !== 'undefined' ? getCookies().adminThemeName as string : 'grayscale',
+  adminThemeName: getCookies()?.adminThemeName || 'grayscale',
   homeThemeName: 'oceanBlue',
   homePageType: 'landingPage',
-  adminThemeType: typeof window !== 'undefined' ? getCookies().adminThemeType as PaletteMode : 'dark',
+  adminThemeType: getCookies()?.adminThemeType || 'dark',
   adminLoadingBar: 0,
   adminFormSubmit: false,
   profile: {},
@@ -103,7 +103,10 @@ const reducer = (state: State = initialState, action: AnyAction) => {
     case HYDRATE:
       // Attention! This will overwrite client state! Real apps should use proper reconciliation.
       // console.log(action)
-      return { ...state, ...action.payload };
+      return {
+        ...state, ...action.payload,
+        totalData: [...state.totalData, ...action.payload.totalData],
+      };
     case 'SERVER_ACTION':
     case 'CLIENT_ACTION':
     case 'ADMIN_ACCESS_TOKEN':

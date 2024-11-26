@@ -95,7 +95,7 @@ const secondStyle = makeStyles<{}>()((theme) => {
   }
 })
 
-const VectorMap = dynamic(
+const VectorMap: any = dynamic(
   () => import('@react-jvectormap/core').then((m) => m.VectorMap),
   { ssr: false }
 );

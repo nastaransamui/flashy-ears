@@ -26,6 +26,7 @@ const DashboardWrapper = ({ children }: ChildrenProps) => {
     <Fragment >
       <ThemeProvider theme={adminTheme}>
         <CssBaseline />
+        {/* @ts-ignore */}
         <StylesProvider jss={jss}>
           <Backdrop
             sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}

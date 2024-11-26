@@ -5,9 +5,11 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import PaletteIcon from '@mui/icons-material/Palette'
 
-import SwipeableDrawer from '@mui/material/SwipeableDrawer';
+import dynamic from 'next/dynamic';
+
+const SwipeableDrawer: any = dynamic(() => import('@mui/material/SwipeableDrawer'), { ssr: false });
 import AppBar from '@mui/material/AppBar';
-import Hidden from '@mui/material/Hidden';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import IconButton from '@mui/material/IconButton'
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -28,6 +30,7 @@ import { DrawerStateType } from "@/shared/interfaces/react.interface";
 import Switch from '@mui/material/Switch';
 import palette from "@/theme/palette";
 import Loading from "@/shared/Loading";
+import { useTheme } from '@mui/material';
 export interface ThemeUserTypes {
   rtlActive: boolean;
   state: DrawerStateType
@@ -52,6 +55,7 @@ const TabPanel: FC<TabPanelTypes> = (props: TabPanelTypes) => {
 const ThemeUser: FC<ThemeUserTypes> = (props: ThemeUserTypes) => {
   const { t } = useTranslation('common');
 
+  const theme = useTheme();
   const { rtlActive, state } = props
   const {
     classes,
@@ -71,8 +75,7 @@ const ThemeUser: FC<ThemeUserTypes> = (props: ThemeUserTypes) => {
     changeHomePageType,
     pageTypeLoading
   } = useThemeUser(state)
-
-
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
   return (
     <Fragment>
       <SwipeableDrawer
@@ -91,11 +94,11 @@ const ThemeUser: FC<ThemeUserTypes> = (props: ThemeUserTypes) => {
             position='fixed'
             color='default'
             classes={{ root: classes.appbar }}>
-            <Hidden smUp>
+            {isSmallScreen && (
               <IconButton onClick={handleClose} className={classes.mobileBack}>
                 {rtlActive ? <ArrowBackIcon /> : <ArrowForwardIcon />}
               </IconButton>
-            </Hidden>
+            )}
             <Tabs
               value={tab}
               className={classes.tab}
@@ -111,7 +114,7 @@ const ThemeUser: FC<ThemeUserTypes> = (props: ThemeUserTypes) => {
               />
               <Tab
                 iconPosition="end"
-                icon={isDesktop ? <PaletteIcon sx={{ color: palette[homeThemeName]['palette']['primary']['main'] }} /> : ''}
+                icon={isDesktop ? <PaletteIcon sx={{ color: palette[homeThemeName!]['palette']['primary']['main'] }} /> : ''}
                 label={t('homeTheme')}
                 classes={{ root: classes.wrapper }}
               />
@@ -193,7 +196,7 @@ const ThemeUser: FC<ThemeUserTypes> = (props: ThemeUserTypes) => {
                 </Grid>
                 <Grid component="label" container alignItems="center" justifyContent='center' spacing={1}>{t('changeHomeLanding')}</Grid>
                 <Grid component="label" container alignItems="center" spacing={1}>
-                  {pageTypeLoading ? <Loading color={palette[homeThemeName]['palette']['primary']['main']} />
+                  {pageTypeLoading ? <Loading color={palette[homeThemeName!]['palette']['primary']['main']} />
                     :
                     <>
                       <Grid item>{t('landingPage')}</Grid>

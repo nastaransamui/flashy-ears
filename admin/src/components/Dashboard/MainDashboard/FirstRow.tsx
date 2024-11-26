@@ -208,7 +208,7 @@ const FirstRow: FC = (() => {
   const dispatch = useDispatch()
 
   const something = async () => {
-    const firstRow = await getFirstRow(adminAccessToken)
+    // const firstRow = await getFirstRow(adminAccessToken)
     const { success, data } = firstRow;
     if (success) {
       dispatch({
@@ -218,11 +218,11 @@ const FirstRow: FC = (() => {
     }
   }
 
-  useEffect(() => {
-    if (firstRow.length == 0) {
-      something()
-    }
-  }, [firstRow])
+  // useEffect(() => {
+  //   if (firstRow.length == 0) {
+  //     something()
+  //   }
+  // }, [firstRow])
 
   return (
     <Grid container spacing={1}>

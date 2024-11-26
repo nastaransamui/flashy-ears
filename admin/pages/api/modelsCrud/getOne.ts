@@ -1,12 +1,12 @@
-import nextConnect from 'next-connect';
-import { NextApiResponse } from 'next';
-import { HazelcastType } from '@/interfaces/next.interface';
-import { verifyToken } from 'middleware/verifyToken';
-import { dbCheck } from 'middleware/dbCheck';
-import hazelCast from 'middleware/hazelCast';
-import mongoose, { Model } from 'mongoose';
-import type { MultiMap } from 'hazelcast-client/lib/proxy/MultiMap';
-import { findFunctions, findMuliMapFunctions } from '@/helpers/dbFinds';
+import nextConnect from "next-connect";
+import { NextApiResponse } from "next";
+import { HazelcastType } from "@/interfaces/next.interface";
+import { verifyToken } from "middleware/verifyToken";
+import { dbCheck } from "middleware/dbCheck";
+// import hazelCast from 'middleware/hazelCast';
+import mongoose, { Model } from "mongoose";
+import type { MultiMap } from "hazelcast-client/lib/proxy/MultiMap";
+import { findFunctions, findMuliMapFunctions } from "@/helpers/dbFinds";
 
 const apiRoute = nextConnect<HazelcastType, NextApiResponse>({
   onError(error, req, res) {
@@ -30,7 +30,7 @@ type Data = {
 apiRoute.post(
   verifyToken,
   dbCheck,
-  hazelCast,
+  // hazelCast,
   async (req: HazelcastType, res: NextApiResponse<Data>, next: () => void) => {
     try {
       const { modelName, _id, lookupsFilter } = req.body;

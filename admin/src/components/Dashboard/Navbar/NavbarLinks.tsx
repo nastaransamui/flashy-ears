@@ -2,7 +2,7 @@
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Paper from '@mui/material/Paper'
 import Grow from '@mui/material/Grow'
-import Hidden from '@mui/material/Hidden'
+// import Hidden from '@mui/material/Hidden'
 import Popper from '@mui/material/Popper'
 import IconButton from '@mui/material/IconButton'
 import List from '@mui/material/List'
@@ -24,7 +24,7 @@ import { CustomPropsTypes } from '@/interfaces/react.interface';
 import useNavbarLinks from './useNavbarLinks'
 import navbarLinksStyle from './navbar-links-style';
 import useCurrentRouteState from '@/hookes/useCurrentRouteState';
-
+import useMediaQuery from '@mui/material/useMediaQuery';
 export interface NavbarLinksTypes extends CustomPropsTypes {
   rtlActive: boolean;
   handleDrawerToggle: () => void;
@@ -37,7 +37,7 @@ const NavbarLinks: FC<NavbarLinksTypes> = (props: NavbarLinksTypes) => {
     handleClickSettings, handleCloseSetting, t, i18n, isMobile, handleChangeLang, handleChangeMode } = useNavbarLinks();
   const { rtlActive, handleDrawerToggle, sideBarbgColor } = props;
   const { classes, cx, theme } = navbarLinksStyle({ sideBarbgColor: sideBarbgColor as SidebarColor })
-
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const currentRouteState = useCurrentRouteState();
   const { modelName } = currentRouteState;
   const wrapper =
@@ -91,13 +91,13 @@ const NavbarLinks: FC<NavbarLinksTypes> = (props: NavbarLinksTypes) => {
               ' ' + classes.links
             }
           />
-          <Hidden smUp implementation='css'>
+          {isSmallScreen && (
             <span onClick={(event: React.MouseEvent<HTMLElement>) => {
               handleClickProfile((event as any))
             }} className={classes.linkText + " " + classes[sideBarbgColor + 'Background' as keyof typeof classes]}>
               {t('MyProfile')}
             </span>
-          </Hidden>
+          )}
         </IconButton>
         <Popper
           open={Boolean(openProfile)}
@@ -182,13 +182,13 @@ const NavbarLinks: FC<NavbarLinksTypes> = (props: NavbarLinksTypes) => {
               ' ' + classes.links
             }
           />
-          <Hidden smUp implementation='css'>
+          {isSmallScreen && (
             <span onClick={(event: React.MouseEvent<HTMLElement>) => {
               handleClickSettings((event as any))
             }} className={classes.linkText + " " + classes[sideBarbgColor + 'Background' as keyof typeof classes]}>
               {t('header')[`header_language` as keyof typeof t]}
             </span>
-          </Hidden>
+          )}
         </IconButton>
         <Popper
           open={Boolean(openSettings)}
@@ -270,13 +270,13 @@ const NavbarLinks: FC<NavbarLinksTypes> = (props: NavbarLinksTypes) => {
             }
           />
         )}
-        <Hidden smUp implementation='css'>
+        {isSmallScreen && (
           <span className={classes.linkText + " " + classes[sideBarbgColor + 'Background' as keyof typeof classes]}>
             {theme.palette.mode == 'light'
               ? t('header')[`header_dark` as keyof typeof t]
               : t('header')[`header_light` as keyof typeof t]}
           </span>
-        </Hidden>
+        )}
       </IconButton>
     </div>
   )

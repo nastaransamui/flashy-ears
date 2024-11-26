@@ -1,10 +1,10 @@
-import nextConnect from 'next-connect';
-import { NextApiResponse } from 'next';
-import { HazelcastType } from '@/interfaces/next.interface';
-import { verifyToken } from 'middleware/verifyToken';
-import { dbCheck } from 'middleware/dbCheck';
-import hazelCast from 'middleware/hazelCast';
-import type { MultiMap } from 'hazelcast-client/lib/proxy/MultiMap';
+import nextConnect from "next-connect";
+import { NextApiResponse } from "next";
+import { HazelcastType } from "@/interfaces/next.interface";
+import { verifyToken } from "middleware/verifyToken";
+import { dbCheck } from "middleware/dbCheck";
+// import hazelCast from 'middleware/hazelCast';
+import type { MultiMap } from "hazelcast-client/lib/proxy/MultiMap";
 import {
   searchAgencies,
   searchAllCities,
@@ -18,10 +18,10 @@ import {
   searchUsers,
   searchCollections,
   searchColors,
-} from '@/helpers/searchFind';
+} from "@/helpers/searchFind";
 
 export function escapeRegExp(value: string) {
-  return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+  return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 }
 
 const apiRoute = nextConnect<HazelcastType, NextApiResponse>({
@@ -50,12 +50,12 @@ type Results = {
 apiRoute.post(
   verifyToken,
   dbCheck,
-  hazelCast,
+  // hazelCast,
   async (req: HazelcastType, res: NextApiResponse<Data>) => {
     try {
       const { modelName, activeOnly, filterValue, fieldValue } = req.body;
       const hz = req.hazelCast;
-      const searchRegex = new RegExp(escapeRegExp(filterValue), 'i');
+      const searchRegex = new RegExp(escapeRegExp(filterValue), "i");
       // console.log(hz);
       if (hz) {
         const multiMap = await hz.getMultiMap(modelName);
@@ -74,34 +74,34 @@ apiRoute.post(
         }
       } else {
         switch (modelName) {
-          case 'Users':
+          case "Users":
             var result: Results = await searchUsers(searchRegex, fieldValue);
             res.status(200).json({ success: true, ...result });
             break;
-          case 'Roles':
+          case "Roles":
             var result: Results = await searchRoles(searchRegex, fieldValue);
             res.status(200).json({ success: true, ...result });
             break;
-          case 'Collections':
+          case "Collections":
             var result: Results = await searchCollections(
               searchRegex,
               fieldValue
             );
             res.status(200).json({ success: true, ...result });
             break;
-          case 'Colors':
+          case "Colors":
             var result: Results = await searchColors(searchRegex, fieldValue);
             res.status(200).json({ success: true, ...result });
             break;
-          case 'Photos':
+          case "Photos":
             var result: Results = await searchPhotos(searchRegex, fieldValue);
             res.status(200).json({ success: true, ...result });
             break;
-          case 'Features':
+          case "Features":
             var result: Results = await searchFeatures(searchRegex, fieldValue);
             res.status(200).json({ success: true, ...result });
             break;
-          case 'Countries':
+          case "Countries":
             var result: Results = await searchAllCountries(
               searchRegex,
               fieldValue,
@@ -109,7 +109,7 @@ apiRoute.post(
             );
             res.status(200).json({ success: true, ...result });
             break;
-          case 'Currencies':
+          case "Currencies":
             var result: Results = await searchAllCurrencies(
               searchRegex,
               fieldValue,
@@ -117,21 +117,21 @@ apiRoute.post(
             );
             res.status(200).json({ success: true, ...result });
             break;
-          case 'Provinces':
+          case "Provinces":
             var result: Results = await searchAllProvince(
               searchRegex,
               fieldValue
             );
             res.status(200).json({ success: true, ...result });
             break;
-          case 'Cities':
+          case "Cities":
             var result: Results = await searchAllCities(
               searchRegex,
               fieldValue
             );
             res.status(200).json({ success: true, ...result });
             break;
-          case 'Agencies':
+          case "Agencies":
             var result: Results = await searchAgencies(filterValue, fieldValue);
             res.status(200).json({ success: true, ...result });
             break;

@@ -262,6 +262,7 @@ const MainTable: FC<MainTableType> = ((props: MainTableType) => {
                             return (
                               <div style={{ display: 'flex', width: '100%' }}>
                                 <Avatar sx={{ width: 30, height: 30 }}>
+                                  {/* @ts-ignore */}
                                   <YouTube
                                     videoId={params.row.youTubeId}
                                     opts={{ playerVars: { autoplay: 1 } }}

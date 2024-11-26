@@ -1,8 +1,8 @@
-import nextConnect from 'next-connect';
-import { NextApiResponse } from 'next';
-import { HazelcastType } from '@/interfaces/next.interface';
-import { verifyToken } from 'middleware/verifyToken';
-import hazelCast from 'middleware/hazelCast';
+import nextConnect from "next-connect";
+import { NextApiResponse } from "next";
+import { HazelcastType } from "@/interfaces/next.interface";
+import { verifyToken } from "middleware/verifyToken";
+// import hazelCast from 'middleware/hazelCast';
 
 const apiRoute = nextConnect<HazelcastType, NextApiResponse>({
   onError(error, req, res) {
@@ -18,19 +18,19 @@ const apiRoute = nextConnect<HazelcastType, NextApiResponse>({
 });
 
 type MultimapType =
-  | 'roles'
-  | 'users'
-  | 'videos'
-  | 'photos'
-  | 'features'
-  | 'countries'
-  | 'provinces'
-  | 'cities'
-  | 'agencies';
+  | "roles"
+  | "users"
+  | "videos"
+  | "photos"
+  | "features"
+  | "countries"
+  | "provinces"
+  | "cities"
+  | "agencies";
 
 apiRoute.get(
   // verifyToken,
-  hazelCast,
+  // hazelCast,
   async (req: HazelcastType, res: NextApiResponse) => {
     const hz = req.hazelCast;
     if (hz) {
@@ -41,10 +41,10 @@ apiRoute.get(
       const multiMap = await hz.getMultiMap(`${capitalCaseModel}`);
       await multiMap.destroy();
       console.log(`clear ${capitalCaseModel} catch`);
-      res.status(200).redirect('/admin/dashboard');
+      res.status(200).redirect("/admin/dashboard");
       await hz.shutdown();
     } else {
-      res.status(200).redirect('/admin/dashboard');
+      res.status(200).redirect("/admin/dashboard");
     }
   }
 );

@@ -42,7 +42,6 @@ export default function MyApp({ Component, ...rest }: NextProps) {
   //     preloader?.remove();
   //   }
   // }, [])
-
   useEffect(() => {
     // Load Jquery
     typeof document !== 'undefined'
@@ -58,6 +57,7 @@ export default function MyApp({ Component, ...rest }: NextProps) {
       <Provider store={store}>
         <CssBaseline />
         <AppWrapper>
+          {/* @ts-ignore */}
           <Component {...pageProps} key={router.route} router={router} isVercel={isVercel} />
         </AppWrapper>
       </Provider>

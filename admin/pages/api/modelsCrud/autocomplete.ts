@@ -1,14 +1,14 @@
-import nextConnect from 'next-connect';
-import { NextApiResponse } from 'next';
-import { HazelcastType } from '@/interfaces/next.interface';
-import { verifyToken } from 'middleware/verifyToken';
-import { dbCheck } from 'middleware/dbCheck';
-import hazelCast from 'middleware/hazelCast';
+import nextConnect from "next-connect";
+import { NextApiResponse } from "next";
+import { HazelcastType } from "@/interfaces/next.interface";
+import { verifyToken } from "middleware/verifyToken";
+import { dbCheck } from "middleware/dbCheck";
+// import hazelCast from 'middleware/hazelCast';
 
-import { autoCompleteRoles } from '@/helpers/autoComplete';
+import { autoCompleteRoles } from "@/helpers/autoComplete";
 
 export function escapeRegExp(value: string) {
-  return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+  return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 }
 
 const apiRoute = nextConnect<HazelcastType, NextApiResponse>({
@@ -36,18 +36,18 @@ type Results = {
 apiRoute.post(
   verifyToken,
   dbCheck,
-  hazelCast,
+  // hazelCast,
   async (req: HazelcastType, res: NextApiResponse<Data>) => {
     try {
       const { modelName, activeOnly, filterValue, fieldValue } = req.body;
       const hz = req.hazelCast;
-      const searchRegex = new RegExp(escapeRegExp(filterValue), 'i');
+      const searchRegex = new RegExp(escapeRegExp(filterValue), "i");
       // console.log(hz);
       if (hz) {
-        res.status(401).json({ success: false, error: 'update HZ search' });
+        res.status(401).json({ success: false, error: "update HZ search" });
       } else {
         switch (modelName) {
-          case 'Roles':
+          case "Roles":
             var result: Results = await autoCompleteRoles(
               searchRegex,
               fieldValue
