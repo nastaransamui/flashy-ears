@@ -32,7 +32,7 @@ import Product from '@/src/components/Products/Product/Product'
 // import Agent from '@/src/components/Agents/Agent/Agent';
 import { RoutesViews } from '@/interfaces/react.interface';
 import { useSelector } from 'react-redux';
-import { State } from '@/src/redux/store';
+import { Profile, State } from '@/src/redux/store';
 export function useQuery() {
   const { search } = useLocation();
 
@@ -53,25 +53,11 @@ const ReactRouter: FC<ProDashboardProps> = (props: ProDashboardProps) => {
       Colors,
       Color,
       Products,
-      Product,
-      // Photos,
-      // Photo,
-      // Features,
-      // Feature,
-      // Countries,
-      // Country,
-      // Provinces,
-      // Province,
-      // Cities,
-      // City,
-      // Currencies,
-      // Currency,
-      // Agencies,
-      // Agent
+      Product
     }
   }, [])
 
-  const { profile } = useSelector<State, State>(state => state)
+  const profile = useSelector<State, Profile>(state => state.profile)
 
   // Spread array of routes
   const allRoutes: RoutesViews[] = []
@@ -86,7 +72,7 @@ const ReactRouter: FC<ProDashboardProps> = (props: ProDashboardProps) => {
 
   return (
     // <React.StrictMode>
-    <Routes>
+    <Routes >
       <Route path="/" element={<Prodashboard {...props} />} >
         <Route index element={<MainDashboard {...props} />} />
         {

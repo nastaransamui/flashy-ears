@@ -92,7 +92,9 @@ describe('load dashboard', () => {
   it('Test sidebarDrawer', async () => {
     const { container } = render(
       <Provider store={store} >
-        <RouterContext.Provider value={{ ...nextRouter, ...router }}>
+        <RouterContext.Provider value={{ ...nextRouter, ...router }} future={{
+          v7_startTransition: true,
+        }}>
           <RouterProvider router={router} />
         </RouterContext.Provider>
       </Provider>

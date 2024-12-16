@@ -18,7 +18,8 @@ export interface ClickAwayCollapseType {
 
 const ClickAwayCollapse: FC<ClickAwayCollapseType> = (({ children, index }) => {
 
-  const { expanded } = useSelector<State, State>(state => state);
+  const expanded = useSelector<State, { [key: string]: boolean }>(state => state.expanded)
+
   const dispatch = useDispatch();
 
   const awayClicked = (index: number, expanded: object) => {

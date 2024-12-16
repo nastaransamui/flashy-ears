@@ -18,7 +18,7 @@ import { DataShowCtx } from '@/shared/DataShow/useDataShow';
 import { Player } from 'video-react';
 import YouTube from 'react-youtube';
 import { useSelector } from "react-redux";
-import { State } from "@/src/redux/store";
+import { State, TotalDataType } from "@/src/redux/store";
 
 const cardContent = makeStyles<{ gridView: GridSize, elRefs: any }>()((theme, { gridView, elRefs }) => {
   return {
@@ -85,7 +85,7 @@ const CardContent: FC<CardContentTypes> = ((props: CardContentTypes) => {
   const { elRefs, media, path, isYoutube, colorCode } = props
   const currentRouteState = useCurrentRouteState();
   const { modelName, predefineDb, activeOnly } = currentRouteState;
-  const { totalData } = useSelector<State, State>((state) => state);
+  const totalData = useSelector<State, TotalDataType[]>((state) => state.totalData);
 
   const gridView: GridSize = useReadLocalStorage(`${modelName}_gridView`)!
   const { classes, theme } = cardContent({ gridView, elRefs });

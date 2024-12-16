@@ -1,45 +1,44 @@
-import { faker } from '@faker-js/faker';
-import Users from '@/models/Users';
-import Roles from '@/models/Roles';
-import Videos from '@/models/Videos';
-import { faker as farsiFaker } from '@faker-js/faker/locale/fa';
-import Photos from '@/models/Photos';
-import Features from '@/models/Features';
-import Provinces from '@/models/Provinces';
-import Countries from '@/models/Countries';
-import Cities from '@/models/Cities';
-import Agencies from '@/models/Agencies';
+import { faker } from "@faker-js/faker";
+import Users from "@/models/Users";
+import Roles from "@/models/Roles";
+import Videos from "@/models/Videos";
+import { faker as farsiFaker } from "@faker-js/faker/locale/fa";
+import Photos from "@/models/Photos";
+import Features from "@/models/Features";
+import Provinces from "@/models/Provinces";
+import Countries from "@/models/Countries";
+import Cities from "@/models/Cities";
+import Agencies from "@/models/Agencies";
+import mongoose, { Model } from "mongoose";
 
-var ObjectId = require('mongodb').ObjectID;
-
-export const addUsersFaker = (total: number) => {
+export const addUsersFaker = async (total: number) => {
   let timeSeriesData = [];
   for (let i = 0; i < total; i++) {
     const firstName = faker.name.firstName();
     const lastName = faker.name.lastName();
     let user = {
       userName: faker.internet.email(firstName, lastName).toLowerCase(),
-      password: 'U2FsdGVkX197jTV5P20MTiKLpRO0Vq46tgNeXjWoC04=',
+      password: "U2FsdGVkX197jTV5P20MTiKLpRO0Vq46tgNeXjWoC04=",
       profileImage: faker.image.avatar(),
-      prifleImageKey: '',
-      finalFolder: 'so',
-      folderId: 'so',
+      prifleImageKey: "",
+      finalFolder: "so",
+      folderId: "so",
       firstName,
       lastName,
-      role_id: [ObjectId('6350dd3a28c3c4a13a1c7248')],
-      roleName: 'Super User',
+      role_id: [new mongoose.Types.ObjectId("6350dd3a28c3c4a13a1c7248")],
+      roleName: "Super User",
       agents_id: [],
       city_id: [],
-      cityName: '',
+      cityName: "",
       provinde_id: [],
-      provinceName: '',
+      provinceName: "",
       country_id: [],
-      countryName: '',
+      countryName: "",
       position: faker.company.name(),
       aboutMe: faker.lorem.paragraph(),
       isAdmin: true,
       isVercel: false,
-      accessToken: '',
+      accessToken: "",
       facebook: [],
       google: [],
       twitter: [],
@@ -48,168 +47,170 @@ export const addUsersFaker = (total: number) => {
     };
     timeSeriesData.push(user);
   }
-  Users.insertMany(timeSeriesData, async (err, data) => {
-    console.log(err);
-    //Seperate _ids from users
-    // console.log(data);
-    if (data !== undefined) {
-      const usersIdArray = data.map((a) => a._id);
-      // add current user to array of Ids
-      // usersIdArray.push(ObjectId('6348c1d8e5875d7b0513eda2'));
+  try {
+    // Insert users
+    const insertedUsers = await Users.insertMany(timeSeriesData);
+    if (insertedUsers) {
+      // Extract inserted user IDs
+      const usersIdArray = insertedUsers.map((user) => user._id);
       console.log(usersIdArray);
+
+      // Update roles with the new user IDs
       await Roles.updateOne(
         {
-          _id: ObjectId('6350dd3a28c3c4a13a1c7248'),
+          _id: new mongoose.Types.ObjectId("6350dd3a28c3c4a13a1c7248"),
         },
         {
-          $push: {
-            users_id: [...usersIdArray],
-          },
+          $push: { users_id: { $each: usersIdArray } },
         }
       );
+
+      console.log("Roles updated successfully with user IDs.");
     }
-  });
+  } catch (error) {
+    console.error("Error during user insertion or role update:", error);
+  }
 };
 var routes = [
   {
-    state: 'dashboardMain',
+    state: "dashboardMain",
     access: true,
   },
   {
-    state: 'userCollapse',
+    state: "userCollapse",
     access: true,
   },
   {
-    state: 'usersMultiCollapse',
+    state: "usersMultiCollapse",
     access: true,
   },
   {
-    state: 'userMultiCollapse',
+    state: "userMultiCollapse",
     access: true,
   },
   {
-    state: 'roleCollapse',
+    state: "roleCollapse",
     access: true,
   },
   {
-    state: 'rolesMultiCollapse',
+    state: "rolesMultiCollapse",
     access: true,
   },
   {
-    state: 'roleMultiCollapse',
+    state: "roleMultiCollapse",
     access: true,
   },
   {
-    state: 'mainPageCollapse',
+    state: "mainPageCollapse",
     access: true,
   },
   {
-    state: 'collectionMultiCollapse',
+    state: "collectionMultiCollapse",
     access: true,
   },
   {
-    state: 'collectionsCollapse',
+    state: "collectionsCollapse",
     access: true,
   },
   {
-    state: 'collectionCollapse',
+    state: "collectionCollapse",
     access: true,
   },
   {
-    state: 'photoMultiCollapse',
+    state: "photoMultiCollapse",
     access: true,
   },
   {
-    state: 'photosCollapse',
+    state: "photosCollapse",
     access: true,
   },
   {
-    state: 'photoCollapse',
+    state: "photoCollapse",
     access: true,
   },
   {
-    state: 'featureMultiCollapse',
+    state: "featureMultiCollapse",
     access: true,
   },
   {
-    state: 'featuresCollapse',
+    state: "featuresCollapse",
     access: true,
   },
   {
-    state: 'featureCollapse',
+    state: "featureCollapse",
     access: true,
   },
   {
-    state: 'aboutCollapse',
+    state: "aboutCollapse",
     access: true,
   },
   {
-    state: 'mainDataCollapse',
+    state: "mainDataCollapse",
     access: true,
   },
   {
-    state: 'allGlobeCollapse',
+    state: "allGlobeCollapse",
     access: true,
   },
   {
-    state: 'gCountriesCollapse',
+    state: "gCountriesCollapse",
     access: true,
   },
   {
-    state: 'gCurrenciesMultiCollapse',
+    state: "gCurrenciesMultiCollapse",
     access: true,
   },
   {
-    state: 'gHotelsMultiCollapse',
+    state: "gHotelsMultiCollapse",
     access: true,
   },
   {
-    state: 'activeGlobeCollapse',
+    state: "activeGlobeCollapse",
     access: true,
   },
   {
-    state: 'aCountriesCollapse',
+    state: "aCountriesCollapse",
     access: true,
   },
   {
-    state: 'aProvincesCollapse',
+    state: "aProvincesCollapse",
     access: true,
   },
   {
-    state: 'aCitiesCollapse',
+    state: "aCitiesCollapse",
     access: true,
   },
   {
-    state: 'aCurrenciesMultiCollapse',
+    state: "aCurrenciesMultiCollapse",
     access: true,
   },
   {
-    state: 'agencyDataCollapse',
+    state: "agencyDataCollapse",
     access: true,
   },
   {
-    state: 'agenciesCollapse',
+    state: "agenciesCollapse",
     access: true,
   },
   {
-    state: 'agencyCollapse',
+    state: "agencyCollapse",
     access: true,
   },
   {
-    state: 'hotelsDataCollapse',
+    state: "hotelsDataCollapse",
     access: true,
   },
   {
-    state: 'hotelsCollapse',
+    state: "hotelsCollapse",
     access: true,
   },
   {
-    state: 'hotelCollapse',
+    state: "hotelCollapse",
     access: true,
   },
 ];
 
-export const addRolesFaker = (total: number) => {
+export const addRolesFaker = async (total: number) => {
   let timeSeriesData = [];
   for (let i = 0; i < total; i++) {
     const roleName =
@@ -220,18 +221,24 @@ export const addRolesFaker = (total: number) => {
       remark: faker.lorem.paragraph(),
       isActive: false,
       routes: routes,
-      icon: 'M22 11V3h-7v3H9V3H2v8h7V8h2v10h4v3h7v-8h-7v3h-2V8h2v3z',
+      icon: "M22 11V3h-7v3H9V3H2v8h7V8h2v10h4v3h7v-8h-7v3h-2V8h2v3z",
       createdAt: faker.date.past(),
       updatedAt: faker.date.past(),
     };
     timeSeriesData.push(role);
   }
-  Roles.insertMany(timeSeriesData, async (err, data) => {
-    console.log(err);
-  });
+  try {
+    // Insert users
+    const insertedRoles = await Roles.insertMany(timeSeriesData);
+    if (insertedRoles) {
+      console.log("Roles updated successfully with user IDs.");
+    }
+  } catch (error) {
+    console.error("Error during user insertion or role update:", error);
+  }
 };
 
-export const addVideosFaker = (total: number) => {
+export const addVideosFaker = async (total: number) => {
   let timeSeriesData = [];
   for (let i = 0; i < total; i++) {
     const title_en = faker.name.firstName();
@@ -253,29 +260,35 @@ export const addVideosFaker = (total: number) => {
       button_en,
       button_fa,
       imageMobileShowKey:
-        'videos/ebz34/ef1c48d7-3ed9-43ce-a48c-50fe143f1492.jpg',
-      videoPosterKey: 'videos/ebz34/b4cc61dd-28fd-4e04-aa5f-95402fe37d32.jpg',
-      videoLinkKey: 'videos/ebz34/27faaf4e-8091-49cb-ae69-646f147237d8.mp4',
-      youTubeId: i % 2 == 0 ? 'xcJtL7QggTI' : '',
-      finalFolder: 'videos',
-      folderId: 'ebz34',
+        "videos/ebz34/ef1c48d7-3ed9-43ce-a48c-50fe143f1492.jpg",
+      videoPosterKey: "videos/ebz34/b4cc61dd-28fd-4e04-aa5f-95402fe37d32.jpg",
+      videoLinkKey: "videos/ebz34/27faaf4e-8091-49cb-ae69-646f147237d8.mp4",
+      youTubeId: i % 2 == 0 ? "xcJtL7QggTI" : "",
+      finalFolder: "videos",
+      folderId: "ebz34",
       isActive: i % 2 == 0 ? true : false,
       isYoutube: i % 2 == 0 ? true : false,
       isVercel: false,
-      imageMobileShow: 'https://picsum.photos/id/124/1280/720',
-      videoPoster: 'https://picsum.photos/id/13/1280/720',
-      videoLink: 'http://media.w3.org/2010/05/bunny/movie.mp4',
+      imageMobileShow: "https://picsum.photos/id/124/1280/720",
+      videoPoster: "https://picsum.photos/id/13/1280/720",
+      videoLink: "http://media.w3.org/2010/05/bunny/movie.mp4",
       createdAt: faker.date.past(),
       updatedAt: faker.date.past(),
     };
     timeSeriesData.push(video);
   }
-  Videos.insertMany(timeSeriesData, async (err, data) => {
-    console.log(err);
-  });
+  try {
+    // Insert users
+    const insertedVideos = await Videos.insertMany(timeSeriesData);
+    if (insertedVideos) {
+      console.log("Videos updated successfully with user IDs.");
+    }
+  } catch (error) {
+    console.error("Error during user insertion or role update:", error);
+  }
 };
 
-export const addPhotosFaker = (total: number) => {
+export const addPhotosFaker = async (total: number) => {
   let timeSeriesData = [];
   for (let i = 0; i < total; i++) {
     const title_en = faker.name.firstName();
@@ -296,23 +309,29 @@ export const addPhotosFaker = (total: number) => {
       subTitle_fa,
       button_en,
       button_fa,
-      finalFolder: 'photos',
-      folderId: 'ebz34',
+      finalFolder: "photos",
+      folderId: "ebz34",
       isActive: i % 2 == 0 ? true : false,
       isVercel: false,
       imageShow: faker.image.avatar(),
-      imageShowKey: 'photo/ebz34/b4cc61dd-28fd-4e04-aa5f-95402fe37d32.jpg',
+      imageShowKey: "photo/ebz34/b4cc61dd-28fd-4e04-aa5f-95402fe37d32.jpg",
       // createdAt: faker.date.past(),
       updatedAt: faker.date.past(),
     };
     timeSeriesData.push(video);
   }
-  Photos.insertMany(timeSeriesData, async (err, data) => {
-    console.log(err);
-  });
+  try {
+    // Insert users
+    const insertedPhotos = await Photos.insertMany(timeSeriesData);
+    if (insertedPhotos) {
+      console.log("Photos updated successfully with user IDs.");
+    }
+  } catch (error) {
+    console.error("Error during user insertion or role update:", error);
+  }
 };
 
-export const addFeaturesFaker = (total: number) => {
+export const addFeaturesFaker = async (total: number) => {
   let timeSeriesData = [];
   for (let i = 0; i < total; i++) {
     const title_en = faker.name.firstName();
@@ -322,12 +341,12 @@ export const addFeaturesFaker = (total: number) => {
       title_en,
       title_fa,
       imageShow: faker.image.avatar(),
-      imageShowKey: 'photo/ebz34/b4cc61dd-28fd-4e04-aa5f-95402fe37d32.jpg',
-      videoLink: 'http://media.w3.org/2010/05/bunny/movie.mp4',
-      videoLinkKey: 'features/ebz34/27faaf4e-8091-49cb-ae69-646f147237d8.mp4',
-      youTubeId: i % 2 == 0 ? 'xcJtL7QggTI' : '',
-      finalFolder: 'features',
-      folderId: 'ebz34',
+      imageShowKey: "photo/ebz34/b4cc61dd-28fd-4e04-aa5f-95402fe37d32.jpg",
+      videoLink: "http://media.w3.org/2010/05/bunny/movie.mp4",
+      videoLinkKey: "features/ebz34/27faaf4e-8091-49cb-ae69-646f147237d8.mp4",
+      youTubeId: i % 2 == 0 ? "xcJtL7QggTI" : "",
+      finalFolder: "features",
+      folderId: "ebz34",
       isActive: i % 2 == 0 ? true : false,
       isVercel: false,
       isYoutube: i % 2 == 0 ? true : false,
@@ -336,12 +355,18 @@ export const addFeaturesFaker = (total: number) => {
     };
     timeSeriesData.push(video);
   }
-  Features.insertMany(timeSeriesData, async (err, data) => {
-    console.log(err);
-  });
+  try {
+    // Insert users
+    const insertedFeatures = await Features.insertMany(timeSeriesData);
+    if (insertedFeatures) {
+      console.log("Features updated successfully with user IDs.");
+    }
+  } catch (error) {
+    console.error("Error during user insertion or role update:", error);
+  }
 };
 
-export const addAgenciesFaker = (total: number) => {
+export const addAgenciesFaker = async (total: number) => {
   let timeSeriesData = [];
   for (let i = 0; i < total; i++) {
     const firstName = faker.name.firstName();
@@ -351,45 +376,45 @@ export const addAgenciesFaker = (total: number) => {
       agentName: firstName + lastName + i,
       address: faker.address.cityName() + faker.address.country(),
       logoImage: faker.image.avatar(),
-      logoImageKey: '',
-      finalFolder: 'so',
-      folderId: 'so',
+      logoImageKey: "",
+      finalFolder: "so",
+      folderId: "so",
       city_id: [
         i % 2 == 0
-          ? ObjectId('635f90bbee881d1d7fe5330b')
-          : Object('635f90adee881d1d7fe4f972'),
+          ? new mongoose.Types.ObjectId("635f90bbee881d1d7fe5330b")
+          : Object("635f90adee881d1d7fe4f972"),
       ],
-      cityName: i % 2 == 0 ? 'Airdrie' : 'Abbotsbury',
+      cityName: i % 2 == 0 ? "Airdrie" : "Abbotsbury",
       province_id: [
         i % 2 == 0
-          ? ObjectId('635f313ee82381e9a3f84505')
-          : Object('635f313ee82381e9a3f84350'),
+          ? new mongoose.Types.ObjectId("635f313ee82381e9a3f84505")
+          : Object("635f313ee82381e9a3f84350"),
       ],
-      provinceName: i % 2 == 0 ? 'Alberta' : 'New South Wales',
+      provinceName: i % 2 == 0 ? "Alberta" : "New South Wales",
       country_id: [
         i % 2 == 0
-          ? ObjectId('634e6cd8c680cc9a50ac81ed')
-          : Object('634e6cd8c680cc9a50ac81dd'),
+          ? new mongoose.Types.ObjectId("634e6cd8c680cc9a50ac81ed")
+          : Object("634e6cd8c680cc9a50ac81dd"),
       ],
-      countryName: i % 2 == 0 ? 'Canada' : 'Australia',
+      countryName: i % 2 == 0 ? "Canada" : "Australia",
       phones: [
         {
-          tags: [i % 2 == 0 ? 'Mobile' : 'Company'],
+          tags: [i % 2 == 0 ? "Mobile" : "Company"],
           number: faker.phone.imei(),
           remark: faker.lorem.lines(1),
         },
         {
-          tags: [i % 2 == 0 ? 'Mobile' : 'Company'],
+          tags: [i % 2 == 0 ? "Mobile" : "Company"],
           number: faker.phone.imei(),
           remark: faker.lorem.lines(1),
         },
         {
-          tags: [i % 2 == 0 ? 'Mobile' : 'Company'],
+          tags: [i % 2 == 0 ? "Mobile" : "Company"],
           number: faker.phone.imei(),
           remark: faker.lorem.lines(1),
         },
         {
-          tags: [i % 2 == 0 ? 'Mobile' : 'Company'],
+          tags: [i % 2 == 0 ? "Mobile" : "Company"],
           number: faker.phone.imei(),
           remark: faker.lorem.lines(1),
         },
@@ -397,18 +422,20 @@ export const addAgenciesFaker = (total: number) => {
       email: faker.internet.email(firstName, lastName).toLowerCase(),
       currencyCode_id: [
         i % 2 == 0
-          ? ObjectId('635f1f07fa784578cf07c6e0')
-          : ObjectId('635f1f07fa784578cf07c6c2'),
+          ? new mongoose.Types.ObjectId("635f1f07fa784578cf07c6e0")
+          : new mongoose.Types.ObjectId("635f1f07fa784578cf07c6c2"),
       ],
-      currencyCode: i % 2 == 0 ? 'CAD' : 'AUD',
+      currencyCode: i % 2 == 0 ? "CAD" : "AUD",
       creditAmount: faker.datatype.number({ min: 1000000 }),
       depositAmount: faker.datatype.number({ min: 1000000 }),
       remainCreditAmount: faker.datatype.number({ min: 1000000 }),
       remainDepositAmount: faker.datatype.number({ min: 1000000 }),
-      userCreated: [ObjectId('634e125be99740ef55a429b7')],
-      userUpdated: [ObjectId('634e125be99740ef55a429b7')],
-      accountManager_id: [ObjectId('634e125be99740ef55a429b7')],
-      accountManager: 'test@test.com',
+      userCreated: [new mongoose.Types.ObjectId("634e125be99740ef55a429b7")],
+      userUpdated: [new mongoose.Types.ObjectId("634e125be99740ef55a429b7")],
+      accountManager_id: [
+        new mongoose.Types.ObjectId("634e125be99740ef55a429b7"),
+      ],
+      accountManager: "test@test.com",
       isActive: i % 2 == 0 ? true : false,
       isVercel: false,
       remark: faker.lorem.paragraph(),
@@ -417,40 +444,39 @@ export const addAgenciesFaker = (total: number) => {
     };
     timeSeriesData.push(agent);
   }
-  Agencies.insertMany(timeSeriesData, async (err, data) => {
-    console.log(err);
-  });
+  try {
+    // Insert users
+    const insertedAgencies = await Agencies.insertMany(timeSeriesData);
+    if (insertedAgencies) {
+      console.log("Agencies updated successfully with user IDs.");
+    }
+  } catch (error) {
+    console.error("Error during user insertion or role update:", error);
+  }
 };
 
-export const updateProvince = () => {
-  Provinces.updateMany(
-    {},
-    {
-      $set: {
-        isActive: false,
-        // isHotelsActive: false,
-        // cities_id: [],
-        // users_id: [],
-        // agents_id: [],
-        // hotels_id: [],
-        // suppliers_id: [],
+export const updateProvince = async () => {
+  try {
+    const result = await Provinces.updateMany(
+      {},
+      {
+        $set: {
+          isActive: false,
+          // isHotelsActive: false,
+          // cities_id: [],
+          // users_id: [],
+          // agents_id: [],
+          // hotels_id: [],
+          // suppliers_id: [],
+        },
       },
-    },
-    { multi: true, upsert: false },
-    (error, properties) => {
-      console.log(error);
-      console.log(properties);
-    }
-  );
-  // Provinces.updateMany(
-  //   {},
-  //   { $rename: { country_code: 'iso2' } },
-  //   { upsert: false, multi: true },
-  //   (error, properties) => {
-  //     console.log(error);
-  //     console.log(properties);
-  //   }
-  // );
+      { multi: true, upsert: false }
+    );
+
+    console.log("Update result:", result);
+  } catch (error) {
+    console.error("Error updating provinces:", error);
+  }
 };
 
 export const updateCountryStates = async () => {
@@ -458,15 +484,15 @@ export const updateCountryStates = async () => {
     { $match: {} },
     {
       $lookup: {
-        from: 'provinces',
-        localField: 'id',
-        foreignField: 'country_id',
-        as: 'states_id',
+        from: "provinces",
+        localField: "id",
+        foreignField: "country_id",
+        as: "states_id",
       },
     },
     {
       $addFields: {
-        states_id: '$states_id._id',
+        states_id: "$states_id._id",
       },
     },
     // {
@@ -476,9 +502,9 @@ export const updateCountryStates = async () => {
     // },
     {
       $merge: {
-        into: 'countries',
-        on: '_id',
-        whenMatched: 'replace',
+        into: "countries",
+        on: "_id",
+        whenMatched: "replace",
       },
     },
   ]);
@@ -490,15 +516,15 @@ export const updateCountryCities = async () => {
     { $match: {} },
     {
       $lookup: {
-        from: 'cities',
-        localField: 'id',
-        foreignField: 'country_id',
-        as: 'cities_id',
+        from: "cities",
+        localField: "id",
+        foreignField: "country_id",
+        as: "cities_id",
       },
     },
     {
       $addFields: {
-        cities_id: '$cities_id._id',
+        cities_id: "$cities_id._id",
       },
     },
     // {
@@ -508,9 +534,9 @@ export const updateCountryCities = async () => {
     // },
     {
       $merge: {
-        into: 'countries',
-        on: '_id',
-        whenMatched: 'replace',
+        into: "countries",
+        on: "_id",
+        whenMatched: "replace",
       },
     },
   ]);
@@ -522,18 +548,18 @@ export const updateProvincesCities = async () => {
     { $match: {} },
     {
       $lookup: {
-        from: 'cities',
-        let: { province_id: '$id' },
-        localField: 'country_id',
-        foreignField: 'country_id',
-        as: 'cities_id',
+        from: "cities",
+        let: { province_id: "$id" },
+        localField: "country_id",
+        foreignField: "country_id",
+        as: "cities_id",
         pipeline: [
           {
             $match: {
               $expr: {
                 $and: [
                   {
-                    $eq: ['$$province_id', '$state_id'],
+                    $eq: ["$$province_id", "$state_id"],
                   },
                 ],
               },
@@ -545,48 +571,40 @@ export const updateProvincesCities = async () => {
     // { $match: { 'cities_id.state_id': 'provinces.id' } },
     {
       $addFields: {
-        cities_id: '$cities_id._id',
+        cities_id: "$cities_id._id",
       },
     },
     {
       $merge: {
-        into: 'provinces',
-        on: '_id',
-        whenMatched: 'replace',
+        into: "provinces",
+        on: "_id",
+        whenMatched: "replace",
       },
     },
   ]);
   console.log(data);
 };
 
-export const updateCities = () => {
-  Cities.updateMany(
-    {},
-    {
-      $set: {
-        isActive: false,
-        // isHotelsActive: false,
-        // users_id: [],
-        // agents_id: [],
-        // hotels_id: [],
-        // suppliers_id: [],
+export const updateCities = async () => {
+  try {
+    const result = await Cities.updateMany(
+      {},
+      {
+        $set: {
+          isActive: false,
+          // isHotelsActive: false,
+          // users_id: [],
+          // agents_id: [],
+          // hotels_id: [],
+          // suppliers_id: [],
+        },
+        // $unset: { wikiDataId: 1 },
       },
-      // $unset: { wikiDataId: 1 },
-    },
-    { multi: true, upsert: false },
-    (error, properties) => {
-      console.log(error);
-      console.log(properties);
-    }
-  );
-  // Cities.updateMany(
-  //   {},
-  //   // { $rename: { country_code: 'iso2' } },
-  //   { $unset: { wikiDataId: 1 } },
-  //   { multi: true, strict: false },
-  //   (error, properties) => {
-  //     console.log(error);
-  //     console.log(properties);
-  //   }
-  // );
+      { multi: true, upsert: false } // `multi` is actually redundant in updateMany.
+    );
+
+    console.log("Update result:", result);
+  } catch (error) {
+    console.error("Error updating cities:", error);
+  }
 };

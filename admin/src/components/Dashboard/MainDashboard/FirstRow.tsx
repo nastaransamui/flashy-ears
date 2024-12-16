@@ -203,7 +203,7 @@ export const tableValuesLocaleConvert = (value: string, rtlActive: boolean) => {
 
 const FirstRow: FC = (() => {
   const { classes, theme } = cardStyles({});
-  const { firstRow, adminAccessToken } = useSelector<State, State>((state) => state);
+  const firstRow = useSelector<State, { [key: string]: any }>((state) => state.firstRow);
   const { t, i18n } = useTranslation('common')
   const dispatch = useDispatch()
 

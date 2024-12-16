@@ -510,7 +510,7 @@ export const ProductsFormFinancial: FC<ProductsFormFinancialTypes> = ((props: Pr
   const { t, i18n } = useTranslation('Products')
   const { classes, theme } = productStyles({})
   const dispatch = useDispatch();
-  const { productFinancialFillAll } = useSelector<State, State>(state => state)
+  const productFinancialFillAll = useSelector<State, boolean | null>(state => state.productFinancialFillAll)
   let selectedColor: any = colorArray?.filter((a: ColorsType) => getValues("colors_id").includes(a._id))
 
   useEffect(() => {

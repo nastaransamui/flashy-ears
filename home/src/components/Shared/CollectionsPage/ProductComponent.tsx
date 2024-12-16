@@ -22,7 +22,7 @@ const ProductComponent: FC = (() => {
   const [selectedColor, setSelectedColor] = useState<{ [k: string]: any }[]>([])
   const { classes, theme, cx } = CollectionStyle({})
   const [animeRef, setAnimeRef] = useState<any[]>([]);
-  const { productItems } = useSelector<State, State>((state) => state)
+  const productItems = useSelector<State, ProductItemsType[]>((state) => state.productItems)
   const [turn, setTurn] = useState<any>({})
   const [isZoomed, setIsZoomed] = useState<boolean>(false)
   const [productZoomed, setProductZoomed] = useState(false)

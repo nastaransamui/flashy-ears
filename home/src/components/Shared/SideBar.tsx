@@ -7,7 +7,7 @@ import useShallowTranslation from '../Hooks/useShallowTranslation';
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "@/src/redux/store"
 import { setCookie } from "cookies-next";
-import useTranslation from 'next-translate/useTranslation'
+import { PaletteMode } from "@mui/material";
 
 export interface SideBarProps {
 
@@ -19,9 +19,9 @@ const SideBar: FC<SideBarProps> = ((props) => {
   const { lang, t } = useShallowTranslation('common')
   const { classes, cx, theme } = SiebarStyle({ lang: lang })
   const router = useRouter();
-  const hasQuery = router.asPath.includes('?');
   const dispatch = useDispatch()
-  const { homeThemeType, homePageType } = useSelector<State, State>((state) => state);
+  const homePageType = useSelector<State, string>(state => state.homePageType)
+  const homeThemeType = useSelector<State, PaletteMode | null>(state => state.homeThemeType)
 
   const navRef = createRef<any>();
   const menuRef = createRef<any>();

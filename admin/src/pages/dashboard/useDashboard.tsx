@@ -8,7 +8,7 @@ type SidebarColor = 'white' | 'black'
 const useDashboard = () => {
   const { i18n } = useTranslation(['dashboard', 'footer', 'users']);
   const rtlActive = i18n.language == 'fa'
-  const { propsMiniActive } = useSelector<State, State>(state => state)
+  const propsMiniActive = useSelector<State, boolean>(state => state.propsMiniActive)
   const dispatch = useDispatch()
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
   const [sideBarbgColor, setSideBarbgColor] = useState<SidebarColor>('black');

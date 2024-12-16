@@ -61,6 +61,7 @@ apiRoute.post(
       }
     } catch (error) {
       const hz = req.hazelCast;
+      console.log(error);
       res
         .status(500)
         .json({ success: false, Error: (error as Error).toString() });

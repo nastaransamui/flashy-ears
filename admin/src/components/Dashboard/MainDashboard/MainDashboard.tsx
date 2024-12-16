@@ -11,7 +11,7 @@ import SecondRow from "./SecondRow";
 
 const MainDashboard: FC<CustomPropsTypes> = (props: CustomPropsTypes) => {
 
-  const { propsMiniActive } = useSelector<State, State>(state => state)
+  const propsMiniActive = useSelector<State, boolean>((state) => state.propsMiniActive);
   const { classes, cx } = maindashboardStyle({})
   return (
     <Fragment>

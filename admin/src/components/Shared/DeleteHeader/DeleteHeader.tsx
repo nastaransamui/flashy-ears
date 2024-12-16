@@ -15,7 +15,7 @@ import { useTheme } from '@mui/material';
 
 //Redux
 import { useDispatch, useSelector } from "react-redux";
-import { State } from '@/src/redux/store';
+import { Profile, State, TotalDataType } from '@/src/redux/store';
 
 //Hooks
 import useCurrentRouteState from '@/hookes/useCurrentRouteState';
@@ -25,7 +25,10 @@ import { DataShowCtx } from "@/shared/DataShow/useDataShow";
 const DeleteHeader: FC = (() => {
 
   const theme = useTheme()
-  const { profile, totalData, deleteIds, statusIdsUpdate, } = useSelector<State, State>(state => state);
+  const totalData = useSelector<State, TotalDataType[]>(state => state.totalData);
+  const profile = useSelector<State, Profile>(state => state.profile);
+  const deleteIds = useSelector<State, string[]>(state => state.deleteIds)
+  const statusIdsUpdate = useSelector<State, string[]>(state => state.statusIdsUpdate);
   const dispatch = useDispatch();
   const currentRouteState = useCurrentRouteState();
   const { modelName, predefineDb, activeOnly } = currentRouteState;

@@ -37,7 +37,8 @@ const CardCollapseArea = forwardRef<Ref, CardCollapseAreaTypes>(({ elRefs, index
 
   const theme = useTheme()
   const iconMap = useIconMap()
-  const { expanded } = useSelector<State, State>(state => state)
+  const expanded = useSelector<State, { [key: string]: boolean }>(state => state.expanded)
+
   const currentRouteState = useCurrentRouteState();
   const { modelName } = currentRouteState;
   const { t, i18n } = useTranslation(modelName);

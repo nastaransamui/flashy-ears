@@ -1,7 +1,7 @@
 import { GridSize } from '@mui/material/Grid'
 import { FC, useEffect, useState, createRef, Fragment } from 'react'
 import { useSelector } from 'react-redux';
-import { State, MainCardTypes } from '@/src/redux/store';
+import { State, MainCardTypes, TotalDataType } from '@/src/redux/store';
 import useCurrentRouteState from '@/hookes/useCurrentRouteState'
 import { useReadLocalStorage } from 'usehooks-ts'
 
@@ -26,7 +26,9 @@ const MainCard: FC = (() => {
   const theme = useTheme();
   const currentRouteState = useCurrentRouteState();
   const { modelName } = currentRouteState;
-  const { totalData, deleteIds, statusIdsUpdate } = useSelector<State, State>(state => state)
+  const totalData = useSelector<State, TotalDataType[]>((state) => state.totalData);
+  const deleteIds = useSelector<State, string[]>((state) => state.deleteIds);
+  const statusIdsUpdate = useSelector<State, string[]>((state) => state.statusIdsUpdate);
   const gridView: GridSize = useReadLocalStorage(`${modelName}_gridView`)!
   const perPage: number = useReadLocalStorage(`${modelName}_perPage`)!
   const cardView: boolean = useReadLocalStorage(`${modelName}_cardView`)!

@@ -8,13 +8,14 @@ import NavbarMain from '../Navbar/NavbarMain';
 import Footer from '../Footer/Footer';
 import ThemeUser from '../Theme/ThemeUser';
 import { useSelector } from 'react-redux';
-import { State } from '@/src/redux/store';
+import { Profile, State } from '@/src/redux/store';
 import { useQuery } from "@/src/components/Dashboard/ReactRouter";
 
 const Prodashboard: FC<ProDashboardProps> = (props: ProDashboardProps) => {
   const { classes, cx } = prodashboardStyle({})
   const { rtlActive, routes } = props;
-  const { propsMiniActive, profile } = useSelector<State, State>(state => state)
+  const profile = useSelector<State, Profile>(state => state.profile)
+  const propsMiniActive = useSelector<State, boolean>((state) => state.propsMiniActive);
   const mainPageMinimize = classes.mainPageMinimize + ' ' + cx({
     [classes.mainPageHandlemainOpen]: propsMiniActive,
     [classes.mainPageHandlemainClose]: !propsMiniActive

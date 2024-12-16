@@ -2,7 +2,7 @@ import { useState, SetStateAction } from "react";
 import navbarLinksStyle from "./navbar-links-style";
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
-import { State } from "@/src/redux/store";
+import { Profile, State } from "@/src/redux/store";
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useTranslation } from 'react-i18next';
 import { setCookie, deleteCookie, removeCookies } from "cookies-next";
@@ -20,7 +20,7 @@ const api = `/admin/api/auth/logout`
 const useNavbarLinks = () => {
   const { theme } = navbarLinksStyle({})
   const navigate = useNavigate()
-  const { profile } = useSelector<State, State>(state => state)
+  const profile = useSelector<State, Profile>(state => state.profile);
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const { t, i18n } = useTranslation('dashboard')
   const dispatch = useDispatch();

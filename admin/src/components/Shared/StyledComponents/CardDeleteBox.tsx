@@ -36,7 +36,8 @@ export const StyledBox = styled(Container)<InputProps>(({ theme, dispay }) => ({
 
 const CardDeleteBox: FC<DeleteBoxPropsType> = (({ children }: DeleteBoxPropsType) => {
 
-  const { deleteIds, statusIdsUpdate, } = useSelector<State, State>(state => state)
+  const deleteIds = useSelector<State, string[]>((state) => state.deleteIds);
+  const statusIdsUpdate = useSelector<State, string[]>((state) => state.statusIdsUpdate);
   return (
     <StyledBox
       dispay={deleteIds.length !== 0 || statusIdsUpdate.length !== 0 ? 'flex' : 'none'}

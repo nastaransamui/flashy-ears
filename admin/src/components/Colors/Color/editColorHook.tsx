@@ -14,7 +14,8 @@ let editColorUrl = '/admin/api/home/editColor'
 
 const editColorHook = (singleData: any) => {
   const dispatch = useDispatch();
-  const { adminAccessToken, reRunSingleGet } = useSelector<State, State>(state => state)
+  const adminAccessToken = useSelector<State, string>(state => state.adminAccessToken as string)
+  const reRunSingleGet = useSelector<State, boolean>((state) => state.reRunSingleGet);
   const [colorSelected, setcolorSelected] = useState<string>('')
   const [showSelect, setShowSelect] = useState<boolean>(false)
   const { t, i18n } = useTranslation('Colors')

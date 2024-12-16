@@ -1,19 +1,23 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
-import authStyles from './auth-style';
+import authStyles from "./auth-style";
 
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
-import { useSelector, useDispatch } from 'react-redux';
-import { State } from '@/src/redux/store';
-import { setCookie } from 'cookies-next';
+import { useSelector, useDispatch } from "react-redux";
+import { State } from "@/src/redux/store";
+import { setCookie } from "cookies-next";
+import { PaletteMode } from "@mui/material";
 
 const useLangPack = () => {
   const { classes } = authStyles({});
   const { i18n, t } = useTranslation();
   const dispatch = useDispatch();
-  const { adminThemeName, adminThemeType } = useSelector<State, State>(
-    (state) => state
+  const adminThemeName = useSelector<State, PaletteMode>(
+    (state) => state.adminThemeType as PaletteMode
+  );
+  const adminThemeType = useSelector<State, string>(
+    (state) => state.adminThemeType
   );
   const [values, setValues] = useState({
     lang: i18n.language,
@@ -32,27 +36,27 @@ const useLangPack = () => {
 
   const handleLanguage = (lang: string) => {
     i18n.changeLanguage(lang);
-    setCookie('i18nextLng', lang);
+    setCookie("i18nextLng", lang);
     dispatch({
-      type: 'ADMIN_LOADINGBAR',
+      type: "ADMIN_LOADINGBAR",
       payload: 0,
     });
   };
 
   const handleThemeName = (pallet: string) => {
-    dispatch({ type: 'ADMIN_THEMENAME', payload: pallet });
-    setCookie('adminThemeName', pallet);
+    dispatch({ type: "ADMIN_THEMENAME", payload: pallet });
+    setCookie("adminThemeName", pallet);
     dispatch({
-      type: 'ADMIN_LOADINGBAR',
+      type: "ADMIN_LOADINGBAR",
       payload: 0,
     });
   };
 
   const handleMode = (modeType: string) => {
-    dispatch({ type: 'ADMIN_THEMETYPE', payload: modeType });
-    setCookie('adminThemeType', modeType);
+    dispatch({ type: "ADMIN_THEMETYPE", payload: modeType });
+    setCookie("adminThemeType", modeType);
     dispatch({
-      type: 'ADMIN_LOADINGBAR',
+      type: "ADMIN_LOADINGBAR",
       payload: 0,
     });
   };

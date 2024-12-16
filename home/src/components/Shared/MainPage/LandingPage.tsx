@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import Button from '@mui/material/Button'
 import useShallowTranslation from "@/src/components/Hooks/useShallowTranslation";
 import { useDispatch, useSelector } from "react-redux";
-import { ProductItemsType, State } from "@/src/redux/store";
+import { ProductItemsType, SlidesType, State } from "@/src/redux/store";
 import Slider from 'react-animated-slider';
 import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid';
@@ -30,7 +30,9 @@ const LandingPage: FC = (() => {
   const { t, lang } = useShallowTranslation('common')
   const router = useRouter();
   const dispatch = useDispatch()
-  const { slides, productItems } = useSelector<State, State>(state => state)
+  const slides = useSelector<State, SlidesType[]>(state => state.slides);
+  const productItems = useSelector<State, ProductItemsType[]>((state) => state.productItems)
+
   const { classes, theme, cx } = LangingStyle({ slides })
   useEffect(() => {
     var ScrollReveal: any;

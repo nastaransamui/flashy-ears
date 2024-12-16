@@ -11,10 +11,8 @@ import SidebarLinks from './SidebarLinks'
 import { DrawerStateType } from '@/interfaces/react.interface'
 import NavbarLinks from '../Navbar/NavbarLinks'
 
-import { useRouter } from 'next/router'
-import { useLocation } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import { State } from '@/src/redux/store'
+import { Profile, State } from '@/src/redux/store'
 import { useQuery } from "@/src/components/Dashboard/ReactRouter";
 
 
@@ -28,9 +26,8 @@ const SidebarMain: FC<ProDashboardProps> = (props: ProDashboardProps) => {
     state,
     setState,
     getCollapseInitialState } = props;
-  const router = useRouter()
-  const location = useLocation()
-  const { propsMiniActive, profile } = useSelector<State, State>(state => state)
+  const profile = useSelector<State, Profile>(state => state.profile)
+  const propsMiniActive = useSelector<State, boolean>((state) => state.propsMiniActive);
 
   let query = useQuery();
   const _id = query.get('_id');

@@ -37,7 +37,7 @@ export interface StepsWizardsPropTypes {
 import { useForm } from "react-hook-form";
 const StepsWizards: FC<StepsWizardsPropTypes> = ((props: StepsWizardsPropTypes) => {
   const { classes, theme } = stepsWizardStyles({});
-  const { propsMiniActive } = useSelector<State, State>((state) => state);
+  const propsMiniActive = useSelector<State, boolean>((state) => state.propsMiniActive);
 
   const { singleDataContext } = useSingleData('context');
   const wizard = useRef<any>();

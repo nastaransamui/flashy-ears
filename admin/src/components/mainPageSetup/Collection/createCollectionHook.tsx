@@ -34,7 +34,7 @@ interface StateProps {
 
 const createCollectionHook = () => {
   const { t, i18n } = useTranslation('Collections')
-  const { adminAccessToken } = useSelector<State, State>(state => state)
+  const adminAccessToken = useSelector<State, string>(state => state.adminAccessToken as string)
   const [values, setValues] = useState<any>([
     {
       label_en: '',

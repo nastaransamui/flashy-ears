@@ -1,79 +1,78 @@
-import mongoose, { Model } from 'mongoose';
+import mongoose, { Model } from "mongoose";
 import Users, {
   IUser,
   dispalyFields as usersDisplayField,
   muiDataObj as usersMuiDataObj,
-} from '@/models/Users';
+} from "@/models/Users";
 import Roles, {
   IRole,
   dispalyFields as rolesDisplayField,
   muiDataObj as rolesMuiDataObj,
-} from '@/models/Roles';
+} from "@/models/Roles";
 import Videos, {
   IVideo,
   dispalyFields as videosDisplayField,
   muiDataObj as videosMuiDataObj,
-} from '@/models/Videos';
+} from "@/models/Videos";
 import Collections, {
   ICollection,
   dispalyFields as collectionsDisplayField,
   muiDataObj as collectionsMuiDataObj,
-} from 'homeModels/Collections';
+} from "homeModels/Collections";
 import Colors, {
   IColors,
   dispalyFields as colorsDisplayField,
   muiDataObj as colorsMuiDataObj,
-} from 'homeModels/Colors';
+} from "homeModels/Colors";
 
 import Products, {
   IProducts,
   dispalyFields as productsDisplayField,
   muiDataObj as productsMuiDataObj,
-} from 'homeModels/Products';
+} from "homeModels/Products";
 import Photos, {
   IPhoto,
   dispalyFields as photosDisplayField,
   muiDataObj as photosMuiDataObj,
-} from '@/models/Photos';
+} from "@/models/Photos";
 import Features, {
   IFeature,
   dispalyFields as featuresDisplayField,
   muiDataObj as featuresMuiDataObj,
-} from '@/models/Features';
+} from "@/models/Features";
 import Countries, {
   ICountry,
   dispalyFields as countriesDisplayField,
   muiDataObj as countriesMuiDataObj,
-} from '@/models/Countries';
+} from "@/models/Countries";
 import Provinces, {
   IProvince,
   dispalyFields as provincesDisplayField,
   muiDataObj as provincesMuiDataObj,
-} from '@/models/Provinces';
+} from "@/models/Provinces";
 import Cities, {
   ICity,
   dispalyFields as citiesDisplayField,
   muiDataObj as citiesMuiDataObj,
-} from '@/models/Cities';
+} from "@/models/Cities";
 import Currencies, {
   ICurrency,
   dispalyFields as currenciesDisplayField,
   muiDataObj as currenciesMuiDataObj,
-} from '@/models/Currencies';
+} from "@/models/Currencies";
 import Agencies, {
   IAgent,
   dispalyFields as agenciesDisplayField,
   muiDataObj as agenciesMuiDataObj,
-} from '@/models/Agencies';
+} from "@/models/Agencies";
 
-import { firstBy } from 'thenby';
-import type { MultiMap } from 'hazelcast-client/lib/proxy/MultiMap';
-var toBoolean = require('to-boolean');
+import { firstBy } from "thenby";
+import type { MultiMap } from "hazelcast-client/lib/proxy/MultiMap";
+var toBoolean = require("to-boolean");
 
 //Add nginx link to images for production serve image
 let addLinkToImage = !toBoolean(process.env.NEXT_PUBLIC_SERVERLESS);
 
-var ObjectId = require('mongodb').ObjectID;
 export function paginate(array: object[], perPage: number, pageNumber: number) {
   // human-readable page numbers usually start with 1, so we reduce 1 in the first argument
   return array.slice((pageNumber - 1) * perPage, pageNumber * perPage);
@@ -84,9 +83,9 @@ export function sort_by(
   sortByField: any,
   sortDirection: 1 | -1
 ) {
-  if (sortByField !== 'isActive') {
+  if (sortByField !== "isActive") {
     array = array.sort(
-      firstBy('isActive', 'desc').thenBy(sortByField, {
+      firstBy("isActive", "desc").thenBy(sortByField, {
         ignoreCase: true,
         direction: sortDirection,
       })
@@ -105,7 +104,7 @@ export async function findUserByUsername(username: string) {
 }
 
 export async function findUserById(_id: string) {
-  let user = await Users.findById(_id, '-password');
+  let user = await Users.findById(_id, "-password");
   return user;
 }
 
@@ -134,14 +133,15 @@ findFunctions.findUsersById = async function findUsersById(
   const indexOfAgentsData = lookupsFilter.findIndex((a: any) =>
     Object.keys(a).some((e) => /agentsData/g.test(e))
   );
+
   let user = await Users.aggregate([
-    { $match: { _id: ObjectId(_id) } },
+    { $match: { _id: new mongoose.Types.ObjectId(_id) } },
     { $project: { password: 0, accessToken: 0 } },
     {
       $lookup: {
-        from: 'roles',
-        localField: 'role_id',
-        foreignField: '_id',
+        from: "roles",
+        localField: "role_id",
+        foreignField: "_id",
         pipeline: [
           {
             $project: {
@@ -149,25 +149,25 @@ findFunctions.findUsersById = async function findUsersById(
             },
           },
         ],
-        as: 'roleData',
+        as: "roleData",
       },
     },
     {
       $set: {
-        roleName: '$roleData.roleName',
+        roleName: "$roleData.roleName",
       },
     },
     {
       $unwind: {
-        path: '$roleName',
+        path: "$roleName",
         preserveNullAndEmptyArrays: true,
       },
     },
     {
       $lookup: {
-        from: 'agencies',
-        localField: 'agents_id',
-        foreignField: '_id',
+        from: "agencies",
+        localField: "agents_id",
+        foreignField: "_id",
         pipeline: [
           { $match: { isActive: false } },
           {
@@ -191,7 +191,7 @@ findFunctions.findUsersById = async function findUsersById(
               lookupsFilter[indexOfAgentsData][`Users_agentsData_perPage`],
           },
         ],
-        as: 'agentsData',
+        as: "agentsData",
       },
     },
   ]);
@@ -208,12 +208,12 @@ findFunctions.findRolesById = async function findUsersById(
   );
 
   let role = await Roles.aggregate([
-    { $match: { _id: ObjectId(_id) } },
+    { $match: { _id: new mongoose.Types.ObjectId(_id) } },
     {
       $lookup: {
-        from: 'users',
-        localField: 'users_id',
-        foreignField: '_id',
+        from: "users",
+        localField: "users_id",
+        foreignField: "_id",
         pipeline: [
           {
             $sort: {
@@ -247,7 +247,7 @@ findFunctions.findRolesById = async function findUsersById(
             },
           },
         ],
-        as: 'userData',
+        as: "userData",
       },
     },
   ]);
@@ -256,7 +256,9 @@ findFunctions.findRolesById = async function findUsersById(
 };
 
 findFunctions.findVideosById = async function findVideosById(_id: string) {
-  let video = await Videos.aggregate([{ $match: { _id: ObjectId(_id) } }]);
+  let video = await Videos.aggregate([
+    { $match: { _id: new mongoose.Types.ObjectId(_id) } },
+  ]);
   return video[0];
 };
 findFunctions.findCollectionsById = async function findCollectionsById(
@@ -270,27 +272,27 @@ findFunctions.findCollectionsById = async function findCollectionsById(
     lookupsFilter[indexOfProductData][`Collections_productData_perPage`] *
     lookupsFilter[indexOfProductData][`Collections_productData_pageNumber`];
   let collection = await Collections.aggregate([
-    { $match: { _id: ObjectId(_id) } },
+    { $match: { _id: new mongoose.Types.ObjectId(_id) } },
     {
       $unwind: {
-        path: '$img_light',
+        path: "$img_light",
         preserveNullAndEmptyArrays: true,
       },
     },
     {
       $set: {
-        'img_light.src': {
+        "img_light.src": {
           $cond: {
             if: {
-              $eq: [{ $ifNull: ['$img_light.src', ''] }, ''],
+              $eq: [{ $ifNull: ["$img_light.src", ""] }, ""],
             },
-            then: '/admin/images/faces/avatar1.jpg',
+            then: "/admin/images/faces/avatar1.jpg",
             else: {
               $concat: [
                 addLinkToImage
                   ? process.env[`NEXT_PUBLIC_${process.env.NODE_ENV}`]
-                  : '',
-                '$img_light.src',
+                  : "",
+                "$img_light.src",
               ],
             },
           },
@@ -299,24 +301,24 @@ findFunctions.findCollectionsById = async function findCollectionsById(
     },
     {
       $unwind: {
-        path: '$img_dark',
+        path: "$img_dark",
         preserveNullAndEmptyArrays: true,
       },
     },
     {
       $set: {
-        'img_dark.src': {
+        "img_dark.src": {
           $cond: {
             if: {
-              $eq: [{ $ifNull: ['$img_dark.src', ''] }, ''],
+              $eq: [{ $ifNull: ["$img_dark.src", ""] }, ""],
             },
-            then: '/admin/images/faces/avatar1.jpg',
+            then: "/admin/images/faces/avatar1.jpg",
             else: {
               $concat: [
                 addLinkToImage
                   ? process.env[`NEXT_PUBLIC_${process.env.NODE_ENV}`]
-                  : '',
-                '$img_dark.src',
+                  : "",
+                "$img_dark.src",
               ],
             },
           },
@@ -325,25 +327,25 @@ findFunctions.findCollectionsById = async function findCollectionsById(
     },
     {
       $group: {
-        _id: '$_id',
-        label_en: { $first: '$label_en' },
-        label_th: { $first: '$label_th' },
-        name_en: { $first: '$name_en' },
-        name_th: { $first: '$name_th' },
-        img_light: { $push: '$img_light' },
-        img_dark: { $push: '$img_dark' },
-        desc_en: { $first: '$desc_en' },
-        desc_th: { $first: '$desc_th' },
-        linkTitle_en: { $first: '$linkTitle_en' },
-        linkTitle_th: { $first: '$linkTitle_th' },
-        products_id: { $first: '$products_id' },
+        _id: "$_id",
+        label_en: { $first: "$label_en" },
+        label_th: { $first: "$label_th" },
+        name_en: { $first: "$name_en" },
+        name_th: { $first: "$name_th" },
+        img_light: { $push: "$img_light" },
+        img_dark: { $push: "$img_dark" },
+        desc_en: { $first: "$desc_en" },
+        desc_th: { $first: "$desc_th" },
+        linkTitle_en: { $first: "$linkTitle_en" },
+        linkTitle_th: { $first: "$linkTitle_th" },
+        products_id: { $first: "$products_id" },
       },
     },
     {
       $lookup: {
-        from: 'products',
-        localField: 'products_id',
-        foreignField: '_id',
+        from: "products",
+        localField: "products_id",
+        foreignField: "_id",
         pipeline: [
           {
             $sort: {
@@ -369,12 +371,12 @@ findFunctions.findCollectionsById = async function findCollectionsById(
               ],
           },
         ],
-        as: 'productData',
+        as: "productData",
       },
     },
     {
       $addFields: {
-        totalProducts: { $size: '$products_id' },
+        totalProducts: { $size: "$products_id" },
       },
     },
   ]);
@@ -383,172 +385,172 @@ findFunctions.findCollectionsById = async function findCollectionsById(
 
 findFunctions.findProductsById = async function findProductsById(_id: string) {
   let collection = await Products.aggregate([
-    { $match: { _id: ObjectId(_id) } },
+    { $match: { _id: new mongoose.Types.ObjectId(_id) } },
     {
       $unwind: {
-        path: '$gallery',
+        path: "$gallery",
         preserveNullAndEmptyArrays: true,
       },
     },
     {
       $set: {
-        'gallery.src': {
+        "gallery.src": {
           $concat: [
             addLinkToImage
               ? process.env[`NEXT_PUBLIC_${process.env.NODE_ENV}`]
-              : '',
-            '$gallery.src',
+              : "",
+            "$gallery.src",
           ],
         },
       },
     },
     {
       $unwind: {
-        path: '$images.front',
+        path: "$images.front",
         preserveNullAndEmptyArrays: true,
       },
     },
     {
       $unwind: {
-        path: '$images.back',
+        path: "$images.back",
         preserveNullAndEmptyArrays: true,
       },
     },
     {
       $group: {
-        _id: '$_id',
-        product_label_en: { $first: '$product_label_en' },
-        product_label_th: { $first: '$product_label_th' },
-        product_name_en: { $first: '$product_name_en' },
-        product_name_th: { $first: '$product_name_th' },
-        product_subtitle_en: { $first: '$product_subtitle_en' },
-        product_subtitle_th: { $first: '$product_subtitle_th' },
-        product_description_en: { $first: '$product_description_en' },
-        product_description_th: { $first: '$product_description_th' },
-        gallery: { $push: '$gallery' },
-        front: { $first: '$images.front' },
-        back: { $first: '$images.back' },
-        colors_id: { $first: '$colors_id' },
-        collection_id: { $first: '$collection_id' },
-        financials: { $first: '$financials' },
-        createdAt: { $first: '$createdAt' },
-        updatedAt: { $first: '$updatedAt' },
+        _id: "$_id",
+        product_label_en: { $first: "$product_label_en" },
+        product_label_th: { $first: "$product_label_th" },
+        product_name_en: { $first: "$product_name_en" },
+        product_name_th: { $first: "$product_name_th" },
+        product_subtitle_en: { $first: "$product_subtitle_en" },
+        product_subtitle_th: { $first: "$product_subtitle_th" },
+        product_description_en: { $first: "$product_description_en" },
+        product_description_th: { $first: "$product_description_th" },
+        gallery: { $push: "$gallery" },
+        front: { $first: "$images.front" },
+        back: { $first: "$images.back" },
+        colors_id: { $first: "$colors_id" },
+        collection_id: { $first: "$collection_id" },
+        financials: { $first: "$financials" },
+        createdAt: { $first: "$createdAt" },
+        updatedAt: { $first: "$updatedAt" },
       },
     },
     {
       $unwind: {
-        path: '$front',
+        path: "$front",
         preserveNullAndEmptyArrays: true,
       },
     },
     {
       $unwind: {
-        path: '$back',
+        path: "$back",
         preserveNullAndEmptyArrays: true,
       },
     },
     {
       $unwind: {
-        path: '$back',
+        path: "$back",
         preserveNullAndEmptyArrays: true,
       },
     },
     {
       $set: {
-        'back.src': {
+        "back.src": {
           $concat: [
             addLinkToImage
               ? process.env[`NEXT_PUBLIC_${process.env.NODE_ENV}`]
-              : '',
-            '$back.src',
+              : "",
+            "$back.src",
           ],
         },
       },
     },
     {
       $group: {
-        _id: '$_id',
-        back: { $push: '$back' },
-        front: { $first: '$front' },
-        gallery: { $first: '$gallery' },
-        product_label_en: { $first: '$product_label_en' },
-        product_label_th: { $first: '$product_label_th' },
-        product_name_en: { $first: '$product_name_en' },
-        product_name_th: { $first: '$product_name_th' },
-        product_subtitle_en: { $first: '$product_subtitle_en' },
-        product_subtitle_th: { $first: '$product_subtitle_th' },
-        product_description_en: { $first: '$product_description_en' },
-        product_description_th: { $first: '$product_description_th' },
-        colors_id: { $first: '$colors_id' },
-        collection_id: { $first: '$collection_id' },
-        financials: { $first: '$financials' },
-        createdAt: { $first: '$createdAt' },
-        updatedAt: { $first: '$updatedAt' },
+        _id: "$_id",
+        back: { $push: "$back" },
+        front: { $first: "$front" },
+        gallery: { $first: "$gallery" },
+        product_label_en: { $first: "$product_label_en" },
+        product_label_th: { $first: "$product_label_th" },
+        product_name_en: { $first: "$product_name_en" },
+        product_name_th: { $first: "$product_name_th" },
+        product_subtitle_en: { $first: "$product_subtitle_en" },
+        product_subtitle_th: { $first: "$product_subtitle_th" },
+        product_description_en: { $first: "$product_description_en" },
+        product_description_th: { $first: "$product_description_th" },
+        colors_id: { $first: "$colors_id" },
+        collection_id: { $first: "$collection_id" },
+        financials: { $first: "$financials" },
+        createdAt: { $first: "$createdAt" },
+        updatedAt: { $first: "$updatedAt" },
       },
     },
     {
       $unwind: {
-        path: '$front',
+        path: "$front",
         preserveNullAndEmptyArrays: true,
       },
     },
     {
       $set: {
-        'front.src': {
+        "front.src": {
           $concat: [
             addLinkToImage
               ? process.env[`NEXT_PUBLIC_${process.env.NODE_ENV}`]
-              : '',
-            '$front.src',
+              : "",
+            "$front.src",
           ],
         },
       },
     },
     {
       $lookup: {
-        from: 'colors',
-        localField: 'colors_id',
-        foreignField: '_id',
-        as: 'colors',
+        from: "colors",
+        localField: "colors_id",
+        foreignField: "_id",
+        as: "colors",
       },
     },
     {
       $lookup: {
-        from: 'collections',
-        localField: 'collection_id',
-        foreignField: '_id',
-        as: 'collectionData',
+        from: "collections",
+        localField: "collection_id",
+        foreignField: "_id",
+        as: "collectionData",
       },
     },
     {
       $group: {
-        _id: '$_id',
-        back: { $first: '$back' },
-        front: { $push: '$front' },
-        gallery: { $first: '$gallery' },
-        product_label_en: { $first: '$product_label_en' },
-        product_label_th: { $first: '$product_label_th' },
-        product_name_en: { $first: '$product_name_en' },
-        product_name_th: { $first: '$product_name_th' },
-        product_subtitle_en: { $first: '$product_subtitle_en' },
-        product_subtitle_th: { $first: '$product_subtitle_th' },
-        product_description_en: { $first: '$product_description_en' },
-        product_description_th: { $first: '$product_description_th' },
-        colors_id: { $first: '$colors_id' },
-        colors: { $first: '$colors' },
-        collection_id: { $first: '$collection_id' },
-        collectionData: { $first: '$collectionData' },
-        financials: { $first: '$financials' },
-        createdAt: { $first: '$createdAt' },
-        updatedAt: { $first: '$updatedAt' },
+        _id: "$_id",
+        back: { $first: "$back" },
+        front: { $push: "$front" },
+        gallery: { $first: "$gallery" },
+        product_label_en: { $first: "$product_label_en" },
+        product_label_th: { $first: "$product_label_th" },
+        product_name_en: { $first: "$product_name_en" },
+        product_name_th: { $first: "$product_name_th" },
+        product_subtitle_en: { $first: "$product_subtitle_en" },
+        product_subtitle_th: { $first: "$product_subtitle_th" },
+        product_description_en: { $first: "$product_description_en" },
+        product_description_th: { $first: "$product_description_th" },
+        colors_id: { $first: "$colors_id" },
+        colors: { $first: "$colors" },
+        collection_id: { $first: "$collection_id" },
+        collectionData: { $first: "$collectionData" },
+        financials: { $first: "$financials" },
+        createdAt: { $first: "$createdAt" },
+        updatedAt: { $first: "$updatedAt" },
       },
     },
     {
       $addFields: {
-        images: [{ front: '$front' }, { back: '$back' }],
+        images: [{ front: "$front" }, { back: "$back" }],
       },
     },
-    { $unset: ['back', 'front'] },
+    { $unset: ["back", "front"] },
   ]);
   return collection[0];
 };
@@ -565,12 +567,12 @@ findFunctions.findColorsById = async function findColorsById(
     lookupsFilter[indexOfProductData][`Colors_productData_perPage`] *
     lookupsFilter[indexOfProductData][`Colors_productData_pageNumber`];
   let collection = await Colors.aggregate([
-    { $match: { _id: ObjectId(_id) } },
+    { $match: { _id: new mongoose.Types.ObjectId(_id) } },
     {
       $lookup: {
-        from: 'products',
-        localField: 'products_id',
-        foreignField: '_id',
+        from: "products",
+        localField: "products_id",
+        foreignField: "_id",
         pipeline: [
           {
             $sort: {
@@ -592,12 +594,12 @@ findFunctions.findColorsById = async function findColorsById(
               lookupsFilter[indexOfProductData][`Colors_productData_perPage`],
           },
         ],
-        as: 'productData',
+        as: "productData",
       },
     },
     {
       $addFields: {
-        totalProducts: { $size: '$products_id' },
+        totalProducts: { $size: "$products_id" },
       },
     },
   ]);
@@ -605,12 +607,16 @@ findFunctions.findColorsById = async function findColorsById(
 };
 
 findFunctions.findPhotosById = async function findPhotosById(_id: string) {
-  let photo = await Photos.aggregate([{ $match: { _id: ObjectId(_id) } }]);
+  let photo = await Photos.aggregate([
+    { $match: { _id: new mongoose.Types.ObjectId(_id) } },
+  ]);
   return photo[0];
 };
 
 findFunctions.findFeaturesById = async function findFeaturesById(_id: string) {
-  let feature = await Features.aggregate([{ $match: { _id: ObjectId(_id) } }]);
+  let feature = await Features.aggregate([
+    { $match: { _id: new mongoose.Types.ObjectId(_id) } },
+  ]);
   return feature[0];
 };
 
@@ -642,12 +648,12 @@ findFunctions.findCountriesById = async function findCountriesById(
   );
 
   let country = await Countries.aggregate([
-    { $match: { _id: ObjectId(_id) } },
+    { $match: { _id: new mongoose.Types.ObjectId(_id) } },
     {
       $lookup: {
-        from: 'provinces',
-        localField: 'states_id',
-        foreignField: '_id',
+        from: "provinces",
+        localField: "states_id",
+        foreignField: "_id",
         pipeline: [
           {
             $sort: {
@@ -672,14 +678,14 @@ findFunctions.findCountriesById = async function findCountriesById(
               lookupsFilter[indexOfStateData][`Countries_statesData_perPage`],
           },
         ],
-        as: 'statesData',
+        as: "statesData",
       },
     },
     {
       $lookup: {
-        from: 'cities',
-        localField: 'cities_id',
-        foreignField: '_id',
+        from: "cities",
+        localField: "cities_id",
+        foreignField: "_id",
         pipeline: [
           {
             $sort: {
@@ -704,14 +710,14 @@ findFunctions.findCountriesById = async function findCountriesById(
               lookupsFilter[indexOfCitiesData][`Countries_citiesData_perPage`],
           },
         ],
-        as: 'citiesData',
+        as: "citiesData",
       },
     },
     {
       $lookup: {
-        from: 'users',
-        localField: 'users_id',
-        foreignField: '_id',
+        from: "users",
+        localField: "users_id",
+        foreignField: "_id",
         pipeline: [
           { $match: { isActive: false } },
           {
@@ -735,14 +741,14 @@ findFunctions.findCountriesById = async function findCountriesById(
               lookupsFilter[indexOfUserData][`Countries_userData_perPage`],
           },
         ],
-        as: 'userData',
+        as: "userData",
       },
     },
     {
       $lookup: {
-        from: 'agencies',
-        localField: 'agents_id',
-        foreignField: '_id',
+        from: "agencies",
+        localField: "agents_id",
+        foreignField: "_id",
         pipeline: [
           { $match: { isActive: false } },
           {
@@ -768,14 +774,14 @@ findFunctions.findCountriesById = async function findCountriesById(
               lookupsFilter[indexOfAgentsData][`Countries_agentsData_perPage`],
           },
         ],
-        as: 'agentsData',
+        as: "agentsData",
       },
     },
     {
       $lookup: {
-        from: 'suppliers',
-        localField: 'suppliers_id',
-        foreignField: '_id',
+        from: "suppliers",
+        localField: "suppliers_id",
+        foreignField: "_id",
         pipeline: [
           { $match: { isActive: false } },
           {
@@ -805,14 +811,14 @@ findFunctions.findCountriesById = async function findCountriesById(
               ],
           },
         ],
-        as: 'suppliersData',
+        as: "suppliersData",
       },
     },
     {
       $lookup: {
-        from: 'hotels',
-        localField: 'hotels_id',
-        foreignField: '_id',
+        from: "hotels",
+        localField: "hotels_id",
+        foreignField: "_id",
         pipeline: [
           { $match: { isActive: false } },
           {
@@ -838,7 +844,7 @@ findFunctions.findCountriesById = async function findCountriesById(
               lookupsFilter[indexOfHotelsData][`Countries_hotelsData_perPage`],
           },
         ],
-        as: 'hotelsData',
+        as: "hotelsData",
       },
     },
   ]);
@@ -871,34 +877,34 @@ findFunctions.findProvincesById = async function findProvincesById(
   );
 
   let province = await Provinces.aggregate([
-    { $match: { _id: ObjectId(_id) } },
+    { $match: { _id: new mongoose.Types.ObjectId(_id) } },
     {
       $lookup: {
-        from: 'countries',
-        localField: 'country_id',
-        foreignField: 'id',
-        as: 'countryData',
+        from: "countries",
+        localField: "country_id",
+        foreignField: "id",
+        as: "countryData",
       },
     },
     {
       $set: {
-        country_name: '$countryData.name',
+        country_name: "$countryData.name",
       },
     },
     {
       $unwind: {
-        path: '$country_name',
+        path: "$country_name",
         preserveNullAndEmptyArrays: true,
       },
     },
     {
-      $unset: ['countryData'],
+      $unset: ["countryData"],
     },
     {
       $lookup: {
-        from: 'cities',
-        localField: 'cities_id',
-        foreignField: '_id',
+        from: "cities",
+        localField: "cities_id",
+        foreignField: "_id",
         pipeline: [
           {
             $sort: {
@@ -923,14 +929,14 @@ findFunctions.findProvincesById = async function findProvincesById(
               lookupsFilter[indexOfCitiesData][`Provinces_citiesData_perPage`],
           },
         ],
-        as: 'citiesData',
+        as: "citiesData",
       },
     },
     {
       $lookup: {
-        from: 'users',
-        localField: 'users_id',
-        foreignField: '_id',
+        from: "users",
+        localField: "users_id",
+        foreignField: "_id",
         pipeline: [
           { $match: { isActive: false } },
           {
@@ -954,14 +960,14 @@ findFunctions.findProvincesById = async function findProvincesById(
               lookupsFilter[indexOfUserData][`Provinces_userData_perPage`],
           },
         ],
-        as: 'userData',
+        as: "userData",
       },
     },
     {
       $lookup: {
-        from: 'agencies',
-        localField: 'agents_id',
-        foreignField: '_id',
+        from: "agencies",
+        localField: "agents_id",
+        foreignField: "_id",
         pipeline: [
           { $match: { isActive: false } },
           {
@@ -987,14 +993,14 @@ findFunctions.findProvincesById = async function findProvincesById(
               lookupsFilter[indexOfAgentsData][`Provinces_agentsData_perPage`],
           },
         ],
-        as: 'agentsData',
+        as: "agentsData",
       },
     },
     {
       $lookup: {
-        from: 'suppliers',
-        localField: 'suppliers_id',
-        foreignField: '_id',
+        from: "suppliers",
+        localField: "suppliers_id",
+        foreignField: "_id",
         pipeline: [
           { $match: { isActive: false } },
           {
@@ -1024,14 +1030,14 @@ findFunctions.findProvincesById = async function findProvincesById(
               ],
           },
         ],
-        as: 'suppliersData',
+        as: "suppliersData",
       },
     },
     {
       $lookup: {
-        from: 'hotels',
-        localField: 'hotels_id',
-        foreignField: '_id',
+        from: "hotels",
+        localField: "hotels_id",
+        foreignField: "_id",
         pipeline: [
           { $match: { isActive: false } },
           {
@@ -1057,7 +1063,7 @@ findFunctions.findProvincesById = async function findProvincesById(
               lookupsFilter[indexOfHotelsData][`Provinces_hotelsData_perPage`],
           },
         ],
-        as: 'hotelsData',
+        as: "hotelsData",
       },
     },
   ]);
@@ -1085,50 +1091,50 @@ findFunctions.findCitiesById = async function findCitiesById(
     Object.keys(a).some((e) => /hotelsData/g.test(e))
   );
   let city = await Cities.aggregate([
-    { $match: { _id: ObjectId(_id) } },
+    { $match: { _id: new mongoose.Types.ObjectId(_id) } },
     {
       $lookup: {
-        from: 'countries',
-        localField: 'country_id',
-        foreignField: 'id',
-        as: 'countryData',
+        from: "countries",
+        localField: "country_id",
+        foreignField: "id",
+        as: "countryData",
       },
     },
     {
       $set: {
-        country_name: '$countryData.name',
+        country_name: "$countryData.name",
       },
     },
     {
       $unwind: {
-        path: '$country_name',
+        path: "$country_name",
         preserveNullAndEmptyArrays: true,
       },
     },
     {
       $lookup: {
-        from: 'provinces',
-        localField: 'state_id',
-        foreignField: 'id',
-        as: 'provinceData',
+        from: "provinces",
+        localField: "state_id",
+        foreignField: "id",
+        as: "provinceData",
       },
     },
     {
       $set: {
-        state_name: '$provinceData.name',
+        state_name: "$provinceData.name",
       },
     },
     {
       $unwind: {
-        path: '$state_name',
+        path: "$state_name",
         preserveNullAndEmptyArrays: true,
       },
     },
     {
       $lookup: {
-        from: 'users',
-        localField: 'users_id',
-        foreignField: '_id',
+        from: "users",
+        localField: "users_id",
+        foreignField: "_id",
         pipeline: [
           { $match: { isActive: false } },
           {
@@ -1147,14 +1153,14 @@ findFunctions.findCitiesById = async function findCitiesById(
             $limit: lookupsFilter[indexOfUserData][`Cities_userData_perPage`],
           },
         ],
-        as: 'userData',
+        as: "userData",
       },
     },
     {
       $lookup: {
-        from: 'agencies',
-        localField: 'agents_id',
-        foreignField: '_id',
+        from: "agencies",
+        localField: "agents_id",
+        foreignField: "_id",
         pipeline: [
           { $match: { isActive: false } },
           {
@@ -1180,14 +1186,14 @@ findFunctions.findCitiesById = async function findCitiesById(
               lookupsFilter[indexOfAgentsData][`Cities_agentsData_perPage`],
           },
         ],
-        as: 'agentsData',
+        as: "agentsData",
       },
     },
     {
       $lookup: {
-        from: 'suppliers',
-        localField: 'suppliers_id',
-        foreignField: '_id',
+        from: "suppliers",
+        localField: "suppliers_id",
+        foreignField: "_id",
         pipeline: [
           { $match: { isActive: false } },
           {
@@ -1217,14 +1223,14 @@ findFunctions.findCitiesById = async function findCitiesById(
               ],
           },
         ],
-        as: 'suppliersData',
+        as: "suppliersData",
       },
     },
     {
       $lookup: {
-        from: 'hotels',
-        localField: 'hotels_id',
-        foreignField: '_id',
+        from: "hotels",
+        localField: "hotels_id",
+        foreignField: "_id",
         pipeline: [
           { $match: { isActive: false } },
           {
@@ -1250,11 +1256,11 @@ findFunctions.findCitiesById = async function findCitiesById(
               lookupsFilter[indexOfHotelsData][`Cities_hotelsData_perPage`],
           },
         ],
-        as: 'hotelsData',
+        as: "hotelsData",
       },
     },
     {
-      $unset: ['countryData', 'provinceData'],
+      $unset: ["countryData", "provinceData"],
     },
   ]);
 
@@ -1274,12 +1280,12 @@ findFunctions.findCurrenciesById = async function findCurrenciesById(
   );
 
   let currency = await Currencies.aggregate([
-    { $match: { _id: ObjectId(_id) } },
+    { $match: { _id: new mongoose.Types.ObjectId(_id) } },
     {
       $lookup: {
-        from: 'agencies',
-        localField: 'agents_id',
-        foreignField: '_id',
+        from: "agencies",
+        localField: "agents_id",
+        foreignField: "_id",
         pipeline: [
           { $match: { isActive: false } },
           {
@@ -1307,14 +1313,14 @@ findFunctions.findCurrenciesById = async function findCurrenciesById(
               lookupsFilter[indexOfAgentsData][`Currencies_agentsData_perPage`],
           },
         ],
-        as: 'agentsData',
+        as: "agentsData",
       },
     },
     {
       $lookup: {
-        from: 'suppliers',
-        localField: 'suppliers_id',
-        foreignField: '_id',
+        from: "suppliers",
+        localField: "suppliers_id",
+        foreignField: "_id",
         pipeline: [
           { $match: { isActive: false } },
           {
@@ -1344,7 +1350,7 @@ findFunctions.findCurrenciesById = async function findCurrenciesById(
               ],
           },
         ],
-        as: 'suppliersData',
+        as: "suppliersData",
       },
     },
   ]);
@@ -1354,12 +1360,12 @@ findFunctions.findCurrenciesById = async function findCurrenciesById(
 
 findFunctions.findAgenciesById = async function findAgenciesById(_id: string) {
   let agent = await Agencies.aggregate([
-    { $match: { _id: ObjectId(_id) } },
+    { $match: { _id: new mongoose.Types.ObjectId(_id) } },
     {
       $lookup: {
-        from: 'users',
-        localField: 'accountManager_id',
-        foreignField: '_id',
+        from: "users",
+        localField: "accountManager_id",
+        foreignField: "_id",
         pipeline: [
           {
             $project: {
@@ -1379,14 +1385,14 @@ findFunctions.findAgenciesById = async function findAgenciesById(_id: string) {
             },
           },
         ],
-        as: 'accountManagerData',
+        as: "accountManagerData",
       },
     },
     {
       $lookup: {
-        from: 'users',
-        localField: 'userUpdated',
-        foreignField: '_id',
+        from: "users",
+        localField: "userUpdated",
+        foreignField: "_id",
         pipeline: [
           {
             $project: {
@@ -1406,14 +1412,14 @@ findFunctions.findAgenciesById = async function findAgenciesById(_id: string) {
             },
           },
         ],
-        as: 'userUpdatedData',
+        as: "userUpdatedData",
       },
     },
     {
       $lookup: {
-        from: 'users',
-        localField: 'userCreated',
-        foreignField: '_id',
+        from: "users",
+        localField: "userCreated",
+        foreignField: "_id",
         pipeline: [
           {
             $project: {
@@ -1433,79 +1439,79 @@ findFunctions.findAgenciesById = async function findAgenciesById(_id: string) {
             },
           },
         ],
-        as: 'userCreatedData',
+        as: "userCreatedData",
       },
     },
     {
       $set: {
-        accountManager: '$accountManagerData.userName',
+        accountManager: "$accountManagerData.userName",
       },
     },
     {
       $unwind: {
-        path: '$accountManager',
+        path: "$accountManager",
         preserveNullAndEmptyArrays: true,
       },
     },
     {
       $lookup: {
-        from: 'countries',
-        localField: 'country_id',
-        foreignField: '_id',
-        as: 'countryData',
+        from: "countries",
+        localField: "country_id",
+        foreignField: "_id",
+        as: "countryData",
       },
     },
     {
       $set: {
-        countryName: '$countryData.name',
+        countryName: "$countryData.name",
       },
     },
     {
       $unwind: {
-        path: '$countryName',
+        path: "$countryName",
         preserveNullAndEmptyArrays: true,
       },
     },
     {
       $lookup: {
-        from: 'provinces',
-        localField: 'province_id',
-        foreignField: '_id',
-        as: 'provinceData',
+        from: "provinces",
+        localField: "province_id",
+        foreignField: "_id",
+        as: "provinceData",
       },
     },
     {
       $set: {
-        provinceName: '$provinceData.name',
+        provinceName: "$provinceData.name",
       },
     },
     {
       $unwind: {
-        path: '$provinceName',
+        path: "$provinceName",
         preserveNullAndEmptyArrays: true,
       },
     },
     {
       $lookup: {
-        from: 'cities',
-        localField: 'city_id',
-        foreignField: '_id',
-        as: 'cityData',
+        from: "cities",
+        localField: "city_id",
+        foreignField: "_id",
+        as: "cityData",
       },
     },
     {
       $set: {
-        cityName: '$cityData.name',
+        cityName: "$cityData.name",
       },
     },
     {
       $unwind: {
-        path: '$cityName',
+        path: "$cityName",
         preserveNullAndEmptyArrays: true,
       },
     },
     {
-      $unset: ['countryData', 'provinceData', 'cityData'],
+      $unset: ["countryData", "provinceData", "cityData"],
     },
   ]);
   return agent[0];
@@ -1577,25 +1583,25 @@ export async function findAllUsersWithPagginate(
     },
     {
       $lookup: {
-        from: 'roles',
-        localField: 'role_id',
-        foreignField: '_id',
-        as: 'roleData',
+        from: "roles",
+        localField: "role_id",
+        foreignField: "_id",
+        as: "roleData",
       },
     },
     {
       $set: {
-        roleName: '$roleData.roleName',
+        roleName: "$roleData.roleName",
       },
     },
     {
       $unwind: {
-        path: '$roleName',
+        path: "$roleName",
         preserveNullAndEmptyArrays: true,
       },
     },
     {
-      $unset: ['roleData', '__v'],
+      $unset: ["roleData", "__v"],
     },
     {
       $addFields: {
@@ -1611,7 +1617,7 @@ export async function findAllUsersWithPagginate(
         ],
         totalCount: [
           {
-            $count: 'count',
+            $count: "count",
           },
         ],
       },
@@ -1654,7 +1660,7 @@ export async function findAllRolesWithPagginate(
           ],
           totalCount: [
             {
-              $count: 'count',
+              $count: "count",
             },
           ],
         },
@@ -1697,7 +1703,7 @@ export async function findAllVideosWithPagginate(
         ],
         totalCount: [
           {
-            $count: 'count',
+            $count: "count",
           },
         ],
       },
@@ -1723,24 +1729,24 @@ export async function findAllCollectionsWithPagginate(
   const dataValue = await collection.aggregate([
     {
       $unwind: {
-        path: '$img_light',
+        path: "$img_light",
         preserveNullAndEmptyArrays: true,
       },
     },
     {
       $set: {
-        'img_light.src': {
+        "img_light.src": {
           $cond: {
             if: {
-              $eq: [{ $ifNull: ['$img_light.src', ''] }, ''],
+              $eq: [{ $ifNull: ["$img_light.src", ""] }, ""],
             },
-            then: '/admin/images/faces/avatar1.jpg',
+            then: "/admin/images/faces/avatar1.jpg",
             else: {
               $concat: [
                 addLinkToImage
                   ? process.env[`NEXT_PUBLIC_${process.env.NODE_ENV}`]
-                  : '',
-                '$img_light.src',
+                  : "",
+                "$img_light.src",
               ],
             },
           },
@@ -1749,24 +1755,24 @@ export async function findAllCollectionsWithPagginate(
     },
     {
       $unwind: {
-        path: '$img_dark',
+        path: "$img_dark",
         preserveNullAndEmptyArrays: true,
       },
     },
     {
       $set: {
-        'img_dark.src': {
+        "img_dark.src": {
           $cond: {
             if: {
-              $eq: [{ $ifNull: ['$img_dark.src', ''] }, ''],
+              $eq: [{ $ifNull: ["$img_dark.src", ""] }, ""],
             },
-            then: '/admin/images/faces/avatar1.jpg',
+            then: "/admin/images/faces/avatar1.jpg",
             else: {
               $concat: [
                 addLinkToImage
                   ? process.env[`NEXT_PUBLIC_${process.env.NODE_ENV}`]
-                  : '',
-                '$img_dark.src',
+                  : "",
+                "$img_dark.src",
               ],
             },
           },
@@ -1775,18 +1781,18 @@ export async function findAllCollectionsWithPagginate(
     },
     {
       $group: {
-        _id: '$_id',
-        label_en: { $first: '$label_en' },
-        label_th: { $first: '$label_th' },
-        name_en: { $first: '$name_en' },
-        name_th: { $first: '$name_th' },
-        img_light: { $push: '$img_light' },
-        img_dark: { $push: '$img_dark' },
-        desc_en: { $first: '$desc_en' },
-        desc_th: { $first: '$desc_th' },
-        linkTitle_en: { $first: '$linkTitle_en' },
-        linkTitle_th: { $first: '$linkTitle_th' },
-        products_id: { $first: '$products_id' },
+        _id: "$_id",
+        label_en: { $first: "$label_en" },
+        label_th: { $first: "$label_th" },
+        name_en: { $first: "$name_en" },
+        name_th: { $first: "$name_th" },
+        img_light: { $push: "$img_light" },
+        img_dark: { $push: "$img_dark" },
+        desc_en: { $first: "$desc_en" },
+        desc_th: { $first: "$desc_th" },
+        linkTitle_en: { $first: "$linkTitle_en" },
+        linkTitle_th: { $first: "$linkTitle_th" },
+        products_id: { $first: "$products_id" },
       },
     },
     {
@@ -1796,7 +1802,7 @@ export async function findAllCollectionsWithPagginate(
       $addFields: {
         dispalyFields: collectionsDisplayField,
         muiData: collectionsMuiDataObj,
-        totalProducts: { $size: '$products_id' },
+        totalProducts: { $size: "$products_id" },
       },
     },
     {
@@ -1807,7 +1813,7 @@ export async function findAllCollectionsWithPagginate(
         ],
         totalCount: [
           {
-            $count: 'count',
+            $count: "count",
           },
         ],
       },
@@ -1838,7 +1844,7 @@ export async function findAllColorsWithPagginate(
       $addFields: {
         dispalyFields: colorsDisplayField,
         muiData: colorsMuiDataObj,
-        totalProducts: { $size: '$products_id' },
+        totalProducts: { $size: "$products_id" },
       },
     },
     {
@@ -1849,7 +1855,7 @@ export async function findAllColorsWithPagginate(
         ],
         totalCount: [
           {
-            $count: 'count',
+            $count: "count",
           },
         ],
       },
@@ -1876,171 +1882,171 @@ export async function findAllProductsWithPagginate(
   const dataValue = await collection.aggregate([
     {
       $unwind: {
-        path: '$gallery',
+        path: "$gallery",
         preserveNullAndEmptyArrays: true,
       },
     },
     {
       $set: {
-        'gallery.src': {
+        "gallery.src": {
           $concat: [
             addLinkToImage
               ? process.env[`NEXT_PUBLIC_${process.env.NODE_ENV}`]
-              : '',
-            '$gallery.src',
+              : "",
+            "$gallery.src",
           ],
         },
       },
     },
     {
       $unwind: {
-        path: '$images.front',
+        path: "$images.front",
         preserveNullAndEmptyArrays: true,
       },
     },
     {
       $unwind: {
-        path: '$images.back',
+        path: "$images.back",
         preserveNullAndEmptyArrays: true,
       },
     },
     {
       $group: {
-        _id: '$_id',
-        product_label_en: { $first: '$product_label_en' },
-        product_label_th: { $first: '$product_label_th' },
-        product_name_en: { $first: '$product_name_en' },
-        product_name_th: { $first: '$product_name_th' },
-        product_subtitle_en: { $first: '$product_subtitle_en' },
-        product_subtitle_th: { $first: '$product_subtitle_th' },
-        product_description_en: { $first: '$product_description_en' },
-        product_description_th: { $first: '$product_description_th' },
-        gallery: { $push: '$gallery' },
-        front: { $first: '$images.front' },
-        back: { $first: '$images.back' },
-        colors_id: { $first: '$colors_id' },
-        collection_id: { $first: '$collection_id' },
-        financials: { $first: '$financials' },
-        createdAt: { $first: '$createdAt' },
-        updatedAt: { $first: '$updatedAt' },
+        _id: "$_id",
+        product_label_en: { $first: "$product_label_en" },
+        product_label_th: { $first: "$product_label_th" },
+        product_name_en: { $first: "$product_name_en" },
+        product_name_th: { $first: "$product_name_th" },
+        product_subtitle_en: { $first: "$product_subtitle_en" },
+        product_subtitle_th: { $first: "$product_subtitle_th" },
+        product_description_en: { $first: "$product_description_en" },
+        product_description_th: { $first: "$product_description_th" },
+        gallery: { $push: "$gallery" },
+        front: { $first: "$images.front" },
+        back: { $first: "$images.back" },
+        colors_id: { $first: "$colors_id" },
+        collection_id: { $first: "$collection_id" },
+        financials: { $first: "$financials" },
+        createdAt: { $first: "$createdAt" },
+        updatedAt: { $first: "$updatedAt" },
       },
     },
     {
       $unwind: {
-        path: '$front',
+        path: "$front",
         preserveNullAndEmptyArrays: true,
       },
     },
     {
       $unwind: {
-        path: '$back',
+        path: "$back",
         preserveNullAndEmptyArrays: true,
       },
     },
     {
       $unwind: {
-        path: '$back',
+        path: "$back",
         preserveNullAndEmptyArrays: true,
       },
     },
     {
       $set: {
-        'back.src': {
+        "back.src": {
           $concat: [
             addLinkToImage
               ? process.env[`NEXT_PUBLIC_${process.env.NODE_ENV}`]
-              : '',
-            '$back.src',
+              : "",
+            "$back.src",
           ],
         },
       },
     },
     {
       $group: {
-        _id: '$_id',
-        back: { $push: '$back' },
-        front: { $first: '$front' },
-        gallery: { $first: '$gallery' },
-        product_label_en: { $first: '$product_label_en' },
-        product_label_th: { $first: '$product_label_th' },
-        product_name_en: { $first: '$product_name_en' },
-        product_name_th: { $first: '$product_name_th' },
-        product_subtitle_en: { $first: '$product_subtitle_en' },
-        product_subtitle_th: { $first: '$product_subtitle_th' },
-        product_description_en: { $first: '$product_description_en' },
-        product_description_th: { $first: '$product_description_th' },
-        colors_id: { $first: '$colors_id' },
-        collection_id: { $first: '$collection_id' },
-        financials: { $first: '$financials' },
-        createdAt: { $first: '$createdAt' },
-        updatedAt: { $first: '$updatedAt' },
+        _id: "$_id",
+        back: { $push: "$back" },
+        front: { $first: "$front" },
+        gallery: { $first: "$gallery" },
+        product_label_en: { $first: "$product_label_en" },
+        product_label_th: { $first: "$product_label_th" },
+        product_name_en: { $first: "$product_name_en" },
+        product_name_th: { $first: "$product_name_th" },
+        product_subtitle_en: { $first: "$product_subtitle_en" },
+        product_subtitle_th: { $first: "$product_subtitle_th" },
+        product_description_en: { $first: "$product_description_en" },
+        product_description_th: { $first: "$product_description_th" },
+        colors_id: { $first: "$colors_id" },
+        collection_id: { $first: "$collection_id" },
+        financials: { $first: "$financials" },
+        createdAt: { $first: "$createdAt" },
+        updatedAt: { $first: "$updatedAt" },
       },
     },
     {
       $unwind: {
-        path: '$front',
+        path: "$front",
         preserveNullAndEmptyArrays: true,
       },
     },
     {
       $set: {
-        'front.src': {
+        "front.src": {
           $concat: [
             addLinkToImage
               ? process.env[`NEXT_PUBLIC_${process.env.NODE_ENV}`]
-              : '',
-            '$front.src',
+              : "",
+            "$front.src",
           ],
         },
       },
     },
     {
       $lookup: {
-        from: 'colors',
-        localField: 'colors_id',
-        foreignField: '_id',
-        as: 'colors',
+        from: "colors",
+        localField: "colors_id",
+        foreignField: "_id",
+        as: "colors",
       },
     },
     {
       $lookup: {
-        from: 'collections',
-        localField: 'collection_id',
-        foreignField: '_id',
-        as: 'collectionData',
+        from: "collections",
+        localField: "collection_id",
+        foreignField: "_id",
+        as: "collectionData",
       },
     },
     {
       $group: {
-        _id: '$_id',
-        back: { $first: '$back' },
-        front: { $push: '$front' },
-        gallery: { $first: '$gallery' },
-        product_label_en: { $first: '$product_label_en' },
-        product_label_th: { $first: '$product_label_th' },
-        product_name_en: { $first: '$product_name_en' },
-        product_name_th: { $first: '$product_name_th' },
-        product_subtitle_en: { $first: '$product_subtitle_en' },
-        product_subtitle_th: { $first: '$product_subtitle_th' },
-        product_description_en: { $first: '$product_description_en' },
-        product_description_th: { $first: '$product_description_th' },
-        colors_id: { $first: '$colors_id' },
-        colors: { $first: '$colors' },
-        collection_id: { $first: '$collection_id' },
-        collectionData: { $first: '$collectionData' },
-        financials: { $first: '$financials' },
-        createdAt: { $first: '$createdAt' },
-        updatedAt: { $first: '$updatedAt' },
+        _id: "$_id",
+        back: { $first: "$back" },
+        front: { $push: "$front" },
+        gallery: { $first: "$gallery" },
+        product_label_en: { $first: "$product_label_en" },
+        product_label_th: { $first: "$product_label_th" },
+        product_name_en: { $first: "$product_name_en" },
+        product_name_th: { $first: "$product_name_th" },
+        product_subtitle_en: { $first: "$product_subtitle_en" },
+        product_subtitle_th: { $first: "$product_subtitle_th" },
+        product_description_en: { $first: "$product_description_en" },
+        product_description_th: { $first: "$product_description_th" },
+        colors_id: { $first: "$colors_id" },
+        colors: { $first: "$colors" },
+        collection_id: { $first: "$collection_id" },
+        collectionData: { $first: "$collectionData" },
+        financials: { $first: "$financials" },
+        createdAt: { $first: "$createdAt" },
+        updatedAt: { $first: "$updatedAt" },
       },
     },
     {
       $addFields: {
         dispalyFields: productsDisplayField,
         muiData: productsMuiDataObj,
-        images: [{ front: '$front' }, { back: '$back' }],
+        images: [{ front: "$front" }, { back: "$back" }],
       },
     },
-    { $unset: ['back', 'front'] },
+    { $unset: ["back", "front"] },
     {
       $sort: { [sortByField]: sortDirection },
     },
@@ -2052,7 +2058,7 @@ export async function findAllProductsWithPagginate(
         ],
         totalCount: [
           {
-            $count: 'count',
+            $count: "count",
           },
         ],
       },
@@ -2094,7 +2100,7 @@ export async function findAllPhotosWithPagginate(
         ],
         totalCount: [
           {
-            $count: 'count',
+            $count: "count",
           },
         ],
       },
@@ -2135,7 +2141,7 @@ export async function findAllFeaturesWithPagginate(
         ],
         totalCount: [
           {
-            $count: 'count',
+            $count: "count",
           },
         ],
       },
@@ -2170,12 +2176,12 @@ export async function findAllCountriesWithPagginate(
       $addFields: {
         dispalyFields: countriesDisplayField,
         muiData: countriesMuiDataObj,
-        totalStates: { $size: '$states_id' },
-        totalCities: { $size: '$cities_id' },
-        totalActiveHotels: { $size: '$hotels_id' },
-        totalUsers: { $size: '$users_id' },
-        totalAgents: { $size: '$agents_id' },
-        totalSuppliers: { $size: '$suppliers_id' },
+        totalStates: { $size: "$states_id" },
+        totalCities: { $size: "$cities_id" },
+        totalActiveHotels: { $size: "$hotels_id" },
+        totalUsers: { $size: "$users_id" },
+        totalAgents: { $size: "$agents_id" },
+        totalSuppliers: { $size: "$suppliers_id" },
       },
     },
     {
@@ -2186,7 +2192,7 @@ export async function findAllCountriesWithPagginate(
         ],
         totalCount: [
           {
-            $count: 'count',
+            $count: "count",
           },
         ],
       },
@@ -2219,35 +2225,35 @@ export async function findAllProvincesWithPagginate(
     },
     {
       $lookup: {
-        from: 'countries',
-        localField: 'country_id',
-        foreignField: 'id',
-        as: 'countryData',
+        from: "countries",
+        localField: "country_id",
+        foreignField: "id",
+        as: "countryData",
       },
     },
     {
       $set: {
-        country_name: '$countryData.name',
+        country_name: "$countryData.name",
       },
     },
     {
       $unwind: {
-        path: '$country_name',
+        path: "$country_name",
         preserveNullAndEmptyArrays: true,
       },
     },
     {
-      $unset: ['countryData', '__v'],
+      $unset: ["countryData", "__v"],
     },
     {
       $addFields: {
         dispalyFields: provincesDisplayField,
         muiData: provincesMuiDataObj,
-        totalCities: { $size: '$cities_id' },
-        totalActiveHotels: { $size: '$hotels_id' },
-        totalUsers: { $size: '$users_id' },
-        totalAgents: { $size: '$agents_id' },
-        totalSuppliers: { $size: '$suppliers_id' },
+        totalCities: { $size: "$cities_id" },
+        totalActiveHotels: { $size: "$hotels_id" },
+        totalUsers: { $size: "$users_id" },
+        totalAgents: { $size: "$agents_id" },
+        totalSuppliers: { $size: "$suppliers_id" },
       },
     },
     {
@@ -2258,7 +2264,7 @@ export async function findAllProvincesWithPagginate(
         ],
         totalCount: [
           {
-            $count: 'count',
+            $count: "count",
           },
         ],
       },
@@ -2292,49 +2298,49 @@ export async function findAllCitiesWithPagginate(
       },
       {
         $lookup: {
-          from: 'countries',
-          localField: 'country_id',
-          foreignField: 'id',
-          as: 'countryData',
+          from: "countries",
+          localField: "country_id",
+          foreignField: "id",
+          as: "countryData",
         },
       },
       {
         $lookup: {
-          from: 'provinces',
-          localField: 'state_id',
-          foreignField: 'id',
-          as: 'provinceData',
+          from: "provinces",
+          localField: "state_id",
+          foreignField: "id",
+          as: "provinceData",
         },
       },
       {
         $set: {
-          country_name: '$countryData.name',
-          state_name: '$provinceData.name',
+          country_name: "$countryData.name",
+          state_name: "$provinceData.name",
         },
       },
       {
         $unwind: {
-          path: '$country_name',
+          path: "$country_name",
           preserveNullAndEmptyArrays: true,
         },
       },
       {
         $unwind: {
-          path: '$state_name',
+          path: "$state_name",
           preserveNullAndEmptyArrays: true,
         },
       },
       {
-        $unset: ['countryData', 'provinceData'],
+        $unset: ["countryData", "provinceData"],
       },
       {
         $addFields: {
           dispalyFields: citiesDisplayField,
           muiData: citiesMuiDataObj,
-          totalActiveHotels: { $size: '$hotels_id' },
-          totalUsers: { $size: '$users_id' },
-          totalAgents: { $size: '$agents_id' },
-          totalSuppliers: { $size: '$suppliers_id' },
+          totalActiveHotels: { $size: "$hotels_id" },
+          totalUsers: { $size: "$users_id" },
+          totalAgents: { $size: "$agents_id" },
+          totalSuppliers: { $size: "$suppliers_id" },
         },
       },
       {
@@ -2345,7 +2351,7 @@ export async function findAllCitiesWithPagginate(
           ],
           totalCount: [
             {
-              $count: 'count',
+              $count: "count",
             },
           ],
         },
@@ -2380,31 +2386,31 @@ export async function findAllCurrenciesWithPagginate(
     },
     {
       $lookup: {
-        from: 'countries',
-        localField: 'id',
-        foreignField: 'id',
-        as: 'nameData',
+        from: "countries",
+        localField: "id",
+        foreignField: "id",
+        as: "nameData",
       },
     },
     {
       $addFields: {
         dispalyFields: currenciesDisplayField,
         muiData: currenciesMuiDataObj,
-        totalAgents: { $size: '$agents_id' },
-        totalSuppliers: { $size: '$suppliers_id' },
+        totalAgents: { $size: "$agents_id" },
+        totalSuppliers: { $size: "$suppliers_id" },
       },
     },
     {
       $set: {
-        name: '$nameData.name',
+        name: "$nameData.name",
       },
     },
     {
-      $unset: 'nameData',
+      $unset: "nameData",
     },
     {
       $unwind: {
-        path: '$name',
+        path: "$name",
         preserveNullAndEmptyArrays: true,
       },
     },
@@ -2416,7 +2422,7 @@ export async function findAllCurrenciesWithPagginate(
         ],
         totalCount: [
           {
-            $count: 'count',
+            $count: "count",
           },
         ],
       },
@@ -2447,63 +2453,63 @@ export async function findAllAgenciesWithPagginate(
     },
     {
       $lookup: {
-        from: 'users',
-        localField: 'accountManager_id',
-        foreignField: '_id',
-        as: 'accountManagerData',
+        from: "users",
+        localField: "accountManager_id",
+        foreignField: "_id",
+        as: "accountManagerData",
       },
     },
     {
       $set: {
-        accountManager: '$accountManagerData.userName',
+        accountManager: "$accountManagerData.userName",
       },
     },
     {
       $unwind: {
-        path: '$accountManager',
+        path: "$accountManager",
         preserveNullAndEmptyArrays: true,
       },
     },
     {
       $lookup: {
-        from: 'countries',
-        localField: 'country_id',
-        foreignField: '_id',
-        as: 'countryData',
+        from: "countries",
+        localField: "country_id",
+        foreignField: "_id",
+        as: "countryData",
       },
     },
     {
       $set: {
-        countryName: '$countryData.name',
+        countryName: "$countryData.name",
       },
     },
     {
       $unwind: {
-        path: '$countryName',
+        path: "$countryName",
         preserveNullAndEmptyArrays: true,
       },
     },
     {
       $lookup: {
-        from: 'provinces',
-        localField: 'province_id',
-        foreignField: '_id',
-        as: 'provinceData',
+        from: "provinces",
+        localField: "province_id",
+        foreignField: "_id",
+        as: "provinceData",
       },
     },
     {
       $set: {
-        provinceName: '$provinceData.name',
+        provinceName: "$provinceData.name",
       },
     },
     {
       $unwind: {
-        path: '$provinceName',
+        path: "$provinceName",
         preserveNullAndEmptyArrays: true,
       },
     },
     {
-      $unset: ['accountManagerData', 'countryData', 'provinceData', '__v'],
+      $unset: ["accountManagerData", "countryData", "provinceData", "__v"],
     },
     {
       $addFields: {
@@ -2519,7 +2525,7 @@ export async function findAllAgenciesWithPagginate(
         ],
         totalCount: [
           {
-            $count: 'count',
+            $count: "count",
           },
         ],
       },
@@ -2555,9 +2561,9 @@ findMuliMapFunctions.findUsersById = async function findUsersById(
   const indexOfAgentsData = lookupsFilter.findIndex((a: any) =>
     Object.keys(a).some((e) => /agentsData/g.test(e))
   );
-  const multiMapAgents = await hz.getMultiMap('Agencies');
+  const multiMapAgents = await hz.getMultiMap("Agencies");
   const agentsExist = await multiMapAgents.containsKey(`allAgencies`);
-  const multiMapRoles = await hz.getMultiMap('Roles');
+  const multiMapRoles = await hz.getMultiMap("Roles");
   const rolesExist = await multiMapRoles.containsKey(`allRoles`);
 
   let finalUser = {};
@@ -2569,7 +2575,7 @@ findMuliMapFunctions.findUsersById = async function findUsersById(
     const users = await multiMap.get(`allUsers`);
     for (const user of users as any) {
       let currentUser = user.filter((a: any) => a._id == _id);
-      const agencies = await multiMapAgents.get('allAgencies');
+      const agencies = await multiMapAgents.get("allAgencies");
       for (const agents of agencies as any) {
         let findAgents = agents.filter((a: any) =>
           currentUser[0].agents_id.includes(a._id)
@@ -2595,7 +2601,7 @@ findMuliMapFunctions.findUsersById = async function findUsersById(
         );
         currentUser[0].agentsData = sortAgents;
       }
-      const roles = await multiMapRoles.get('allRoles');
+      const roles = await multiMapRoles.get("allRoles");
       for (const role of roles as any) {
         let relatedRole = role.filter((a: any) =>
           currentUser[0].role_id.includes(a._id)
@@ -2621,7 +2627,7 @@ findMuliMapFunctions.findRolesById = async function findRolesById(
   const indexOfUserData = lookupsFilter.findIndex((a: any) =>
     Object.keys(a).some((e) => /userData/g.test(e))
   );
-  const multiMapUsers = await hz.getMultiMap('Users');
+  const multiMapUsers = await hz.getMultiMap("Users");
   const usersExist = await multiMapUsers.containsKey(`allUsers`);
 
   let finalRole = {};
@@ -2643,7 +2649,7 @@ findMuliMapFunctions.findRolesById = async function findRolesById(
           muiData: string[];
         }) => rest
       );
-      const multiUsers = await multiMapUsers.get('allUsers');
+      const multiUsers = await multiMapUsers.get("allUsers");
       for (const users of multiUsers as any) {
         let finalUsers = users.filter((a: any) =>
           filterRole[0].users_id.includes(a._id)
@@ -2796,13 +2802,13 @@ findMuliMapFunctions.findCountriesById = async function findCountriesById(
     Object.keys(a).some((e) => /hotelsData/g.test(e))
   );
 
-  const multiMapProvinces = await hz.getMultiMap('Provinces');
+  const multiMapProvinces = await hz.getMultiMap("Provinces");
   const provincesExist = await multiMapProvinces.containsKey(`allProvinces`);
-  const multiMapCities = await hz.getMultiMap('Cities');
+  const multiMapCities = await hz.getMultiMap("Cities");
   const citiesExist = await multiMapCities.containsKey(`allCities`);
-  const multiMapUsers = await hz.getMultiMap('Users');
+  const multiMapUsers = await hz.getMultiMap("Users");
   const usersExist = await multiMapUsers.containsKey(`allUsers`);
-  const multiMapAgents = await hz.getMultiMap('Agencies');
+  const multiMapAgents = await hz.getMultiMap("Agencies");
   const agentsExist = await multiMapAgents.containsKey(`allAgencies`);
   //Todo check hotel and supplier multipmap
   let finalCountry = {};
@@ -2825,7 +2831,7 @@ findMuliMapFunctions.findCountriesById = async function findCountriesById(
           muiData: string[];
         }) => rest
       );
-      const provincesData = await multiMapProvinces.get('allProvinces');
+      const provincesData = await multiMapProvinces.get("allProvinces");
       for (const provinces of provincesData) {
         let findProvinces = provinces.filter((a: any) =>
           filterCountry[0].states_id.includes(a._id)
@@ -2858,7 +2864,7 @@ findMuliMapFunctions.findCountriesById = async function findCountriesById(
         filterCountry[0].statesData = sortProvinces;
       }
 
-      const citiesData = await multiMapCities.get('allCities');
+      const citiesData = await multiMapCities.get("allCities");
       for (const cities of citiesData) {
         let findCities = cities.filter((a: any) =>
           filterCountry[0].cities_id.includes(a._id)
@@ -2891,7 +2897,7 @@ findMuliMapFunctions.findCountriesById = async function findCountriesById(
         filterCountry[0].citiesData = sortCities;
       }
 
-      const usersData = await multiMapUsers.get('allUsers');
+      const usersData = await multiMapUsers.get("allUsers");
       for (const users of usersData) {
         let findUsers = users.filter((a: any) =>
           filterCountry[0].users_id.includes(a._id)
@@ -2918,7 +2924,7 @@ findMuliMapFunctions.findCountriesById = async function findCountriesById(
         filterCountry[0].userData = sortUsers;
       }
 
-      const agentsData = await multiMapAgents.get('allAgencies');
+      const agentsData = await multiMapAgents.get("allAgencies");
       for (const agents of agentsData) {
         let findAgents = agents.filter((a: any) =>
           filterCountry[0].agents_id.includes(a._id)
@@ -2987,11 +2993,11 @@ findMuliMapFunctions.findProvincesById = async function findProvincesById(
     Object.keys(a).some((e) => /hotelsData/g.test(e))
   );
 
-  const multiMapCities = await hz.getMultiMap('Cities');
+  const multiMapCities = await hz.getMultiMap("Cities");
   const citiesExist = await multiMapCities.containsKey(`allCities`);
-  const multiMapUsers = await hz.getMultiMap('Users');
+  const multiMapUsers = await hz.getMultiMap("Users");
   const usersExist = await multiMapUsers.containsKey(`allUsers`);
-  const multiMapAgents = await hz.getMultiMap('Agencies');
+  const multiMapAgents = await hz.getMultiMap("Agencies");
   const agentsExist = await multiMapAgents.containsKey(`allAgencies`);
   //Todo check hotel and supplier multipmap
   let finalCountry = {};
@@ -3015,7 +3021,7 @@ findMuliMapFunctions.findProvincesById = async function findProvincesById(
         }) => rest
       );
 
-      const citiesData = await multiMapCities.get('allCities');
+      const citiesData = await multiMapCities.get("allCities");
       for (const cities of citiesData) {
         let findCities = cities.filter((a: any) =>
           filterProvince[0].cities_id.includes(a._id)
@@ -3048,7 +3054,7 @@ findMuliMapFunctions.findProvincesById = async function findProvincesById(
         filterProvince[0].citiesData = sortCities;
       }
 
-      const usersData = await multiMapUsers.get('allUsers');
+      const usersData = await multiMapUsers.get("allUsers");
       for (const users of usersData) {
         let findUsers = users.filter((a: any) =>
           filterProvince[0].users_id.includes(a._id)
@@ -3075,7 +3081,7 @@ findMuliMapFunctions.findProvincesById = async function findProvincesById(
         filterProvince[0].userData = sortUsers;
       }
 
-      const agentsData = await multiMapAgents.get('allAgencies');
+      const agentsData = await multiMapAgents.get("allAgencies");
       for (const agents of agentsData) {
         let findAgents = agents.filter((a: any) =>
           filterProvince[0].agents_id.includes(a._id)
@@ -3140,9 +3146,9 @@ findMuliMapFunctions.findCitiesById = async function findCitiesById(
     Object.keys(a).some((e) => /hotelsData/g.test(e))
   );
 
-  const multiMapUsers = await hz.getMultiMap('Users');
+  const multiMapUsers = await hz.getMultiMap("Users");
   const usersExist = await multiMapUsers.containsKey(`allUsers`);
-  const multiMapAgents = await hz.getMultiMap('Agencies');
+  const multiMapAgents = await hz.getMultiMap("Agencies");
   const agentsExist = await multiMapAgents.containsKey(`allAgencies`);
   //Todo check hotel and supplier multipmap
   let finalCountry = {};
@@ -3165,7 +3171,7 @@ findMuliMapFunctions.findCitiesById = async function findCitiesById(
           muiData: string[];
         }) => rest
       );
-      const usersData = await multiMapUsers.get('allUsers');
+      const usersData = await multiMapUsers.get("allUsers");
       for (const users of usersData) {
         let findUsers = users.filter((a: any) =>
           filterCity[0].users_id.includes(a._id)
@@ -3192,7 +3198,7 @@ findMuliMapFunctions.findCitiesById = async function findCitiesById(
         filterCity[0].userData = sortUsers;
       }
 
-      const agentsData = await multiMapAgents.get('allAgencies');
+      const agentsData = await multiMapAgents.get("allAgencies");
       for (const agents of agentsData) {
         let findAgents = agents.filter((a: any) =>
           filterCity[0].agents_id.includes(a._id)
@@ -3242,7 +3248,7 @@ findMuliMapFunctions.findCurrenciesById = async function findCurrenciesById(
   const indexOfSuppliersData = lookupsFilter.findIndex((a: any) =>
     Object.keys(a).some((e) => /suppliersData/g.test(e))
   );
-  const multiMapAgents = await hz.getMultiMap('Agencies');
+  const multiMapAgents = await hz.getMultiMap("Agencies");
   const agentsExist = await multiMapAgents.containsKey(`allAgencies`);
   //Todo check supplier multipmap
   let finalCurrency = {};
@@ -3265,7 +3271,7 @@ findMuliMapFunctions.findCurrenciesById = async function findCurrenciesById(
         }) => rest
       );
 
-      const agentsData = await multiMapAgents.get('allAgencies');
+      const agentsData = await multiMapAgents.get("allAgencies");
       for (const agents of agentsData) {
         let findAgents = agents.filter((a: any) =>
           filterCurrency[0].agents_id.includes(a._id)
@@ -3313,13 +3319,13 @@ findMuliMapFunctions.findAgenciesById = async function findAgenciesById(
   hz: any,
   multiMap: any
 ) {
-  const multiMapCountries = await hz.getMultiMap('Countries');
+  const multiMapCountries = await hz.getMultiMap("Countries");
   const countriesExist = await multiMapCountries.containsKey(`allCountries`);
-  const multiMapProvinces = await hz.getMultiMap('Provinces');
+  const multiMapProvinces = await hz.getMultiMap("Provinces");
   const provincesExist = await multiMapProvinces.containsKey(`allProvinces`);
-  const multiMapCities = await hz.getMultiMap('Cities');
+  const multiMapCities = await hz.getMultiMap("Cities");
   const citiesExist = await multiMapCities.containsKey(`allCities`);
-  const multiMapUsers = await hz.getMultiMap('Users');
+  const multiMapUsers = await hz.getMultiMap("Users");
   const usersExist = await multiMapUsers.containsKey(`allUsers`);
 
   let finalAgent = {};
@@ -3509,10 +3515,10 @@ export async function findAllUsers(
     },
     {
       $lookup: {
-        from: 'roles',
-        localField: 'role_id',
-        foreignField: '_id',
-        as: 'roleData',
+        from: "roles",
+        localField: "role_id",
+        foreignField: "_id",
+        as: "roleData",
       },
     },
     {
@@ -3523,17 +3529,17 @@ export async function findAllUsers(
     },
     {
       $set: {
-        roleName: '$roleData.roleName',
+        roleName: "$roleData.roleName",
       },
     },
     {
       $unwind: {
-        path: '$roleName',
+        path: "$roleName",
         preserveNullAndEmptyArrays: true,
       },
     },
     {
-      $unset: 'roleData',
+      $unset: "roleData",
     },
   ]);
   const result = {
@@ -3628,7 +3634,7 @@ export async function findAllCollections(
       $addFields: {
         dispalyFields: collectionsDisplayField,
         muiData: collectionsMuiDataObj,
-        totalProducts: { $size: '$products_id' },
+        totalProducts: { $size: "$products_id" },
       },
     },
   ]);
@@ -3727,12 +3733,12 @@ export async function findAllCountries(
       $addFields: {
         dispalyFields: countriesDisplayField,
         muiData: countriesMuiDataObj,
-        totalStates: { $size: '$states_id' },
-        totalCities: { $size: '$cities_id' },
-        totalActiveHotels: { $size: '$hotels_id' },
-        totalUsers: { $size: '$users_id' },
-        totalAgents: { $size: '$agents_id' },
-        totalSuppliers: { $size: '$suppliers_id' },
+        totalStates: { $size: "$states_id" },
+        totalCities: { $size: "$cities_id" },
+        totalActiveHotels: { $size: "$hotels_id" },
+        totalUsers: { $size: "$users_id" },
+        totalAgents: { $size: "$agents_id" },
+        totalSuppliers: { $size: "$suppliers_id" },
       },
     },
   ]);
@@ -3776,35 +3782,35 @@ export async function findAllProvinces(
     },
     {
       $lookup: {
-        from: 'countries',
-        localField: 'country_id',
-        foreignField: 'id',
-        as: 'countryData',
+        from: "countries",
+        localField: "country_id",
+        foreignField: "id",
+        as: "countryData",
       },
     },
     {
       $set: {
-        country_name: '$countryData.name',
+        country_name: "$countryData.name",
       },
     },
     {
       $unwind: {
-        path: '$country_name',
+        path: "$country_name",
         preserveNullAndEmptyArrays: true,
       },
     },
     {
-      $unset: ['countryData', '__v'],
+      $unset: ["countryData", "__v"],
     },
     {
       $addFields: {
         dispalyFields: provincesDisplayField,
         muiData: provincesMuiDataObj,
-        totalCities: { $size: '$cities_id' },
-        totalActiveHotels: { $size: '$hotels_id' },
-        totalUsers: { $size: '$users_id' },
-        totalAgents: { $size: '$agents_id' },
-        totalSuppliers: { $size: '$suppliers_id' },
+        totalCities: { $size: "$cities_id" },
+        totalActiveHotels: { $size: "$hotels_id" },
+        totalUsers: { $size: "$users_id" },
+        totalAgents: { $size: "$agents_id" },
+        totalSuppliers: { $size: "$suppliers_id" },
       },
     },
   ]);
@@ -3886,10 +3892,10 @@ export async function findAllCities(
         $addFields: {
           dispalyFields: citiesDisplayField,
           muiData: citiesMuiDataObj,
-          totalActiveHotels: { $size: '$hotels_id' },
-          totalUsers: { $size: '$users_id' },
-          totalAgents: { $size: '$agents_id' },
-          totalSuppliers: { $size: '$suppliers_id' },
+          totalActiveHotels: { $size: "$hotels_id" },
+          totalUsers: { $size: "$users_id" },
+          totalAgents: { $size: "$agents_id" },
+          totalSuppliers: { $size: "$suppliers_id" },
         },
       },
     ],
@@ -3932,31 +3938,31 @@ export async function findAllCurrencies(
     },
     {
       $lookup: {
-        from: 'countries',
-        localField: 'id',
-        foreignField: 'id',
-        as: 'nameData',
+        from: "countries",
+        localField: "id",
+        foreignField: "id",
+        as: "nameData",
       },
     },
     {
       $addFields: {
         dispalyFields: currenciesDisplayField,
         muiData: currenciesMuiDataObj,
-        totalAgents: { $size: '$agents_id' },
-        totalSuppliers: { $size: '$suppliers_id' },
+        totalAgents: { $size: "$agents_id" },
+        totalSuppliers: { $size: "$suppliers_id" },
       },
     },
     {
       $set: {
-        name: '$nameData.name',
+        name: "$nameData.name",
       },
     },
     {
-      $unset: 'nameData',
+      $unset: "nameData",
     },
     {
       $unwind: {
-        path: '$name',
+        path: "$name",
         preserveNullAndEmptyArrays: true,
       },
     },
@@ -3987,63 +3993,63 @@ export async function findAllAgencies(
     },
     {
       $lookup: {
-        from: 'users',
-        localField: 'accountManager_id',
-        foreignField: '_id',
-        as: 'accountManagerData',
+        from: "users",
+        localField: "accountManager_id",
+        foreignField: "_id",
+        as: "accountManagerData",
       },
     },
     {
       $set: {
-        accountManager: '$accountManagerData.userName',
+        accountManager: "$accountManagerData.userName",
       },
     },
     {
       $unwind: {
-        path: '$accountManager',
+        path: "$accountManager",
         preserveNullAndEmptyArrays: true,
       },
     },
     {
       $lookup: {
-        from: 'countries',
-        localField: 'country_id',
-        foreignField: '_id',
-        as: 'countryData',
+        from: "countries",
+        localField: "country_id",
+        foreignField: "_id",
+        as: "countryData",
       },
     },
     {
       $set: {
-        countryName: '$countryData.name',
+        countryName: "$countryData.name",
       },
     },
     {
       $unwind: {
-        path: '$countryName',
+        path: "$countryName",
         preserveNullAndEmptyArrays: true,
       },
     },
     {
       $lookup: {
-        from: 'provinces',
-        localField: 'province_id',
-        foreignField: '_id',
-        as: 'provinceData',
+        from: "provinces",
+        localField: "province_id",
+        foreignField: "_id",
+        as: "provinceData",
       },
     },
     {
       $set: {
-        provinceName: '$provinceData.name',
+        provinceName: "$provinceData.name",
       },
     },
     {
       $unwind: {
-        path: '$provinceName',
+        path: "$provinceName",
         preserveNullAndEmptyArrays: true,
       },
     },
     {
-      $unset: ['accountManagerData', 'countryData', 'provinceData', '__v'],
+      $unset: ["accountManagerData", "countryData", "provinceData", "__v"],
     },
     {
       $addFields: {

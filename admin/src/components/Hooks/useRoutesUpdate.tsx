@@ -9,7 +9,7 @@ import { useRouter } from 'next/router';
 import { deleteCookie } from 'cookies-next';
 
 const useRoutesUpdate = () => {
-  const { updateRoutes } = useSelector<State, State>(state => state);
+  const updateRoutes = useSelector<State, any>(state => state.updateRoutes);
   const dispatch = useDispatch();
   const router = useRouter();
 

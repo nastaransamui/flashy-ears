@@ -20,7 +20,10 @@ const Dashboard: FC<CustomPropsTypes> = (props: CustomPropsTypes) => {
   return (
     <div >
       <DashboardWrapper>
-        <BrowserRouter basename='/admin/dashboard'>
+        <BrowserRouter basename='/admin/dashboard'
+          future={{
+            v7_startTransition: true,
+          }}>
           <ReactRouter
             handleDrawerToggle={handleDrawerToggle}
             handleSideBarBgToggle={handleSideBarBgToggle}

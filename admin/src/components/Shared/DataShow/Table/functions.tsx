@@ -155,7 +155,8 @@ export const CustomNoRowsOverlay = () => {
 
 export const CustomToolbar = () => {
 
-  const { deleteIds, statusIdsUpdate } = useSelector<State, State>(state => state)
+  const deleteIds = useSelector<State, string[]>(state => state.deleteIds)
+  const statusIdsUpdate = useSelector<State, string[]>(state => state.statusIdsUpdate);
 
   return (
     <GridToolbarContainer sx={{ pt: 1, pb: 1 }}>

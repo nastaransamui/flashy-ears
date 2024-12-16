@@ -38,7 +38,7 @@ const createColorHook = () => {
 
   const { t, i18n } = useTranslation('Colors')
   const { theme, classes } = colorStyles({ colorSelected: colorSelected })
-  const { adminAccessToken } = useSelector<State, State>(state => state)
+  const adminAccessToken = useSelector<State, string>(state => state.adminAccessToken as string);
   const [values, setValues] = useState([{}]);
 
   const [showSelect, setShowSelect] = useState<boolean>(false)

@@ -1,9 +1,9 @@
-import { State } from '@/src/redux/store';
+import { Profile, State } from '@/src/redux/store';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useForm } from "react-hook-form";
 const createAgentHook = () => {
-  const { profile } = useSelector<State, State>(state => state)
+  const profile = useSelector<State, Profile>(state => state.profile)
   const [values, setValues] = useState([
     {
       _id: '',

@@ -17,7 +17,7 @@ const createProductHook = () => {
 
   const { t, i18n } = useTranslation('Products')
   const { theme, classes } = productStyles({})
-  const { adminAccessToken, productFinancialFillAll } = useSelector<State, State>(state => state)
+  const adminAccessToken = useSelector<State, string>(state => state.adminAccessToken as string)
   const [informationValidate, setInformationValidate] = useState<boolean>(false)
   const [colorValidation, setColorValidation] = useState<boolean>(false)
   const [financialValidation, setFinancialValidation] = useState<boolean>(false)

@@ -13,7 +13,7 @@ interface Props {
 export type Ref = HTMLDivElement;
 const Card = forwardRef<Ref, Props>(({ children, index }, ref) => {
 
-  const { expanded, deleteIds, statusIdsUpdate } = useSelector<State, State>(state => state)
+  const expanded = useSelector<State, { [key: string]: boolean }>(state => state.expanded)
 
   const setCardStyle = (index: number, expanded: { [key: string]: boolean }) => {
     return {

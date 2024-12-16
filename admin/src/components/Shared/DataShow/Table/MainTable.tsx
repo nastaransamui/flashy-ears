@@ -2,7 +2,7 @@ import { FC, Fragment, useContext, useState } from "react";
 
 import Box from '@mui/material/Box'
 import { useDispatch, useSelector } from 'react-redux';
-import { State } from '@/src/redux/store';
+import { Profile, State, TotalDataType } from '@/src/redux/store';
 import { DataGrid, GridColDef, GridActionsCellItem, GridRenderCellParams, GridRowParams, } from '@mui/x-data-grid';
 import { CustomNoRowsOverlay, CustomToolbar, LocateText } from './functions'
 import Typography from '@mui/material/Typography'
@@ -81,7 +81,11 @@ interface MuiDataType {
 }
 
 const MainTable: FC<MainTableType> = ((props: MainTableType) => {
-  const { totalData, totalCount, profile, deleteIds, statusIdsUpdate } = useSelector<State, State>(state => state)
+  const totalCount = useSelector<State, number>(state => state.totalCount);
+  const totalData = useSelector<State, TotalDataType[]>(state => state.totalData);
+  const profile = useSelector<State, Profile>(state => state.profile);
+  const deleteIds = useSelector<State, string[]>(state => state.deleteIds)
+  const statusIdsUpdate = useSelector<State, string[]>(state => state.statusIdsUpdate);
   const dispatch = useDispatch();
   const currentRouteState = useCurrentRouteState();
   const { singleDeleteClicked, singleStatusClicked } = useContext(DataShowCtx)

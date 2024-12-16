@@ -23,7 +23,7 @@ import TablePagination from '@mui/material/TablePagination';
 import { SingleDataCtx } from '@/hookes/useSingleData'
 import { useReadLocalStorage } from 'usehooks-ts'
 import useCurrentRouteState from '@/hookes/useCurrentRouteState';
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import Sort from '@mui/icons-material/Sort';
 import Toolbar from '@mui/material/Toolbar';
 import CustomPopover from '@/shared/CustomPopover';

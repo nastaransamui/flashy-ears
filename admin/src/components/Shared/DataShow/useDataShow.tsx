@@ -7,7 +7,6 @@ import { State } from '@/src/redux/store';
 import { toast } from 'react-toastify';
 import { ToastMessage } from '@/shared/CustomToaster/CustomToaster';
 import axios from 'axios';
-import { useLocation } from 'react-router-dom';
 import CustomAlert from '../CustomAlert/CustomAlert';
 
 let getAllUrl = '/admin/api/modelsCrud/getAll';
@@ -31,8 +30,9 @@ const useDataShow = () => {
   const widthRef = useRef<HTMLDivElement>(null);
   const currentRouteState = useCurrentRouteState();
   const { modelName, predefineDb, activeOnly, path } = currentRouteState;
-  const { adminAccessToken, deleteIds, statusIdsUpdate } = useSelector<State, State>(state => state)
-  const location = useLocation();
+  const adminAccessToken = useSelector<State, string>((state) => state.adminAccessToken as string);
+  const deleteIds = useSelector<State, string[]>((state) => state.deleteIds);
+  const statusIdsUpdate = useSelector<State, string[]>((state) => state.statusIdsUpdate);
   const dispatch = useDispatch()
   const toastID = `${modelName}_toastId`;
   //Dynamically add locall storage for view

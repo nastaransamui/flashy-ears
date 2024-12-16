@@ -19,7 +19,8 @@ const BrandLogo: FC<BrandLogoTypes> = (props: BrandLogoTypes) => {
   const currentRouteState = useCurrentRouteState();
   const { modelName } = currentRouteState;
   const { sideBarbgColor, rtlActive, stateMiniActive, handleSideBarBgToggle } = props
-  const { propsMiniActive } = useSelector<State, State>(state => state);
+  const propsMiniActive = useSelector<State, boolean>((state) => state.propsMiniActive);
+
   const logoClasses =
     classes.logo +
     ' ' +

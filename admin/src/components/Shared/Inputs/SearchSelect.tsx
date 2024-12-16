@@ -9,7 +9,7 @@ import dataShowStyle from "@/shared/DataShow/data-show-style";
 import { useTranslation } from 'react-i18next';
 import useCurrentRouteState from "@/src/components/Hooks/useCurrentRouteState";
 import { useDispatch, useSelector } from 'react-redux';
-import { State } from '@/src/redux/store';
+import { State, TotalDataType } from '@/src/redux/store';
 import FormHelperText from "@mui/material/FormHelperText";
 
 interface SearchSelectProps { }
@@ -19,7 +19,10 @@ const SearchSelect: FC<SearchSelectProps> = (() => {
   const currentRouteState = useCurrentRouteState();
   const { modelName } = currentRouteState;
   const { t, } = useTranslation(modelName)
-  const { totalData, firstSearch, fieldValue } = useSelector<State, State>(state => state)
+  const totalData = useSelector<State, TotalDataType[]>((state) => state.totalData);
+  const firstSearch = useSelector<State, boolean>((state) => state.firstSearch);
+  const fieldValue = useSelector<State, string>((state) => state.fieldValue);
+
   const dispatch = useDispatch();
   const [showError, setShowError] = useState(false)
 

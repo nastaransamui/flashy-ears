@@ -10,7 +10,7 @@ import SideBar from "../Shared/SideBar";
 
 const MainPage: FC = (() => {
 
-  const { homePageType, } = useSelector<State, State>(state => state)
+  const homePageType = useSelector<State, string>(state => state.homePageType)
   return (
     <Fragment>
       {

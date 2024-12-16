@@ -25,7 +25,8 @@ const useSingleData = (componet: 'edit' | 'context') => {
   let { state } = useLocation();
   const dispatch = useDispatch();
   const [singleData, setSingleData] = useState(state);
-  const { adminAccessToken, reRunSingleGet } = useSelector<State, State>(state => state)
+  const adminAccessToken = useSelector<State, string>((state) => state.adminAccessToken as string);
+  const reRunSingleGet = useSelector<State, boolean>((state) => state.reRunSingleGet);
   const currentRouteState = useCurrentRouteState();
   const { modelName, lookUps, predefineDb } = currentRouteState;
   const [lookupsFilter, setLookupsFilter] =

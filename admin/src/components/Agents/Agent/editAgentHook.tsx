@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 
 const editAgentHook = (singleData: any) => {
   const dispatch = useDispatch();
-  const { reRunSingleGet, profile } = useSelector<State, State>(state => state)
+  const reRunSingleGet = useSelector<State, boolean>(state => state.reRunSingleGet)
   const [values, setValues] = useState([
     {
       _id: '',

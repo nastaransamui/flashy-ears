@@ -19,7 +19,7 @@ const Pagination: FC<PaginationType> = ((props: PaginationType) => {
   const currentRouteState = useCurrentRouteState();
   const { modelName } = currentRouteState
   const { setPageNumber, setPerPage } = useContext(DataShowCtx)
-  const { totalCount } = useSelector<State, State>(state => state)
+  const totalCount = useSelector<State, number>((state) => state.totalCount);
   const pageNumber: number = useReadLocalStorage(`${modelName}_pageNumber`)!
   const perPage: number = useReadLocalStorage(`${modelName}_perPage`)!
   const [count, setCount] = useState(0)

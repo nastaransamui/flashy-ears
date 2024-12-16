@@ -15,7 +15,7 @@ import Carousel from 'react-slick';
 
 const CollectionComponent: FC = (() => {
   const { t, lang } = useShallowTranslation('common');
-  let { collectionItems } = useSelector<State, State>((state) => state)
+  const collectionItems = useSelector<State, CollectionItemsType[]>((state) => state.collectionItems)
   // const theme = useTheme()
   const { classes, cx, theme } = galleryStyles({})
   const [isLoaded, setLoaded] = useState(true);

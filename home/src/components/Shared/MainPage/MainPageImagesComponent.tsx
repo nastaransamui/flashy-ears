@@ -1,4 +1,4 @@
-import { State } from "@/src/redux/store";
+import { SlidesType, State } from "@/src/redux/store";
 import { FC, useEffect, useState, useRef, createRef } from "react";
 import { useSelector } from "react-redux";
 import { Controller, Scene } from 'react-scrollmagic';
@@ -20,7 +20,7 @@ var lastScrollTop = 0;
 const MainPageImagesComponent: FC = (() => {
   const [current, setCurrent] = useState<number>(0)
   const [dir, setDir] = useState('next')
-  const { slides } = useSelector<State, State>((state) => state)
+  const slides = useSelector<State, SlidesType[]>(state => state.slides);
   const [isAnimating, setIsAnimating] = useState(false)
   const { classes, cx } = ImageStyle({})
   const slideTrackRef = useRef<HTMLDivElement>(null);

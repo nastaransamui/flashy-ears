@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 
 import userSideBarStyle from './user-sidebar-style'
 import { useSelector } from 'react-redux'
-import { State } from '@/src/redux/store'
+import { Profile, State } from '@/src/redux/store'
 import { useNavigate, createSearchParams } from 'react-router-dom'
 import { FC } from 'react'
 import { SibebarUserProps } from '../../Shared/interfaces/react.interface'
@@ -26,7 +26,8 @@ const SidebarUser: FC<SibebarUserProps> = (props: SibebarUserProps) => {
   const { modelName } = currentRouteState;
   let query = useQuery();
   const _id = query.get('_id');
-  const { profile, propsMiniActive } = useSelector<State, State>(state => state)
+  const profile = useSelector<State, Profile>(state => state.profile)
+  const propsMiniActive = useSelector<State, boolean>((state) => state.propsMiniActive);
   const { sideBarbgColor, rtlActive, openCollapse, stateMiniActive, openAvatar } = props;
   const userWrapperClass =
     classes.user

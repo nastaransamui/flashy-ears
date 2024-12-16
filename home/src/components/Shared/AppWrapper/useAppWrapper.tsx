@@ -12,9 +12,10 @@ import { jssPreset } from '@mui/styles'
 import rtl from 'jss-rtl';
 
 const useWrapper = () => {
-  const { homeLoadingBar, homeFormSubmit, homeThemeName, homeThemeType } = useSelector<State, State>(
-    (state) => state
-  );
+  const homeThemeName = useSelector<State, string | null>(state => state.homeThemeName)
+  const homeFormSubmit = useSelector<State, boolean>(state => state.homeFormSubmit)
+  const homeLoadingBar = useSelector<State, number>(state => state.homeLoadingBar)
+  const homeThemeType = useSelector<State, PaletteMode | null>(state => state.homeThemeType)
 
   const dispatch = useDispatch();
   const [homeTheme, setHomeTheme] = useState({

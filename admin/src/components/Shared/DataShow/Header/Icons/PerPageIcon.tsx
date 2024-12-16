@@ -29,7 +29,7 @@ const PerPageIcon: FC<PerPageIconType> = (props: PerPageIconType) => {
   const { t } = useTranslation('common')
   const theme = useTheme()
   const [anchor, setAnchor] = useState<HTMLButtonElement | null>(null);
-  const { totalCount } = useSelector<State, State>(state => state)
+  const totalCount = useSelector<State, number>((state) => state.totalCount);
   const open = Boolean(anchor);
   const id = open ? 'perpage-popover' : undefined;
   const currentRouteState = useCurrentRouteState();

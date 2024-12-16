@@ -14,7 +14,8 @@ let editProductUrl = '/admin/api/home/editProduct'
 var toBoolean = require('to-boolean');
 const editProductHook = (singleData: any) => {
   const dispatch = useDispatch();
-  const { adminAccessToken, productFinancialFillAll } = useSelector<State, State>(state => state)
+  const adminAccessToken = useSelector<State, string>(state => state.adminAccessToken as string)
+
   const { t, i18n } = useTranslation('Products')
   const { theme, classes } = productStyles({})
   const [colorArray, setColorArray] = useState(null)

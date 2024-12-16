@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form";
 const editRoleHook = (singleData: any) => {
   const updateRoutes = useRoutesUpdate();
   const dispatch = useDispatch();
-  const { reRunSingleGet } = useSelector<State, State>(state => state)
+  const reRunSingleGet = useSelector<State, boolean>(state => state.reRunSingleGet)
   const [values, setValues] = useState([
     {
       roleName: '',

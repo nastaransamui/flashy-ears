@@ -16,7 +16,7 @@ import Typography from '@mui/material/Typography'
 
 //Redux
 import { useDispatch, useSelector } from 'react-redux';
-import { State, MainCardTypes } from '@/src/redux/store';
+import { State, MainCardTypes, Profile } from '@/src/redux/store';
 
 //Hooks
 import useCurrentRouteState from '@/hookes/useCurrentRouteState'
@@ -34,8 +34,9 @@ export interface CardHeaderType {
 
 const CardHeader: FC<CardHeaderType> = ((props: CardHeaderType) => {
   const { fieldsObject, thumbnail } = props;
-  const { deleteIds, profile, statusIdsUpdate } = useSelector<State, State>(state => state)
-
+  const profile = useSelector<State, Profile>(state => state.profile)
+  const statusIdsUpdate = useSelector<State, string[]>((state) => state.statusIdsUpdate);
+  const deleteIds = useSelector<State, string[]>((state) => state.deleteIds);
   const currentRouteState = useCurrentRouteState();
   const { modelName, predefineDb, activeOnly } = currentRouteState;
   const { t, i18n } = useTranslation(modelName);

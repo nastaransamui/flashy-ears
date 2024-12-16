@@ -21,7 +21,7 @@ import { DataShowCtx } from "@/shared/DataShow/useDataShow";
 import MultipleExpand from '@/shared/StyledComponents/MultipleExpand';
 
 //Types
-import { State, MainCardTypes } from '@/src/redux/store'
+import { State, MainCardTypes, Profile } from '@/src/redux/store'
 export interface CardActionsType {
   fieldObject: MainCardTypes;
   index: number;
@@ -31,7 +31,7 @@ const CardActions: FC<CardActionsType> = (({ fieldObject, index }) => {
   const currentRouteState = useCurrentRouteState();
   const { modelName, predefineDb, activeOnly } = currentRouteState;
   const { singleDeleteClicked, singleStatusClicked } = useContext(DataShowCtx)
-  const { profile } = useSelector<State, State>(state => state)
+  const profile = useSelector<State, Profile>(state => state.profile)
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const theme = useTheme();

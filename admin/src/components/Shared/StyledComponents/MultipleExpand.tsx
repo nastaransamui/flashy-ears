@@ -40,7 +40,8 @@ export interface ExpandTypes {
 const MultipleExpand: FC<ExpandTypes> = (({ index }: ExpandTypes) => {
 
   const { t, i18n } = useTranslation('common');
-  const { expanded } = useSelector<State, State>(state => state);
+  const expanded = useSelector<State, { [key: string]: boolean }>(state => state.expanded)
+
   const dispatch = useDispatch();
   const rtlActive = i18n.language == 'fa';
 

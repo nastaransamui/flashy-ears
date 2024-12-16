@@ -15,9 +15,10 @@ import rtl from 'jss-rtl';
 import { jssPreset } from '@mui/styles'
 
 const useWrapper = () => {
-  const { adminLoadingBar, adminFormSubmit, adminThemeName, adminThemeType } = useSelector<State, State>(
-    (state) => state
-  );
+  const adminLoadingBar = useSelector<State, number>((state) => state.adminLoadingBar);
+  const adminFormSubmit = useSelector<State, boolean>((state) => state.adminFormSubmit);
+  const adminThemeType = useSelector<State, string>((state) => state.adminThemeType);
+  const adminThemeName = useSelector<State, PaletteMode>((state) => state.adminThemeName as PaletteMode);
   const dispatch = useDispatch();
   const { i18n, t } = useTranslation();
 

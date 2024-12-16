@@ -11,11 +11,17 @@ import axios from "axios";
 
 import { toast } from 'react-toastify';
 import { ToastMessage } from '@/shared/CustomToaster/CustomToaster';
+import { PaletteMode } from "@mui/material";
 let updateHomeTheme = '/admin/api/home/themeUpdate';
 let updateHomeLanding = '/admin/api/home/homeLandingUpdate'
 
 const useThemeUser = (state: DrawerStateType) => {
-  const { adminThemeName, propsMiniActive, homeThemeName, adminAccessToken, homePageType } = useSelector<State, State>((state) => state);
+
+  const adminAccessToken = useSelector<State, string>((state) => state.adminAccessToken as string);
+  const homeThemeName = useSelector<State, string>((state) => state.homeThemeName as string);
+  const homePageType = useSelector<State, string>((state) => state.homePageType as string);
+  const adminThemeName = useSelector<State, PaletteMode>((state) => state.adminThemeType as PaletteMode);
+  const propsMiniActive = useSelector<State, boolean>((state) => state.propsMiniActive);
   let drawerOpen = !propsMiniActive && propsMiniActive ? false : !propsMiniActive && !state.stateMiniActive ? true : state.stateMiniActive && !propsMiniActive ? false : true
   const { classes, theme, cx } = themeUserStyle({ drawerOpen })
   const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));

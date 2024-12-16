@@ -4,7 +4,8 @@ import { State } from '@/src/redux/store';
 import { useForm } from "react-hook-form";
 const editUserHook = (singleData: any) => {
   const dispatch = useDispatch();
-  const { reRunSingleGet } = useSelector<State, State>(state => state)
+  const reRunSingleGet = useSelector<State, boolean>((state) => state.reRunSingleGet);
+
   const [values, setValues] = useState([
     {
       _id: '',

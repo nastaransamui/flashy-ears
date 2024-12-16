@@ -12,7 +12,8 @@ let editCollectionUrl = '/admin/api/home/editCollection'
 
 const editCollectionHook = (singleData: any, _id: string | null) => {
   const dispatch = useDispatch();
-  const { reRunSingleGet } = useSelector<State, State>(state => state)
+  const reRunSingleGet = useSelector<State, boolean>(state => state.reRunSingleGet);
+
   const navigate = useNavigate();
   const [imagevalidate, setImageValidate] = useState<boolean>(false)
   const [productValidation, setProductValidation] = useState(false)
@@ -79,7 +80,7 @@ const editCollectionHook = (singleData: any, _id: string | null) => {
   }, [singleData, reRunSingleGet])
 
   const { t, i18n } = useTranslation('Collections')
-  const { adminAccessToken } = useSelector<State, State>(state => state)
+  const adminAccessToken = useSelector<State, string>(state => state.adminAccessToken as string)
   const {
     handleSubmit,
     watch, setValue,

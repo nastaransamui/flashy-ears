@@ -42,7 +42,7 @@ const GalleryComponent: FC = (() => {
   const { classes, theme, cx } = galleryStyles({});
   const [galleryImageModel, setGalleryImageModel] = useState<string>(getCookies({}).galleryImageModel as string)
   const { t, lang } = useShallowTranslation('common');
-  const { dbImages } = useSelector<State, State>(state => state)
+  const dbImages = useSelector<State, DBImagesType[]>(state => state.dbImages);
   const mobile = useMediaQuery(theme.breakpoints.down(900));
   const [images, setImages] = useState<ImageGalleryType[]>([])
   const [filterData, setFilterData] = useState([])

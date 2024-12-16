@@ -40,7 +40,10 @@ const SearchAutoComplete: FC<SearchAutoCompleteProps> = (() => {
   const currentRouteState = useCurrentRouteState();
   const { modelName, activeOnly, predefineDb } = currentRouteState;
   const { t } = useTranslation(modelName)
-  const { adminAccessToken, totalData, firstSearch, fieldValue } = useSelector<State, State>(state => state)
+  const adminAccessToken = useSelector<State, string>((state) => state.adminAccessToken as string);
+  const totalData = useSelector<State, TotalDataType[]>((state) => state.totalData);
+  const firstSearch = useSelector<State, boolean>((state) => state.firstSearch);
+  const fieldValue = useSelector<State, string>((state) => state.fieldValue);
   const dispatch = useDispatch()
   let allTotalDataCopy = useRef<TotalDataType[]>([]);
   const [openOption, setOpenOption] = useState<boolean>(false);

@@ -34,7 +34,7 @@ const SidebarLinks: FC<SideBarLinksTypes> = (props: SideBarLinksTypes) => {
     handleDrawerToggle,
     openCollapse } = props;
   const { stateMiniActive } = state;
-  const { propsMiniActive } = useSelector<State, State>(state => state)
+  const propsMiniActive = useSelector<State, boolean>((state) => state.propsMiniActive);
   const currentRouteState = useCurrentRouteState()
   const { modelName } = currentRouteState;
   const { path } = currentRouteState

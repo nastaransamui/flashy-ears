@@ -27,21 +27,18 @@ export const authenticate = async (
 
 export const localStrategy = new LocalStrategy(
   { usernameField: "email" },
-  (userName, password, done) => {
-    Users.findOne(
-      { userName: userName.toLowerCase() },
-      (err: NativeError, user: IUser) => {
-        if (err) {
-          return done(err);
-        }
-        if (!user) {
-          return done(null, { message: `Wrong Email` });
-        } else if (!validatePassword(user, password)) {
-          return done(null, { message: `Wrong password` });
-        } else {
-          done(null, user);
-        }
+  async (userName, password, done) => {
+    try {
+      const user = await Users.findOne({ userName: userName.toLowerCase() });
+      if (!user) {
+        return done(null, { message: `Wrong Email` });
+      } else if (!validatePassword(user, password)) {
+        return done(null, { message: `Wrong password` });
+      } else {
+        done(null, user);
       }
-    );
+    } catch (error) {
+      return done(error);
+    }
   }
 );

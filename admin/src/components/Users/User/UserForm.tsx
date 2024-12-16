@@ -498,7 +498,7 @@ export const AutoComplete: FC<AutoCompleteType> = ((props: AutoCompleteType) => 
   const [optionValue, setOptionValue] = useState<OptionType | null>(null);
   const [inputValue, setInputValue] = useState('');
   const [options, setOptions] = useState<readonly OptionType[]>([]);
-  const { adminAccessToken } = useSelector<State, State>(state => state)
+  const adminAccessToken = useSelector<State, string>(state => state.adminAccessToken as string)
   const url = '/admin/api/modelsCrud/autocomplete';
   switch (name) {
     case 'roleName':

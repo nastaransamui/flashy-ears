@@ -6,7 +6,7 @@ import { State } from "@/src/redux/store";
 const editCityHook = () => {
   const { _id, singleData } = useSingleData('edit');
   const dispatch = useDispatch();
-  const { reRunSingleGet } = useSelector<State, State>(state => state);
+  const reRunSingleGet = useSelector<State, boolean>(state => state.reRunSingleGet);
   const [values, setValues] = useState([
     {
       isActive: singleData?.isActive,

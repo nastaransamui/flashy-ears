@@ -18,7 +18,7 @@ import Sort from '@mui/icons-material/Sort';
 import ArrowRight from '@mui/icons-material/ArrowRight'
 import ArrowLeft from '@mui/icons-material/ArrowLeft'
 import { useDispatch, useSelector } from 'react-redux';
-import { State } from '@/src/redux/store';
+import { State, TotalDataType } from '@/src/redux/store';
 import Home from '@mui/icons-material/Home'
 import Popover from '@mui/material/Popover'
 
@@ -83,7 +83,7 @@ const SortByIcon: FC<SortByIconType> = (props: SortByIconType) => {
   const currentRouteState = useCurrentRouteState();
   const { modelName, predefineDb } = currentRouteState;
   const { t, i18n } = useTranslation(modelName)
-  const { totalData } = useSelector<State, State>(state => state)
+  const totalData = useSelector<State, TotalDataType[]>((state) => state.totalData);
   const [anchorSTl, setAnchorSTl] = useState<AnchorType>({
     0: null,
     field: ''

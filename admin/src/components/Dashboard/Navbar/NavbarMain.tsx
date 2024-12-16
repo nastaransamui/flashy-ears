@@ -18,14 +18,15 @@ import { RoutesType, } from '@/interfaces/react.interface'
 import { Typography } from "@mui/material";
 import { ActiveRouteType } from '@/interfaces/react.interface'
 import { useSelector } from "react-redux";
-import { State } from "@/src/redux/store";
+import { Profile, State } from "@/src/redux/store";
 import { useQuery } from "@/src/components/Dashboard/ReactRouter";
 
 const NavbarMain: FC<ProDashboardProps> = (props: ProDashboardProps) => {
   const { routes, handleDrawerToggle, sidebarMinimizeFunc } =
     props;
   const location = useLocation();
-  const { propsMiniActive, profile } = useSelector<State, State>(state => state)
+  const profile = useSelector<State, Profile>(state => state.profile)
+  const propsMiniActive = useSelector<State, boolean>((state) => state.propsMiniActive);
   const { t, i18n } = useTranslation()
   const { classes, cx, theme } = navbarMainStyle({});
   const mainPanel = createRef();
